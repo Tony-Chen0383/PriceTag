@@ -1,0 +1,789 @@
+{
+  "schemaVersion": 1,
+  "version": "4.1.29-seed",
+  "updatedAt": "2026-10-06",
+  "fallbackMode": "text",
+  "brandCount": 88,
+  "brands": {
+    "switcheasy": {
+      "displayName": "SwitchEasy",
+      "file": "./brands/switcheasy.jpg",
+      "aliases": [
+        "SwitchEasy",
+        "switcheasy"
+      ],
+      "scale": 1
+    },
+    "transcend": {
+      "displayName": "Transcend",
+      "file": "./brands/transcend.jpg",
+      "aliases": [
+        "Transcend",
+        "transcend"
+      ],
+      "scale": 1
+    },
+    "transformers": {
+      "displayName": "TRANSFORMERS",
+      "file": "./brands/transformers.jpg",
+      "aliases": [
+        "TRANSFORMERS",
+        "transformers"
+      ],
+      "scale": 1
+    },
+    "trusonus": {
+      "displayName": "Trusonus",
+      "file": "./brands/trusonus.png",
+      "aliases": [
+        "Trusonus",
+        "trusonus"
+      ],
+      "scale": 1
+    },
+    "tucano": {
+      "displayName": "TUCANO",
+      "file": "./brands/tucano.jpg",
+      "aliases": [
+        "TUCANO",
+        "tucano"
+      ],
+      "scale": 1
+    },
+    "uag": {
+      "displayName": "UAG",
+      "file": "./brands/uag.jpg",
+      "aliases": [
+        "UAG",
+        "uag"
+      ],
+      "scale": 1
+    },
+    "uniq": {
+      "displayName": "UNIQ",
+      "file": "./brands/uniq.jpg",
+      "aliases": [
+        "UNIQ",
+        "uniq"
+      ],
+      "scale": 1
+    },
+    "uniqtough": {
+      "displayName": "UNIQTOUGH",
+      "file": "./brands/uniqtough.jpg",
+      "aliases": [
+        "UNIQTOUGH",
+        "uniqtough"
+      ],
+      "scale": 1
+    },
+    "vivo": {
+      "displayName": "vivo",
+      "file": "./brands/vivo.jpg",
+      "aliases": [
+        "vivo"
+      ],
+      "scale": 1
+    },
+    "voorca": {
+      "displayName": "VOORCA",
+      "file": "./brands/voorca.jpg",
+      "aliases": [
+        "VOORCA",
+        "voorca"
+      ],
+      "scale": 1
+    },
+    "wekome": {
+      "displayName": "WEKOME",
+      "file": "./brands/wekome.png",
+      "aliases": [
+        "WEKOME",
+        "wekome"
+      ],
+      "scale": 1
+    },
+    "wellypower": {
+      "displayName": "Wellypower",
+      "file": "./brands/wellypower.jpg",
+      "aliases": [
+        "Wellypower",
+        "wellypower"
+      ],
+      "scale": 1
+    },
+    "xiaomi": {
+      "displayName": "Xiaomi",
+      "file": "./brands/xiaomi.jpg",
+      "aliases": [
+        "Xiaomi",
+        "xiaomi"
+      ],
+      "scale": 1
+    },
+    "aceice": {
+      "displayName": "ACEICE",
+      "file": "./brands/aceice.jpg",
+      "aliases": [
+        "ACEICE",
+        "aceice"
+      ],
+      "scale": 1
+    },
+    "adam": {
+      "displayName": "ADAM",
+      "file": "./brands/adam.jpg",
+      "aliases": [
+        "ADAM",
+        "adam"
+      ],
+      "scale": 1
+    },
+    "adata": {
+      "displayName": "ADATA",
+      "file": "./brands/adata.jpg",
+      "aliases": [
+        "ADATA",
+        "adata"
+      ],
+      "scale": 1
+    },
+    "ahastyle": {
+      "displayName": "ahastyle",
+      "file": "./brands/ahastyle.jpg",
+      "aliases": [
+        "ahastyle"
+      ],
+      "scale": 1
+    },
+    "aiwa": {
+      "displayName": "AIWA",
+      "file": "./brands/aiwa.jpg",
+      "aliases": [
+        "AIWA",
+        "aiwa"
+      ],
+      "scale": 1
+    },
+    "allite": {
+      "displayName": "ALLite",
+      "file": "./brands/allite.jpg",
+      "aliases": [
+        "ALLite",
+        "allite"
+      ],
+      "scale": 1
+    },
+    "alto": {
+      "displayName": "alto",
+      "file": "./brands/alto.jpg",
+      "aliases": [
+        "alto"
+      ],
+      "scale": 1
+    },
+    "amuok": {
+      "displayName": "amuok",
+      "file": "./brands/amuok.jpg",
+      "aliases": [
+        "amuok"
+      ],
+      "scale": 1
+    },
+    "anfast": {
+      "displayName": "ANFAST",
+      "file": "./brands/anfast.jpg",
+      "aliases": [
+        "ANFAST",
+        "anfast"
+      ],
+      "scale": 1
+    },
+    "anker": {
+      "displayName": "ANKER",
+      "file": "./brands/anker.jpg",
+      "aliases": [
+        "ANKER",
+        "anker"
+      ],
+      "scale": 1
+    },
+    "apple": {
+      "displayName": "Apple",
+      "file": "./brands/apple.jpg",
+      "aliases": [
+        "Apple",
+        "apple"
+      ],
+      "scale": 1
+    },
+    "aspor": {
+      "displayName": "ASPOR",
+      "file": "./brands/aspor.jpg",
+      "aliases": [
+        "ASPOR",
+        "aspor"
+      ],
+      "scale": 1
+    },
+    "asus": {
+      "displayName": "ASUS",
+      "file": "./brands/asus.jpg",
+      "aliases": [
+        "ASUS",
+        "asus"
+      ],
+      "scale": 1
+    },
+    "awson": {
+      "displayName": "AWSON",
+      "file": "./brands/awson.jpg",
+      "aliases": [
+        "AWSON",
+        "awson"
+      ],
+      "scale": 1
+    },
+    "azeada": {
+      "displayName": "Azeada",
+      "file": "./brands/azeada.jpg",
+      "aliases": [
+        "Azeada",
+        "azeada"
+      ],
+      "scale": 1
+    },
+    "baseus": {
+      "displayName": "Baseus",
+      "file": "./brands/baseus.jpg",
+      "aliases": [
+        "Baseus",
+        "baseus"
+      ],
+      "scale": 1
+    },
+    "bluelight": {
+      "displayName": "Bluelight",
+      "file": "./brands/bluelight.jpg",
+      "aliases": [
+        "Bluelight",
+        "bluelight"
+      ],
+      "scale": 1
+    },
+    "borofone": {
+      "displayName": "BOROFONE",
+      "file": "./brands/borofone.jpg",
+      "aliases": [
+        "BOROFONE",
+        "borofone"
+      ],
+      "scale": 1
+    },
+    "casetify": {
+      "displayName": "CASETiFY",
+      "file": "./brands/casetify.jpg",
+      "aliases": [
+        "CASETiFY",
+        "casetify"
+      ],
+      "scale": 1
+    },
+    "cityboss": {
+      "displayName": "CITY BOSS",
+      "file": "./brands/cityboss.jpg",
+      "aliases": [
+        "CITY BOSS",
+        "cityboss"
+      ],
+      "scale": 1
+    },
+    "cy": {
+      "displayName": "CY",
+      "file": "./brands/cy.jpg",
+      "aliases": [
+        "CY",
+        "cy"
+      ],
+      "scale": 1
+    },
+    "dapad": {
+      "displayName": "Dapad",
+      "file": "./brands/dapad.jpg",
+      "aliases": [
+        "Dapad",
+        "dapad"
+      ],
+      "scale": 1
+    },
+    "donghe": {
+      "displayName": "DONGHE",
+      "file": "./brands/donghe.jpg",
+      "aliases": [
+        "DONGHE",
+        "donghe"
+      ],
+      "scale": 1
+    },
+    "drtough": {
+      "displayName": "DR.TOUGH",
+      "file": "./brands/drtough.jpg",
+      "aliases": [
+        "DR.TOUGH",
+        "drtough"
+      ],
+      "scale": 1
+    },
+    "eton": {
+      "displayName": "ETON",
+      "file": "./brands/eton.jpg",
+      "aliases": [
+        "ETON",
+        "eton"
+      ],
+      "scale": 1
+    },
+    "fujitek": {
+      "displayName": "Fujitek",
+      "file": "./brands/fujitek.jpg",
+      "aliases": [
+        "Fujitek",
+        "fujitek"
+      ],
+      "scale": 1
+    },
+    "gan": {
+      "displayName": "Gan",
+      "file": "./brands/gan.png",
+      "aliases": [
+        "Gan",
+        "gan"
+      ],
+      "scale": 1
+    },
+    "gnovel": {
+      "displayName": "GNOVEL",
+      "file": "./brands/gnovel.jpg",
+      "aliases": [
+        "GNOVEL",
+        "gnovel"
+      ],
+      "scale": 1
+    },
+    "google": {
+      "displayName": "Google",
+      "file": "./brands/google.jpg",
+      "aliases": [
+        "Google",
+        "google"
+      ],
+      "scale": 1
+    },
+    "guxon": {
+      "displayName": "GUXON",
+      "file": "./brands/guxon.jpg",
+      "aliases": [
+        "GUXON",
+        "guxon"
+      ],
+      "scale": 1
+    },
+    "hang": {
+      "displayName": "HANG",
+      "file": "./brands/hang.jpg",
+      "aliases": [
+        "HANG",
+        "hang"
+      ],
+      "scale": 1
+    },
+    "hoco": {
+      "displayName": "hoco",
+      "file": "./brands/hoco.jpg",
+      "aliases": [
+        "hoco"
+      ],
+      "scale": 1
+    },
+    "hoda": {
+      "displayName": "Hoda",
+      "file": "./brands/hoda.jpg",
+      "aliases": [
+        "Hoda",
+        "hoda"
+      ],
+      "scale": 1
+    },
+    "htc": {
+      "displayName": "HTC",
+      "file": "./brands/htc.jpg",
+      "aliases": [
+        "HTC",
+        "htc"
+      ],
+      "scale": 1
+    },
+    "huawei": {
+      "displayName": "HUAWEI",
+      "file": "./brands/huawei.jpg",
+      "aliases": [
+        "HUAWEI",
+        "huawei"
+      ],
+      "scale": 1
+    },
+    "hyperdrive": {
+      "displayName": "HyperDrive",
+      "file": "./brands/hyperdrive.jpg",
+      "aliases": [
+        "HyperDrive",
+        "hyperdrive"
+      ],
+      "scale": 1
+    },
+    "idars": {
+      "displayName": "iDARS",
+      "file": "./brands/idars.jpg",
+      "aliases": [
+        "iDARS",
+        "idars"
+      ],
+      "scale": 1
+    },
+    "idmix": {
+      "displayName": "idmix",
+      "file": "./brands/idmix.jpg",
+      "aliases": [
+        "idmix"
+      ],
+      "scale": 1
+    },
+    "igrass": {
+      "displayName": "igrass",
+      "file": "./brands/igrass.jpg",
+      "aliases": [
+        "igrass"
+      ],
+      "scale": 1
+    },
+    "imos": {
+      "displayName": "imos",
+      "file": "./brands/imos.jpg",
+      "aliases": [
+        "imos"
+      ],
+      "scale": 1
+    },
+    "jinxi": {
+      "displayName": "JINXI",
+      "file": "./brands/jinxi.png",
+      "aliases": [
+        "JINXI",
+        "jinxi"
+      ],
+      "scale": 1
+    },
+    "jtlegend": {
+      "displayName": "JTLEGEND",
+      "file": "./brands/jtlegend.jpg",
+      "aliases": [
+        "JTLEGEND",
+        "jtlegend"
+      ],
+      "scale": 1
+    },
+    "kingleen": {
+      "displayName": "KINGLEEN",
+      "file": "./brands/kingleen.jpg",
+      "aliases": [
+        "KINGLEEN",
+        "kingleen"
+      ],
+      "scale": 1
+    },
+    "kingston": {
+      "displayName": "kingston",
+      "file": "./brands/kingston.jpg",
+      "aliases": [
+        "kingston"
+      ],
+      "scale": 1
+    },
+    "kinyo": {
+      "displayName": "KINYO",
+      "file": "./brands/kinyo.jpg",
+      "aliases": [
+        "KINYO",
+        "kinyo"
+      ],
+      "scale": 1
+    },
+    "lapo": {
+      "displayName": "LaPO",
+      "file": "./brands/lapo.jpg",
+      "aliases": [
+        "LaPO",
+        "lapo"
+      ],
+      "scale": 1
+    },
+    "loop": {
+      "displayName": "Loop",
+      "file": "./brands/loop.jpg",
+      "aliases": [
+        "Loop",
+        "loop"
+      ],
+      "scale": 1
+    },
+    "mageasy": {
+      "displayName": "Mageasy",
+      "file": "./brands/mageasy.jpg",
+      "aliases": [
+        "Mageasy",
+        "mageasy"
+      ],
+      "scale": 1
+    },
+    "mcdodo": {
+      "displayName": "MCDODO",
+      "file": "./brands/mcdodo.png",
+      "aliases": [
+        "MCDODO",
+        "mcdodo"
+      ],
+      "scale": 1
+    },
+    "megaking": {
+      "displayName": "MEGA KING",
+      "file": "./brands/megaking.jpg",
+      "aliases": [
+        "MEGA KING",
+        "megaking"
+      ],
+      "scale": 1
+    },
+    "mobia": {
+      "displayName": "MOBIA",
+      "file": "./brands/mobia.jpg",
+      "aliases": [
+        "MOBIA",
+        "mobia"
+      ],
+      "scale": 1
+    },
+    "modian": {
+      "displayName": "MODiAN",
+      "file": "./brands/modian.jpg",
+      "aliases": [
+        "MODiAN",
+        "modian"
+      ],
+      "scale": 1
+    },
+    "monocozzi": {
+      "displayName": "MONOCOZZI",
+      "file": "./brands/monocozzi.jpg",
+      "aliases": [
+        "MONOCOZZI",
+        "monocozzi"
+      ],
+      "scale": 1
+    },
+    "moresee": {
+      "displayName": "MoreSee",
+      "file": "./brands/moresee.jpg",
+      "aliases": [
+        "MoreSee",
+        "moresee"
+      ],
+      "scale": 1
+    },
+    "moshi": {
+      "displayName": "MOSHI",
+      "file": "./brands/moshi.jpg",
+      "aliases": [
+        "MOSHI",
+        "moshi"
+      ],
+      "scale": 1
+    },
+    "mrcoq": {
+      "displayName": "MR.COQ",
+      "file": "./brands/mrcoq.jpg",
+      "aliases": [
+        "MR.COQ",
+        "mrcoq"
+      ],
+      "scale": 1
+    },
+    "null": {
+      "displayName": "null",
+      "file": "./brands/null.jpg",
+      "aliases": [
+        "null"
+      ],
+      "scale": 1
+    },
+    "onpro": {
+      "displayName": "OnPro",
+      "file": "./brands/onpro.jpg",
+      "aliases": [
+        "OnPro",
+        "onpro"
+      ],
+      "scale": 1
+    },
+    "oone": {
+      "displayName": "O-ONE",
+      "file": "./brands/oone.jpg",
+      "aliases": [
+        "O-ONE",
+        "oone"
+      ],
+      "scale": 1
+    },
+    "oppo": {
+      "displayName": "OPPO",
+      "file": "./brands/oppo.jpg",
+      "aliases": [
+        "OPPO",
+        "oppo"
+      ],
+      "scale": 1
+    },
+    "polywell": {
+      "displayName": "Polywell",
+      "file": "./brands/polywell.jpg",
+      "aliases": [
+        "Polywell",
+        "polywell"
+      ],
+      "scale": 1
+    },
+    "puregear": {
+      "displayName": "Puregear",
+      "file": "./brands/puregear.jpg",
+      "aliases": [
+        "Puregear",
+        "puregear"
+      ],
+      "scale": 1
+    },
+    "rasto": {
+      "displayName": "RASTO",
+      "file": "./brands/rasto.jpg",
+      "aliases": [
+        "RASTO",
+        "rasto"
+      ],
+      "scale": 1
+    },
+    "realme": {
+      "displayName": "realme",
+      "file": "./brands/realme.jpg",
+      "aliases": [
+        "realme"
+      ],
+      "scale": 1
+    },
+    "redmi": {
+      "displayName": "Redmi",
+      "file": "./brands/redmi.jpg",
+      "aliases": [
+        "Redmi",
+        "redmi"
+      ],
+      "scale": 1
+    },
+    "remax": {
+      "displayName": "ReMax",
+      "file": "./brands/remax.jpg",
+      "aliases": [
+        "ReMax",
+        "remax"
+      ],
+      "scale": 1
+    },
+    "rhinoshield": {
+      "displayName": "RHINOSHIELD",
+      "file": "./brands/rhinoshield.jpg",
+      "aliases": [
+        "RHINOSHIELD",
+        "rhinoshield"
+      ],
+      "scale": 1
+    },
+    "riivan": {
+      "displayName": "Riivan",
+      "file": "./brands/riivan.jpg",
+      "aliases": [
+        "Riivan",
+        "riivan"
+      ],
+      "scale": 1
+    },
+    "samsung": {
+      "displayName": "Samsung",
+      "file": "./brands/samsung.jpg",
+      "aliases": [
+        "Samsung",
+        "samsung"
+      ],
+      "scale": 1
+    },
+    "sandisk": {
+      "displayName": "SanDisk",
+      "file": "./brands/sandisk.jpg",
+      "aliases": [
+        "SanDisk",
+        "sandisk"
+      ],
+      "scale": 1
+    },
+    "simmpo": {
+      "displayName": "simmpo",
+      "file": "./brands/simmpo.jpg",
+      "aliases": [
+        "simmpo"
+      ],
+      "scale": 1
+    },
+    "skinarma": {
+      "displayName": "SKINARMA",
+      "file": "./brands/skinarma.jpg",
+      "aliases": [
+        "SKINARMA",
+        "skinarma"
+      ],
+      "scale": 1
+    },
+    "smartmobile": {
+      "displayName": "SmartMobile",
+      "file": "./brands/smartmobile.jpg",
+      "aliases": [
+        "SmartMobile",
+        "smartmobile"
+      ],
+      "scale": 1
+    },
+    "sony": {
+      "displayName": "Sony",
+      "file": "./brands/sony.jpg",
+      "aliases": [
+        "Sony",
+        "sony"
+      ],
+      "scale": 1
+    },
+    "star": {
+      "displayName": "Star",
+      "file": "./brands/star.jpg",
+      "aliases": [
+        "Star",
+        "star"
+      ],
+      "scale": 1
+    }
+  }
+}
