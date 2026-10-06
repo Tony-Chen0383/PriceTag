@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "version": "",
+  "updatedAt": "",
+  "currentFile": "./current/suggested-price.xlsx",
+  "scope": [
+    "新機",
+    "二手機"
+  ],
+  "matchKey": [
+    "類型",
+    "品牌",
+    "型號",
+    "容量"
+  ],
+  "applyToField": "建議售價",
+  "fallback": "HQ 無匹配或檔案無法取得時，保留公司匯入 Excel 的原建議售價，不阻擋產卡。",
+  "note": "V4.1.29 Candidate：只建立 GitHub 路徑；尚未啟用自動讀取／覆蓋。"
+}
