@@ -1,20 +1,22 @@
 {
-  "schemaVersion": 1,
-  "enabled": false,
-  "version": "",
-  "updatedAt": "",
-  "currentFile": "./current/suggested-price.xlsx",
-  "scope": [
-    "新機",
-    "二手機"
+  "schemaVersion": 2,
+  "enabled": true,
+  "currentFile": "./current/hq-suggested-price.xlsb",
+  "sheetName": "系統版",
+  "format": "company-standard-xlsb",
+  "columns": {
+    "brand": "廠牌",
+    "name": "標價卡用名稱",
+    "model": "型號",
+    "rom": "Rom",
+    "suggestedPrice": "建議售價"
+  },
+  "matchPriority": [
+    "廠牌 + 標價卡用名稱 + Rom",
+    "廠牌 + 型號 + Rom"
   ],
-  "matchKey": [
-    "類型",
-    "品牌",
-    "型號",
-    "容量"
-  ],
-  "applyToField": "建議售價",
-  "fallback": "HQ 無匹配或檔案無法取得時，保留公司匯入 Excel 的原建議售價，不阻擋產卡。",
-  "note": "V4.1.29 Candidate：只建立 GitHub 路徑；尚未啟用自動讀取／覆蓋。"
+  "scope": "新機／二手機作業頁的建議售價（手機與穿戴模板）；配件不套用",
+  "fallback": "HQ 檔案無法取得或無匹配時，使用工具既有建議售價，不阻擋產卡。",
+  "updatedAt": "2026-10-06",
+  "note": "V4.1.30：直接讀公司制式 XLSB；只需覆蓋固定 current 檔，不需另做 HQ 專用 Excel。"
 }
