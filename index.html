@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.30｜HQ 建議售價 GitHub 連動版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.31｜HQ 管理中心 UI 重整版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6121,11 +6121,32 @@ body{min-width:1080px}
    不修改產卡、列印、Excel 解析、條碼或商品資料處理 JS。
 */
 </style>
+
+<style id="v4131-hq-management-center-ui">
+/* ===== V4.1.31｜HQ 管理中心 UI 重整版 =====
+   只重整 HQ 管理頁資訊層級與狀態顯示；不修改產卡、列印、條碼、尺寸、
+   公司 Excel 匯入或 HQ 建議售價比對核心。
+*/
+.hq31-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;margin-bottom:14px;border:1px solid #d9e5f4;border-radius:14px;background:linear-gradient(135deg,#f7fbff 0%,#f2f7ff 100%)}
+.hq31-hero-title{font-size:15px;font-weight:900;color:#17304f}.hq31-hero-sub{margin-top:4px;font-size:11px;line-height:1.55;color:#66778e}.hq31-hero-badge{flex:0 0 auto;padding:7px 11px;border-radius:999px;background:#e9f7ee;color:#247a46;font-size:10.5px;font-weight:900;white-space:nowrap}
+.hq31-status-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.hq31-status{position:relative;min-height:96px;padding:14px 15px;border:1px solid #dfe7f1;border-radius:13px;background:#fff;box-shadow:0 2px 10px rgba(31,55,82,.035)}
+.hq31-status .eyebrow{font-size:10px;font-weight:800;color:#8290a3;letter-spacing:.02em}.hq31-status .value{margin-top:7px;font-size:17px;font-weight:950;color:#1e324d;line-height:1.15}.hq31-status .meta{margin-top:5px;font-size:10.5px;line-height:1.4;color:#6e7d91}.hq31-status .dot{position:absolute;right:13px;top:13px;width:8px;height:8px;border-radius:50%;background:#2da867;box-shadow:0 0 0 4px #e8f7ee}.hq31-status.warn .dot{background:#d39a24;box-shadow:0 0 0 4px #fff5dc}.hq31-status.muted .dot{background:#8d9aad;box-shadow:0 0 0 4px #f0f3f7}
+.hq31-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.hq31-action{border:1px solid #dfe7f1;border-radius:14px;background:#fff;overflow:hidden}.hq31-action-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 15px;border-bottom:1px solid #edf1f6;background:#fbfcfe}.hq31-action-title{font-size:13px;font-weight:950;color:#263a55}.hq31-action-sub{margin-top:3px;font-size:10.5px;line-height:1.45;color:#7a899d}.hq31-action-body{padding:14px 15px}.hq31-badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:#edf7f1;color:#257749;font-size:9.5px;font-weight:900;white-space:nowrap}.hq31-badge.pending{background:#fff5dd;color:#8a6412}
+.hq31-live{padding:11px 12px;border:1px solid #e1e8f1;border-radius:10px;background:#f8fafc}.hq31-live strong{display:block;font-size:12px;color:#253a55}.hq31-live span{display:block;margin-top:4px;font-size:10.5px;line-height:1.5;color:#66778e}.hq31-mini-path{margin-top:10px;padding:8px 10px;border-radius:8px;background:#111827;color:#dce8f8;font:9.5px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all}.hq31-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:11px}.hq31-note{margin-top:10px;font-size:10px;line-height:1.5;color:#718096}.hq31-note b{color:#42546b}
+.hq31-grade-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;margin-bottom:14px;border:1px solid #dfe7f1;border-radius:12px;background:#fff}.hq31-grade-strip strong{font-size:11.5px;color:#30445e}.hq31-grade-strip span{font-size:10.5px;color:#738297}.hq31-grade-ok{padding:5px 9px;border-radius:999px;background:#edf8f1;color:#27794b;font-size:9.5px!important;font-weight:900;white-space:nowrap}
+.hq31-details{border:1px solid #dfe7f1;border-radius:14px;background:#fff;overflow:hidden}.hq31-details>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;font-size:12px;font-weight:950;color:#30445e;background:#f8fafc}.hq31-details>summary::-webkit-details-marker{display:none}.hq31-details>summary:after{content:'＋';font-size:18px;line-height:1;color:#708199}.hq31-details[open]>summary:after{content:'−'}.hq31-summary-note{margin-left:auto;margin-right:8px;font-size:9.5px;font-weight:700;color:#8a97a8}.hq31-details-body{padding:14px}.hq31-tech-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hq31-tech{border:1px solid #e4eaf2;border-radius:11px;background:#fff;overflow:hidden}.hq31-tech h3{margin:0;padding:10px 12px;border-bottom:1px solid #edf1f6;background:#fbfcfe;font-size:11px;color:#354a65}.hq31-tech .body{padding:9px 12px}.hq31-tech .hq-rule-line{grid-template-columns:105px minmax(0,1fr)}.hq31-tech code{font-size:9.5px}
+@media(max-width:1100px){.hq31-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.hq31-action-grid,.hq31-tech-grid{grid-template-columns:1fr}.hq31-hero{align-items:flex-start;flex-direction:column}.hq31-grade-strip{align-items:flex-start;flex-direction:column}}
+@media(max-width:620px){.hq31-status-grid{grid-template-columns:1fr}.hq31-summary-note{display:none}}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.30</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.30 HQ 建議售價 GitHub 連動版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.31</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.31 HQ 管理中心 UI 重整版</div></div></div>
     <div class="top-info">
       <span class="pill good">● 中央售價資料 <strong>已載入</strong></span>
       <span class="pill">新機／二手機售價表：<strong>2026-09-14</strong></span>
@@ -6140,7 +6161,7 @@ body{min-width:1080px}
       <button class="navbtn" data-page="used"><span class="nav-icon">📱</span><span>二手機標價卡</span></button>
       <button class="navbtn" data-page="new"><span class="nav-icon">✨</span><span>新機標價卡</span></button>
       <div class="nav-title" style="margin-top:16px">系統</div>
-      <button class="navbtn" data-page="templates"><span class="nav-icon">🎨</span><span>HQ 維護規則</span></button>
+      <button class="navbtn" data-page="templates"><span class="nav-icon">🎨</span><span>HQ 管理中心</span></button>
       <div class="side-note"><b>門市隔離模式</b><br>IMEI、SN、待列印清單與門市上傳檔只存在目前瀏覽器分頁；重新整理或關閉頁面即清空，不使用 localStorage / IndexedDB。</div>
     </aside>
 
@@ -6217,172 +6238,151 @@ body{min-width:1080px}
 
       <!-- TEMPLATES -->
       
+
 <section class="page" id="page-templates">
-  <div class="page-head"><div><h1>HQ 維護規則</h1><p>V4.1.30 正式啟用 HQ 建議售價 GitHub 連動；直接讀取公司制式 XLSB「系統版」，只覆蓋新機／二手機作業頁的建議售價，其他資料仍沿用公司 Excel 匯入。</p></div></div>
-
-  <div class="hq-current-banner">
-    <div><div class="hq-current-title">目前正式基準：V4.1.24 → GitHub 資源架構 Candidate V4.1.30</div><div class="hq-current-sub">產卡與列印版型沿用既有正式基準；不串資料庫。GitHub 僅提供 HQ 建議售價覆蓋層與 Logo 靜態資源，實際牌價、IMEI／SN 與其他作業資料仍由公司 Excel 匯入。</div></div>
-    <span class="hq-current-badge">GITHUB STATIC · NO DB</span>
-  </div>
-
-  <div class="hq-rule-grid">
-    <div class="hq-rule-card">
-      <div class="rh">實體尺寸 × A4 排版</div>
-      <div class="rb">
-        <div class="hq-rule-line"><b>新機／二手機</b><span>55 × 85 mm；A4 直式 3 × 3；卡片間距 0。</span></div>
-        <div class="hq-rule-line"><b>穿戴</b><span>55 × 60 mm；A4 直式 3 × 4；卡片間距 0。</span></div>
-        <div class="hq-rule-line"><b>配件</b><span>65 × 40 mm；A4 橫式每排 4 張；維持現行實體標籤尺寸。</span></div>
-        <div class="hq-lock-note"><b>尺寸鎖定：</b>UI、字級與顏色調整不得改變上述實體尺寸；列印縮放與 cell 尺寸不可任意重算。</div>
-      </div>
-    </div>
-
-    <div class="hq-rule-card">
-      <div class="rh">品牌 × 牌價字級</div>
-      <div class="rb">
-        <div class="hq-rule-line"><b>品牌字</b><span>新機 27px／二手機 27px／穿戴 27px。</span></div>
-        <div class="hq-rule-line"><b>牌價本體</b><span>新機 35px／二手機 33px／穿戴 35px。</span></div>
-        <div class="hq-rule-line"><b>$ 符號</b><span>新機／二手機／穿戴全部統一 27px。</span></div>
-        <div class="hq-rule-line"><b>二手機售價列</b><span>維持上移 4px 的正式位置，避免壓到上市日期／建議售價。</span></div>
-      </div>
-    </div>
-
-    <div class="hq-rule-card">
-      <div class="rh">SN／IMEI × Code128</div>
-      <div class="rb">
-        <div class="hq-rule-line"><b>穿戴安全區</b><span>SN／IMEI 最後區固定 19mm；不得用 padding、假底色或額外高度補縫。</span></div>
-        <div class="hq-rule-line"><b>條碼</b><span>Code128；穿戴條碼與辨識字實體大小沿用手機正式基準。</span></div>
-        <div class="hq-rule-line"><b>底部填滿</b><span>穿戴前兩個規格列採彈性吸收列印 rounding，19mm 區本身保持固定。</span></div>
-        <div class="hq-lock-note"><b>不可回歸：</b>禁止重新加入 V4.1.15／V4.1.16 類型的補色、shadow 或欄位向下延伸修法。</div>
-      </div>
-    </div>
-
-    <div class="hq-rule-card">
-      <div class="rh">顏色 × 列印原則</div>
-      <div class="rb">
-        <div class="hq-rule-line"><b>彩色背景</b><span>正式列印強制保留背景色，使用 print-color-adjust: exact。</span></div>
-        <div class="hq-rule-line"><b>新機色系</b><span>螢幕尺寸為淡黃底；相機畫素、CPU、保固維持正式白底配置。</span></div>
-        <div class="hq-rule-line"><b>手機／穿戴</b><span>卡片相連裁切，底框、黃底與深藍欄不得出現白色像素縫。</span></div>
-        <div class="hq-rule-line"><b>預覽</b><span>畫面外框／操作區不屬於實體卡內容；不得為修預覽而改正式卡尺寸。</span></div>
-      </div>
+  <div class="page-head">
+    <div>
+      <h1>HQ 管理中心</h1>
+      <p>日常維護只需要確認建議售價與配件 Logo 狀態；尺寸、列印與 GitHub 技術規則已收進下方說明，不再全部攤在主畫面。</p>
     </div>
   </div>
 
-  <div class="template-board">
-    <div class="template-card">
-      <h3>手機／穿戴／耳機 Logo 規則</h3>
-      <p><b>標價卡使用等級 Logo；品牌以文字呈現，不另外放品牌 Logo。</b> 穿戴底色與等級規則依新機／二手機狀態套用。</p>
-      <div class="hq-logo-status">
-        <span class="hq-logo-chip"><img src="./assets/static/img-462b7463f2d8abd7.png" alt="S級">二手機 S <b class="hq-status-ok">已導入</b></span>
-        <span class="hq-logo-chip"><img src="./assets/static/img-babd7ecc90b37ad6.png" alt="A級">二手機 A <b class="hq-status-ok">已導入</b></span>
-        <span class="hq-logo-chip"><img src="./assets/static/img-6db8d0163c0a6ac3.png" alt="B級">二手機 B <b class="hq-status-ok">已導入</b></span>
-        <span class="hq-logo-chip"><img src="./assets/static/img-cde584d44f430845.png" alt="C級">二手機 C <b class="hq-status-ok">已導入</b></span>
-        <span class="hq-logo-chip">二手機全等級 <b class="hq-status-ok">Logo 已導入</b></span>
-        <span class="hq-logo-chip"><img src="./assets/static/img-c0456fc81227250d.png" alt="全新品">新機／全新品 <b class="hq-status-ok">已導入</b></span>
-      </div>
+  <div class="hq31-hero">
+    <div>
+      <div class="hq31-hero-title">V4.1.31｜GitHub 靜態管理架構</div>
+      <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
-    <div class="template-card">
-      <h3>配件標籤 Logo 規則</h3>
-      <p><b>只使用品牌 Logo，不使用等級 Logo。</b> 系統目前 88 個正式品牌 Logo 已改為 GitHub 外部實體檔＋ manifest 載入；HQ 後續可於管理頁新增、更新或替換配件品牌 Logo，發布後由 GitHub 靜態資源同步供門市使用。imos / Moshi / Lapo 維持控價版型與現行價格顯示邏輯。</p>
-      <p><b>Fallback 規則：</b>若商品品牌尚未對應到正式 Logo，不阻擋產卡；優先使用 fallback Logo，必要時改以品牌文字顯示，避免門市因缺少圖片而無法列印。</p>
-      <p><b>發布原則：</b>Logo 實體檔先上傳成功，再更新 <code>manifest.json</code>；品牌 key 建議統一使用大寫英文與固定 alias，避免同一品牌因大小寫或別名產生重複資源。</p>
+    <span class="hq31-hero-badge">GITHUB STATIC · NO DB</span>
+  </div>
+
+  <div class="hq31-status-grid">
+    <div class="hq31-status">
+      <span class="dot"></span>
+      <div class="eyebrow">工具版本</div>
+      <div class="value">V4.1.31</div>
+      <div class="meta">HQ 管理中心 UI 重整版</div>
+    </div>
+    <div class="hq31-status" id="hqOverviewPriceCard">
+      <span class="dot"></span>
+      <div class="eyebrow">HQ 建議售價</div>
+      <div class="value" id="hqOverviewPriceStatus">載入中…</div>
+      <div class="meta" id="hqOverviewPriceMeta">正在檢查 GitHub 公司制式 XLSB</div>
+    </div>
+    <div class="hq31-status" id="hqOverviewLogoCard">
+      <span class="dot"></span>
+      <div class="eyebrow">配件品牌 Logo</div>
+      <div class="value" id="hqAccessoryLogoStatus">載入中…</div>
+      <div class="meta" id="hqAccessoryLogoCount">正在讀取 manifest</div>
+    </div>
+    <div class="hq31-status">
+      <span class="dot"></span>
+      <div class="eyebrow">等級 Logo</div>
+      <div class="value">全部完成</div>
+      <div class="meta">新機／二手機正式等級皆已導入</div>
     </div>
   </div>
 
-
-  <div class="hq-path-good" style="margin:12px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <b id="hqPriceStatus">HQ 建議售價：載入中…</b>
-    <span id="hqPriceDetail">讀取公司制式 XLSB／系統版</span>
-    <button type="button" class="btn ghost small" onclick="loadHqSuggestedPrices(true)">重新讀取</button>
-  </div>
-
-  <div class="hq-path-grid">
-    <div class="hq-path-card">
-      <div class="ph">HQ 建議售價｜GitHub 固定相對路徑</div>
-      <div class="pb">
-        <div class="hq-path-note"><b>只管理新機／二手機的「建議售價」</b>。GitHub 不取代公司原始 Excel，也不保存 IMEI、SN、實際牌價、規格、保固或門市作業資料。</div>
-        <div class="hq-path-code">./data/hq/suggested-prices/
-├─ manifest.json
-├─ current/
-│  └─ hq-suggested-price.xlsb
-└─ archive/
-   └─ YYYY-MM/</div>
-        <div class="hq-rule-line"><b>公司制式檔</b><span>直接讀取既有 .xlsb 的「系統版」；不要求 HQ 另做格式、不轉檔、不改欄位。</span></div>
-        <div class="hq-rule-line"><b>讀取欄位</b><span>廠牌／標價卡用名稱／型號／Rom／建議售價；其他欄位不拿來覆蓋產卡資料。</span></div>
-        <div class="hq-rule-line"><b>比對 Key</b><span>優先：廠牌 + 標價卡用名稱 + Rom；備援：廠牌 + 型號 + Rom。Rom 會正規化 256 / 256GB、1T / 1TB 等格式。</span></div>
-        <div class="hq-rule-line"><b>覆蓋原則</b><span>HQ 有匹配時只覆蓋「建議售價」；找不到時保留公司匯入 Excel 原值，不阻擋產卡。</span></div>
-        <div class="hq-rule-line"><b>更新方式</b><span>固定覆蓋 current/hq-suggested-price.xlsb 即可；程式每次載入都使用 cache-busting 重新抓檔，不需要因檔名日期變更而改 HTML。</span></div>
-        <div class="hq-path-good"><b>GitHub Pages only：</b>全部採相對路徑與靜態檔案，不使用資料庫、不需要後端 API。</div>
+  <div class="hq31-action-grid">
+    <div class="hq31-action">
+      <div class="hq31-action-head">
+        <div><div class="hq31-action-title">新機／二手機建議售價</div><div class="hq31-action-sub">直接讀公司制式 XLSB「系統版」，只覆蓋標卡上的建議售價。</div></div>
+        <span class="hq31-badge">已啟用</span>
+      </div>
+      <div class="hq31-action-body">
+        <div class="hq31-live">
+          <strong id="hqPriceStatus">HQ 建議售價：載入中…</strong>
+          <span id="hqPriceDetail">讀取公司制式 XLSB／系統版</span>
+        </div>
+        <div class="hq31-mini-path">./data/hq/suggested-prices/current/hq-suggested-price.xlsb</div>
+        <div class="hq31-actions">
+          <button type="button" class="btn primary" onclick="loadHqSuggestedPrices(true)">重新檢查價格檔</button>
+        </div>
+        <div class="hq31-note"><b>更新方式：</b>公司每次產生新的價格檔後，固定覆蓋 GitHub 上的 <code>hq-suggested-price.xlsb</code>。不需轉 XLSX、不需改公司欄位。</div>
+        <div class="hq31-note"><b>影響範圍：</b>只更新新機／二手機「建議售價」。實際牌價、規格、保固、IMEI／SN 全部不動；抓不到時自動 fallback。</div>
       </div>
     </div>
 
-    <div class="hq-path-card">
-      <div class="ph">配件品牌 Logo｜HQ 網頁上傳 → GitHub</div>
-      <div class="pb">
-        <div class="hq-path-note">未來 HQ 可直接在本工具選擇品牌、上傳 Logo、預覽後發布到 GitHub。Logo 檔案與 manifest 都是靜態資源，不需要資料庫。</div>
-        <div class="hq-path-code">./assets/accessory-logos/
-├─ manifest.json
-├─ fallback.png
-└─ brands/
-   ├─ switcheasy.png
-   ├─ hoda.png
-   └─ ...</div>
-        <div class="hq-rule-line"><b>網頁上傳</b><span>選擇品牌 → 選圖 → 預覽 → 發布；同品牌已有 Logo 時走更新流程，不重複建立品牌。</span></div>
-        <div class="hq-rule-line"><b>正式格式</b><span>PNG 優先、透明背景、方形畫布；檔名使用穩定英文 slug，品牌別名由 manifest 對應。</span></div>
-        <div class="hq-rule-line"><b>Fallback</b><span>找不到品牌或 Logo 載入失敗時使用 fallback.png，不影響配件標籤文字與列印。</span></div>
-        <div class="hq-rule-line"><b>GitHub 授權</b><span>未來發布功能只在 HQ 操作時取得 GitHub 寫入授權；Token 不寫入 HTML、不提交 Repository、不永久保存於瀏覽器。</span></div>
-        <div class="hq-path-good"><b>目前狀態：</b>所有等級 Logo 已完成導入；配件 Logo 外部 manifest 已啟用；HQ 公司制式 XLSB 建議售價自動讀取已於 V4.1.30 啟用。網頁端 GitHub Logo 寫入功能仍留待下一階段。</div>
+    <div class="hq31-action">
+      <div class="hq31-action-head">
+        <div><div class="hq31-action-title">配件品牌 Logo</div><div class="hq31-action-sub">目前由 GitHub 外部 manifest 載入；缺 Logo 不阻擋門市產卡。</div></div>
+        <span class="hq31-badge pending">GitHub 維護</span>
+      </div>
+      <div class="hq31-action-body">
+        <div class="hq31-live">
+          <strong id="hqAccessoryLogoDetail">配件 Logo：載入中…</strong>
+          <span>正式資源由 <code>manifest.json</code> 對應品牌與圖片檔。</span>
+        </div>
+        <div class="hq31-mini-path">./assets/accessory-logos/manifest.json<br>./assets/accessory-logos/brands/</div>
+        <div class="hq31-actions">
+          <button type="button" class="btn ghost" onclick="loadAccessoryLogoManifest()">重新讀取 Logo</button>
+        </div>
+        <div class="hq31-note"><b>目前操作：</b>Logo 檔與 manifest 仍由 GitHub Repository 更新。網頁端「選品牌 → 上傳 → 發布 GitHub」功能留待下一階段實作。</div>
+        <div class="hq31-note"><b>Fallback：</b>品牌尚未有正式 Logo 或圖片讀取失敗時，以品牌文字顯示，不影響配件標籤列印。</div>
       </div>
     </div>
   </div>
 
-  <div class="hq-grid" style="margin-top:14px">
-    <div class="panel">
-      <div class="panel-head"><div><div class="panel-title">資料來源分工</div><div class="panel-sub">GitHub 只做 HQ 建議售價覆蓋層；正式產卡主資料仍來自公司／門市匯入的 Excel。</div></div></div>
-      <div class="panel-body">
-        <div class="hq-rule-line"><b>HQ GitHub</b><span>僅提供新機／二手機作業頁標卡的「建議售價」；手機與穿戴模板皆只套用此欄位。配件不使用 HQ 建議售價。</span></div>
-        <div class="hq-rule-line"><b>公司 Excel</b><span>品牌、型號、RAM／ROM、CPU、螢幕、相機、電池、網路、實際牌價、保固、IMEI／SN 與其他既有欄位照原流程匯入。</span></div>
-        <div class="hq-rule-line"><b>資料合併</b><span>產卡資料仍照原流程；顯示建議售價時再以 HQ Key 查表。HQ 命中只替換建議售價顯示，不改實際牌價與商品規格。</span></div>
-        <div class="hq-rule-line"><b>Fallback</b><span>HQ 檔案無法取得或商品無匹配時，公司 Excel 仍可獨立完成產卡，不因 GitHub 中斷。</span></div>
-        <div class="hq-rule-line"><b>資料庫</b><span>不使用 Supabase、MySQL 或其他資料庫；GitHub Pages + 靜態 Excel / JSON / Logo 即為正式方向。</span></div>
-      </div>
-    </div>
+  <div class="hq31-grade-strip">
+    <div><strong>等級 Logo 狀態</strong><br><span>新機／全新品與二手機所有正式等級 Logo 均已導入；品牌維持文字呈現。</span></div>
+    <span class="hq31-grade-ok">✓ 全部完成</span>
+  </div>
 
-    <div class="panel">
-      <div class="panel-head"><div><div class="panel-title">Logo 維護狀態</div><div class="panel-sub">所有目前使用中的等級 Logo 均已完成導入；配件品牌 Logo 後續改走 GitHub 靜態資源維護。</div></div></div>
-      <div class="panel-body">
-        <div class="hq-row"><b>二手機全等級</b><div class="logo-slot">所有正式等級 Logo 已內嵌</div><span class="tag auto">已導入</span></div>
-        <div class="hq-row"><b>新機／全新品</b><div class="logo-slot"><img src="./assets/static/img-c0456fc81227250d.png" alt="全新品" style="width:46px;height:46px;object-fit:contain"></div><span class="tag auto">已導入</span></div>
-        <div class="hq-row"><b>配件品牌</b><div class="logo-slot">現有正式品牌 Logo 已導入；未來由 HQ 網頁上傳／替換並發布至 ./assets/accessory-logos/</div><span class="tag auto">GitHub 維護</span></div>
-      </div>
-    </div>
+  <details class="hq31-details">
+    <summary>維護規則與技術說明 <span class="hq31-summary-note">平常可保持收合，需要查規格時再展開</span></summary>
+    <div class="hq31-details-body">
+      <div class="hq31-tech-grid">
+        <div class="hq31-tech">
+          <h3>資料來源分工</h3>
+          <div class="body">
+            <div class="hq-rule-line"><b>HQ GitHub</b><span>只提供新機／二手機建議售價，以及 Logo 靜態資源。</span></div>
+            <div class="hq-rule-line"><b>公司 Excel</b><span>實際牌價、品牌、型號、規格、保固、IMEI／SN 與其他作業資料照原流程匯入。</span></div>
+            <div class="hq-rule-line"><b>穿戴</b><span>不使用 HQ 建議售價覆蓋；建議售價沿用公司匯入資料。</span></div>
+            <div class="hq-rule-line"><b>Fallback</b><span>HQ 檔案無法取得或商品未匹配時，保留工具／公司 Excel 原值，不阻擋產卡。</span></div>
+            <div class="hq-rule-line"><b>資料庫</b><span>不使用 Supabase、MySQL 或其他資料庫。</span></div>
+          </div>
+        </div>
 
-    <div class="panel">
-      <div class="panel-head"><div><div class="panel-title">發布前驗收 Gate</div><div class="panel-sub">HQ 更新任何正式檔前，至少完成以下檢查。</div></div></div>
-      <div class="panel-body">
-        <div class="hq-checks">
-          <div class="hq-check"><b>① 尺寸</b><br>手機 55×85、穿戴 55×60、配件 65×40 實際列印尺寸 PASS。</div>
-          <div class="hq-check"><b>② 排版</b><br>手機 3×3、穿戴 3×4 無間距；沒有白縫或裁切。</div>
-          <div class="hq-check"><b>③ 條碼</b><br>Code128 可掃；IMEI／SN 辨識字完整、不被支架遮擋關鍵資訊。</div>
-          <div class="hq-check"><b>④ 視覺</b><br>品牌、牌價、建議售價與 Logo 不重疊，背景色正常列印。</div>
+        <div class="hq31-tech">
+          <h3>正式版型鎖定</h3>
+          <div class="body">
+            <div class="hq-rule-line"><b>手機</b><span>55 × 85 mm；A4 直式 3 × 3；gap 0。</span></div>
+            <div class="hq-rule-line"><b>穿戴</b><span>55 × 60 mm；A4 直式 3 × 4；gap 0；SN／IMEI 固定 19mm。</span></div>
+            <div class="hq-rule-line"><b>配件</b><span>65 × 40 mm；維持現行正式實體尺寸。</span></div>
+            <div class="hq-rule-line"><b>品牌字</b><span>新機 27px／二手機 27px／穿戴 27px。</span></div>
+            <div class="hq-rule-line"><b>牌價</b><span>新機 35px／二手機 33px／穿戴 35px；$ 全部 27px。</span></div>
+            <div class="hq-rule-line"><b>二手機</b><span>售價列維持上移 4px 的正式位置。</span></div>
+            <div class="hq-rule-line"><b>條碼</b><span>Code128；不得因 UI 調整改變實體尺寸或辨識字規格。</span></div>
+          </div>
+        </div>
+
+        <div class="hq31-tech">
+          <h3>GitHub 路徑與價格比對</h3>
+          <div class="body">
+            <div class="hq-rule-line"><b>價格檔</b><span><code>./data/hq/suggested-prices/current/hq-suggested-price.xlsb</code></span></div>
+            <div class="hq-rule-line"><b>工作表</b><span>公司制式 XLSB 的「系統版」。</span></div>
+            <div class="hq-rule-line"><b>讀取欄位</b><span>廠牌／標價卡用名稱／型號／Rom／建議售價。</span></div>
+            <div class="hq-rule-line"><b>比對 Key</b><span>優先：廠牌＋標價卡用名稱＋Rom；備援：廠牌＋型號＋Rom。</span></div>
+            <div class="hq-rule-line"><b>配件 Logo</b><span><code>./assets/accessory-logos/manifest.json</code>＋<code>brands/</code>。</span></div>
+            <div class="hq-rule-line"><b>授權</b><span>未來若做網頁端 GitHub 發布，Token 不寫入 HTML、不提交 Repository、不永久保存。</span></div>
+          </div>
+        </div>
+
+        <div class="hq31-tech">
+          <h3>發布前驗收 Gate</h3>
+          <div class="body">
+            <div class="hq-rule-line"><b>尺寸</b><span>手機 55×85、穿戴 55×60、配件 65×40 實際列印 PASS。</span></div>
+            <div class="hq-rule-line"><b>排版</b><span>手機 3×3、穿戴 3×4 無間距，無白縫或裁切。</span></div>
+            <div class="hq-rule-line"><b>條碼</b><span>Code128 可掃；IMEI／SN 完整且不被支架遮擋關鍵資訊。</span></div>
+            <div class="hq-rule-line"><b>視覺</b><span>品牌、牌價、建議售價與 Logo 不重疊，背景色正常列印。</span></div>
+            <div class="hq-rule-line"><b>價格檔</b><span>HQ 顯示已連線，筆數與匹配數合理；失敗時 fallback 正常。</span></div>
+            <div class="hq-rule-line"><b>Logo</b><span>manifest 可讀、品牌 Logo 正常；缺圖時品牌文字 fallback 正常。</span></div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="panel">
-      <div class="panel-head"><div><div class="panel-title">GitHub 發布原則</div><div class="panel-sub">GitHub Pages 只發布正式 HTML、HQ 建議售價與 Logo 靜態資源；不串資料庫，也不把 GitHub Token 或私密憑證寫進前端。</div></div></div>
-      <div class="panel-body">
-        <div class="data-flow" style="display:flex;flex-wrap:wrap">
-          <span class="flowbox">HQ 更新建議售價 Excel / 配件 Logo</span><span class="arrow">→</span>
-          <span class="flowbox">發布 GitHub 靜態檔</span><span class="arrow">→</span>
-          <span class="flowbox">最後更新 manifest</span><span class="arrow">→</span>
-          <span class="flowbox">Gate 驗收</span><span class="arrow">→</span>
-          <span class="flowbox">門市重新載入</span>
-        </div>
-        <div class="hq-lock-note"><b>版本原則：</b>V4.1.30 已啟用 HQ 建議售價自動 fetch；配件 Logo 仍維持 V4.1.29 外部 manifest 讀取。HQ 價格檔無法取得或未匹配時，自動回退工具既有建議售價，不阻擋產卡；正式列印版型不因本功能變更。</div>
-      </div>
-    </div>
-  </div>
+  </details>
 </section>
+
 
     </main>
   </div>
@@ -6418,6 +6418,16 @@ const ACC_BRAND_LOGOS = {};
 const ACC_BRAND_OPTICAL_SCALE = {};
 const ACC_BRAND_MANIFEST_PATH = './assets/accessory-logos/manifest.json';
 let ACC_BRAND_MANIFEST_READY = false;
+function updateHqLogoDashboard(ok,count=0,message=''){
+  const card=document.getElementById('hqOverviewLogoCard');
+  const st=document.getElementById('hqAccessoryLogoStatus');
+  const ct=document.getElementById('hqAccessoryLogoCount');
+  const dt=document.getElementById('hqAccessoryLogoDetail');
+  if(card){card.classList.toggle('warn',!ok);card.classList.toggle('muted',false)}
+  if(st)st.textContent=ok?'已連線':'Fallback';
+  if(ct)ct.textContent=ok?`${Number(count||0).toLocaleString()} 個品牌已載入`:(message||'使用品牌文字 fallback');
+  if(dt)dt.textContent=ok?`配件 Logo：已載入 ${Number(count||0).toLocaleString()} 個品牌`:`配件 Logo：Fallback${message?'｜'+message:''}`;
+}
 async function loadAccessoryLogoManifest(){
   try{
     const manifestUrl=new URL(ACC_BRAND_MANIFEST_PATH,location.href);
@@ -6447,12 +6457,14 @@ async function loadAccessoryLogoManifest(){
       }
     }
     ACC_BRAND_MANIFEST_READY=true;
+    updateHqLogoDashboard(true,Object.keys(brands).length);
     const hint=document.getElementById('accDetectHint');
     if(hint)hint.textContent=`配件 Logo 已由 GitHub 外部 manifest 載入 ${Object.keys(brands).length} 個品牌；imos / Moshi / Lapo 維持控價版型。`;
     try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
     return true;
   }catch(err){
     ACC_BRAND_MANIFEST_READY=false;
+    updateHqLogoDashboard(false,0,String(err&&err.message||err));
     console.warn('Accessory logo manifest load failed:',err);
     const hint=document.getElementById('accDetectHint');
     if(hint)hint.textContent='配件 Logo manifest 尚未載入；目前以品牌文字 fallback，不影響 Excel 匯入與產卡。GitHub Pages 部署後會自動讀取外部 Logo。';
@@ -6671,10 +6683,19 @@ function hqPriceReportDate(rows,headerRow){
 }
 function updateHqPriceStatus(){
   const st=document.getElementById('hqPriceStatus'),dt=document.getElementById('hqPriceDetail');
-  if(!st&&!dt)return;
-  if(HQ_PRICE_STATE.loading){if(st)st.textContent='HQ 建議售價：載入中…';if(dt)dt.textContent='正在讀取 GitHub 公司制式 XLSB';return}
-  if(HQ_PRICE_STATE.ready){if(st)st.textContent='HQ 建議售價：已連線';if(dt)dt.textContent=`${HQ_PRICE_STATE.reportDate||HQ_PRICE_STATE.updatedAt||'最新版'}｜${HQ_PRICE_STATE.sheet||'系統版'}｜${HQ_PRICE_STATE.rows.toLocaleString()} 筆｜目前規格匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;return}
-  if(st)st.textContent='HQ 建議售價：Fallback';if(dt)dt.textContent=HQ_PRICE_STATE.error||'尚未載入；使用工具既有建議售價，不阻擋產卡'
+  const ov=document.getElementById('hqOverviewPriceStatus'),om=document.getElementById('hqOverviewPriceMeta'),card=document.getElementById('hqOverviewPriceCard');
+  if(HQ_PRICE_STATE.loading){
+    if(st)st.textContent='HQ 建議售價：載入中…';if(dt)dt.textContent='正在讀取 GitHub 公司制式 XLSB';
+    if(ov)ov.textContent='載入中…';if(om)om.textContent='正在檢查 GitHub 公司制式 XLSB';if(card){card.classList.remove('warn');card.classList.add('muted')}return
+  }
+  if(HQ_PRICE_STATE.ready){
+    const detail=`${HQ_PRICE_STATE.reportDate||HQ_PRICE_STATE.updatedAt||'最新版'}｜${HQ_PRICE_STATE.sheet||'系統版'}｜${HQ_PRICE_STATE.rows.toLocaleString()} 筆｜目前規格匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;
+    if(st)st.textContent='HQ 建議售價：已連線';if(dt)dt.textContent=detail;
+    if(ov)ov.textContent='已連線';if(om)om.textContent=`${HQ_PRICE_STATE.rows.toLocaleString()} 筆・匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;if(card){card.classList.remove('warn','muted')}return
+  }
+  const err=HQ_PRICE_STATE.error||'尚未載入；使用工具既有建議售價，不阻擋產卡';
+  if(st)st.textContent='HQ 建議售價：Fallback';if(dt)dt.textContent=err;
+  if(ov)ov.textContent='Fallback';if(om)om.textContent=err;if(card){card.classList.add('warn');card.classList.remove('muted')}
 }
 async function loadHqSuggestedPrices(force=false){
   if(HQ_PRICE_STATE.loading&&!force)return false;
