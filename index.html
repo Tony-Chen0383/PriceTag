@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.32.4｜配件暫存清除修正版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.32.5｜新機狀態標籤放大版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6220,11 +6220,51 @@ body{min-width:1080px}
 }
 </style>
 
+
+<style id="v41325-new-meta-special-pill-size">
+/* ===== V4.1.32.5｜新機狀態標籤放大版 =====
+   基準：V4.1.32.5
+   新機手機卡：盒損 / 保期不足 / 拆封新品
+   尺寸對齊「建議售價」cr-pill：20px 高、11.5px 字、同圓角 / padding。
+   不改卡片尺寸、價格、Meta 列高度與其他版型。
+*/
+.phone-card.new-phone-card .new-meta-special{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:20px!important;
+  height:20px!important;
+  padding:2px 7px!important;
+  border-radius:999px!important;
+  font-size:11.5px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  box-sizing:border-box!important;
+}
+.phone-card.new-phone-card .new-meta-specials{
+  gap:3px!important;
+}
+.phone-card.new-phone-card .new-msrp-with-specials{
+  gap:4px!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-meta-special{
+    min-height:20px!important;
+    height:20px!important;
+    padding:2px 7px!important;
+    border-radius:999px!important;
+    font-size:11.5px!important;
+    line-height:1!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.4</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.4 配件暫存清除修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.5 新機狀態標籤放大版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6531,7 +6571,7 @@ document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+next).classList.add('active');
 }));
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
-/* V4.1.32.4：正式版不再內建任何配件示範商品。
+/* V4.1.32.5：正式版不再內建任何配件示範商品。
    配件工作區每次開啟都從空白開始，只接受本次 Excel 匯入資料。 */
 let accProducts=[];
 let accCurrent=null;
@@ -6704,7 +6744,7 @@ function renderAccessory(){const tb=document.getElementById('accTbody');if(!acce
 function changeAccPrintName(i,v){const row=accessoryRows[i];if(!row)return;syncAccessoryPrintName(row,v);syncAccessoryNameControls();if(accCurrent&&accCurrent._accId===row._accId)renderAccessoryPreview(accCurrent)}
 function chgQty(i,d){accessoryRows[i].qty=Math.max(1,accessoryRows[i].qty+d);renderAccessory()}function removeAcc(i){accessoryRows.splice(i,1);renderAccessory()}
 function clearAccessory(silent=false){
-  /* V4.1.32.4｜配件工作區完整 Reset Gate
+  /* V4.1.32.5｜配件工作區完整 Reset Gate
      只清本次門市作業；不清 GitHub 授權、HQ 建議售價、Logo manifest。 */
   accProducts=[];
   accResults=[];
@@ -7121,7 +7161,7 @@ async function gh32PublishLogo(){
     await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
     const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
     brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
-    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.4-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.4 web direct publish';
+    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.4-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.5 web direct publish';
     if(p)p.textContent='Logo 完成，更新 manifest…';
     await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);
 
