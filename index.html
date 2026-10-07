@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.32.2｜配件 Logo 即時刷新與列印白底修正版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.32.3｜配件 Logo 即時刷新與列印白底修正版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6163,7 +6163,7 @@ body{min-width:1080px}
 
 
 <style id="v41322-accessory-print-white-fix">
-/* ===== V4.1.32.2｜配件列印白底／自動高度修正 =====
+/* ===== V4.1.32.3｜配件列印白底／自動高度修正 =====
    僅修正配件批次列印外層容器；65×40mm 標籤本體不變。 */
 @media print{
   html,body,body.batch-print-mode,
@@ -6190,11 +6190,41 @@ body{min-width:1080px}
 }
 </style>
 
+
+<style id="v41323-reset-special-meta">
+/* ===== V4.1.32.3｜作業重置＋新機狀態註記整理 ===== */
+.phone-card.new-phone-card .phone-special-status{display:none!important;}
+.phone-card.new-phone-card .cr-meta{
+  grid-template-columns:auto 68px auto minmax(0,1fr)!important;
+}
+.phone-card.new-phone-card .new-msrp-with-specials{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:3px!important;overflow:visible!important;min-width:0!important;
+}
+.phone-card.new-phone-card .new-msrp-value{flex:0 0 auto;white-space:nowrap;}
+.phone-card.new-phone-card .new-meta-specials{display:inline-flex;align-items:center;gap:2px;flex:0 0 auto;}
+.phone-card.new-phone-card .new-meta-special{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:14px;padding:0 3px;border-radius:5px;color:#fff;
+  font-size:7px;font-weight:900;line-height:1;white-space:nowrap;
+  box-shadow:none;border:0;
+}
+.phone-card.new-phone-card .new-meta-special.special-box{background:#f97316;}
+.phone-card.new-phone-card .new-meta-special.special-warranty{background:#e11d48;}
+.phone-card.new-phone-card .new-meta-special.special-opened{background:#0f766e;}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta{
+    grid-template-columns:auto 68px auto minmax(0,1fr)!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-meta-special{font-size:7px!important;height:14px!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.2 配件 Logo 即時刷新＋列印白底修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.3 配件 Logo 即時刷新＋列印白底修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6297,7 +6327,7 @@ body{min-width:1080px}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V4.1.32.2｜GitHub 靜態管理＋管理者直接發布</div>
+      <div class="hq31-hero-title">V4.1.32.3｜GitHub 靜態管理＋作業重置修正</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -6330,7 +6360,7 @@ body{min-width:1080px}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V4.1.32.2</div>
+      <div class="value">V4.1.32.3</div>
       <div class="meta">管理者網頁直傳 GitHub 版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -6488,9 +6518,17 @@ body{min-width:1080px}
 <div class="toast" id="toast"></div>
 <script>
 const pages=['accessory','used','new','templates'];
+function resetWorkspaceForPage(page,silent=true){
+  if(page==='accessory')return clearAccessory(silent);
+  if(page==='used')return resetUsedItems(silent);
+  if(page==='new')return resetNewItems(silent);
+}
 document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>{
+  const current=document.querySelector('.navbtn.active')?.dataset.page||'';
+  const next=b.dataset.page;
+  if(current&&current!==next&&current!=='templates')resetWorkspaceForPage(current,true);
   document.querySelectorAll('.navbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+b.dataset.page).classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+next).classList.add('active');
 }));
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
 let accProducts=[{code:'NO0001090CA',barcode:'',brand:'imos',name:'iPhone 17Pro Max 荒原廢土磁吸防摔手機款(附掛環扣)',list:1090,member:870,status:'示意'}];
@@ -6660,7 +6698,27 @@ function addAccessoryByIndex(idx){const p=accResults[idx];if(!p)return;accCurren
 function addAccessory(){const p=accCurrent||accProducts[0];if(!p)return;const printName=String(p.printName||p.name||'').trim();if(isControlledBrand(p.brand)&&!(Number(p.member)>0)){toast('控價商品缺少會員價，已禁止加入列印清單');return}const row=accessoryRows.find(x=>x._accId===p._accId);if(row){row.qty=(Number(row.qty)||1)+1}else{accessoryRows.push({...p,printName:printName||p.name||'',qty:1})}renderAccessory();renderAccResult(accResults);toast('已增加 1 張')}
 function renderAccessory(){const tb=document.getElementById('accTbody');if(!accessoryRows.length){tb.innerHTML='<tr><td class="empty" colspan="6">尚未加入商品</td></tr>';document.getElementById('accCount').textContent='0 張'}else{tb.innerHTML=accessoryRows.map((r,i)=>`<tr><td><b>${h(accessoryPrintName(r))}</b><span class="acc-row-original">原始名稱：${h(r.name||'—')}</span><input class="acc-row-name-input" value="${h(accessoryPrintName(r))}" oninput="changeAccPrintName(${i},this.value)" placeholder="可自訂列印名稱"></td><td>${h(r.brand)} ${isControlledBrand(r.brand)?'<span class="tag lock">控價</span>':''}</td><td>$${Number(r.list||0).toLocaleString()}</td><td>$${Number(r.member||0).toLocaleString()}</td><td><div class="qty"><button onclick="chgQty(${i},-1)">−</button><input value="${r.qty}" readonly><button onclick="chgQty(${i},1)">＋</button></div></td><td><button class="iconbtn" onclick="removeAcc(${i})">✕</button></td></tr>`).join('');document.getElementById('accCount').textContent=accessoryRows.reduce((a,r)=>a+r.qty,0)+' 張'}}
 function changeAccPrintName(i,v){const row=accessoryRows[i];if(!row)return;syncAccessoryPrintName(row,v);syncAccessoryNameControls();if(accCurrent&&accCurrent._accId===row._accId)renderAccessoryPreview(accCurrent)}
-function chgQty(i,d){accessoryRows[i].qty=Math.max(1,accessoryRows[i].qty+d);renderAccessory()}function removeAcc(i){accessoryRows.splice(i,1);renderAccessory()}function clearAccessory(){accessoryRows=[];renderAccessory();toast('已清空本次配件作業')}
+function chgQty(i,d){accessoryRows[i].qty=Math.max(1,accessoryRows[i].qty+d);renderAccessory()}function removeAcc(i){accessoryRows.splice(i,1);renderAccessory()}
+function clearAccessory(silent=false){
+  accProducts=[];accResults=[];accCurrent=null;accessoryRows=[];
+  const f=document.getElementById('accFile');if(f)f.value='';
+  const q=document.getElementById('accSearch');if(q)q.value='';
+  const brand=document.getElementById('accBrand');if(brand)brand.innerHTML='<option selected>全部品牌</option>';
+  const st=document.getElementById('accSourceStatus');if(st)st.textContent='點擊匯入';
+  const sub=document.getElementById('accSourceSub');if(sub)sub.textContent='拖曳庫存報表 Excel 至此';
+  const hint=document.getElementById('accUploadHint');if(hint)hint.textContent='';
+  const detect=document.getElementById('accDetectHint');if(detect)detect.textContent='匯入後會直接產生全部標卡預覽；品牌 Logo 依 GitHub manifest 載入。搜尋功能僅供快速篩選。';
+  const result=document.getElementById('accResult');if(result)result.innerHTML='<div class="acc-preview-note">匯入後直接產生全部配件標卡預覽；名稱、張數都直接在標卡區調整。</div><div class="empty">尚未匯入配件 Excel</div>';
+  const label=document.getElementById('accLabelPreview');if(label)label.classList.remove('controlled-price');
+  const code=document.getElementById('accPCode');if(code)code.textContent='';
+  const mini=document.getElementById('accPMini');if(mini)mini.textContent='';
+  const list=document.getElementById('accPList');if(list)list.textContent='';
+  const promo=document.getElementById('accPPromo');if(promo)promo.textContent='';
+  const name=document.getElementById('accPName');if(name)name.textContent='';
+  const logo=document.getElementById('accPBrandLogo');if(logo){logo.innerHTML='';logo.title='';}
+  renderAccessory();
+  if(!silent)toast('已清空本次配件作業');
+}
 const USED_REPORT_HEADERS={source:['回收來源'],small:['商品小類','小類'],brand:['品牌','廠牌'],name:['回收機款','機款','商品名稱'],imei:['IMEI','IMEI/SN','序號'],grade:['等級'],store:['所在門市','門市'],price:['設定售價','售價'],actualPrice:['實際售價'],orderNo:['進貨單號','單號'],status:['機款狀態','狀態'],batteryHealth:['電池健康度','電池健康'],internationalVersion:['國際版本','版本'],screenBurn:['螢幕烙印','烙印']};
 let usedItems=[];
 let currentBatchType="";let usedBatchPage=0;let usedInlinePage=0;
@@ -6710,7 +6768,7 @@ function usedInlineCardHtml(r,i){const p=productAt(r);return `<div class="batch-
 function renderUsedInlinePage(page=0){usedInlinePage=Math.max(0,page);renderUsedItems()}
 function selectUsedItem(i){activeUsedIndex=i;usedInlinePage=Math.floor(i/9);renderUsedItems()}
 function removeUsedItem(i){usedItems.splice(i,1);if(activeUsedIndex>=usedItems.length)activeUsedIndex=Math.max(0,usedItems.length-1);updateUsedImportUI();renderUsedItems()}
-function resetUsedItems(){usedItems=[];activeUsedIndex=0;usedInlinePage=0;usedImportState={rows:null,file:'',errors:[]};updateUsedImportUI();renderUsedItems();const f=document.getElementById('usedFile');if(f)f.value='';toast('已清空本次二手機作業')}
+function resetUsedItems(silent=false){usedItems=[];activeUsedIndex=0;usedInlinePage=0;usedBatchPage=0;usedImportState={rows:null,file:'',errors:[]};updateUsedImportUI();renderUsedItems();const f=document.getElementById('usedFile');if(f)f.value='';if(!silent)toast('已清空本次二手機作業')}
 const USED_GRADE_LOGOS={"S":"./assets/static/img-462b7463f2d8abd7.png","A":"./assets/static/img-babd7ecc90b37ad6.png","B":"./assets/static/img-6db8d0163c0a6ac3.png","C":"./assets/static/img-cde584d44f430845.png","D":"./assets/static/img-6460e79a5c526ed8.png","E":"./assets/static/img-9a756b0d102a0636.png","F":"./assets/static/img-1e066b8f8e22a0fb.png","G":"./assets/static/img-23f46c77a257a4b8.png","H":"./assets/static/img-114057dccbe82212.png"};
 function usedGradeLogoHtml(g,small=false){const src=USED_GRADE_LOGOS[g];if(src)return `<img src="${src}" alt="${g}級">`;return small?`<span>${h(g)}級<br>待補</span>`:`<span class="grade-big">${h(g)}</span><span class="grade-small">Logo待補</span>`}
 function gradePalette(g,type='used'){const used={S:['#e9ad18','#fff'],A:['#ea3d55','#fff'],B:['#2fa9dc','#fff'],C:['#3caf50','#fff'],D:['#9d2459','#fff'],E:['#742593','#fff'],F:['#2149a0','#fff'],G:['#226a83','#fff'],H:['#885020','#fff']};const nw={A:['#303640','#fff']};return type==='new'?(nw[g]||nw.A):(used[g]||used.B)}
@@ -6839,7 +6897,15 @@ let newItems=[];
 function newSpecialSourceText(item,p){p=p||productAt(item);return [p&&p.name,item&&item.sourceName,item&&item.sourceSmall,item&&item.sourceMid,item&&item.sourceCategory,item&&item.name].filter(Boolean).join(' ')}
 function newNameHasWarrantyInsufficient(item,p){return newSpecialSourceText(item,p).includes('保期不足')}
 function newHasBoxDamage(item,p){const t=newSpecialSourceText(item,p);return t.includes('盒損')||t.includes('外盒損傷')||t.includes('外盒瑕疵')}
-function newDisplayName(item,p){p=p||productAt(item);const base=(p&&p.name)||(item&&item.sourceName)||'—';return String(base).replace(/[（(]\s*(?:外盒損傷|外盒瑕疵|盒損|保期不足)\s*[）)]/g,'').replace(/(?:外盒損傷|外盒瑕疵|盒損|保期不足)/g,'').replace(/\s{2,}/g,' ').trim()||'—'}
+function newHasOpenedNew(item,p){const t=newSpecialSourceText(item,p);return t.includes('拆封新品')||t.includes('已拆封新品')}
+function newDisplayName(item,p){p=p||productAt(item);const base=(p&&p.name)||(item&&item.sourceName)||'—';return String(base).replace(/[（(]\s*(?:外盒損傷|外盒瑕疵|盒損|保期不足|已拆封新品|拆封新品)\s*[）)]/g,'').replace(/(?:外盒損傷|外盒瑕疵|盒損|保期不足|已拆封新品|拆封新品)/g,'').replace(/\s{2,}/g,' ').trim()||'—'}
+function newPhoneMetaSpecials(item,p){
+  const tags=[];
+  if(newHasBoxDamage(item,p))tags.push('<span class="new-meta-special special-box" title="盒損">盒損</span>');
+  if(newNameHasWarrantyInsufficient(item,p))tags.push('<span class="new-meta-special special-warranty" title="保期不足">保期不足</span>');
+  if(newHasOpenedNew(item,p))tags.push('<span class="new-meta-special special-opened" title="拆封新品">拆封新品</span>');
+  return tags.length?'<span class="new-meta-specials">'+tags.join('')+'</span>':'';
+}
 function applyNewWarrantyRule(item,p){if(!item)return false;p=p||productAt(item);item.warrantyLockedByName=true;item.warranty='創宇保固一年';return true}
 function normalizeItem(item){const p=productAt(item);if(!p)return item;const colors=splitColors(p.colors);if(!colors.includes(item.color))item.color=colors[0];if(!item.tpl)item.tpl=autoTemplate(p.category);if(!item.grade)item.grade='A';applyNewWarrantyRule(item,p);return item}
 newItems.forEach(normalizeItem);
@@ -6877,10 +6943,17 @@ function changeNewImei(i,v){newItems[i].imei=v;activeNewIndex=i;renderNewPreview
 function changeNewWarranty(i,v){newItems[i].warranty='創宇保固一年';activeNewIndex=i;renderNewPreview()}function changeNewGrade(i,v){newItems[i].grade=v;activeNewIndex=i;renderNewPreview()}
 function addNewItem(){toast('新機商品資料由雙報表自動產生；門市僅需在必要時調整售價')}
 function removeNewItem(i){newItems.splice(i,1);if(activeNewIndex>=newItems.length)activeNewIndex=Math.max(0,newItems.length-1);renderNewItems()}
-function resetNewItems(){newItems=[];activeNewIndex=0;renderNewItems();toast('已清空本次新機作業')}
+function resetNewItems(silent=false){
+  newItems=[];activeNewIndex=0;
+  newReportState={stock:null,imei:null,stockFile:'',imeiFile:'',errors:[],lastBuild:null};
+  const f=document.getElementById('newReportFiles');if(f)f.value='';
+  updateNewReportUI();renderNewItems();
+  const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent='0 筆';
+  if(!silent)toast('已清空本次新機作業');
+}
 function shortWarranty(w){return String(w||'').replace('原廠保固','原廠 ').replace('創宇保固','創宇 ')}
 const NEW_GRADE_LOGO='./assets/static/img-c0456fc81227250d.png';
-function newPhoneHtml(p,r,opt={}){const sale=money(r.price)||'—';const date=wearDisplayDate(p.year),displayName=newDisplayName(r,p);const boxDamage=newHasBoxDamage(r,p),warrantyShort=newNameHasWarrantyInsufficient(r,p);r.warranty='創宇保固一年';const special=`<div class="phone-special-status">${boxDamage?'<span class="phone-special-tag special-box">盒損</span>':''}${warrantyShort?'<span class="phone-special-tag special-warranty">保期</span>':''}</div>`;const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;return `<div class="cr-hero">${special}<div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(displayName)}">${h(displayName)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta"><span class="cr-pill">上市日期</span><span class="cr-meta-val">${h(date)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val">${formatSuggestedMsrp(p)}</span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div><div class="spec-value">${h(ramText(p.ram))} / ${h(cap(p.rom))}</div></div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div><div class="spec-value yellow cpu-value ${cpuTextClass(p.processor)}">${h(p.processor||'—')}</div></div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div><div class="spec-value">${h(p.display||'—')}</div></div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div><div class="spec-value yellow">${h(mainCameraText(p.rearCamera))}</div></div><div class="spec-line double"><div class="spec-label dark">電池</div><div class="spec-value yellow">${h(p.battery||'—')}</div><div class="spec-label dark">通訊<br>網路</div><div class="spec-value">${h(p.network||'—')}</div></div><div class="spec-line"><div class="spec-label">保固</div><div class="spec-value">${h('創宇保固一年')}</div></div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`}
+function newPhoneHtml(p,r,opt={}){const sale=money(r.price)||'—';const date=wearDisplayDate(p.year),displayName=newDisplayName(r,p);const metaSpecials=newPhoneMetaSpecials(r,p);r.warranty='創宇保固一年';const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(displayName)}">${h(displayName)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta"><span class="cr-pill">上市日期</span><span class="cr-meta-val">${h(date)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-with-specials"><span class="new-msrp-value">${formatSuggestedMsrp(p)}</span>${metaSpecials}</span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div><div class="spec-value">${h(ramText(p.ram))} / ${h(cap(p.rom))}</div></div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div><div class="spec-value yellow cpu-value ${cpuTextClass(p.processor)}">${h(p.processor||'—')}</div></div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div><div class="spec-value">${h(p.display||'—')}</div></div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div><div class="spec-value yellow">${h(mainCameraText(p.rearCamera))}</div></div><div class="spec-line double"><div class="spec-label dark">電池</div><div class="spec-value yellow">${h(p.battery||'—')}</div><div class="spec-label dark">通訊<br>網路</div><div class="spec-value">${h(p.network||'—')}</div></div><div class="spec-line"><div class="spec-label">保固</div><div class="spec-value">${h('創宇保固一年')}</div></div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`}
 function wearDisplayDate(val){if(!val)return '—';const s=String(val).trim();if(/^\d{4}$/.test(s))return `${s}-01-01`;const m=s.match(/^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})$/);if(m)return `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`;return s}
 function wearSecondLine(p,r){const bits=[];if(r&&r.color&&r.color!=='—')bits.push(r.color);const rom=cap(p.rom);if(rom&&rom!=='—')bits.push(rom);if(p.model&&bits.length<2&&!bits.join(' ').includes(p.model))bits.push(p.model);if(!bits.length&&p.colors)bits.push(String(p.colors).split('、')[0]);return bits.join(' ')|| '—'}
 function wearNetworkText(p){const v=(p.network||'').trim();if(!v||v==='—')return /(耳機|Ring|Watch|手錶|手環|穿戴)/i.test(String(p.category||'')+' '+String(p.name||''))?'藍牙':'—';return v}
@@ -7019,11 +7092,11 @@ async function gh32PublishLogo(){
     await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
     const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
     brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
-    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.2-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.2 web direct publish';
+    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.2-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.3 web direct publish';
     if(p)p.textContent='Logo 完成，更新 manifest…';
     await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);
 
-    /* V4.1.32.2：GitHub Pages 尚未部署完成前，立即把本次上傳結果套到目前工作階段。 */
+    /* V4.1.32.3：GitHub Pages 尚未部署完成前，立即把本次上傳結果套到目前工作階段。 */
     GH32_LOGO_MANIFEST_CACHE=manifest;
     const liveUrl=GH32_LOGO_PENDING.url;
     const scale=Number(brands[key].scale)||1;
