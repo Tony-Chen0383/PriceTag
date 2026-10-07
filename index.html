@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.32｜管理者網頁直傳 GitHub 版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.32.2｜配件 Logo 即時刷新與列印白底修正版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6161,11 +6161,40 @@ body{min-width:1080px}
 @media(max-width:820px){.hq32-auth-grid{grid-template-columns:1fr}.hq32-token-row{grid-template-columns:1fr}.hq32-logo-grid{grid-template-columns:1fr}}
 </style>
 
+
+<style id="v41322-accessory-print-white-fix">
+/* ===== V4.1.32.2｜配件列印白底／自動高度修正 =====
+   僅修正配件批次列印外層容器；65×40mm 標籤本體不變。 */
+@media print{
+  html,body,body.batch-print-mode,
+  body.batch-print-mode #batchModal,
+  body.batch-print-mode .batch-sheet,
+  body.batch-print-mode .batch-preview-body,
+  body.batch-print-mode .batch-preview-grid.accessory,
+  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item{
+    background:#fff !important;
+    background-color:#fff !important;
+  }
+  body.batch-print-mode .batch-sheet,
+  body.batch-print-mode .batch-preview-body,
+  body.batch-print-mode .batch-preview-grid.accessory{
+    min-height:0 !important;
+    height:auto !important;
+    max-height:none !important;
+  }
+  body.batch-print-mode .batch-preview-body{
+    display:block !important;
+    flex:none !important;
+    overflow:visible !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.1 頂部 HQ 價格狀態同步修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.2 配件 Logo 即時刷新＋列印白底修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6268,7 +6297,7 @@ body{min-width:1080px}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V4.1.32｜GitHub 靜態管理＋管理者直接發布</div>
+      <div class="hq31-hero-title">V4.1.32.2｜GitHub 靜態管理＋管理者直接發布</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -6301,7 +6330,7 @@ body{min-width:1080px}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V4.1.32</div>
+      <div class="value">V4.1.32.2</div>
       <div class="meta">管理者網頁直傳 GitHub 版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -6502,7 +6531,7 @@ async function loadAccessoryLogoManifest(){
       const entry=typeof entryRaw==='string'?{file:entryRaw}:entryRaw||{};
       const key=brandKey(rawKey);
       if(!key||!entry.file)continue;
-      ACC_BRAND_LOGOS[key]=new URL(entry.file,baseUrl).href;
+      const logoUrl=new URL(entry.file,baseUrl);logoUrl.searchParams.set('v',String(data.version||data.updatedAt||Date.now()));ACC_BRAND_LOGOS[key]=logoUrl.href;
       ACC_BRAND_OPTICAL_SCALE[key]=Number(entry.scale)||1;
       const display=entry.displayName||ACC_BRAND_NAME_MAP[key]||rawKey;
       ACC_BRAND_NAME_MAP[key]=display;
@@ -6898,7 +6927,7 @@ function usedBatchCardHtml(r,i){const p=productAt(r);return `<div class="batch-p
 function renderUsedBatchPage(page=0){const grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');const pages=Math.max(1,Math.ceil(usedItems.length/9));usedBatchPage=Math.max(0,Math.min(page,pages-1));grid.className='batch-preview-grid fast-used-preview';if(!usedItems.length){grid.innerHTML='<div class="batch-empty">尚未匯入二手機資料</div>';pager.style.display='none';return}const start=usedBatchPage*9,end=Math.min(start+9,usedItems.length);let html='';for(let i=start;i<end;i++)html+=usedBatchCardHtml(usedItems[i],i);grid.innerHTML=html;pager.style.display='flex';pager.innerHTML=`<button class="btn ghost" ${usedBatchPage<=0?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage-1})">上一頁</button><span class="pager-info">第 ${usedBatchPage+1} / ${pages} 頁</span><button class="btn ghost" ${usedBatchPage>=pages-1?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage+1})">下一頁</button>`}
 function buildUsedPrintPagesFast(){const grid=document.getElementById('batchGrid'),phones=usedItems.filter(r=>r.tpl!=='穿戴'),wears=usedItems.filter(r=>r.tpl==='穿戴'),cells=[];cells.push('<div class="a4-preview-stack">');const add=(arr,per,wear)=>{const pages=Math.ceil(arr.length/per);for(let pg=0;pg<pages;pg++){cells.push(`<div class="a4-page${wear?' wear-page':''}">`);for(let c=0;c<per;c++){const r=arr[pg*per+c];cells.push('<div class="a4-cell">');if(r){const pp=productAt(r);cells.push('<div class="batch-preview-item">');cells.push(wear?usedWearHtml(pp,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(pp,r)}</div>`);cells.push('</div>')}cells.push('</div>')}cells.push(`<div class="a4-page-badge">A4｜${wear?'穿戴 3×4':'手機 3×3'}｜第 ${pg+1} / ${pages} 頁</div></div>`)}};add(phones,9,false);add(wears,12,true);cells.push('</div>');grid.className='batch-preview-grid a4-layout';grid.innerHTML=cells.join('')}
 function openBatchPreview(type,showModal=true){currentBatchType=type;const modal=document.getElementById('batchModal'),grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');grid.innerHTML='';grid.className='batch-preview-grid';pager.style.display='none';if(type==='new'){const warns=newItemWarnings(),phoneCount=newItems.filter(x=>x.tpl!=='穿戴').length,wearCount=newItems.length-phoneCount;setBatchMeta('新機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${newItems.length} 張`,false],[`A4 ${Math.ceil(newItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴／耳機 ${wearCount}`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!newItems.length)grid.innerHTML='<div class="batch-empty">尚未新增商品</div>';newItems.forEach((r,i)=>{normalizeItem(r);const p=productAt(r),item=document.createElement('div');item.className='batch-preview-item';item.innerHTML=`<div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(newDisplayName(r,p))}</span></div>${r.tpl==='穿戴'?newWearHtml(p,r):`<div class="phone-card new-phone-card">${newPhoneHtml(p,r)}</div>`}`;grid.appendChild(item)});applyA4BatchLayout(type)}else if(type==='accessory'){grid.classList.add('accessory');const total=accessoryRows.reduce((s,r)=>s+(r.qty||1),0),warns=[];accessoryRows.forEach((r,i)=>{if(!accessoryPrintName(r))warns.push(`配件 ${i+1}：缺少商品名稱`);if(!r.list)warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：缺少牌價`);if(isControlledBrand(r.brand)&&!(Number(r.member)>0))warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：控價商品缺少會員價，禁止列印`)});const ctlTotal=accessoryRows.reduce((s,r)=>s+(isControlledBrand(r.brand)?(r.qty||1):0),0);setBatchMeta('配件｜批次預覽','配件標卡尺寸 65×40 mm；A4 橫式每排 4 張自動排版',[[`共 ${total} 張`,false],[`商品 ${accessoryRows.length} 項`,false],[`控價 ${ctlTotal} 張`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!accessoryRows.length)grid.innerHTML='<div class="batch-empty">尚未加入待列印商品</div>';accessoryRows.forEach((r,i)=>{for(let q=0;q<(r.qty||1);q++){const item=document.createElement('div');item.className='batch-preview-item';const ctl=isControlledBrand(r.brand);item.innerHTML=`<div class="item-head"><b>${h(r.code||r.barcode||'配件')}</b><span>${h(r.brand||'')} ${ctl?'<span class="tag lock">🔒 控價</span>':''}</span></div>`;item.appendChild(accessoryCloneFor(r));grid.appendChild(item)}})}else{const phoneCount=usedItems.filter(x=>x.tpl!=='穿戴').length,wearCount=usedItems.length-phoneCount;setBatchMeta('二手機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${usedItems.length} 張`,false],[`A4 ${Math.ceil(usedItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴 / 耳機 ${wearCount}`,false]],[]);usedBatchPage=0;renderUsedBatchPage(0)}if(showModal)modal.classList.add('open')}
-function setAccessoryLandscapePrint(on){let st=document.getElementById('accessoryLandscapePrintStyle');if(on){if(!st){st=document.createElement('style');st.id='accessoryLandscapePrintStyle';st.textContent='@media print{@page{size:A4 landscape;margin:10mm}body.batch-print-mode .batch-preview-body{width:277mm!important;margin:0 auto!important}}';document.head.appendChild(st)}}else{st?.remove()}}
+function setAccessoryLandscapePrint(on){let st=document.getElementById('accessoryLandscapePrintStyle');if(on){if(!st){st=document.createElement('style');st.id='accessoryLandscapePrintStyle';st.textContent='@media print{@page{size:A4 landscape;margin:10mm}html,body,body.batch-print-mode,body.batch-print-mode #batchModal,body.batch-print-mode .batch-sheet,body.batch-print-mode .batch-preview-body,body.batch-print-mode .batch-preview-grid.accessory{background:#fff!important;background-color:#fff!important}body.batch-print-mode .batch-preview-body{width:277mm!important;margin:0 auto!important;min-height:0!important;height:auto!important;max-height:none!important;display:block!important;flex:none!important;overflow:visible!important}body.batch-print-mode .batch-preview-grid.accessory{min-height:0!important;height:auto!important;background:#fff!important}}';document.head.appendChild(st)}}else{st?.remove()}}
 function printBatchPreview(){const title=document.getElementById('batchTitle')?.textContent||'',pager=document.getElementById('batchPager');if(currentBatchType==='used'){if(!usedItems.length){toast('目前沒有可列印的標價卡');return}const keepPage=usedBatchPage;buildUsedPrintPagesFast();pager.style.display='none';setAccessoryLandscapePrint(false);document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');renderUsedBatchPage(keepPage)},40)}));return}if(title.startsWith('配件')){const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}setAccessoryLandscapePrint(true)}else{setAccessoryLandscapePrint(false);if(!document.querySelector('#batchGrid .a4-page')){toast('目前沒有可列印的標價卡');return}}document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false)},120)})}
 function printPage(p){if(p==='new'||p==='used'||p==='accessory'){if(p==='accessory'){if(!accessoryRows.length){toast('目前沒有可列印的配件標籤');return}const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}}else if(p==='new'&&!newItems.length){toast('目前沒有可列印的新機標價卡');return}else if(p==='used'&&!usedItems.length){toast('目前沒有可列印的二手機標價卡');return}openBatchPreview(p,false);requestAnimationFrame(()=>requestAnimationFrame(()=>printBatchPreview()));return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));document.getElementById('page-'+p).classList.add('printing');requestAnimationFrame(()=>{window.print();setTimeout(()=>document.getElementById('page-'+p).classList.remove('printing'),120)})}
 window.addEventListener('dragover',e=>{try{if(e.dataTransfer&&Array.from(e.dataTransfer.types||[]).includes('Files'))e.preventDefault()}catch(_){}});
@@ -6961,14 +6990,59 @@ async function gh32PriceFileSelected(file){
 async function gh32PublishPrice(){
   if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V4.1.32 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e)}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast('價格檔已發布到 GitHub');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
 }
+function gh32RenderLogoOptions(manifest,selectedKey=''){
+  const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;
+  const rows=Object.entries((manifest&&manifest.brands)||{}).map(([k,v])=>({key:k,name:(v&&v.displayName)||k})).sort((a,b)=>a.name.localeCompare(b.name,'zh-Hant',{sensitivity:'base'}));
+  sel.innerHTML='<option value="">請選擇既有品牌</option>'+rows.map(x=>`<option value="${h(x.key)}">${h(x.name)}</option>`).join('');
+  if(selectedKey&&rows.some(x=>x.key===selectedKey))sel.value=selectedKey;
+}
 async function gh32LoadLogoOptions(){
-  const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;try{const u=new URL(ACC_BRAND_MANIFEST_PATH,location.href);u.searchParams.set('_',Date.now());const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('manifest HTTP '+r.status);const m=await r.json();GH32_LOGO_MANIFEST_CACHE=m;const rows=Object.entries(m.brands||{}).map(([k,v])=>({key:k,name:(v&&v.displayName)||k})).sort((a,b)=>a.name.localeCompare(b.name,'zh-Hant',{sensitivity:'base'}));sel.innerHTML='<option value="">請選擇既有品牌</option>'+rows.map(x=>`<option value="${h(x.key)}">${h(x.name)}</option>`).join('')}catch(err){sel.innerHTML='<option value="">品牌清單載入失敗</option>';console.warn(err)}}
+  const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;try{const u=new URL(ACC_BRAND_MANIFEST_PATH,location.href);u.searchParams.set('_',Date.now());const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('manifest HTTP '+r.status);const m=await r.json();GH32_LOGO_MANIFEST_CACHE=m;gh32RenderLogoOptions(m)}catch(err){sel.innerHTML='<option value="">品牌清單載入失敗</option>';console.warn(err)}}
 function gh32LogoFileSelected(file){
   GH32_LOGO_PENDING=null;const fn=document.getElementById('gh32LogoFileName'),box=document.getElementById('gh32LogoPreview'),info=document.getElementById('gh32LogoInfo'),pr=document.getElementById('gh32LogoProgress');if(pr)pr.textContent='';if(fn)fn.textContent=file?file.name:'尚未選檔';if(box){box.innerHTML='Logo 預覽'}if(!file){gh32UpdatePublishButtons();return}try{const okType=/image\/(png|jpeg|webp)/i.test(file.type)||/\.(png|jpe?g|webp)$/i.test(file.name);if(!okType)throw new Error('只支援 PNG／JPG／WebP');if(file.size>5*1024*1024)throw new Error('Logo 檔案請控制在 5MB 以內');const url=URL.createObjectURL(file);if(box)box.innerHTML=`<img src="${url}" alt="Logo preview">`;GH32_LOGO_PENDING={ok:true,file,url};if(info){info.className='hq32-preview ok';info.textContent=`✓ 圖片檢查 PASS｜${file.name}｜${Math.round(file.size/1024).toLocaleString()} KB`}}catch(err){GH32_LOGO_PENDING={ok:false,error:String(err.message||err)};if(info){info.className='hq32-preview bad';info.textContent='圖片檢查失敗：'+GH32_LOGO_PENDING.error}}gh32UpdatePublishButtons()
 }
 function gh32LogoExt(file){const n=(file?.name||'').toLowerCase();if(n.endsWith('.png')||file?.type==='image/png')return 'png';if(n.endsWith('.webp')||file?.type==='image/webp')return 'webp';return 'jpg'}
 async function gh32PublishLogo(){
-  if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const sel=document.getElementById('gh32LogoBrandSelect'),newName=(document.getElementById('gh32LogoNewBrand')?.value||'').trim(),selectedKey=sel?.value||'';let displayName=newName||((sel&&sel.selectedIndex>=0)?sel.options[sel.selectedIndex].textContent:'');let key=newName?brandKey(newName):selectedKey;if(!key||!displayName||displayName==='請選擇既有品牌')return toast('請選擇既有品牌或輸入新品牌名稱');const btn=document.getElementById('gh32LogoPublishBtn'),p=document.getElementById('gh32LogoProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='讀取 GitHub manifest…'}const manifest=await gh32ReadJsonFromRepo(GH32_LOGO_MANIFEST_PATH),brands=manifest.brands||(manifest.brands={}),existing=brands[key]||{},ext=gh32LogoExt(GH32_LOGO_PENDING.file),assetPath=`assets/accessory-logos/brands/${key}.${ext}`;if(p)p.textContent='正在上傳 Logo…';const buf=await GH32_LOGO_PENDING.file.arrayBuffer();await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32 web direct publish';if(p)p.textContent='Logo 完成，更新 manifest…';await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast(`${displayName} Logo 已發布`);document.getElementById('gh32LogoNewBrand').value='';setTimeout(async()=>{await loadAccessoryLogoManifest();await gh32LoadLogoOptions()},3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('Logo 發布失敗')}finally{gh32UpdatePublishButtons()}
+  if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');
+  if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+  const sel=document.getElementById('gh32LogoBrandSelect'),newName=(document.getElementById('gh32LogoNewBrand')?.value||'').trim(),selectedKey=sel?.value||'';
+  let displayName=newName||((sel&&sel.selectedIndex>=0)?sel.options[sel.selectedIndex].textContent:'');
+  let key=newName?brandKey(newName):selectedKey;
+  if(!key||!displayName||displayName==='請選擇既有品牌')return toast('請選擇既有品牌或輸入新品牌名稱');
+  const btn=document.getElementById('gh32LogoPublishBtn'),p=document.getElementById('gh32LogoProgress');
+  try{
+    if(btn)btn.disabled=true;
+    if(p){p.className='hq32-progress';p.textContent='讀取 GitHub manifest…'}
+    const manifest=await gh32ReadJsonFromRepo(GH32_LOGO_MANIFEST_PATH),brands=manifest.brands||(manifest.brands={}),existing=brands[key]||{},ext=gh32LogoExt(GH32_LOGO_PENDING.file),assetPath=`assets/accessory-logos/brands/${key}.${ext}`;
+    if(p)p.textContent='正在上傳 Logo…';
+    const buf=await GH32_LOGO_PENDING.file.arrayBuffer();
+    await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
+    const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
+    brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
+    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.2-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.2 web direct publish';
+    if(p)p.textContent='Logo 完成，更新 manifest…';
+    await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);
+
+    /* V4.1.32.2：GitHub Pages 尚未部署完成前，立即把本次上傳結果套到目前工作階段。 */
+    GH32_LOGO_MANIFEST_CACHE=manifest;
+    const liveUrl=GH32_LOGO_PENDING.url;
+    const scale=Number(brands[key].scale)||1;
+    ACC_BRAND_LOGOS[key]=liveUrl;ACC_BRAND_OPTICAL_SCALE[key]=scale;ACC_BRAND_NAME_MAP[key]=displayName;
+    for(const alias of aliases){const ak=brandKey(alias);if(!ak)continue;ACC_BRAND_LOGOS[ak]=liveUrl;ACC_BRAND_OPTICAL_SCALE[ak]=scale;ACC_BRAND_NAME_MAP[ak]=displayName}
+    ACC_BRAND_MANIFEST_READY=true;
+    updateHqLogoDashboard(true,Object.keys(brands).length);
+    gh32RenderLogoOptions(manifest,key);
+    try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
+
+    if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功｜本頁已立即套用新 Logo／品牌'}
+    toast(`${displayName} Logo 已發布並立即套用`);
+    document.getElementById('gh32LogoNewBrand').value='';
+    /* Pages 通常需要數秒到數十秒部署；不再 3.5 秒後用舊 Pages manifest 蓋回新資料。 */
+    setTimeout(()=>loadAccessoryLogoManifest(),30000);
+  }catch(err){
+    if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}
+    toast('Logo 發布失敗');
+  }finally{gh32UpdatePublishButtons()}
 }
 function gh32Init(){gh32FillCfg();const c=gh32GetCfg();if((!c.owner||!c.repo)&&location.hostname.toLowerCase().endsWith('.github.io'))gh32AutoDetectRepo();gh32LoadLogoOptions();if(gh32GetToken())gh32TestConnection(false);else gh32SetAuthUi('idle','GitHub 發布授權：未連線','第一次設定後，可直接在此頁發布價格檔與配件 Logo。')}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',gh32Init,{once:true});else setTimeout(gh32Init,0);
