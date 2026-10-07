@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "4.1.32-202610071126",
+  "version": "4.1.32.2-202610071223",
   "updatedAt": "2026-10-07",
   "fallbackMode": "text",
   "brandCount": 89,
@@ -795,5 +795,5 @@
       "scale": 1
     }
   },
-  "publishedVia": "V4.1.32 web direct publish"
+  "publishedVia": "V4.1.32.2 web direct publish"
 }
