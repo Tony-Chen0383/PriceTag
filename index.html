@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.32.5｜新機狀態標籤放大版</title>
+<title>創宇標籤／標價卡列印工具 V5.0.2｜三頁固定區貼頂 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6260,11 +6260,92 @@ body{min-width:1080px}
 }
 </style>
 
+
+<!-- V5.0 GitHub 正式鎖定版｜封版基準：V4.1.32.5；產卡／列印／資料邏輯沿用封版基準。 -->
+
+<style id="v501-fixed-workspace-heads">
+/* ===== V5.0.1｜配件／二手機／新機 上方操作區固定 Hotfix =====
+   固定內容：
+   - 配件：標題列 + 狀態卡
+   - 二手機：標題列 + 狀態卡
+   - 新機：標題列 + 狀態卡 + 匯入摘要
+   僅下方工作內容跟著頁面捲動；固定區本身不建立獨立 scrollbar。
+*/
+#page-accessory > .page-fixed-head,
+#page-used > .page-fixed-head,
+#page-new > .page-fixed-head{
+  position:-webkit-sticky !important;
+  position:sticky !important;
+  top:78px !important;
+  z-index:18 !important;
+  background:var(--bg) !important;
+  overflow:visible !important;
+  max-height:none !important;
+  padding-top:1px;
+  box-shadow:0 10px 14px -16px rgba(24,52,94,.45);
+}
+#page-accessory > .page-fixed-head .page-head,
+#page-used > .page-fixed-head .page-head,
+#page-new > .page-fixed-head .page-head{
+  flex-shrink:0;
+}
+#page-accessory > .page-fixed-head .status-grid,
+#page-used > .page-fixed-head .status-grid,
+#page-new > .page-fixed-head .status-grid,
+#page-new > .page-fixed-head .new-import-summary{
+  flex-shrink:0;
+  overflow:visible !important;
+  max-height:none !important;
+}
+/* 固定區與下方內容保持原有視覺間距，不改工作區尺寸。 */
+#page-accessory > .page-fixed-head + .grid2,
+#page-used > .page-fixed-head + .grid2,
+#page-new > .page-fixed-head + .grid2{
+  position:relative;
+  z-index:1;
+}
+@media print{
+  #page-accessory > .page-fixed-head,
+  #page-used > .page-fixed-head,
+  #page-new > .page-fixed-head{
+    position:static !important;
+    top:auto !important;
+    box-shadow:none !important;
+  }
+}
+</style>
+
+
+<style id="v502-fixed-workspace-heads-top-fix">
+/* ===== V5.0.2｜三頁固定區貼頂 Hotfix =====
+   V5.0.1 的 page-fixed-head 位於 .main scrollport 內，
+   因此 sticky top 應為 0，而不是再次加上 topbar 的 78px。
+   修正：移除 78px 空洞與下方內容重疊；列印不受影響。
+*/
+@media screen{
+  #page-accessory > .page-fixed-head,
+  #page-used > .page-fixed-head,
+  #page-new > .page-fixed-head{
+    top:0 !important;
+    margin-top:0 !important;
+  }
+
+  /* 三個工作頁的內容表頭維持正常內容流，不與固定操作區爭 sticky 層。 */
+  #page-accessory .panel-head,
+  #page-used .panel-head,
+  #page-new .panel-head{
+    position:relative !important;
+    top:auto !important;
+    z-index:auto !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.5 新機狀態標籤放大版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.0.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.0 GitHub 正式鎖定版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6286,6 +6367,7 @@ body{min-width:1080px}
     <main class="main">
       <!-- ACCESSORY -->
       <section class="page active" id="page-accessory">
+        <div class="page-fixed-head">
         <div class="page-head"><div><h1>配件標籤</h1><p>門市匯入自己的庫存報表 Excel，系統自動辨識欄位後即可掃條碼／商品編碼／名稱抓取，不再手 KEY。</p></div><div class="actions"><button class="btn danger" onclick="clearAccessory()">清空本次作業</button><button class="btn primary" onclick="printPage('accessory')">列印清單</button></div></div>
         <div class="status-grid">
           <div class="status-card source-drop-card" id="accDropZone" role="button" tabindex="0" title="點擊或拖曳配件庫存報表 Excel 至此" onclick="document.getElementById('accFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('accFile').click()}" ondragenter="handleAccDragOver(event)" ondragover="handleAccDragOver(event)" ondragleave="handleAccDragLeave(event)" ondrop="handleAccDrop(event)"><div class="k">商品來源</div><div class="v" id="accSourceStatus">點擊匯入</div><div class="s" id="accSourceSub">拖曳庫存報表 Excel 至此</div><span id="accUploadHint" hidden></span><input id="accFile" type="file" accept=".xlsx,.xls,.xlsb" hidden onchange="accessoryFileLoaded(this)"></div>
@@ -6293,6 +6375,7 @@ body{min-width:1080px}
           <div class="status-card"><div class="k">商品搜尋</div><div class="v">編碼 / 條碼 / 名稱</div><div class="s">支援掃碼槍直接輸入</div></div>
           <div class="status-card"><div class="k">本次待列印</div><div class="v" id="accCount">0 張</div><div class="s">重新整理即清空</div></div>
         </div>
+        </div><!-- /page-fixed-head -->
         <div class="grid2">
           <div class="panel">
             <div class="panel-head"><div><div class="panel-title">商品搜尋與標卡預覽</div><div class="panel-sub">左上「商品來源」可點擊或拖曳匯入 Excel；匯入後直接產生全部標卡預覽。</div></div><span class="tag auto">AUTO MATCH</span></div>
@@ -6324,12 +6407,14 @@ body{min-width:1080px}
 
       <!-- USED -->
       <section class="page" id="page-used">
+        <div class="page-fixed-head">
         <div class="page-head"><div><h1>二手機標價卡</h1><p>二手機售價直接由回收紀錄 Excel 的「設定售價」帶入，不開放門市手動改價；資料只存在目前分頁，不會看到其他門市上傳內容。</p></div><div class="actions"><button class="btn danger" onclick="resetUsedItems()">清空本次作業</button><button class="btn primary" onclick="printPage('used')">批次列印</button></div></div>
         <div class="status-grid">
           <div class="status-card source-drop-card" id="usedDrop" role="button" tabindex="0" title="點擊或拖曳二手機回收紀錄 Excel 至此" onclick="document.getElementById('usedFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('usedFile').click()}" ondragenter="usedDragOver(event)" ondragover="usedDragOver(event)" ondragleave="usedDragLeave(event)" ondrop="usedDrop(event)"><div class="k">商品來源</div><div class="v" id="usedImportStatus">點擊匯入</div><div class="s" id="usedImportSub">拖曳二手機回收紀錄 Excel 至此</div><input id="usedFile" type="file" accept=".xlsx,.xls,.xlsb" hidden onchange="usedFileLoaded(this)"></div>
           <div class="status-card"><div class="k">售價來源</div><div class="v">設定售價</div><div class="s">完全鎖定，不可手動修改</div></div>
           <div class="status-card"><div class="k">已產生標卡</div><div class="v" id="usedItemCount">0 筆</div><div class="s">手機 / 穿戴自動判斷</div></div>
         </div>
+        </div><!-- /page-fixed-head -->
         <div class="grid2">
           <div class="panel"><div class="panel-head"><div><div class="panel-title">二手機標卡預覽</div><div class="panel-sub">左上「商品來源」可點擊或拖曳匯入；檔案只在目前瀏覽器分頁解析，重新整理即清空。</div></div><span class="tag mem">SESSION ONLY</span></div><div class="panel-body">
             <div class="summary-panel" id="usedImportSummary"><div class="summary-row"><span><b>匯入：</b>尚未載入</span><span><b>售價：</b>設定售價</span><span><b>保固：</b>S=180天｜A/B/C=90天｜D=14天</span></div><div class="summary-note">每間門市在自己的分頁中操作，不會看到其他門市上傳的資料或標價卡。</div></div>
@@ -6342,9 +6427,11 @@ body{min-width:1080px}
         </div>
       </section>
       <section class="page" id="page-new">
+        <div class="page-fixed-head">
         <div class="page-head"><div><h1>新機標價卡</h1><p>匯入「庫存報表＋IMEI報表」後自動產生商品資料；門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
         <div class="status-grid"><div class="status-card source-drop-card" id="newReportDrop" role="button" tabindex="0" title="點擊或拖曳庫存報表＋IMEI報表 Excel 至此，可一次放入兩份" onclick="document.getElementById('newReportFiles').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('newReportFiles').click()}" ondragenter="newReportDragOver(event)" ondragover="newReportDragOver(event)" ondragleave="newReportDragLeave(event)" ondrop="newReportDrop(event)"><div class="k">商品來源</div><div class="v" id="newImportStatus">點擊匯入</div><div class="s" id="newImportSub">拖曳庫存＋IMEI報表至此</div><input id="newReportFiles" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="newReportFilesSelected(this.files)"></div><div class="status-card"><div class="k">標價卡售價來源</div><div class="v">牌價</div><div class="s">不抓銷售底價／會員價</div></div><div class="status-card"><div class="k">已產生標卡</div><div class="v" id="newItemCount">0 筆</div><div class="s">僅手動調整售價</div></div><div class="status-card"><div class="k">匯入異常</div><div class="v" id="newImportErrorCount">0 筆</div><div class="s">未配對／不可列印資料</div></div></div>
         <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">庫存報表＋IMEI報表到齊後自動產卡；找不到規格的資料不會硬印。</div></div>
+        </div><!-- /page-fixed-head -->
         <div class="grid2">
           <div class="panel"><div class="panel-head"><div><div class="panel-title">本次商品清單</div><div class="panel-sub">匯入後直接顯示正式標價卡；點擊標卡上的售價數字即可修改。</div></div><span class="tag mem">SESSION ONLY</span></div><div class="panel-body" id="newItems"></div></div>
           <div class="panel"><div class="panel-head"><div><div class="panel-title">新機模板預覽</div><div class="panel-sub">新機／二手機使用同一手機卡骨架；新機使用全新品 Logo，二手機使用 S/A/B/C/D/E/F/G/H 等級 Logo。</div></div><div class="segment"><button class="seg active" onclick="setNewPreview('phone',this)">手機</button><button class="seg" onclick="setNewPreview('wear',this)">穿戴</button></div></div><div class="preview-wrap"><div class="preview-top"><span>自動版型</span><span id="newPreviewLabel">新機手機卡</span></div><div class="paper">
@@ -6367,7 +6454,7 @@ body{min-width:1080px}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V4.1.32.3｜GitHub 靜態管理＋作業重置修正</div>
+      <div class="hq31-hero-title">V5.0.2｜三頁固定區貼頂 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -6400,7 +6487,7 @@ body{min-width:1080px}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V4.1.32.3</div>
+      <div class="value">V5.0.1</div>
       <div class="meta">管理者網頁直傳 GitHub 版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -6521,7 +6608,7 @@ body{min-width:1080px}
             <div class="hq-rule-line"><b>讀取欄位</b><span>廠牌／標價卡用名稱／型號／Rom／建議售價。</span></div>
             <div class="hq-rule-line"><b>比對 Key</b><span>優先：廠牌＋標價卡用名稱＋Rom；備援：廠牌＋型號＋Rom。</span></div>
             <div class="hq-rule-line"><b>配件 Logo</b><span><code>./assets/accessory-logos/manifest.json</code>＋<code>brands/</code>。</span></div>
-            <div class="hq-rule-line"><b>授權</b><span>V4.1.32 已支援網頁端 GitHub 發布；Token 不寫入 HTML 或 Repository。勾選「記住這台電腦」時僅儲存在該瀏覽器 localStorage。</span></div>
+            <div class="hq-rule-line"><b>授權</b><span>V5.0 已支援網頁端 GitHub 發布；Token 不寫入 HTML 或 Repository。勾選「記住這台電腦」時僅儲存在該瀏覽器 localStorage。</span></div>
           </div>
         </div>
 
@@ -7130,7 +7217,7 @@ async function gh32PriceFileSelected(file){
   GH32_PRICE_PENDING=null;const name=document.getElementById('gh32PriceFileName'),pv=document.getElementById('gh32PricePreview'),pr=document.getElementById('gh32PriceProgress');if(pr)pr.textContent='';if(name)name.textContent=file?file.name:'尚未選檔';if(!file){if(pv){pv.className='hq32-preview';pv.innerHTML='尚未選擇檔案。'}gh32UpdatePublishButtons();return}try{if(!/\.xlsb$/i.test(file.name))throw new Error('請選擇公司制式 .xlsb 檔案');if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),d=hqDetectPriceSheet(wb,'系統版');if(!d)throw new Error('找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');const byName=new Map(),byModel=new Map();let count=0;for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]);if(!brand||!nm||!rom||!(msrp>0))continue;byName.set(hqPriceMapKey(brand,nm,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++}if(!count)throw new Error('價格檔沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}GH32_PRICE_PENDING={ok:true,file,buffer:buf,sheet:d.sheet,rows:count,matched,reportDate:hqPriceReportDate(d.rows,d.headerRow)};if(pv){pv.className='hq32-preview ok';pv.innerHTML=`✓ 預檢 PASS｜工作表：<b>${h(d.sheet)}</b>｜有效建議售價：<b>${count.toLocaleString()}</b> 筆｜目前規格匹配：<b>${matched.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}</b>${GH32_PRICE_PENDING.reportDate?'｜報表日期：'+h(GH32_PRICE_PENDING.reportDate):''}`}}catch(err){GH32_PRICE_PENDING={ok:false,error:String(err.message||err)};if(pv){pv.className='hq32-preview bad';pv.textContent='預檢失敗：'+GH32_PRICE_PENDING.error}}gh32UpdatePublishButtons()
 }
 async function gh32PublishPrice(){
-  if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V4.1.32 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e)}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast('價格檔已發布到 GitHub');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
+  if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V5.0 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e)}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast('價格檔已發布到 GitHub');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
 }
 function gh32RenderLogoOptions(manifest,selectedKey=''){
   const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;
@@ -7161,7 +7248,7 @@ async function gh32PublishLogo(){
     await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
     const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
     brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
-    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.4-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.5 web direct publish';
+    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='5.0-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V5.0 web direct publish';
     if(p)p.textContent='Logo 完成，更新 manifest…';
     await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);
 
