@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.31｜HQ 管理中心 UI 重整版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.32｜管理者網頁直傳 GitHub 版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6142,11 +6142,30 @@ body{min-width:1080px}
 @media(max-width:620px){.hq31-status-grid{grid-template-columns:1fr}.hq31-summary-note{display:none}}
 </style>
 
+
+<style id="v4132-github-direct-publish">
+/* ===== V4.1.32｜管理者網頁直傳 GitHub 版 =====
+   只新增 HQ 管理者 GitHub 發布能力；不改產卡、列印、條碼、尺寸、
+   公司 Excel 匯入與 HQ 建議售價比對核心。
+*/
+.hq32-auth{margin-bottom:14px;border:1px solid #dbe5f1;border-radius:14px;background:#fff;overflow:hidden}
+.hq32-auth-main{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;background:#fbfcfe}
+.hq32-auth-state{display:flex;align-items:center;gap:10px;min-width:0}.hq32-auth-dot{width:9px;height:9px;border-radius:50%;background:#9aa6b5;box-shadow:0 0 0 4px #f0f3f7;flex:0 0 auto}.hq32-auth.connected .hq32-auth-dot{background:#2da867;box-shadow:0 0 0 4px #e8f7ee}.hq32-auth.error .hq32-auth-dot{background:#d59625;box-shadow:0 0 0 4px #fff3d8}
+.hq32-auth-title{font-size:11.5px;font-weight:950;color:#2d425d}.hq32-auth-meta{margin-top:2px;font-size:10px;color:#718096;line-height:1.4;white-space:normal}
+.hq32-auth details{border-top:1px solid #edf1f6}.hq32-auth summary{cursor:pointer;list-style:none;padding:10px 15px;font-size:10.5px;font-weight:900;color:#53657b}.hq32-auth summary::-webkit-details-marker{display:none}.hq32-auth summary:after{content:'＋';float:right;font-size:15px}.hq32-auth details[open] summary:after{content:'−'}
+.hq32-auth-form{padding:13px 15px 15px;border-top:1px solid #edf1f6;background:#fff}.hq32-auth-grid{display:grid;grid-template-columns:1fr 1fr 120px;gap:10px}.hq32-field label{display:block;margin-bottom:5px;font-size:9.5px;font-weight:900;color:#65768b}.hq32-field input,.hq32-field select{width:100%;height:36px;border:1px solid #cfd9e6;border-radius:8px;padding:0 10px;background:#fff;color:#243950;font-size:11px;outline:none}.hq32-field input:focus,.hq32-field select:focus{border-color:#7fa6d9;box-shadow:0 0 0 3px rgba(57,113,180,.08)}
+.hq32-token-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:10px}.hq32-check{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:10px;color:#5f7086}.hq32-check input{width:15px;height:15px}.hq32-security{margin-top:9px;padding:8px 10px;border:1px solid #f0dfa1;border-radius:8px;background:#fff9e8;color:#725d1f;font-size:9.5px;line-height:1.5}
+.hq32-upload{margin-top:12px;padding:12px;border:1px solid #dfe7f1;border-radius:11px;background:#fbfcfe}.hq32-upload-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.hq32-upload-title{font-size:11px;font-weight:950;color:#344960}.hq32-upload-status{font-size:9.5px;color:#7a899c}.hq32-upload input[type=file]{width:100%;font-size:10px;color:#52657b}.hq32-upload input[type=file]::file-selector-button{margin-right:9px;border:1px solid #cbd7e5;border-radius:7px;background:#fff;padding:7px 10px;color:#40556e;font-size:10px;font-weight:850;cursor:pointer}
+.hq32-preview{margin-top:9px;padding:9px 10px;border-radius:8px;background:#fff;border:1px solid #e5ebf2;font-size:10px;line-height:1.5;color:#5f7085}.hq32-preview.ok{border-color:#cde8d6;background:#f4fbf6;color:#2f7048}.hq32-preview.bad{border-color:#f0d2cc;background:#fff7f5;color:#9a4838}.hq32-publish-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}.hq32-publish-actions .btn:disabled{opacity:.45;cursor:not-allowed}
+.hq32-logo-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}.hq32-logo-preview{height:90px;border:1px dashed #cbd7e5;border-radius:9px;background:#fff;display:grid;place-items:center;overflow:hidden;color:#8a98aa;font-size:10px}.hq32-logo-preview img{max-width:90%;max-height:74px;object-fit:contain}.hq32-new-brand{margin-top:9px}.hq32-progress{margin-left:auto;font-size:9.5px;color:#64768c}.hq32-success{color:#257749!important}.hq32-error{color:#a84b3c!important}
+@media(max-width:820px){.hq32-auth-grid{grid-template-columns:1fr}.hq32-token-row{grid-template-columns:1fr}.hq32-logo-grid{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.31</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.31 HQ 管理中心 UI 重整版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32 管理者網頁直傳 GitHub 版</div></div></div>
     <div class="top-info">
       <span class="pill good">● 中央售價資料 <strong>已載入</strong></span>
       <span class="pill">新機／二手機售價表：<strong>2026-09-14</strong></span>
@@ -6249,18 +6268,41 @@ body{min-width:1080px}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V4.1.31｜GitHub 靜態管理架構</div>
+      <div class="hq31-hero-title">V4.1.32｜GitHub 靜態管理＋管理者直接發布</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
-    <span class="hq31-hero-badge">GITHUB STATIC · NO DB</span>
+    <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
+  </div>
+
+  <div class="hq32-auth" id="gh32AuthCard">
+    <div class="hq32-auth-main">
+      <div class="hq32-auth-state"><span class="hq32-auth-dot"></span><div><div class="hq32-auth-title" id="gh32AuthTitle">GitHub 發布授權：未連線</div><div class="hq32-auth-meta" id="gh32AuthMeta">第一次設定後，可直接在此頁發布價格檔與配件 Logo。</div></div></div>
+      <button type="button" class="btn ghost" onclick="gh32TestConnection(true)">檢查連線</button>
+    </div>
+    <details id="gh32AuthDetails">
+      <summary>管理者授權設定</summary>
+      <div class="hq32-auth-form">
+        <div class="hq32-auth-grid">
+          <div class="hq32-field"><label>GitHub Owner</label><input id="gh32Owner" autocomplete="off" placeholder="例如：tony-chen0383"></div>
+          <div class="hq32-field"><label>Repository</label><input id="gh32Repo" autocomplete="off" placeholder="例如：smartmobile-label"></div>
+          <div class="hq32-field"><label>Branch</label><input id="gh32Branch" autocomplete="off" value="main"></div>
+        </div>
+        <div class="hq32-token-row">
+          <div class="hq32-field"><label>Fine-grained GitHub Token</label><input id="gh32Token" type="password" autocomplete="off" placeholder="貼上 Token；已記住時不需再次輸入"></div>
+          <div class="hq31-actions" style="margin-top:0"><button type="button" class="btn ghost" onclick="gh32AutoDetectRepo()">自動偵測 Repo</button><button type="button" class="btn primary" onclick="gh32Connect()">儲存並連線</button><button type="button" class="btn ghost" onclick="gh32Disconnect()">清除授權</button></div>
+        </div>
+        <label class="hq32-check"><input id="gh32Remember" type="checkbox" checked> 記住這台電腦（Token 儲存在此瀏覽器 localStorage；取消勾選則只保留到本次瀏覽器工作階段）</label>
+        <div class="hq32-security">Token 不會寫進 HTML、Excel、Logo、manifest 或 GitHub Repository。純前端模式下，只要選擇「記住這台電腦」，Token 仍存在此瀏覽器，因此建議使用只授權本 Repository、Contents Read/Write 的 Fine-grained Token。</div>
+      </div>
+    </details>
   </div>
 
   <div class="hq31-status-grid">
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V4.1.31</div>
-      <div class="meta">HQ 管理中心 UI 重整版</div>
+      <div class="value">V4.1.32</div>
+      <div class="meta">管理者網頁直傳 GitHub 版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -6297,7 +6339,13 @@ body{min-width:1080px}
         <div class="hq31-actions">
           <button type="button" class="btn primary" onclick="loadHqSuggestedPrices(true)">重新檢查價格檔</button>
         </div>
-        <div class="hq31-note"><b>更新方式：</b>公司每次產生新的價格檔後，固定覆蓋 GitHub 上的 <code>hq-suggested-price.xlsb</code>。不需轉 XLSX、不需改公司欄位。</div>
+        <div class="hq32-upload">
+          <div class="hq32-upload-head"><span class="hq32-upload-title">直接發布公司價格檔</span><span class="hq32-upload-status" id="gh32PriceFileName">尚未選檔</span></div>
+          <input id="gh32PriceFile" type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="gh32PriceFileSelected(this.files&&this.files[0])">
+          <div class="hq32-preview" id="gh32PricePreview">選擇公司每次提供的 <b>.xlsb</b>；系統會先驗證「系統版」與必要欄位，再允許發布。</div>
+          <div class="hq32-publish-actions"><button type="button" class="btn primary" id="gh32PricePublishBtn" onclick="gh32PublishPrice()" disabled>發布價格檔到 GitHub</button><span class="hq32-progress" id="gh32PriceProgress"></span></div>
+        </div>
+        <div class="hq31-note"><b>更新方式：</b>管理者現在可直接在此頁選擇公司制式 XLSB 並發布；程式自動寫入固定路徑 <code>hq-suggested-price.xlsb</code>，不需手動改檔名。</div>
         <div class="hq31-note"><b>影響範圍：</b>只更新新機／二手機「建議售價」。實際牌價、規格、保固、IMEI／SN 全部不動；抓不到時自動 fallback。</div>
       </div>
     </div>
@@ -6316,7 +6364,18 @@ body{min-width:1080px}
         <div class="hq31-actions">
           <button type="button" class="btn ghost" onclick="loadAccessoryLogoManifest()">重新讀取 Logo</button>
         </div>
-        <div class="hq31-note"><b>目前操作：</b>Logo 檔與 manifest 仍由 GitHub Repository 更新。網頁端「選品牌 → 上傳 → 發布 GitHub」功能留待下一階段實作。</div>
+        <div class="hq32-upload">
+          <div class="hq32-upload-head"><span class="hq32-upload-title">直接新增／替換配件 Logo</span><span class="hq32-upload-status" id="gh32LogoFileName">尚未選檔</span></div>
+          <div class="hq32-logo-grid">
+            <div class="hq32-field"><label>既有品牌</label><select id="gh32LogoBrandSelect"><option value="">載入品牌清單中…</option></select></div>
+            <div class="hq32-field"><label>新品牌（新增時才填）</label><input id="gh32LogoNewBrand" autocomplete="off" placeholder="例如：New Brand"></div>
+          </div>
+          <div class="hq32-new-brand"><input id="gh32LogoFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" onchange="gh32LogoFileSelected(this.files&&this.files[0])"></div>
+          <div class="hq32-logo-preview" id="gh32LogoPreview">Logo 預覽</div>
+          <div class="hq32-preview" id="gh32LogoInfo">更新既有品牌可直接選品牌；新增品牌時輸入新品牌名稱。發布時會先寫入圖片，再安全更新 <code>manifest.json</code>。</div>
+          <div class="hq32-publish-actions"><button type="button" class="btn primary" id="gh32LogoPublishBtn" onclick="gh32PublishLogo()" disabled>發布 Logo 到 GitHub</button><span class="hq32-progress" id="gh32LogoProgress"></span></div>
+        </div>
+        <div class="hq31-note"><b>目前操作：</b>管理者可直接在網頁選品牌與圖片後發布到 GitHub；不需要另外開 GitHub Repository。</div>
         <div class="hq31-note"><b>Fallback：</b>品牌尚未有正式 Logo 或圖片讀取失敗時，以品牌文字顯示，不影響配件標籤列印。</div>
       </div>
     </div>
@@ -6363,7 +6422,7 @@ body{min-width:1080px}
             <div class="hq-rule-line"><b>讀取欄位</b><span>廠牌／標價卡用名稱／型號／Rom／建議售價。</span></div>
             <div class="hq-rule-line"><b>比對 Key</b><span>優先：廠牌＋標價卡用名稱＋Rom；備援：廠牌＋型號＋Rom。</span></div>
             <div class="hq-rule-line"><b>配件 Logo</b><span><code>./assets/accessory-logos/manifest.json</code>＋<code>brands/</code>。</span></div>
-            <div class="hq-rule-line"><b>授權</b><span>未來若做網頁端 GitHub 發布，Token 不寫入 HTML、不提交 Repository、不永久保存。</span></div>
+            <div class="hq-rule-line"><b>授權</b><span>V4.1.32 已支援網頁端 GitHub 發布；Token 不寫入 HTML 或 Repository。勾選「記住這台電腦」時僅儲存在該瀏覽器 localStorage。</span></div>
           </div>
         </div>
 
@@ -6842,6 +6901,73 @@ window.addEventListener('dragover',e=>{try{if(e.dataTransfer&&Array.from(e.dataT
 window.addEventListener('drop',e=>{try{if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)e.preventDefault()}catch(_){}});
 renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory();updateUsedImportUI();renderUsedItems();renderNewItems();
 updateNewReportUI();
+</script>
+
+
+<script id="v4132-github-direct-publish-js">
+/* ===== V4.1.32｜管理者網頁直傳 GitHub ===== */
+const GH32_KEYS={cfg:'smLabelGhCfgV4132',tokenLocal:'smLabelGhTokenV4132',tokenSession:'smLabelGhTokenSessionV4132'};
+const GH32_PRICE_PATH='data/hq/suggested-prices/current/hq-suggested-price.xlsb';
+const GH32_PRICE_MANIFEST_PATH='data/hq/suggested-prices/manifest.json';
+const GH32_LOGO_MANIFEST_PATH='assets/accessory-logos/manifest.json';
+let GH32_CONNECTED=false;
+let GH32_PRICE_PENDING=null;
+let GH32_LOGO_PENDING=null;
+let GH32_LOGO_MANIFEST_CACHE=null;
+function gh32LsGet(k){try{return localStorage.getItem(k)||''}catch(_){return ''}}
+function gh32LsSet(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+function gh32LsDel(k){try{localStorage.removeItem(k)}catch(_){}}
+function gh32SsGet(k){try{return sessionStorage.getItem(k)||''}catch(_){return ''}}
+function gh32SsSet(k,v){try{sessionStorage.setItem(k,v)}catch(_){}}
+function gh32SsDel(k){try{sessionStorage.removeItem(k)}catch(_){}}
+function gh32GetToken(){return gh32SsGet(GH32_KEYS.tokenSession)||gh32LsGet(GH32_KEYS.tokenLocal)||''}
+function gh32GetCfg(){let c={owner:'',repo:'',branch:'main'};try{Object.assign(c,JSON.parse(gh32LsGet(GH32_KEYS.cfg)||'{}'))}catch(_){}return c}
+function gh32SaveCfg(c){gh32LsSet(GH32_KEYS.cfg,JSON.stringify({owner:String(c.owner||'').trim(),repo:String(c.repo||'').trim(),branch:String(c.branch||'main').trim()||'main'}))}
+function gh32CfgFromForm(){return {owner:(document.getElementById('gh32Owner')?.value||'').trim(),repo:(document.getElementById('gh32Repo')?.value||'').trim(),branch:(document.getElementById('gh32Branch')?.value||'main').trim()||'main'}}
+function gh32FillCfg(){const c=gh32GetCfg();const o=document.getElementById('gh32Owner'),r=document.getElementById('gh32Repo'),b=document.getElementById('gh32Branch'),rem=document.getElementById('gh32Remember');if(o)o.value=c.owner||'';if(r)r.value=c.repo||'';if(b)b.value=c.branch||'main';if(rem)rem.checked=!!gh32LsGet(GH32_KEYS.tokenLocal);const ti=document.getElementById('gh32Token');if(ti)ti.placeholder=gh32GetToken()?'已儲存授權；若要更換再貼新 Token':'貼上 Fine-grained Token'}
+function gh32SetAuthUi(mode,msg,meta=''){
+  const card=document.getElementById('gh32AuthCard'),title=document.getElementById('gh32AuthTitle'),m=document.getElementById('gh32AuthMeta');if(card){card.classList.toggle('connected',mode==='ok');card.classList.toggle('error',mode==='error')}if(title)title.textContent=msg;if(m)m.textContent=meta||'';GH32_CONNECTED=mode==='ok';gh32UpdatePublishButtons()
+}
+function gh32UpdatePublishButtons(){const has=GH32_CONNECTED;const pb=document.getElementById('gh32PricePublishBtn'),lb=document.getElementById('gh32LogoPublishBtn');if(pb)pb.disabled=!(has&&GH32_PRICE_PENDING&&GH32_PRICE_PENDING.ok);if(lb)lb.disabled=!(has&&GH32_LOGO_PENDING&&GH32_LOGO_PENDING.ok)}
+function gh32AutoDetectRepo(){
+  const host=location.hostname.toLowerCase();let owner='',repo='';if(host.endsWith('.github.io')){owner=host.split('.')[0];const seg=location.pathname.split('/').filter(Boolean);repo=seg[0]||`${owner}.github.io`}const o=document.getElementById('gh32Owner'),r=document.getElementById('gh32Repo');if(owner&&o)o.value=owner;if(repo&&r)r.value=repo;if(owner&&repo){toast(`已偵測 ${owner}/${repo}`)}else toast('目前網址無法自動判斷 Repo，請手動填寫')
+}
+function gh32EncodePath(p){return String(p||'').split('/').filter(Boolean).map(encodeURIComponent).join('/')}
+async function gh32Api(path,opt={}){
+  const token=gh32GetToken();if(!token)throw new Error('尚未設定 GitHub Token');const headers=Object.assign({'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Authorization':`Bearer ${token}`},opt.headers||{});const res=await fetch('https://api.github.com'+path,Object.assign({},opt,{headers}));let body=null;const ct=res.headers.get('content-type')||'';try{body=ct.includes('json')?await res.json():await res.text()}catch(_){}if(!res.ok){const msg=(body&&body.message)||String(body||'');throw new Error(`GitHub ${res.status}${msg?'｜'+msg:''}`)}return body
+}
+async function gh32Connect(){
+  const c=gh32CfgFromForm(),input=(document.getElementById('gh32Token')?.value||'').trim(),remember=!!document.getElementById('gh32Remember')?.checked;if(!c.owner||!c.repo){toast('請先填 GitHub Owner 與 Repository');return}if(input){if(remember){gh32LsSet(GH32_KEYS.tokenLocal,input);gh32SsDel(GH32_KEYS.tokenSession)}else{gh32SsSet(GH32_KEYS.tokenSession,input);gh32LsDel(GH32_KEYS.tokenLocal)}}if(!gh32GetToken()){toast('請輸入 GitHub Token');return}gh32SaveCfg(c);const ti=document.getElementById('gh32Token');if(ti)ti.value='';await gh32TestConnection(true)
+}
+async function gh32TestConnection(showToast=false){
+  const c=gh32CfgFromForm();if(c.owner&&c.repo)gh32SaveCfg(c);const cfg=gh32GetCfg();if(!gh32GetToken()||!cfg.owner||!cfg.repo){gh32SetAuthUi('idle','GitHub 發布授權：未連線','第一次設定 Owner／Repository／Token 後即可直接發布。');return false}gh32SetAuthUi('idle','GitHub 發布授權：檢查中…',`${cfg.owner}/${cfg.repo}`);try{const repo=await gh32Api(`/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}`);if(repo&&repo.default_branch&&(!cfg.branch||cfg.branch==='main')){cfg.branch=repo.default_branch;gh32SaveCfg(cfg);const b=document.getElementById('gh32Branch');if(b)b.value=cfg.branch}gh32SetAuthUi('ok','GitHub 發布授權：已連線',`${cfg.owner}/${cfg.repo} · branch ${cfg.branch||repo.default_branch||'main'}`);if(showToast)toast('GitHub 連線成功');return true}catch(err){gh32SetAuthUi('error','GitHub 發布授權：連線失敗',String(err.message||err));if(showToast)toast('GitHub 連線失敗');return false}}
+function gh32Disconnect(){gh32LsDel(GH32_KEYS.tokenLocal);gh32SsDel(GH32_KEYS.tokenSession);const ti=document.getElementById('gh32Token');if(ti)ti.value='';gh32SetAuthUi('idle','GitHub 發布授權：未連線','Token 已從此瀏覽器清除；Repository 設定保留。');gh32FillCfg();toast('GitHub 授權已清除')}
+function gh32BytesToBase64(bytes){let s='';const step=0x8000;for(let i=0;i<bytes.length;i+=step)s+=String.fromCharCode(...bytes.subarray(i,Math.min(i+step,bytes.length)));return btoa(s)}
+function gh32Utf8ToBase64(s){return gh32BytesToBase64(new TextEncoder().encode(String(s||'')))}
+function gh32Base64ToUtf8(s){const bin=atob(String(s||'').replace(/\s/g,'')),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new TextDecoder().decode(a)}
+async function gh32GetContentMeta(filePath){const c=gh32GetCfg();try{return await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${gh32EncodePath(filePath)}?ref=${encodeURIComponent(c.branch||'main')}`)}catch(err){if(String(err.message||'').includes('GitHub 404'))return null;throw err}}
+async function gh32PutBase64(filePath,b64,message){const c=gh32GetCfg(),old=await gh32GetContentMeta(filePath),body={message,content:b64,branch:c.branch||'main'};if(old&&old.sha)body.sha=old.sha;return await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${gh32EncodePath(filePath)}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}
+async function gh32ReadJsonFromRepo(filePath){const m=await gh32GetContentMeta(filePath);if(!m||!m.content)throw new Error(`找不到 ${filePath}`);return JSON.parse(gh32Base64ToUtf8(m.content))}
+async function gh32PutJson(filePath,obj,message){return gh32PutBase64(filePath,gh32Utf8ToBase64(JSON.stringify(obj,null,2)+'\n'),message)}
+function gh32NowIso(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`}
+function gh32DateOnly(){return gh32NowIso().slice(0,10)}
+async function gh32PriceFileSelected(file){
+  GH32_PRICE_PENDING=null;const name=document.getElementById('gh32PriceFileName'),pv=document.getElementById('gh32PricePreview'),pr=document.getElementById('gh32PriceProgress');if(pr)pr.textContent='';if(name)name.textContent=file?file.name:'尚未選檔';if(!file){if(pv){pv.className='hq32-preview';pv.innerHTML='尚未選擇檔案。'}gh32UpdatePublishButtons();return}try{if(!/\.xlsb$/i.test(file.name))throw new Error('請選擇公司制式 .xlsb 檔案');if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),d=hqDetectPriceSheet(wb,'系統版');if(!d)throw new Error('找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');const byName=new Map(),byModel=new Map();let count=0;for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]);if(!brand||!nm||!rom||!(msrp>0))continue;byName.set(hqPriceMapKey(brand,nm,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++}if(!count)throw new Error('價格檔沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}GH32_PRICE_PENDING={ok:true,file,buffer:buf,sheet:d.sheet,rows:count,matched,reportDate:hqPriceReportDate(d.rows,d.headerRow)};if(pv){pv.className='hq32-preview ok';pv.innerHTML=`✓ 預檢 PASS｜工作表：<b>${h(d.sheet)}</b>｜有效建議售價：<b>${count.toLocaleString()}</b> 筆｜目前規格匹配：<b>${matched.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}</b>${GH32_PRICE_PENDING.reportDate?'｜報表日期：'+h(GH32_PRICE_PENDING.reportDate):''}`}}catch(err){GH32_PRICE_PENDING={ok:false,error:String(err.message||err)};if(pv){pv.className='hq32-preview bad';pv.textContent='預檢失敗：'+GH32_PRICE_PENDING.error}}gh32UpdatePublishButtons()
+}
+async function gh32PublishPrice(){
+  if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V4.1.32 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e)}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast('價格檔已發布到 GitHub');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
+}
+async function gh32LoadLogoOptions(){
+  const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;try{const u=new URL(ACC_BRAND_MANIFEST_PATH,location.href);u.searchParams.set('_',Date.now());const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error('manifest HTTP '+r.status);const m=await r.json();GH32_LOGO_MANIFEST_CACHE=m;const rows=Object.entries(m.brands||{}).map(([k,v])=>({key:k,name:(v&&v.displayName)||k})).sort((a,b)=>a.name.localeCompare(b.name,'zh-Hant',{sensitivity:'base'}));sel.innerHTML='<option value="">請選擇既有品牌</option>'+rows.map(x=>`<option value="${h(x.key)}">${h(x.name)}</option>`).join('')}catch(err){sel.innerHTML='<option value="">品牌清單載入失敗</option>';console.warn(err)}}
+function gh32LogoFileSelected(file){
+  GH32_LOGO_PENDING=null;const fn=document.getElementById('gh32LogoFileName'),box=document.getElementById('gh32LogoPreview'),info=document.getElementById('gh32LogoInfo'),pr=document.getElementById('gh32LogoProgress');if(pr)pr.textContent='';if(fn)fn.textContent=file?file.name:'尚未選檔';if(box){box.innerHTML='Logo 預覽'}if(!file){gh32UpdatePublishButtons();return}try{const okType=/image\/(png|jpeg|webp)/i.test(file.type)||/\.(png|jpe?g|webp)$/i.test(file.name);if(!okType)throw new Error('只支援 PNG／JPG／WebP');if(file.size>5*1024*1024)throw new Error('Logo 檔案請控制在 5MB 以內');const url=URL.createObjectURL(file);if(box)box.innerHTML=`<img src="${url}" alt="Logo preview">`;GH32_LOGO_PENDING={ok:true,file,url};if(info){info.className='hq32-preview ok';info.textContent=`✓ 圖片檢查 PASS｜${file.name}｜${Math.round(file.size/1024).toLocaleString()} KB`}}catch(err){GH32_LOGO_PENDING={ok:false,error:String(err.message||err)};if(info){info.className='hq32-preview bad';info.textContent='圖片檢查失敗：'+GH32_LOGO_PENDING.error}}gh32UpdatePublishButtons()
+}
+function gh32LogoExt(file){const n=(file?.name||'').toLowerCase();if(n.endsWith('.png')||file?.type==='image/png')return 'png';if(n.endsWith('.webp')||file?.type==='image/webp')return 'webp';return 'jpg'}
+async function gh32PublishLogo(){
+  if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const sel=document.getElementById('gh32LogoBrandSelect'),newName=(document.getElementById('gh32LogoNewBrand')?.value||'').trim(),selectedKey=sel?.value||'';let displayName=newName||((sel&&sel.selectedIndex>=0)?sel.options[sel.selectedIndex].textContent:'');let key=newName?brandKey(newName):selectedKey;if(!key||!displayName||displayName==='請選擇既有品牌')return toast('請選擇既有品牌或輸入新品牌名稱');const btn=document.getElementById('gh32LogoPublishBtn'),p=document.getElementById('gh32LogoProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='讀取 GitHub manifest…'}const manifest=await gh32ReadJsonFromRepo(GH32_LOGO_MANIFEST_PATH),brands=manifest.brands||(manifest.brands={}),existing=brands[key]||{},ext=gh32LogoExt(GH32_LOGO_PENDING.file),assetPath=`assets/accessory-logos/brands/${key}.${ext}`;if(p)p.textContent='正在上傳 Logo…';const buf=await GH32_LOGO_PENDING.file.arrayBuffer();await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32 web direct publish';if(p)p.textContent='Logo 完成，更新 manifest…';await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast(`${displayName} Logo 已發布`);document.getElementById('gh32LogoNewBrand').value='';setTimeout(async()=>{await loadAccessoryLogoManifest();await gh32LoadLogoOptions()},3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('Logo 發布失敗')}finally{gh32UpdatePublishButtons()}
+}
+function gh32Init(){gh32FillCfg();const c=gh32GetCfg();if((!c.owner||!c.repo)&&location.hostname.toLowerCase().endsWith('.github.io'))gh32AutoDetectRepo();gh32LoadLogoOptions();if(gh32GetToken())gh32TestConnection(false);else gh32SetAuthUi('idle','GitHub 發布授權：未連線','第一次設定後，可直接在此頁發布價格檔與配件 Logo。')}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',gh32Init,{once:true});else setTimeout(gh32Init,0);
 </script>
 
 </body>
