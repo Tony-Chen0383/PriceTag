@@ -6165,10 +6165,10 @@ body{min-width:1080px}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32 管理者網頁直傳 GitHub 版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.1 頂部 HQ 價格狀態同步修正版</div></div></div>
     <div class="top-info">
-      <span class="pill good">● 中央售價資料 <strong>已載入</strong></span>
-      <span class="pill">新機／二手機售價表：<strong>2026-09-14</strong></span>
+      <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
+      <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
       <span class="pill">工作資料：<strong>僅本分頁記憶體</strong></span>
     </div>
   </header>
@@ -6743,18 +6743,22 @@ function hqPriceReportDate(rows,headerRow){
 function updateHqPriceStatus(){
   const st=document.getElementById('hqPriceStatus'),dt=document.getElementById('hqPriceDetail');
   const ov=document.getElementById('hqOverviewPriceStatus'),om=document.getElementById('hqOverviewPriceMeta'),card=document.getElementById('hqOverviewPriceCard');
+  const topStatus=document.getElementById('topHqPriceLoadStatus'),topDate=document.getElementById('topHqPriceDate'),topPill=document.getElementById('topHqPriceLoadPill');
   if(HQ_PRICE_STATE.loading){
     if(st)st.textContent='HQ 建議售價：載入中…';if(dt)dt.textContent='正在讀取 GitHub 公司制式 XLSB';
-    if(ov)ov.textContent='載入中…';if(om)om.textContent='正在檢查 GitHub 公司制式 XLSB';if(card){card.classList.remove('warn');card.classList.add('muted')}return
+    if(ov)ov.textContent='載入中…';if(om)om.textContent='正在檢查 GitHub 公司制式 XLSB';if(card){card.classList.remove('warn');card.classList.add('muted')}
+    if(topStatus)topStatus.textContent='載入中';if(topDate)topDate.textContent='檢查中';if(topPill)topPill.classList.add('good');return
   }
   if(HQ_PRICE_STATE.ready){
     const detail=`${HQ_PRICE_STATE.reportDate||HQ_PRICE_STATE.updatedAt||'最新版'}｜${HQ_PRICE_STATE.sheet||'系統版'}｜${HQ_PRICE_STATE.rows.toLocaleString()} 筆｜目前規格匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;
     if(st)st.textContent='HQ 建議售價：已連線';if(dt)dt.textContent=detail;
-    if(ov)ov.textContent='已連線';if(om)om.textContent=`${HQ_PRICE_STATE.rows.toLocaleString()} 筆・匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;if(card){card.classList.remove('warn','muted')}return
+    if(ov)ov.textContent='已連線';if(om)om.textContent=`${HQ_PRICE_STATE.rows.toLocaleString()} 筆・匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;if(card){card.classList.remove('warn','muted')}
+    if(topStatus)topStatus.textContent='已載入';if(topDate)topDate.textContent=HQ_PRICE_STATE.reportDate||String(HQ_PRICE_STATE.updatedAt||'最新版').slice(0,10);if(topPill)topPill.classList.add('good');return
   }
   const err=HQ_PRICE_STATE.error||'尚未載入；使用工具既有建議售價，不阻擋產卡';
   if(st)st.textContent='HQ 建議售價：Fallback';if(dt)dt.textContent=err;
   if(ov)ov.textContent='Fallback';if(om)om.textContent=err;if(card){card.classList.add('warn');card.classList.remove('muted')}
+  if(topStatus)topStatus.textContent='Fallback';if(topDate)topDate.textContent='使用原資料';if(topPill)topPill.classList.remove('good');
 }
 async function loadHqSuggestedPrices(force=false){
   if(HQ_PRICE_STATE.loading&&!force)return false;
