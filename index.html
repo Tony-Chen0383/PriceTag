@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V4.1.32.3｜配件 Logo 即時刷新與列印白底修正版</title>
+<title>創宇標籤／標價卡列印工具 V4.1.32.4｜配件暫存清除修正版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6224,7 +6224,7 @@ body{min-width:1080px}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.3 配件 Logo 即時刷新＋列印白底修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V4.1.32.4</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V4.1.32.4 配件暫存清除修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6268,12 +6268,12 @@ body{min-width:1080px}
             <div class="preview-wrap"><div class="preview-top"><span>配件標籤模板</span><span>預覽比例示意</span></div><div class="paper">
               <div class="acc-label" id="accLabelPreview">
                 <div class="acc-company"><img src="./assets/static/img-0eb378f97a40ab52.png" alt="Smart mobile"></div>
-                <div class="acc-code" id="accPCode">NO000870CA</div>
+                <div class="acc-code" id="accPCode"></div>
                 <div class="acc-member-mini" id="accPMini"></div>
-                <div class="acc-price-main">原價 <span class="money" id="accPList">1090</span> 元</div>
-                <div class="acc-brand-logo" id="accPBrandLogo">品</div>
-                <div class="acc-promo-main"><span class="promo-label" id="accPPromoLabel">會員</span><span class="promo-money" id="accPPromo">優惠價</span><span class="promo-unit"> 元</span></div>
-                <div class="acc-namebar editable" title="可直接在預覽上修改列印名稱"><span id="accPName" contenteditable="true" spellcheck="false" oninput="editAccessoryPreviewName(this.textContent)">iPhone 17Pro Max 荒原廢土磁吸防摔手機款(附掛環扣)</span></div>
+                <div class="acc-price-main">原價 <span class="money" id="accPList"></span> 元</div>
+                <div class="acc-brand-logo" id="accPBrandLogo"></div>
+                <div class="acc-promo-main"><span class="promo-label" id="accPPromoLabel">會員</span><span class="promo-money" id="accPPromo"></span><span class="promo-unit"> 元</span></div>
+                <div class="acc-namebar editable" title="可直接在預覽上修改列印名稱"><span id="accPName" contenteditable="true" spellcheck="false" oninput="editAccessoryPreviewName(this.textContent)"></span></div>
                 <img class="acc-shield" src="./assets/static/img-398d39bdcd0f9f11.png" alt="Smart mobile shield">
               </div>
               <div class="paper-label">配件標卡尺寸｜65 × 40 mm｜匯入後直接產生標卡預覽</div>
@@ -6531,8 +6531,12 @@ document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+next).classList.add('active');
 }));
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
-let accProducts=[{code:'NO0001090CA',barcode:'',brand:'imos',name:'iPhone 17Pro Max 荒原廢土磁吸防摔手機款(附掛環扣)',list:1090,member:870,status:'示意'}];
-let accCurrent=accProducts[0];let accResults=[...accProducts];let accessoryRows=[];
+/* V4.1.32.4：正式版不再內建任何配件示範商品。
+   配件工作區每次開啟都從空白開始，只接受本次 Excel 匯入資料。 */
+let accProducts=[];
+let accCurrent=null;
+let accResults=[];
+let accessoryRows=[];
 const ctlBrands=['imos','moshi','lapo','adam'];
 
 const ACC_BRAND_SOURCE_FILES = ["SwitchEasy.jpg", "Transcend.jpg", "TRANSFORMERS.jpg", "Trusonus.jpg", "TUCANO.jpg", "UAG.jpg", "UNIQ.jpg", "UNIQTOUGH.jpg", "vivo.jpg", "VOORCA.jpg", "WEKOME.jpg", "Wellypower.jpg", "Xiaomi.jpg", "ACEICE.jpg", "ADAM.jpg", "ADATA.jpg", "ahastyle.jpg", "AIWA.jpg", "ALLite.jpg", "alto.jpg", "amuok.jpg", "ANFAST.jpg", "ANKER.jpg", "Apple.jpg", "ASPOR.jpg", "ASUS.jpg", "AWSON.jpg", "Azeada.jpg", "Baseus.jpg", "Bluelight.jpg", "BOROFONE.jpg", "CASETiFY.jpg", "CITY BOSS.jpg", "CY.jpg", "Dapad.jpg", "DONGHE.jpg", "DR.TOUGH.jpg", "ETON.jpg", "Fujitek.jpg", "Gan.jpg", "GNOVEL.jpg", "Google.jpg", "GUXON.jpg", "HANG.jpg", "hoco.jpg", "Hoda.jpg", "HTC.jpg", "HUAWEI.jpg", "HyperDrive.jpg", "iDARS.jpg", "idmix.jpg", "igrass.jpg", "imos.jpg", "JINXI.jpg", "JTLEGEND.jpg", "KINGLEEN.jpg", "kingston.jpg", "KINYO.jpg", "LaPO.jpg", "Loop.jpg", "Mageasy.jpg", "MCDODO.jpg", "MEGA KING.jpg", "MOBIA.jpg", "MODiAN.jpg", "MONOCOZZI.jpg", "MoreSee.jpg", "MOSHI.jpg", "MR.COQ.jpg", "null.jpg", "OnPro.jpg", "O-ONE.jpg", "OPPO.jpg", "Polywell.jpg", "Puregear.jpg", "RASTO.jpg", "realme.jpg", "Redmi.jpg", "ReMax.jpg", "RHINOSHIELD.jpg", "Riivan.jpg", "Samsung.jpg", "SanDisk.jpg", "simmpo.jpg", "SKINARMA.jpg", "SmartMobile.jpg", "Sony.jpg", "Star.jpg"];
@@ -6700,25 +6704,50 @@ function renderAccessory(){const tb=document.getElementById('accTbody');if(!acce
 function changeAccPrintName(i,v){const row=accessoryRows[i];if(!row)return;syncAccessoryPrintName(row,v);syncAccessoryNameControls();if(accCurrent&&accCurrent._accId===row._accId)renderAccessoryPreview(accCurrent)}
 function chgQty(i,d){accessoryRows[i].qty=Math.max(1,accessoryRows[i].qty+d);renderAccessory()}function removeAcc(i){accessoryRows.splice(i,1);renderAccessory()}
 function clearAccessory(silent=false){
-  accProducts=[];accResults=[];accCurrent=null;accessoryRows=[];
+  /* V4.1.32.4｜配件工作區完整 Reset Gate
+     只清本次門市作業；不清 GitHub 授權、HQ 建議售價、Logo manifest。 */
+  accProducts=[];
+  accResults=[];
+  accCurrent=null;
+  accessoryRows=[];
+
   const f=document.getElementById('accFile');if(f)f.value='';
   const q=document.getElementById('accSearch');if(q)q.value='';
   const brand=document.getElementById('accBrand');if(brand)brand.innerHTML='<option selected>全部品牌</option>';
   const st=document.getElementById('accSourceStatus');if(st)st.textContent='點擊匯入';
   const sub=document.getElementById('accSourceSub');if(sub)sub.textContent='拖曳庫存報表 Excel 至此';
-  const hint=document.getElementById('accUploadHint');if(hint)hint.textContent='';
+  const hint=document.getElementById('accUploadHint');if(hint){hint.textContent='';hint.hidden=true;}
   const detect=document.getElementById('accDetectHint');if(detect)detect.textContent='匯入後會直接產生全部標卡預覽；品牌 Logo 依 GitHub manifest 載入。搜尋功能僅供快速篩選。';
-  const result=document.getElementById('accResult');if(result)result.innerHTML='<div class="acc-preview-note">匯入後直接產生全部配件標卡預覽；名稱、張數都直接在標卡區調整。</div><div class="empty">尚未匯入配件 Excel</div>';
+  const count=document.getElementById('accCount');if(count)count.textContent='0 張';
+
+  const result=document.getElementById('accResult');
+  if(result){
+    result.className='acc-preview-host';
+    result.innerHTML='<div class="acc-preview-note">匯入後直接產生全部配件標卡預覽；名稱、張數都直接在標卡區調整。</div><div class="empty">尚未匯入配件 Excel</div>';
+  }
+
   const label=document.getElementById('accLabelPreview');if(label)label.classList.remove('controlled-price');
   const code=document.getElementById('accPCode');if(code)code.textContent='';
   const mini=document.getElementById('accPMini');if(mini)mini.textContent='';
   const list=document.getElementById('accPList');if(list)list.textContent='';
+  const promoLabel=document.getElementById('accPPromoLabel');if(promoLabel)promoLabel.textContent='會員';
   const promo=document.getElementById('accPPromo');if(promo)promo.textContent='';
   const name=document.getElementById('accPName');if(name)name.textContent='';
   const logo=document.getElementById('accPBrandLogo');if(logo){logo.innerHTML='';logo.title='';}
+
+  /* 若剛好有開配件批次預覽，也同步清掉，避免舊卡留在 Modal。 */
+  if(currentBatchType==='accessory'){
+    currentBatchType='';
+    const grid=document.getElementById('batchGrid');if(grid){grid.innerHTML='';grid.className='batch-preview-grid';}
+    const modal=document.getElementById('batchModal');if(modal)modal.classList.remove('open');
+    setAccessoryLandscapePrint(false);
+    document.body.classList.remove('batch-print-mode');
+  }
+
   renderAccessory();
   if(!silent)toast('已清空本次配件作業');
 }
+
 const USED_REPORT_HEADERS={source:['回收來源'],small:['商品小類','小類'],brand:['品牌','廠牌'],name:['回收機款','機款','商品名稱'],imei:['IMEI','IMEI/SN','序號'],grade:['等級'],store:['所在門市','門市'],price:['設定售價','售價'],actualPrice:['實際售價'],orderNo:['進貨單號','單號'],status:['機款狀態','狀態'],batteryHealth:['電池健康度','電池健康'],internationalVersion:['國際版本','版本'],screenBurn:['螢幕烙印','烙印']};
 let usedItems=[];
 let currentBatchType="";let usedBatchPage=0;let usedInlinePage=0;
@@ -7005,7 +7034,7 @@ function printBatchPreview(){const title=document.getElementById('batchTitle')?.
 function printPage(p){if(p==='new'||p==='used'||p==='accessory'){if(p==='accessory'){if(!accessoryRows.length){toast('目前沒有可列印的配件標籤');return}const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}}else if(p==='new'&&!newItems.length){toast('目前沒有可列印的新機標價卡');return}else if(p==='used'&&!usedItems.length){toast('目前沒有可列印的二手機標價卡');return}openBatchPreview(p,false);requestAnimationFrame(()=>requestAnimationFrame(()=>printBatchPreview()));return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));document.getElementById('page-'+p).classList.add('printing');requestAnimationFrame(()=>{window.print();setTimeout(()=>document.getElementById('page-'+p).classList.remove('printing'),120)})}
 window.addEventListener('dragover',e=>{try{if(e.dataTransfer&&Array.from(e.dataTransfer.types||[]).includes('Files'))e.preventDefault()}catch(_){}});
 window.addEventListener('drop',e=>{try{if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)e.preventDefault()}catch(_){}});
-renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory();updateUsedImportUI();renderUsedItems();renderNewItems();
+clearAccessory(true);updateUsedImportUI();renderUsedItems();renderNewItems();
 updateNewReportUI();
 </script>
 
@@ -7092,7 +7121,7 @@ async function gh32PublishLogo(){
     await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
     const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
     brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
-    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.2-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.3 web direct publish';
+    manifest.brandCount=Object.keys(brands).length;manifest.updatedAt=gh32DateOnly();manifest.version='4.1.32.4-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);manifest.publishedVia='V4.1.32.4 web direct publish';
     if(p)p.textContent='Logo 完成，更新 manifest…';
     await gh32PutJson(GH32_LOGO_MANIFEST_PATH,manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`);
 
