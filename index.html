@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1｜多來源中央商品資料層</title>
+<title>創宇標籤／標價卡列印工具 V5.1.3｜中央資料四檔一鍵批次更新版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6494,11 +6494,60 @@ body{min-width:1080px}
 @media print{.v51-catalog-action{display:none!important}}
 </style>
 
+
+<style id="v512-hq-catalog-ui-simplified">
+/* ===== V5.1.2｜HQ 中央資料管理介面精簡版 ===== */
+.v512-catalog-manager{margin-top:14px}
+.v512-catalog-body{padding-top:10px!important}
+.v512-catalog-table{border:1px solid #dfe7f1;border-radius:13px;overflow:hidden;background:#fff}
+.v512-table-head,.v512-source-row>summary,.v512-source-row:not(details){display:grid;grid-template-columns:minmax(190px,1.5fr) 120px 100px 145px 92px;gap:12px;align-items:center}
+.v512-table-head{padding:9px 14px;background:#f5f8fc;color:#728097;font-size:11px;font-weight:900;border-bottom:1px solid #e4eaf2}
+.v512-source-row{border:0;border-bottom:1px solid #e8edf4;background:#fff;min-width:0}
+.v512-source-row:last-of-type{border-bottom:0}
+.v512-source-row:not(details){padding:11px 14px;position:relative}
+.v512-source-row>summary{padding:11px 14px;cursor:pointer;list-style:none;user-select:none}
+.v512-source-row>summary::-webkit-details-marker{display:none}
+.v512-source-row>summary:hover{background:#f9fbfe}
+.v512-source-name{display:flex;flex-direction:column;min-width:0;gap:2px}.v512-source-name strong{font-size:13px;color:#22324d}.v512-source-name small{font-size:10.5px;color:#8390a5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v512-source-state{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:850;color:#637188}.v512-source-state i{width:8px;height:8px;border-radius:50%;background:#e0a22d;box-shadow:0 0 0 3px rgba(224,162,45,.10)}
+.v512-source-row.ok .v512-source-state{color:#16844c}.v512-source-row.ok .v512-source-state i{background:#28ad6b;box-shadow:0 0 0 3px rgba(40,173,107,.10)}
+.v512-source-row.bad .v512-source-state{color:#c53d3d}.v512-source-row.bad .v512-source-state i{background:#d94f4f;box-shadow:0 0 0 3px rgba(217,79,79,.10)}
+.v512-source-count,.v512-source-date{font-size:11.5px;color:#33445f;font-weight:750}.v512-source-action{display:flex;align-items:center;justify-content:flex-end;gap:7px}.v512-update-label{display:inline-flex;align-items:center;justify-content:center;min-width:54px;height:29px;border:1px solid #dbe3ef;border-radius:8px;background:#fff;color:#21416d;font-size:11.5px;font-weight:900}.v512-chevron{font-size:15px;color:#8190a6;transition:.18s transform}
+details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
+.v512-source-editor{display:grid;grid-template-columns:minmax(200px,1fr) minmax(220px,1fr) auto;gap:10px 14px;align-items:center;padding:12px 14px 14px 38px;background:#f8fbff;border-top:1px dashed #dce5f0}.v512-editor-info{display:flex;flex-direction:column;gap:2px;font-size:11px;color:#586983}.v512-editor-info .v51-source-path{margin:0}.v512-source-editor input[type=file]{font-size:11px;max-width:100%}.v512-source-editor .v51-source-meta{grid-column:1 / 3;margin:0;min-height:0}.v512-source-editor .btn{grid-column:3;grid-row:1 / 3;align-self:center}
+.v512-hidden-meta{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+.v512-catalog-footer{display:flex;align-items:center;gap:12px;margin-top:12px}.v512-tech-note{margin-top:10px;border-top:1px solid #eef2f6;padding-top:8px}.v512-tech-note>summary{cursor:pointer;color:#748198;font-size:11.5px;font-weight:800}.v512-tech-note .hq31-note{margin-top:8px}
+@media(max-width:900px){.v512-table-head{display:none}.v512-source-row>summary,.v512-source-row:not(details){grid-template-columns:minmax(160px,1fr) 100px 80px 80px}.v512-source-date{display:none}.v512-source-editor{grid-template-columns:1fr}.v512-source-editor .v51-source-meta,.v512-source-editor .btn{grid-column:1;grid-row:auto}}
+@media(max-width:620px){.v512-source-row>summary,.v512-source-row:not(details){grid-template-columns:1fr auto auto}.v512-source-state{display:none}.v512-source-count{font-size:10.5px}.v512-source-action{justify-content:flex-end}.v512-source-name small{white-space:normal}}
+@media print{.v512-catalog-manager{display:none!important}}
+</style>
+
+
+<style id="v513-batch-catalog-style">
+/* ===== V5.1.3｜中央資料四檔一鍵批次更新版 ===== */
+.v513-batch-box{margin:0 0 12px;border:1px solid #cfe0f2;border-radius:12px;background:#f8fbff;overflow:hidden}
+.v513-batch-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;border-bottom:1px solid #e4edf7;background:#f3f8fe}
+.v513-batch-title{font-size:13px;font-weight:900;color:#17365f}.v513-batch-sub{margin-top:3px;font-size:10.5px;color:#75849a}
+.v513-batch-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.v513-batch-picker input[type=file]{display:none}
+.v513-file-btn{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 13px;border:1px solid #bfd1e5;border-radius:9px;background:#fff;color:#17365f;font-size:11px;font-weight:900;cursor:pointer}
+.v513-batch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px 14px}
+.v513-batch-item{min-width:0;border:1px solid #dce6f0;border-radius:10px;background:#fff;padding:9px 10px}
+.v513-batch-item.ok{border-color:#b9dfc6;background:#f7fcf8}.v513-batch-item.bad{border-color:#efc5bd;background:#fff7f5}.v513-batch-item.pending{border-color:#ecd7a5;background:#fffaf0}
+.v513-batch-item-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.v513-batch-name{font-size:11px;font-weight:900;color:#19375f}.v513-batch-state{font-size:9.5px;font-weight:900;color:#7d899a;white-space:nowrap}
+.v513-batch-item.ok .v513-batch-state{color:#21834b}.v513-batch-item.bad .v513-batch-state{color:#b44435}.v513-batch-item.pending .v513-batch-state{color:#a56f00}
+.v513-batch-file{margin-top:5px;font-size:9.5px;color:#65758b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v513-batch-meta{margin-top:4px;font-size:9.5px;color:#748296;line-height:1.4;min-height:27px}
+.v513-batch-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 12px}.v513-batch-progress{font-size:10px;color:#6b7b90;line-height:1.45}.v513-batch-progress.good{color:#25834d;font-weight:800}.v513-batch-progress.bad{color:#b34739;font-weight:800}
+.v513-batch-foot .btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:1050px){.v513-batch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.v513-batch-head,.v513-batch-foot{align-items:flex-start;flex-direction:column}.v513-batch-grid{grid-template-columns:1fr}}
+@media print{.v513-batch-box{display:none!important}}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1 多來源中央商品資料層</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.3 中央資料四檔一鍵批次更新版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6640,18 +6689,18 @@ body{min-width:1080px}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.1</div>
+      <div class="value">V5.1.3</div>
       <div class="meta">多來源中央商品資料層</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
-      <div class="eyebrow">中央商品資料</div>
+      <div class="eyebrow">HQ 建議售價</div>
       <div class="value" id="hqOverviewPriceStatus">載入中…</div>
       <div class="meta" id="hqOverviewPriceMeta">正在檢查 GitHub 公司制式 XLSB</div>
     </div>
     <div class="hq31-status" id="v51CatalogOverviewCard">
       <span class="dot"></span>
-      <div class="eyebrow">多來源資料層</div>
+      <div class="eyebrow">中央商品資料</div>
       <div class="value" id="v51CatalogOverviewStatus">載入中…</div>
       <div class="meta" id="v51CatalogOverviewMeta">一般／特殊／國際／烙印</div>
     </div>
@@ -6726,43 +6775,107 @@ body{min-width:1080px}
     </div>
   </div>
 
-  <div class="hq31-action v51-catalog-action">
+  <div class="hq31-action v51-catalog-action v512-catalog-manager">
     <div class="hq31-action-head">
-      <div><div class="hq31-action-title">中央商品資料層｜4 來源</div><div class="hq31-action-sub">一般版為主資料；特殊規格補 SKU Alias、國際版自動補版本、烙印版自動補螢幕烙印。找不到才進二手機手動補編。</div></div>
+      <div>
+        <div class="hq31-action-title">中央商品資料</div>
+        <div class="hq31-action-sub">4 份公司 XLSB 維持獨立來源，但集中在這裡查看與更新；平常不展開技術細節。</div>
+      </div>
       <span class="hq31-badge" id="v51CatalogBadge">載入中</span>
     </div>
-    <div class="hq31-action-body">
-      <div class="v51-source-grid">
-        <div class="v51-source-card" data-v51-source="general">
-          <div class="v51-source-head"><strong>一般版｜主資料</strong><span id="v51Status-general">載入中…</span></div>
-          <div class="v51-source-path">./data/hq/suggested-prices/current/hq-suggested-price.xlsb</div>
-          <div class="v51-source-meta" id="v51Meta-general">沿用上方公司價格檔；提供主規格、建議售價、出廠年份。</div>
+    <div class="hq31-action-body v512-catalog-body">
+
+      <div class="v513-batch-box" id="v513BatchBox">
+        <div class="v513-batch-head">
+          <div><div class="v513-batch-title">中央資料四檔批次更新</div><div class="v513-batch-sub">一次可選 1～4 份公司 XLSB；系統自動辨識一般版／特殊規格／國際版／烙印版，預檢通過後一次 Commit 發布。</div></div>
+          <div class="v513-batch-picker">
+            <label class="v513-file-btn" for="v513BatchFiles">選擇 1～4 份 XLSB</label>
+            <input id="v513BatchFiles" type="file" multiple accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v513BatchFilesSelected(this.files);this.value=''">
+          </div>
         </div>
-        <div class="v51-source-card" data-v51-source="special">
-          <div class="v51-source-head"><strong>特殊規格｜SKU Alias</strong><span id="v51Status-special">載入中…</span></div>
-          <div class="v51-source-path">./data/hq/catalog/special-spec.xlsb</div>
-          <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('special',this.files&&this.files[0]);this.value=''">
-          <div class="v51-source-meta" id="v51Meta-special">無風扇／無配件／無鍵盤／特仕名稱等。</div>
-          <button type="button" class="btn primary small" id="v51Publish-special" onclick="v51PublishSource('special')" disabled>發布特殊規格</button>
+        <div class="v513-batch-grid">
+          <div class="v513-batch-item" id="v513Item-general"><div class="v513-batch-item-top"><span class="v513-batch-name">一般版</span><span class="v513-batch-state" id="v513State-general">未選</span></div><div class="v513-batch-file" id="v513File-general">—</div><div class="v513-batch-meta" id="v513Meta-general">主規格／建議售價／上市日期</div></div>
+          <div class="v513-batch-item" id="v513Item-special"><div class="v513-batch-item-top"><span class="v513-batch-name">特殊規格</span><span class="v513-batch-state" id="v513State-special">未選</span></div><div class="v513-batch-file" id="v513File-special">—</div><div class="v513-batch-meta" id="v513Meta-special">特仕商品／特殊 SKU</div></div>
+          <div class="v513-batch-item" id="v513Item-international"><div class="v513-batch-item-top"><span class="v513-batch-name">國際版</span><span class="v513-batch-state" id="v513State-international">未選</span></div><div class="v513-batch-file" id="v513File-international">—</div><div class="v513-batch-meta" id="v513Meta-international">國際版／日版等版本資料</div></div>
+          <div class="v513-batch-item" id="v513Item-screenBurn"><div class="v513-batch-item-top"><span class="v513-batch-name">烙印版</span><span class="v513-batch-state" id="v513State-screenBurn">未選</span></div><div class="v513-batch-file" id="v513File-screenBurn">—</div><div class="v513-batch-meta" id="v513Meta-screenBurn">輕度／中度／重度烙印資料</div></div>
         </div>
-        <div class="v51-source-card" data-v51-source="international">
-          <div class="v51-source-head"><strong>國際版｜版本層</strong><span id="v51Status-international">載入中…</span></div>
-          <div class="v51-source-path">./data/hq/catalog/international.xlsb</div>
-          <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('international',this.files&&this.files[0]);this.value=''">
-          <div class="v51-source-meta" id="v51Meta-international">國際版／日版等，命中後自動帶入「國際版本」。</div>
-          <button type="button" class="btn primary small" id="v51Publish-international" onclick="v51PublishSource('international')" disabled>發布國際版</button>
-        </div>
-        <div class="v51-source-card" data-v51-source="screenBurn">
-          <div class="v51-source-head"><strong>烙印版｜狀態層</strong><span id="v51Status-screenBurn">載入中…</span></div>
-          <div class="v51-source-path">./data/hq/catalog/screen-burn.xlsb</div>
-          <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('screenBurn',this.files&&this.files[0]);this.value=''">
-          <div class="v51-source-meta" id="v51Meta-screenBurn">輕度／中度／重度，命中後自動帶入「螢幕烙印」。</div>
-          <button type="button" class="btn primary small" id="v51Publish-screenBurn" onclick="v51PublishSource('screenBurn')" disabled>發布烙印版</button>
+        <div class="v513-batch-foot">
+          <span class="v513-batch-progress" id="v513BatchProgress">尚未選擇批次更新檔案。</span>
+          <button type="button" class="btn primary" id="v513BatchPublishBtn" onclick="v513PublishBatch()" disabled>一鍵發布已選資料</button>
         </div>
       </div>
-      <div class="hq31-actions" style="margin-top:12px"><button type="button" class="btn ghost" onclick="v51LoadCatalogs(true)">重新載入 4 來源</button><span class="v51-load-note" id="v51CatalogLoadNote">正在建立中央商品索引…</span></div>
-      <div class="hq31-note"><b>配對優先序：</b>品牌＋型號＋容量嚴格比對 → 品牌＋完整商品名稱唯一比對 → 多來源 Alias／狀態層 → 最後才使用「中央未建檔」示意卡補編。</div>
-      <div class="hq31-note"><b>資料分工：</b>一般版更新主規格；特殊規格保留完整特仕商品名；國際版自動寫入「國際版本」；烙印版自動寫入「螢幕烙印」。門市設定售價與 IMEI／SN 不受影響。</div>
+
+      <div class="v512-catalog-table" role="table" aria-label="中央商品資料來源">
+        <div class="v512-table-head" role="row">
+          <span>資料來源</span><span>狀態</span><span>筆數</span><span>最後更新</span><span>操作</span>
+        </div>
+
+        <div class="v512-source-row" data-v51-source="general" role="row">
+          <div class="v512-source-name"><strong>一般版</strong><small>主規格／建議售價／上市日期</small></div>
+          <div class="v512-source-state"><i></i><span id="v512State-general">檢查中</span></div>
+          <div class="v512-source-count" id="v51Status-general">載入中…</div>
+          <div class="v512-source-date" id="v512Date-general">—</div>
+          <div class="v512-source-action"><button type="button" class="btn ghost small" onclick="v512UpdateGeneral()">更新</button></div>
+          <div class="v51-source-meta v512-hidden-meta" id="v51Meta-general">沿用上方公司價格檔；提供主規格、建議售價、出廠年份。</div>
+        </div>
+
+        <details class="v512-source-row" data-v51-source="special">
+          <summary>
+            <div class="v512-source-name"><strong>特殊規格</strong><small>特仕商品／特殊 SKU</small></div>
+            <div class="v512-source-state"><i></i><span id="v512State-special">檢查中</span></div>
+            <div class="v512-source-count" id="v51Status-special">載入中…</div>
+            <div class="v512-source-date" id="v512Date-special">—</div>
+            <div class="v512-source-action"><span class="v512-update-label">更新</span><b class="v512-chevron">⌄</b></div>
+          </summary>
+          <div class="v512-source-editor">
+            <div class="v512-editor-info"><b>特殊規格 XLSB</b><span class="v51-source-path">./data/hq/catalog/special-spec.xlsb</span></div>
+            <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('special',this.files&&this.files[0]);this.value=''">
+            <div class="v51-source-meta" id="v51Meta-special">無風扇／無配件／無鍵盤／特仕名稱等。</div>
+            <button type="button" class="btn primary small" id="v51Publish-special" onclick="v51PublishSource('special')" disabled>發布特殊規格</button>
+          </div>
+        </details>
+
+        <details class="v512-source-row" data-v51-source="international">
+          <summary>
+            <div class="v512-source-name"><strong>國際版</strong><small>國際版／日版等版本資料</small></div>
+            <div class="v512-source-state"><i></i><span id="v512State-international">檢查中</span></div>
+            <div class="v512-source-count" id="v51Status-international">載入中…</div>
+            <div class="v512-source-date" id="v512Date-international">—</div>
+            <div class="v512-source-action"><span class="v512-update-label">更新</span><b class="v512-chevron">⌄</b></div>
+          </summary>
+          <div class="v512-source-editor">
+            <div class="v512-editor-info"><b>國際版 XLSB</b><span class="v51-source-path">./data/hq/catalog/international.xlsb</span></div>
+            <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('international',this.files&&this.files[0]);this.value=''">
+            <div class="v51-source-meta" id="v51Meta-international">國際版／日版等，命中後自動帶入「國際版本」。</div>
+            <button type="button" class="btn primary small" id="v51Publish-international" onclick="v51PublishSource('international')" disabled>發布國際版</button>
+          </div>
+        </details>
+
+        <details class="v512-source-row" data-v51-source="screenBurn">
+          <summary>
+            <div class="v512-source-name"><strong>烙印版</strong><small>輕度／中度／重度烙印資料</small></div>
+            <div class="v512-source-state"><i></i><span id="v512State-screenBurn">檢查中</span></div>
+            <div class="v512-source-count" id="v51Status-screenBurn">載入中…</div>
+            <div class="v512-source-date" id="v512Date-screenBurn">—</div>
+            <div class="v512-source-action"><span class="v512-update-label">更新</span><b class="v512-chevron">⌄</b></div>
+          </summary>
+          <div class="v512-source-editor">
+            <div class="v512-editor-info"><b>烙印版 XLSB</b><span class="v51-source-path">./data/hq/catalog/screen-burn.xlsb</span></div>
+            <input type="file" accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v51SourceFileSelected('screenBurn',this.files&&this.files[0]);this.value=''">
+            <div class="v51-source-meta" id="v51Meta-screenBurn">輕度／中度／重度，命中後自動帶入「螢幕烙印」。</div>
+            <button type="button" class="btn primary small" id="v51Publish-screenBurn" onclick="v51PublishSource('screenBurn')" disabled>發布烙印版</button>
+          </div>
+        </details>
+      </div>
+      <div class="v512-catalog-footer">
+        <button type="button" class="btn ghost" onclick="v51LoadCatalogs(true)">重新檢查全部資料</button>
+        <span class="v51-load-note" id="v51CatalogLoadNote">正在建立中央商品索引…</span>
+      </div>
+      <details class="v512-tech-note">
+        <summary>查看資料分工與配對規則</summary>
+        <div class="hq31-note"><b>配對優先序：</b>品牌＋型號＋容量嚴格比對 → 品牌＋完整商品名稱唯一比對 → 特殊／國際／烙印補強 → 最後才使用「中央未建檔」示意卡補編。</div>
+        <div class="hq31-note"><b>資料分工：</b>一般版提供主規格；特殊規格保留特仕名稱；國際版補國際版本；烙印版補螢幕烙印。門市設定售價與 IMEI／SN 不受影響。</div>
+      </details>
     </div>
   </div>
 
@@ -7845,6 +7958,181 @@ updateUsedImportUI=function(){_v51UpdateUsedImportUI();const sum=document.getEle
 
 /* 初始化：先建立多來源中央索引。 */
 setTimeout(()=>v51LoadCatalogs(false),0);
+</script>
+
+
+<script id="v511-xiaomi-brand-alias-hotfix">
+/* ===== V5.1.2｜HQ 中央資料管理介面精簡版 =====
+   公司檔可能使用 Mi / Mi-Redmi；門市來源可能使用 Xiaomi / Redmi。
+   只在 JOIN key 正規化品牌家族，不放寬型號/容量 Gate。
+*/
+function v511BrandKey(v){
+  const k=nrKey(v);
+  if(['mi','xiaomi','小米','miredmi','redmi','紅米'].includes(k))return 'xiaomi-family';
+  return k;
+}
+function v511DisplayBrand(v){
+  const k=nrKey(v);
+  if(k==='miredmi'||k==='redmi'||k==='紅米')return 'Redmi';
+  if(k==='xiaomi'||k==='小米')return 'Xiaomi';
+  return v;
+}
+
+/* 讓中央資料建立索引時就使用品牌家族 key。 */
+v51BaseKey=function(p){return [v511BrandKey(p?.brand),nrKey(p?.model),nrCap(p?.rom)].join('|')};
+v51NameKey=function(p){return [v511BrandKey(p?.brand),nrKey(p?.name),nrCap(p?.rom)].join('|')};
+
+/* 讀取 XLSB 後只修正顯示品牌，不修改原始檔內容。 */
+const _v511ParseWorkbook=v51ParseWorkbook;
+v51ParseWorkbook=function(wb,type){
+  const out=_v511ParseWorkbook(wb,type);
+  for(const p of out.products||[])p.brand=v511DisplayBrand(p.brand);
+  return out;
+};
+
+/* HQ 一般版建議售價 / 日期 key 同步支援同品牌家族。 */
+hqPriceMapKey=function(brand,nameOrModel,rom){return [v511BrandKey(brand),nrKey(nameOrModel),nrCap(rom)].join('|')};
+
+/* 新機 JOIN：品牌先做 family 正規化，其餘規則維持原本嚴格 Gate。 */
+matchProductFromStock=function(s){
+  let best=null,bestScore=-1;const brand=v511BrandKey(s.brand),model=nrKey(s.model),capv=nrCap(s.capacity),ver=nrVersion(s.version),cat=nrKey(s.mid||s.category||s.small),name=nrKey(s.name);
+  PRODUCTS.forEach((p,idx)=>{if(p.__v51UsedOnly)return;let score=0;if(brand&&v511BrandKey(p.brand)!==brand)return;if(brand)score+=10;if(model){if(nrKey(p.model)===model)score+=50;else return}if(capv){if(nrCap(p.rom)===capv)score+=30;else if(model)return}if(ver){const pv=nrVersion(p.network);if(pv===ver)score+=18;else if((ver==='wifi'||ver==='5g'||ver==='4g')&&pv)score-=5}if(cat&&nrKey(p.category)===cat)score+=10;score+=newNameScore(s.name,p.name);if(score>bestScore){bestScore=score;best={idx,p,score,matchMode:'strict'}}});if(best&&best.score>=45)return best;
+  let list=[];PRODUCTS.forEach((p,idx)=>{if(p.__v51UsedOnly)return;if(brand&&v511BrandKey(p.brand)!==brand)return;if(!name||nrKey(p.name)!==name)return;list.push({idx,p,score:40,matchMode:'exact-name-fallback'})});if(capv){const x=list.filter(a=>nrCap(a.p.rom)===capv);if(x.length)list=x}if(cat){const x=list.filter(a=>nrKey(a.p.category)===cat);if(x.length)list=x}return list.length===1?list[0]:null
+};
+
+/* 二手機 JOIN：同樣只正規化品牌，型號 / 容量 / 名稱分數與安全 fallback 保持。 */
+usedMatchProduct=function(row){
+  const parsed=parseUsedMachine(row.name,row.brand),brand=v511BrandKey(row.brand),cat=nrKey(row.small);let best=null,bestScore=-1;
+  PRODUCTS.forEach((p,idx)=>{let score=0;if(brand&&v511BrandKey(p.brand)!==brand)return;score+=10;if(cat&&nrKey(p.category)===cat)score+=10;if(parsed.model){if(nrKey(p.model)===nrKey(parsed.model))score+=45;else if(nrKey(p.model)&&nrKey(parsed.cleanName).includes(nrKey(p.model)))score+=18}if(parsed.capacity){if(nrCap(p.rom)===nrCap(parsed.capacity))score+=26;else if(parsed.model)return}if(parsed.ram&&nrCap(p.ram)===nrCap(parsed.ram))score+=8;if(parsed.version&&nrVersion(p.network)===nrVersion(parsed.version))score+=10;score+=newNameScore(parsed.cleanName,p.name);if(nrKey(parsed.cleanName)===nrKey(p.name))score+=28;if(score>bestScore){bestScore=score;best={idx,p,score,parsed}}});if(best&&best.score>=18)return best;
+  let list=[];PRODUCTS.forEach((p,idx)=>{if(brand&&v511BrandKey(p.brand)!==brand)return;if(nrKey(p.name)!==nrKey(parsed.cleanName))return;list.push({idx,p,score:40,parsed,matchMode:'v511-exact-name'})});if(parsed.capacity){const x=list.filter(a=>nrCap(a.p.rom)===nrCap(parsed.capacity));if(x.length)list=x}return list.length===1?list[0]:null
+};
+</script>
+
+
+<script id="v512-hq-catalog-ui-script">
+/* V5.1.2 UI-only sync. Does not change catalog matching or publish logic. */
+function v512SyncCatalogRows(){
+  for(const type of ['general','special','international','screenBurn']){
+    const st=V51_SOURCE_STATE?.[type]||{};
+    const state=document.getElementById('v512State-'+type);
+    const date=document.getElementById('v512Date-'+type);
+    if(state)state.textContent=st.ready?'正常':(st.error?'異常':'未上傳');
+    if(date)date.textContent=st.date||'—';
+  }
+}
+function v512UpdateGeneral(){
+  const el=document.getElementById('gh32PriceFile');
+  if(el){el.click();el.scrollIntoView({behavior:'smooth',block:'center'})}
+}
+const _v512SourceUi=v51UpdateSourceUi;
+v51UpdateSourceUi=function(type){_v512SourceUi(type);v512SyncCatalogRows()};
+const _v512Overview=v51UpdateOverview;
+v51UpdateOverview=function(){_v512Overview();v512SyncCatalogRows()};
+setTimeout(v512SyncCatalogRows,0);
+</script>
+
+
+<script id="v513-batch-catalog-script">
+/* ===== V5.1.3｜中央資料四檔一鍵批次更新版 =====
+   - 可一次選 1~4 份公司 XLSB，自動辨識來源。
+   - 每份先在瀏覽器預檢，重複來源直接阻擋。
+   - 發布使用 Git Data API 建立單一 Commit，避免 4 份檔案各自觸發 Pages deployment。
+   - 原本單檔更新功能完整保留作為 fallback。
+*/
+const V513_BATCH={general:null,special:null,international:null,screenBurn:null};
+const V513_TYPES=['general','special','international','screenBurn'];
+const V513_DEFAULT_META={general:'主規格／建議售價／上市日期',special:'特仕商品／特殊 SKU',international:'國際版／日版等版本資料',screenBurn:'輕度／中度／重度烙印資料'};
+function v513TypeFromFileName(name){const n=String(name||'');if(/一般版/i.test(n))return'general';if(/特殊規格/i.test(n))return'special';if(/國際版/i.test(n))return'international';if(/烙印版/i.test(n))return'screenBurn';return''}
+function v513InferTypeFromProducts(products){
+  if(!products?.length)return'';
+  const burn=products.filter(p=>!!v51BurnLabel(p.name)).length, intl=products.filter(p=>!!v51InternationalLabel(p.name)).length;
+  const special=products.filter(p=>v51StripDecorators(p.name)!==String(p.name||'')||/(無風扇|無配件|無鍵盤|蝙蝠俠|聯名|特仕)/i.test(String(p.name||''))).length;
+  if(burn/products.length>.25)return'screenBurn';if(intl/products.length>.20)return'international';if(special>0&&products.length<500)return'special';return'general'
+}
+function v513ResetBatch(){for(const t of V513_TYPES)V513_BATCH[t]=null;v513RenderBatch()}
+function v513RenderBatch(){
+  let chosen=0,good=0,bad=0;
+  for(const t of V513_TYPES){
+    const p=V513_BATCH[t];
+    const item=document.getElementById('v513Item-'+t);
+    const state=document.getElementById('v513State-'+t);
+    const file=document.getElementById('v513File-'+t);
+    const meta=document.getElementById('v513Meta-'+t);
+    if(item)item.classList.remove('ok','bad','pending');
+    if(!p){
+      if(state)state.textContent='未選';
+      if(file)file.textContent='—';
+      if(meta)meta.textContent=V513_DEFAULT_META[t];
+      continue;
+    }
+    chosen++;
+    if(file)file.textContent=p.file?.name||'—';
+    if(p.ok){
+      good++;
+      if(item)item.classList.add('ok');
+      if(state)state.textContent='預檢 PASS';
+      if(meta){
+        if(t==='general')meta.textContent=`${Number(p.products.length).toLocaleString()} 商品｜${Number(p.priceRows||0).toLocaleString()} 筆建議售價${p.reportDate?'｜'+p.reportDate:''}`;
+        else meta.textContent=`${Number(p.products.length).toLocaleString()} 筆${p.reportDate?'｜'+p.reportDate:''}`;
+      }
+    }else{
+      bad++;
+      if(item)item.classList.add('bad');
+      if(state)state.textContent='預檢失敗';
+      if(meta)meta.textContent=p.error||'檔案不符合規則';
+    }
+  }
+  const btn=document.getElementById('v513BatchPublishBtn');
+  const prog=document.getElementById('v513BatchProgress');
+  if(btn){
+    btn.disabled=!(chosen>0&&good===chosen&&bad===0&&GH32_CONNECTED);
+    btn.textContent=chosen?`一鍵發布 ${chosen} 份資料`:'一鍵發布已選資料';
+  }
+  if(prog){
+    prog.className='v513-batch-progress'+(bad?' bad':good===chosen&&chosen?' good':'');
+    prog.textContent=bad?`有 ${bad} 份預檢失敗，請重新選檔。`:chosen?`已選 ${chosen} 份｜${good} 份預檢通過${GH32_CONNECTED?'｜GitHub 已連線':'｜請先完成 GitHub 授權'}`:'尚未選擇批次更新檔案。';
+  }
+}
+async function v513ParseGeneral(file,buf,wb){
+  const d=hqDetectPriceSheet(wb,'系統版');if(!d)throw new Error('一般版找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');const parsed=v51ParseWorkbook(wb,'general');if(!parsed.products.length)throw new Error('一般版系統版沒有有效商品');
+  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map();let count=0;
+  for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]),dt=d.map.manufactureDate==null?'':hqNormalizeProductDate(row[d.map.manufactureDate]);if(!brand||!nm||!rom)continue;const k1=hqPriceMapKey(brand,nm,rom),k2=model?hqPriceMapKey(brand,model,rom):'';if(msrp>0){byName.set(k1,msrp);if(k2)byModel.set(k2,msrp);count++}if(dt){dateByName.set(k1,dt);if(k2)dateByModel.set(k2,dt)}}
+  if(!count)throw new Error('一般版沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}
+  return {ok:true,type:'general',file,buffer:buf,products:parsed.products,reportDate:parsed.reportDate||hqPriceReportDate(d.rows,d.headerRow)||'',sheet:d.sheet,priceRows:count,matched,byName,byModel,dateByName,dateByModel}
+}
+async function v513ParseOne(file){
+  if(!/\.xlsb$/i.test(file.name))throw new Error('只接受公司制式 .xlsb');if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'});let type=v513TypeFromFileName(file.name);
+  if(!type){const probe=v51ParseWorkbook(wb,'general');type=v513InferTypeFromProducts(probe.products)}
+  if(type==='general')return await v513ParseGeneral(file,buf,wb);
+  const parsed=v51ParseWorkbook(wb,type);if(!parsed.products.length)throw new Error(`${V51_SOURCE_LABELS[type]}系統版沒有有效商品`);
+  if(type==='international'&&!parsed.products.some(p=>p.__v51InternationalVersion))throw new Error('檔案內容未辨識到國際版／日版版本資料');
+  if(type==='screenBurn'&&!parsed.products.some(p=>p.__v51ScreenBurn))throw new Error('檔案內容未辨識到輕度／中度／重度烙印資料');
+  return {ok:true,type,file,buffer:buf,products:parsed.products,reportDate:parsed.reportDate||''}
+}
+async function v513BatchFilesSelected(fileList){
+  const files=[...(fileList||[])];v513ResetBatch();if(!files.length)return;if(files.length>4){toast('一次最多選擇 4 份 XLSB');return}const prog=document.getElementById('v513BatchProgress');if(prog){prog.className='v513-batch-progress';prog.textContent='正在辨識與預檢檔案…'}
+  const seen=new Set();for(const file of files){try{const p=await v513ParseOne(file);if(seen.has(p.type)){V513_BATCH[p.type]={ok:false,type:p.type,file,error:`重複選到「${V51_SOURCE_LABELS[p.type]}」；每種類型只能一份`};continue}seen.add(p.type);V513_BATCH[p.type]=p}catch(err){const type=v513TypeFromFileName(file.name)||V513_TYPES.find(t=>!V513_BATCH[t])||'general';V513_BATCH[type]={ok:false,type,file,error:String(err?.message||err)}}}v513RenderBatch()
+}
+function v513BranchPath(branch){return String(branch||'main').split('/').filter(Boolean).map(encodeURIComponent).join('/')}
+async function v513CreateBlob(b64){const c=gh32GetCfg();return await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/blobs`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:b64,encoding:'base64'})})}
+async function v513SingleCommit(entries,message){
+  const c=gh32GetCfg(),bp=v513BranchPath(c.branch||'main');const ref=await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/ref/heads/${bp}`),parentSha=ref?.object?.sha;if(!parentSha)throw new Error('無法取得目前 branch HEAD');const parent=await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/commits/${encodeURIComponent(parentSha)}`),baseTree=parent?.tree?.sha;if(!baseTree)throw new Error('無法取得目前 Git tree');
+  const blobs=await Promise.all(entries.map(async e=>({e,b:await v513CreateBlob(e.b64)})));const tree=await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/trees`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_tree:baseTree,tree:blobs.map(x=>({path:x.e.path,mode:'100644',type:'blob',sha:x.b.sha}))})});const commit=await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/commits`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,tree:tree.sha,parents:[parentSha]})});await gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/git/refs/heads/${bp}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({sha:commit.sha,force:false})});return commit
+}
+async function v513PublishBatch(){
+  const selected=V513_TYPES.map(t=>V513_BATCH[t]).filter(Boolean),bad=selected.filter(p=>!p.ok);if(!selected.length)return toast('請先選擇要更新的 XLSB');if(bad.length)return toast('仍有檔案未通過預檢');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('v513BatchPublishBtn'),prog=document.getElementById('v513BatchProgress');try{if(btn)btn.disabled=true;if(prog){prog.className='v513-batch-progress';prog.textContent='正在建立單一 GitHub Commit…'}
+    const entries=[];for(const p of selected){const path=p.type==='general'?GH32_PRICE_PATH:V51_CATALOG_REPO_PATHS[p.type];entries.push({path,b64:gh32BytesToBase64(new Uint8Array(p.buffer))})}
+    const now=gh32NowIso();
+    if(V513_BATCH.general?.ok){let m={};try{m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH)}catch(_){}m.updatedAt=now;m.sourceFileName=V513_BATCH.general.file.name;m.lastValidatedRows=V513_BATCH.general.priceRows;m.lastMatchedProducts=V513_BATCH.general.matched;m.publishedVia='V5.1.3 batch web publish';m.currentFile=m.currentFile||'./current/hq-suggested-price.xlsb';entries.push({path:GH32_PRICE_MANIFEST_PATH,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
+    const aux=selected.filter(p=>p.type!=='general');if(aux.length){let m={version:'5.1.3',updatedAt:now,sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}m.version='5.1.3';m.updatedAt=now;m.sources=m.sources||{};for(const p of aux){const path=V51_CATALOG_REPO_PATHS[p.type];m.sources[p.type]={file:'./'+path.split('/').pop(),sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:now}}entries.push({path:V51_CATALOG_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
+    const labels=selected.map(p=>V51_SOURCE_LABELS[p.type]).join(' / '),commit=await v513SingleCommit(entries,`V5.1.3 central catalog batch update｜${labels}｜${now}`);
+    for(const p of selected){V51_SOURCE_PRODUCTS[p.type]=p.products;Object.assign(V51_SOURCE_STATE[p.type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||''});v51UpdateSourceUi(p.type);if(p.type==='general'){HQ_PRICE_BY_NAME_ROM=p.byName;HQ_PRICE_BY_MODEL_ROM=p.byModel;HQ_DATE_BY_NAME_ROM=p.dateByName;HQ_DATE_BY_MODEL_ROM=p.dateByModel;Object.assign(HQ_PRICE_STATE,{ready:true,loading:false,error:'',rows:p.priceRows,matchedProducts:p.matched,reportDate:p.reportDate||'',file:'./current/hq-suggested-price.xlsb',sheet:p.sheet||'系統版',updatedAt:now});updateHqPriceStatus()}}
+    v51RebuildProductLayer();v51UpdateOverview();if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ GitHub 發布成功｜${selected.length} 份資料｜單一 Commit ${String(commit.sha||'').slice(0,7)}`};toast(`中央資料已一次發布 ${selected.length} 份`)
+  }catch(err){if(prog){prog.className='v513-batch-progress bad';prog.textContent='發布失敗：'+String(err?.message||err)}toast('批次發布失敗')}finally{v513RenderBatch()}
+}
+/* GitHub 授權狀態變更時同步批次按鈕。 */
+const _v513Gh32UpdatePublishButtons=gh32UpdatePublishButtons;gh32UpdatePublishButtons=function(){_v513Gh32UpdatePublishButtons();v513RenderBatch()};
+setTimeout(v513RenderBatch,0);
 </script>
 
 </body>
