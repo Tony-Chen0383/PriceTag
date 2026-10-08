@@ -1,6 +1,6 @@
 {
   "version": "5.1.3",
-  "updatedAt": "2026-10-08 11:03",
+  "updatedAt": "2026-10-08 18:05",
   "sources": {
     "general": {
       "file": "../suggested-prices/current/hq-suggested-price.xlsb",
@@ -11,21 +11,21 @@
       "sourceFileName": "20260917-標價卡與售價表(特殊規格).xlsb",
       "rows": 25,
       "reportDate": "2026.09.17",
-      "updatedAt": "2026-10-08 11:03"
+      "updatedAt": "2026-10-08 18:05"
     },
     "international": {
       "file": "./international.xlsb",
-      "sourceFileName": "20261005-標價卡與售價表(國際版).xlsb",
-      "rows": 570,
-      "reportDate": "2026.10.05",
-      "updatedAt": "2026-10-08 11:03"
+      "sourceFileName": "20261008-標價卡與售價表(國際版).xlsb",
+      "rows": 572,
+      "reportDate": "2026.10.08",
+      "updatedAt": "2026-10-08 18:05"
     },
     "screenBurn": {
       "file": "./screen-burn.xlsb",
       "sourceFileName": "20261001-標價卡與售價表(烙印版).xlsb",
       "rows": 808,
       "reportDate": "2026.09.17",
-      "updatedAt": "2026-10-08 11:03"
+      "updatedAt": "2026-10-08 18:05"
     }
   }
 }

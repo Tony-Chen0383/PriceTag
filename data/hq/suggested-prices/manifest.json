@@ -17,10 +17,10 @@
   ],
   "scope": "新機／二手機作業頁的建議售價（手機與穿戴模板）；配件不套用",
   "fallback": "HQ 檔案無法取得或無匹配時，使用工具既有建議售價，不阻擋產卡。",
-  "updatedAt": "2026-10-08 11:03",
+  "updatedAt": "2026-10-08 18:05",
   "note": "V4.1.30：直接讀公司制式 XLSB；只需覆蓋固定 current 檔，不需另做 HQ 專用 Excel。",
   "sourceFileName": "20261005-標價卡與售價表(一般版).xlsb",
   "lastValidatedRows": 1980,
-  "lastMatchedProducts": 2910,
-  "publishedVia": "V5.1.3 batch web publish"
+  "lastMatchedProducts": 2928,
+  "publishedVia": "V5.1.4 batch web publish"
 }
