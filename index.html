@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1.6.5｜A4紙邊滿版裁切線版</title>
+<title>創宇標籤／標價卡列印工具 V5.1.6.7｜容量硬性配對 Gate Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6868,11 +6868,100 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5166-layout-cleanup">
+/* ===== V5.1.6.6｜長品名 + Wh 電池 + A4 裁切線整理 =====
+   1) 長商品名進一步縮字，避免與左側等級 Logo 重疊。
+   2) Wh / 瓦特小時由 JS 顯示層正規化，此處維持單行。
+   3) 只保留 A4 紙邊導引線；停用卡片內層虛線與局部角落 crop marks。
+   4) A4 導引線放到卡片後方，不穿過標價卡內容。
+*/
+
+/* 手機長品名：保留單列，但更積極縮字並略微收字距。 */
+.phone-card .cr-model.phone-name-long{
+  font-size:16px !important;
+  letter-spacing:-.02em !important;
+}
+.phone-card .cr-model.phone-name-xlong{
+  font-size:13px !important;
+  letter-spacing:-.04em !important;
+}
+.phone-card .cr-model.phone-name-xxlong{
+  font-size:11.5px !important;
+  letter-spacing:-.045em !important;
+}
+.phone-card .cr-model{
+  padding-left:100px !important;
+  padding-right:6px !important;
+  text-overflow:clip !important;
+}
+
+/* 電池值不換行；Wh 縮寫後可穩定放進半格。 */
+.phone-card .battery-capacity-value,
+.wear-card .battery-capacity-value{
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+}
+
+/* 螢幕批次預覽不再顯示卡片內層虛線。 */
+.batch-preview-grid.a4-layout .phone-card::after,
+.batch-preview-grid.a4-layout .wear-card::after,
+.batch-preview-grid.accessory .acc-label::after{
+  content:none !important;
+  display:none !important;
+  border:0 !important;
+}
+
+@media print{
+  /* 關閉舊的內框與局部角落線，只留下 A4 紙邊導引線。 */
+  body.batch-print-mode .phone-card::after,
+  body.batch-print-mode .wear-card::after,
+  body.batch-print-mode .acc-label::after,
+  body.batch-print-mode .a4-cell:has(.phone-card)::before,
+  body.batch-print-mode .a4-cell:has(.wear-card)::before,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item::before{
+    content:none !important;
+    display:none !important;
+  }
+
+  /* A4 裁切導引線置底，卡片／內容置頂；線只在紙邊與卡片間隙可見。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page{
+    isolation:isolate !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::before,
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::after{
+    z-index:0 !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page > .a4-cell{
+    position:relative !important;
+    z-index:2 !important;
+  }
+  body.batch-print-mode .a4-cell .phone-card .cr-model{
+    padding-left:100px !important;
+    padding-right:6px !important;
+  }
+  body.batch-print-mode .a4-cell .phone-card .cr-model.phone-name-long{font-size:16px !important;letter-spacing:-.02em !important;}
+  body.batch-print-mode .a4-cell .phone-card .cr-model.phone-name-xlong{font-size:13px !important;letter-spacing:-.04em !important;}
+  body.batch-print-mode .a4-cell .phone-card .cr-model.phone-name-xxlong{font-size:11.5px !important;letter-spacing:-.045em !important;}
+
+  /* 配件 A4 紙邊導引線也置於標籤後方。 */
+  body.batch-print-mode.accessory-print-mode::before,
+  body.batch-print-mode.accessory-print-mode::after{
+    z-index:0 !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory{
+    position:relative !important;
+    z-index:2 !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.5 A4紙邊滿版裁切線版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.7</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.6 長品名Wh電池＋裁切線整理版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7613,12 +7702,14 @@ function identifierBarcodeHtml(v){const s=identifierText(v);if(!s)return '<div c
 
 const ON_SALE_BADGE_IMAGE='./assets/static/img-90bed50a82cd808a.png';
 function formatBatteryCapacityDisplay(v){
-  const s=String(v??'').trim();
+  let s=String(v??'').trim();
   if(!s||s==='—')return '—';
-  // 顯示層統一 mAh：移除數字與單位間空白，並正規化大小寫。
-  return s
+  /* V5.1.6.6：只整理顯示，不修改中央 XLSB 原值。 */
+  s=s
     .replace(/([0-9][0-9,]*(?:\.[0-9]+)?)\s*[mM][aA][hH]\b/g,'$1mAh')
-    .replace(/([0-9][0-9,]*(?:\.[0-9]+)?)\s+[mM]\s*[aA]\s*[hH]\b/g,'$1mAh');
+    .replace(/([0-9][0-9,]*(?:\.[0-9]+)?)\s+[mM]\s*[aA]\s*[hH]\b/g,'$1mAh')
+    .replace(/([0-9][0-9,]*(?:\.[0-9]+)?)\s*(?:瓦特小時|瓦特小时|瓦時|瓦时|[wW][hH])/g,'$1Wh');
+  return s;
 }
 
 function usedPhoneHtml(p,r){const sale=money(r.price)||'—',displayName=usedDisplayName(r,p),date=usedDisplayDate(p,r),c=gradePalette(r.grade,'used'),has=!!USED_GRADE_LOGOS[r.grade],mainCamera=usedMainCameraText(p.rearCamera),saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade ${has?'has-image':'pending'}" style="--grade:${c[0]};--grade-text:${c[1]}">${usedGradeLogoHtml(r.grade,false)}</div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(displayName)}">${h(displayName)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span><strong class="cr-price" style="${priceStyle}">${h(sale)}</strong></div><div class="cr-meta"><span class="cr-pill">上市日期</span><span class="cr-meta-val">${h(date)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val">${formatSuggestedMsrp(p)}</span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div><div class="spec-value">${h(ramText(p.ram))} / ${h(cap(p.rom))}</div></div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div><div class="spec-value yellow cpu-value ${cpuTextClass(p.processor)}">${h(p.processor||'—')}</div></div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div><div class="spec-value">${h(p.display||'—')}</div></div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div><div class="spec-value yellow">${h(mainCamera)}</div></div><div class="spec-line double"><div class="spec-label">保固</div><div class="spec-value">${h(usedWarrantyDays(r.warranty))}</div><div class="spec-label">國際<br>版本</div><div class="spec-value">${h(r.internationalVersion||'—')}</div></div><div class="spec-line double"><div class="spec-label dark">電池</div><div class="spec-value yellow battery-capacity-value">${h(formatBatteryCapacityDisplay(p.battery))}</div><div class="spec-label dark">電池<br>健康</div><div class="spec-value yellow">${h(r.batteryHealth||'—')}</div></div><div class="spec-line double"><div class="spec-label">通訊<br>網路</div><div class="spec-value">${h(p.network||r.sourceVersion||'—')}</div><div class="spec-label">螢幕<br>烙印</div><div class="spec-value">${h(r.screenBurn||'—')}</div></div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`}
@@ -8750,6 +8841,137 @@ buildNewCardsFromReports=function(){
   const sellable=imeis.filter(x=>nrKey(x.status)===nrKey('可銷售')),seen=new Set(),built=[],errors=[...(newReportState.errors||[])],unmatchedCodes=new Set();
   for(const ir of sellable){if(!ir.imei){errors.push(`商品 ${ir.code||'—'}：IMEI/SN 空白`);continue}const ik=nrKey(ir.imei);if(seen.has(ik)){errors.push(`重複 IMEI/SN：${ir.imei}`);continue}seen.add(ik);const ck=nrKey(ir.code),s=stockByCodeStore.get(ck+'|'+nrKey(ir.store))||stockByCode.get(ck);if(!s){errors.push(`IMEI ${ir.imei}：找不到商品編碼 ${ir.code} 的庫存資料`);unmatchedCodes.add(ir.code);continue}if(!(Number(s.price)>0)){errors.push(`${ir.code}｜${s.name}：牌價為 0，禁止產卡`);continue}if(s.status&&nrKey(s.status)!==nrKey('啟用')){errors.push(`${ir.code}｜${s.name}：商品狀態「${s.status}」非啟用`);continue}const m=matchProductFromStock(s);if(!m){errors.push(`${ir.code}｜${s.brand} ${s.name}：中央規格未配對（型號 ${s.model||'—'}／容量 ${s.capacity||'—'}／版本 ${s.version||'—'}）`);unmatchedCodes.add(ir.code);continue}const p=m.p;built.push({productIndex:m.idx,color:normalizeImportedColor(p,s.color),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,imei:ir.imei,warranty:'創宇保固一年',tpl:autoTemplate(p.category,p.name),grade:'A',sourceCode:s.code,sourceStore:ir.store||s.store||'',sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,sourceCapacity:s.capacity,sourceVersion:s.version,sourcePriceType:'牌價'})}
   newItems=sortItemsByBrandAZ(built);activeNewIndex=0;newItems.forEach(normalizeItem);newReportState.errors=errors;newReportState.lastBuild={sellable:sellable.length,built:built.length,errors:errors.length,unmatchedCodes:[...unmatchedCodes]};renderNewItems();updateNewReportUI();const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=errors.length+' 筆';const summary=document.getElementById('newImportSummary');if(summary)summary.innerHTML=`<div class="summary-row"><span><b>可銷售 IMEI：</b>${sellable.length.toLocaleString()} 筆</span><span><b>成功產卡：</b>${built.length.toLocaleString()} 張</span><span><b>異常：</b>${errors.length.toLocaleString()} 筆</span><span><b>售價來源：</b>牌價</span></div><div class="summary-note">${errors.length?'異常資料未產卡：'+h(errors.slice(0,3).join('｜'))+(errors.length>3?'…':''):'✓ 全部可銷售資料已成功配對中央規格。'}</div>`;toast(`新機標卡產生完成：${built.length} 張${errors.length?'｜異常 '+errors.length+' 筆':''}`)
+};
+</script>
+
+
+<script id="v5167-capacity-hard-gate-hotfix">
+/* ===== V5.1.6.7｜容量硬性配對 Gate Hotfix =====
+   問題：門市來源可能使用 512G / 512GB / 1T 等格式；舊 fallback 在容量未命中時
+   仍可能靠名稱分數選到不同容量 SKU（例如 512G -> 256GB）。
+   規則：來源只要明確帶 RAM / ROM，ROM 即為 HARD GATE；容量不同一律禁止配對。
+*/
+function v5167MemToken(v){
+  let s=String(v??'').trim().toUpperCase().replace(/[,，\s]+/g,'');
+  if(!s||s==='-'||s==='—')return '';
+  let m=s.match(/^(\d+(?:\.\d+)?)(TB|T|GB|G|MB|M)?$/i);
+  if(!m)return s;
+  let n=String(m[1]).replace(/\.0$/,'');
+  let u=(m[2]||'').toUpperCase();
+  if(u==='TB'||u==='T')return n+'T';
+  if(u==='MB'||u==='M')return n+'MB';
+  /* GB / G / 無單位在公司中央 Rom 都以純數字為主。 */
+  return n;
+}
+
+/* 全站容量 key 統一：512G / 512GB / 512 -> 512；1TB / 1T -> 1T。 */
+nrCap=function(v){return v5167MemToken(v)};
+
+/* 補強二手機名稱解析：支援 12G+512G、12GB+512GB、12G/512G。 */
+const _v5167ParseUsedMachine=parseUsedMachine;
+parseUsedMachine=function(raw,brand=''){
+  const out=_v5167ParseUsedMachine(raw,brand)||{};
+  const text=String(raw||'').trim();
+  const parts=[...text.matchAll(/\[([^\]]+)\]/g)].map(x=>String(x[1]||'').trim()).filter(Boolean);
+  let found=false;
+  for(const part of parts){
+    const bits=part.split('/').map(x=>String(x||'').trim()).filter(Boolean);
+    const first=bits[0]||'';
+    let m=first.match(/^(\d+(?:\.\d+)?)\s*(?:GB|G)?\s*\+\s*(\d+(?:\.\d+)?)\s*(TB|T|GB|G)?$/i);
+    if(m){
+      out.ram=String(m[1]).replace(/\.0$/,'')+'GB';
+      const u=(m[3]||'GB').toUpperCase();
+      out.capacity=String(m[2]).replace(/\.0$/,'')+(u==='T'||u==='TB'?'TB':'GB');
+      if(parts.length===1)out.model='';
+      found=true;break;
+    }
+    if(bits.length>=2){
+      const a=bits[0].match(/^(\d+(?:\.\d+)?)\s*(GB|G)$/i);
+      const b=bits[1].match(/^(\d+(?:\.\d+)?)\s*(TB|T|GB|G)$/i);
+      if(a&&b){
+        out.ram=String(a[1]).replace(/\.0$/,'')+'GB';
+        const u=b[2].toUpperCase();
+        out.capacity=String(b[1]).replace(/\.0$/,'')+(u==='T'||u==='TB'?'TB':'GB');
+        if(parts.length===1)out.model='';
+        found=true;break;
+      }
+    }
+  }
+  if(out.capacity){
+    const k=v5167MemToken(out.capacity);
+    out.capacity=/T$/.test(k)?k.replace(/T$/,'TB'):k+'GB';
+  }
+  if(out.ram){
+    const k=v5167MemToken(out.ram);
+    if(k&&!/MB$|T$/.test(k))out.ram=k+'GB';
+  }
+  return out;
+};
+
+/* 二手機：RAM/ROM 只要來源有明確值就視為硬條件；容量不符直接淘汰。 */
+usedMatchProduct=function(row){
+  const parsed=parseUsedMachine(row.name,row.brand),brand=(typeof v511BrandKey==='function'?v511BrandKey(row.brand):nrKey(row.brand)),cat=nrKey(row.small);
+  const needRom=nrCap(parsed.capacity),needRam=nrCap(parsed.ram);let best=null,bestScore=-1;
+  PRODUCTS.forEach((p,idx)=>{
+    let score=0;
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(needRom&&nrCap(p.rom)!==needRom)return; /* HARD GATE */
+    if(needRam&&nrCap(p.ram)!==needRam)return; /* HARD GATE */
+    score+=10;
+    if(cat&&nrKey(p.category)===cat)score+=10;
+    if(parsed.model){if(nrKey(p.model)===nrKey(parsed.model))score+=45;else if(nrKey(p.model)&&nrKey(parsed.cleanName).includes(nrKey(p.model)))score+=18;else return}
+    if(needRom)score+=26;
+    if(needRam)score+=8;
+    if(parsed.version&&nrVersion(p.network)===nrVersion(parsed.version))score+=10;
+    score+=newNameScore(parsed.cleanName,p.name);
+    if(nrKey(parsed.cleanName)===nrKey(p.name))score+=28;
+    if(score>bestScore){bestScore=score;best={idx,p,score,parsed,matchMode:'v5167-hard-capacity'}}
+  });
+  if(best&&best.score>=18)return best;
+
+  let list=[];
+  PRODUCTS.forEach((p,idx)=>{
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(nrKey(p.name)!==nrKey(parsed.cleanName))return;
+    list.push({idx,p,score:40,parsed,matchMode:'v5167-exact-name'});
+  });
+  if(needRom){list=list.filter(a=>nrCap(a.p.rom)===needRom);if(!list.length)return null}
+  if(needRam){list=list.filter(a=>nrCap(a.p.ram)===needRam);if(!list.length)return null}
+  return list.length===1?list[0]:null;
+};
+
+/* 新機 JOIN 同步採容量 HARD GATE，避免 512G 庫存被匹配到 256GB 規格。 */
+matchProductFromStock=function(s){
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(s.brand):nrKey(s.brand)),model=nrKey(s.model),capv=nrCap(s.capacity),ver=nrVersion(s.version),cat=nrKey(s.mid||s.category||s.small),name=nrKey(s.name);
+  let best=null,bestScore=-1;
+  PRODUCTS.forEach((p,idx)=>{
+    if(p.__v51UsedOnly)return;
+    let score=0;const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(capv&&nrCap(p.rom)!==capv)return; /* HARD GATE */
+    if(brand)score+=10;
+    if(model){if(nrKey(p.model)===model)score+=50;else return}
+    if(capv)score+=30;
+    if(ver){const pv=nrVersion(p.network);if(pv===ver)score+=18;else if((ver==='wifi'||ver==='5g'||ver==='4g')&&pv)score-=5}
+    if(cat&&nrKey(p.category)===cat)score+=10;
+    score+=newNameScore(s.name,p.name);
+    if(score>bestScore){bestScore=score;best={idx,p,score,matchMode:'v5167-hard-capacity'}}
+  });
+  if(best&&best.score>=45)return best;
+
+  let list=[];
+  PRODUCTS.forEach((p,idx)=>{
+    if(p.__v51UsedOnly)return;
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(!name||nrKey(p.name)!==name)return;
+    list.push({idx,p,score:40,matchMode:'v5167-exact-name'});
+  });
+  if(capv){list=list.filter(a=>nrCap(a.p.rom)===capv);if(!list.length)return null}
+  if(cat){const x=list.filter(a=>nrKey(a.p.category)===cat);if(x.length)list=x}
+  return list.length===1?list[0]:null;
 };
 </script>
 
