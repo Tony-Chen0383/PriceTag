@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.0.5｜二手機未建檔示意卡補編版</title>
+<title>創宇標籤／標價卡列印工具 V5.0.5.1｜二手機示意卡預覽排版 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6317,7 +6317,7 @@ body{min-width:1080px}
 
 
 <style id="v502-fixed-workspace-heads-top-fix">
-/* ===== V5.0.5｜二手機未建檔示意卡補編版 =====
+/* ===== V5.0.5.1｜二手機示意卡預覽排版 Hotfix =====
    V5.0.1 的 page-fixed-head 位於 .main scrollport 內，
    因此 sticky top 應為 0，而不是再次加上 topbar 的 78px。
    修正：移除 78px 空洞與下方內容重疊；列印不受影響。
@@ -6348,7 +6348,7 @@ body{min-width:1080px}
 
 
 <style id="v505-used-manual-spec">
-/* ===== V5.0.5｜二手機未建檔示意卡補編版 ===== */
+/* ===== V5.0.5.1｜二手機示意卡預覽排版 Hotfix ===== */
 .used-manual-item{border-color:#f2b84b!important;box-shadow:0 0 0 2px rgba(242,184,75,.12)}
 .used-manual-item .item-head{gap:8px;flex-wrap:wrap}
 .used-manual-edit-btn{margin-left:auto;border:1px solid #e6a52b;background:#fff5d8;color:#7b5400;border-radius:9px;padding:5px 10px;font-size:12px;font-weight:900;cursor:pointer}
@@ -6372,11 +6372,57 @@ body{min-width:1080px}
 @media print{.used-manual-banner,.used-manual-edit-btn,.used-manual-modal{display:none!important}}
 </style>
 
+
+<style id="v5051-used-manual-preview-layout-hotfix">
+/* ===== V5.0.5.1｜二手機未建檔示意卡快速預覽排版 Hotfix =====
+   只修正未建檔示意卡在 fast-used-preview 中被 flex 橫向擠壓，
+   並讓補資料按鈕在 item-head 隱藏時仍可操作。列印不受影響。
+*/
+@media screen{
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item .used-manual-banner{
+    width:100% !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    margin:0 0 8px !important;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item .used-manual-banner-text{
+    min-width:0;
+    flex:1 1 auto;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item .used-manual-banner .used-manual-edit-btn{
+    display:inline-flex !important;
+    flex:0 0 auto;
+    margin-left:0 !important;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item > .phone-card,
+  .batch-preview-grid.fast-used-preview .batch-preview-item.used-manual-item > .wear-card{
+    flex:0 0 auto;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+}
+@media print{
+  .used-manual-banner{display:none !important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.0.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.0 GitHub 正式鎖定版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.0.5.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.0 GitHub 正式鎖定版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6485,7 +6531,7 @@ body{min-width:1080px}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.0.5｜二手機未建檔示意卡補編版</div>
+      <div class="hq31-hero-title">V5.0.5.1｜二手機示意卡預覽排版 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 只負責新機／二手機建議售價與 Logo 靜態資源；實際牌價、IMEI／SN、規格與門市作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -6518,7 +6564,7 @@ body{min-width:1080px}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.0.5</div>
+      <div class="value">V5.0.5.1</div>
       <div class="meta">管理者網頁直傳 GitHub 版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -7002,7 +7048,7 @@ function usedManualMissingCount(r){
 }
 function usedInlineCardHtml(r,i){
   const p=productAt(r),manual=!!r.manualSpec,missing=usedManualMissingCount(r);
-  return `<div class="batch-preview-item ${i===activeUsedIndex?'active':''} ${manual?'used-manual-item':''}" onclick="selectUsedItem(${i})"><div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(usedDisplayName(r,p))}｜${h(r.grade)}級</span>${manual?`<button class="used-manual-edit-btn" onclick="event.stopPropagation();openUsedManualEditor(${i})">補資料${missing?' · '+missing+'項':''}</button>`:''}</div>${manual?'<div class="used-manual-banner">中央未建檔｜目前為示意卡，缺少規格可由門市補編</div>':''}${r.tpl==='穿戴'?usedWearHtml(p,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(p,r)}</div>`}</div>`
+  return `<div class="batch-preview-item ${i===activeUsedIndex?'active':''} ${manual?'used-manual-item':''}" onclick="selectUsedItem(${i})"><div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(usedDisplayName(r,p))}｜${h(r.grade)}級</span>${manual?`<button class="used-manual-edit-btn" onclick="event.stopPropagation();openUsedManualEditor(${i})">補資料${missing?' · '+missing+'項':''}</button>`:''}</div>${manual?`<div class="used-manual-banner"><span class="used-manual-banner-text">中央未建檔｜目前為示意卡</span><button class="used-manual-edit-btn" onclick="event.stopPropagation();openUsedManualEditor(${i})">補資料${missing?' · '+missing+'項':''}</button></div>`:''}${r.tpl==='穿戴'?usedWearHtml(p,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(p,r)}</div>`}</div>`
 }
 function renderUsedInlinePage(page=0){usedInlinePage=Math.max(0,page);renderUsedItems()}
 function selectUsedItem(i){activeUsedIndex=i;usedInlinePage=Math.floor(i/9);renderUsedItems()}
