@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1.6.2｜實體卡邊界裁切線修正版</title>
+<title>創宇標籤／標價卡列印工具 V5.1.6.3｜操作恢復＋裁切線＋長品名修正版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6567,7 +6567,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 </style>
 
 <style id="v516-style">
-/* ===== V5.1.6｜三頁多檔合併列印＋裁切線版 ===== */
+/* ===== V5.1.6.3｜操作恢復＋裁切線＋長品名修正版 ===== */
 /* 二手機來源轉配件卡：品牌 Logo + 等級 Logo（等級 Logo 疊在品牌 Logo 右下角） */
 .acc-used-grade-logo{
   position:absolute;left:12.8mm;top:20.0mm;width:8.6mm;height:8.6mm;z-index:6;
@@ -6591,46 +6591,36 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 </style>
 
 
-<style id="v5162-real-card-cut-guides">
-/* ===== V5.1.6.2｜實體卡邊界裁切線修正版 =====
-   裁切線直接畫在實體標卡邊界內側，不依賴 a4-cell / item outline。
-   不參與盒模型，不改 65×40 / 55×85 / 55×60 實體尺寸。
-*/
+<style id="v5163-safe-cut-guides">
+/* V5.1.6.3：配件一律只顯示品牌 Logo。 */
+.acc-used-grade-logo{display:none !important;}
+
+/* 批次預覽裁切線：畫在實體卡內緣，不改尺寸、不攔截滑鼠。 */
 .batch-preview-grid.a4-layout .phone-card,
 .batch-preview-grid.a4-layout .wear-card,
-.batch-preview-grid.accessory .acc-label{
-  position:relative !important;
-}
+.batch-preview-grid.accessory .acc-label{position:relative !important;}
 .batch-preview-grid.a4-layout .phone-card::after,
 .batch-preview-grid.a4-layout .wear-card::after,
 .batch-preview-grid.accessory .acc-label::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  box-sizing:border-box;
-  border:1px dashed rgba(82,88,99,.72);
-  pointer-events:none;
-  z-index:99999;
+  content:"";position:absolute;inset:1px;box-sizing:border-box;
+  border:1px dashed rgba(70,76,86,.72);pointer-events:none !important;z-index:5000;
 }
 @media print{
+  /* 關閉 V5.1.6 舊外層 outline，改由實體卡本身畫線。 */
+  body.batch-print-mode .a4-cell:has(.batch-preview-item),
+  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item{outline:none !important;}
+  body.batch-print-mode .phone-card,
+  body.batch-print-mode .wear-card,
+  body.batch-print-mode .acc-label{position:relative !important;}
   body.batch-print-mode .phone-card::after,
   body.batch-print-mode .wear-card::after,
   body.batch-print-mode .acc-label::after{
-    content:"" !important;
-    position:absolute !important;
-    inset:0 !important;
-    box-sizing:border-box !important;
-    border:.18mm dashed #555 !important;
-    pointer-events:none !important;
-    z-index:99999 !important;
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
+    content:"" !important;position:absolute !important;inset:.18mm !important;
+    box-sizing:border-box !important;border:.16mm dashed #666 !important;
+    pointer-events:none !important;z-index:5000 !important;
+    -webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;
   }
-  /* 舊版外層 outline 關閉，避免錯位／重疊。 */
-  body.batch-print-mode .a4-cell:has(.batch-preview-item),
-  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item{
-    outline:none !important;
-  }
+  body.batch-print-mode .acc-used-grade-logo{display:none !important;}
 }
 </style>
 
@@ -6638,7 +6628,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.2 實體卡邊界裁切線修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.3 操作恢復＋裁切線＋長品名修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6661,7 +6651,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
       <!-- ACCESSORY -->
       <section class="page active" id="page-accessory">
         <div class="page-fixed-head">
-        <div class="page-head"><div><h1>配件標籤</h1><p>可一次匯入多份配件庫存報表／二手機回收紀錄；二手機來源的售價沿用回收紀錄，小米原價優先對應一般版中央建議售價；配件卡只顯示品牌 Logo，不顯示等級 Logo。</p></div><div class="actions"><button class="btn danger" onclick="clearAccessory()">清空本次作業</button><button class="btn primary" onclick="printPage('accessory')">列印清單</button></div></div>
+        <div class="page-head"><div><h1>配件標籤</h1><p>可一次匯入多份配件庫存報表／二手機回收紀錄；二手機來源的售價沿用回收紀錄，小米原價優先對應一般版中央建議售價；配件卡只顯示品牌 Logo。</p></div><div class="actions"><button class="btn danger" onclick="clearAccessory()">清空本次作業</button><button class="btn primary" onclick="printPage('accessory')">列印清單</button></div></div>
         <div class="status-grid">
           <div class="status-card source-drop-card" id="accDropZone" role="button" tabindex="0" title="點擊或拖曳配件庫存報表／二手機回收紀錄 Excel 至此" onclick="document.getElementById('accFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('accFile').click()}" ondragenter="handleAccDragOver(event)" ondragover="handleAccDragOver(event)" ondragleave="handleAccDragLeave(event)" ondrop="handleAccDrop(event)"><div class="k">商品來源</div><div class="v" id="accSourceStatus">點擊匯入</div><div class="s" id="accSourceSub">可一次拖曳多份配件／二手機回收紀錄</div><span id="accUploadHint" hidden></span><input id="accFile" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="accessoryFileLoaded(this)"></div>
           <div class="status-card"><div class="k">控價品牌</div><div class="v">imos / Moshi / Lapo</div><div class="s">自動套用控價顯示</div></div>
@@ -6780,7 +6770,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.1.6.2</div>
+      <div class="value">V5.1.6</div>
       <div class="meta">多來源中央商品資料層</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -7369,14 +7359,7 @@ function cpuTextClass(v){const n=String(v||'').trim().length;return n>30?'cpu-xl
 function usedWarrantyDays(w){const m=String(w||'').match(/(180|90|14)/);return m?m[1]:'—'}
 function explicitYearFromText(v){const s=String(v||'');const ys=[...s.matchAll(/(?:19|20)\d{2}/g)].map(m=>Number(m[0])).filter(y=>y>=1990&&y<=2099);return ys.length?String(ys[0]):''}
 function usedDisplayDate(p,r){const hqDate=hqProductDateRaw(p);if(hqDate)return hqDate;const explicit=explicitYearFromText((r&&r.sourceCleanName)||'')||explicitYearFromText((r&&r.sourceName)||'');return wearDisplayDate(explicit||(p&&p.year)||'')}
-function phoneNameClass(v){
-  const s=String(v||'').replace(/\s+/g,'').trim();
-  const units=[...s].reduce((n,ch)=>n+(/[^ -ÿ]/.test(ch)?1:0.58),0);
-  if(units>=18)return 'phone-name-xxlong';
-  if(units>=14)return 'phone-name-xlong';
-  if(units>=11.5)return 'phone-name-long';
-  return 'phone-name-normal';
-}
+function phoneNameClass(v){const s=String(v||'').replace(/\s+/g,'').trim();const units=[...s].reduce((n,ch)=>n+(ch.codePointAt(0)>255?1:0.58),0);if(units>=18)return 'phone-name-xxlong';if(units>=14)return 'phone-name-xlong';if(units>=11.5)return 'phone-name-long';return 'phone-name-normal'}
 function identifierText(v){return String(v||'').trim()}
 function identifierLabel(v){const s=identifierText(v).replace(/\s+/g,'');return /^\d{14,17}$/.test(s)?'IMEI':'SN'}
 const CODE128_PATTERNS=["212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"];
@@ -8475,12 +8458,7 @@ handleAccDrop=function(e){e.preventDefault();e.stopPropagation();document.getEle
 function v516ApplyAccessoryGradeLogo(label,p){
   if(!label)return;
   let node=label.querySelector('.acc-used-grade-logo');
-  if(!node){
-    node=document.createElement('div');
-    node.className='acc-used-grade-logo';
-    label.appendChild(node);
-  }
-  /* V5.1.6.1：配件頁一律不顯示等級 Logo，僅保留品牌 Logo。 */
+  if(!node){node=document.createElement('div');node.className='acc-used-grade-logo';label.appendChild(node)}
   node.classList.remove('show');
   node.innerHTML='';
 }
