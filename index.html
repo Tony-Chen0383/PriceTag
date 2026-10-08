@@ -6957,11 +6957,174 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5168-edge-only-crop-guides">
+/* ===== V5.1.6.8｜A4 紙邊裁切記號修正版 =====
+   修正 V5.1.6.5~7 將裁切線畫成整頁井字格的問題。
+   原則：只在紙張外圍留「紙邊 → 卡片邊界」的導引記號；
+   卡片區中央與卡片間不再畫貫穿線。尺寸／位置／資料邏輯均不變。
+*/
+@media print{
+  /* 手機／穿戴共用：垂直切點只出現在 A4 上、下紙邊區。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::before{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:10mm !important;
+    top:0 !important;
+    width:190mm !important;
+    height:297mm !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    background-repeat:no-repeat !important;
+    background-position:left top,left bottom !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  /* 手機：第一排卡頂 13.6667mm；最後一排卡底距紙底同為 13.6667mm。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page)::before{
+    background-image:
+      repeating-linear-gradient(to right,
+        transparent 0,transparent 4.1667mm,
+        #666 4.1667mm,#666 4.3467mm,
+        transparent 4.3467mm,transparent 59.1667mm,
+        #666 59.1667mm,#666 59.3467mm,
+        transparent 59.3467mm,transparent 63.3333mm),
+      repeating-linear-gradient(to right,
+        transparent 0,transparent 4.1667mm,
+        #666 4.1667mm,#666 4.3467mm,
+        transparent 4.3467mm,transparent 59.1667mm,
+        #666 59.1667mm,#666 59.3467mm,
+        transparent 59.3467mm,transparent 63.3333mm) !important;
+    background-size:100% 13.6667mm,100% 13.6667mm !important;
+  }
+  /* 穿戴：第一排卡頂／最後一排卡底到紙邊為 14.625mm。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page::before{
+    background-image:
+      repeating-linear-gradient(to right,
+        transparent 0,transparent 4.1667mm,
+        #666 4.1667mm,#666 4.3467mm,
+        transparent 4.3467mm,transparent 59.1667mm,
+        #666 59.1667mm,#666 59.3467mm,
+        transparent 59.3467mm,transparent 63.3333mm),
+      repeating-linear-gradient(to right,
+        transparent 0,transparent 4.1667mm,
+        #666 4.1667mm,#666 4.3467mm,
+        transparent 4.3467mm,transparent 59.1667mm,
+        #666 59.1667mm,#666 59.3467mm,
+        transparent 59.3467mm,transparent 63.3333mm) !important;
+    background-size:100% 14.625mm,100% 14.625mm !important;
+  }
+
+  /* 水平切點只出現在 A4 左、右紙邊區；中央 181.6666mm 不畫線。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::after{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:0 !important;
+    top:10mm !important;
+    width:210mm !important;
+    height:277mm !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    background-repeat:no-repeat !important;
+    background-position:left top,right top !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page)::after{
+    background-image:
+      repeating-linear-gradient(to bottom,
+        transparent 0,transparent 3.6667mm,
+        #666 3.6667mm,#666 3.8467mm,
+        transparent 3.8467mm,transparent 88.6667mm,
+        #666 88.6667mm,#666 88.8467mm,
+        transparent 88.8467mm,transparent 92.3333mm),
+      repeating-linear-gradient(to bottom,
+        transparent 0,transparent 3.6667mm,
+        #666 3.6667mm,#666 3.8467mm,
+        transparent 3.8467mm,transparent 88.6667mm,
+        #666 88.6667mm,#666 88.8467mm,
+        transparent 88.8467mm,transparent 92.3333mm) !important;
+    background-size:14.1667mm 100%,14.1667mm 100% !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page::after{
+    background-image:
+      repeating-linear-gradient(to bottom,
+        transparent 0,transparent 4.625mm,
+        #666 4.625mm,#666 4.805mm,
+        transparent 4.805mm,transparent 64.625mm,
+        #666 64.625mm,#666 64.805mm,
+        transparent 64.805mm,transparent 69.25mm),
+      repeating-linear-gradient(to bottom,
+        transparent 0,transparent 4.625mm,
+        #666 4.625mm,#666 4.805mm,
+        transparent 4.805mm,transparent 64.625mm,
+        #666 64.625mm,#666 64.805mm,
+        transparent 64.805mm,transparent 69.25mm) !important;
+    background-size:14.1667mm 100%,14.1667mm 100% !important;
+  }
+
+  /* 配件 A4 landscape：只在上下紙邊顯示 65mm 卡寬切點。 */
+  body.batch-print-mode.accessory-print-mode::before{
+    content:"" !important;
+    display:block !important;
+    position:fixed !important;
+    left:14mm !important;
+    top:0 !important;
+    width:269mm !important;
+    height:210mm !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    background-image:
+      repeating-linear-gradient(to right,
+        #666 0,#666 .18mm,
+        transparent .18mm,transparent 65mm,
+        #666 65mm,#666 65.18mm,
+        transparent 65.18mm,transparent 68mm),
+      repeating-linear-gradient(to right,
+        #666 0,#666 .18mm,
+        transparent .18mm,transparent 65mm,
+        #666 65mm,#666 65.18mm,
+        transparent 65.18mm,transparent 68mm) !important;
+    background-size:100% 10mm,100% 27.8mm !important;
+    background-position:left top,left bottom !important;
+    background-repeat:no-repeat !important;
+  }
+  /* 配件水平切點只在 A4 左右紙邊 14mm 區域。 */
+  body.batch-print-mode.accessory-print-mode::after{
+    content:"" !important;
+    display:block !important;
+    position:fixed !important;
+    left:0 !important;
+    top:10mm !important;
+    width:297mm !important;
+    height:172.2mm !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    background-image:
+      repeating-linear-gradient(to bottom,
+        #666 0,#666 .18mm,
+        transparent .18mm,transparent 40mm,
+        #666 40mm,#666 40.18mm,
+        transparent 40.18mm,transparent 44mm),
+      repeating-linear-gradient(to bottom,
+        #666 0,#666 .18mm,
+        transparent .18mm,transparent 40mm,
+        #666 40mm,#666 40.18mm,
+        transparent 40.18mm,transparent 44mm) !important;
+    background-size:14mm 100%,14mm 100% !important;
+    background-position:left top,right top !important;
+    background-repeat:no-repeat !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.7</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.6 長品名Wh電池＋裁切線整理版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.8</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.8 A4紙邊裁切記號修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
