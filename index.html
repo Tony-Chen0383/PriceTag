@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1.6.3｜操作恢復＋裁切線＋長品名修正版</title>
+<title>創宇標籤／標價卡列印工具 V5.1.6.5｜A4紙邊滿版裁切線版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6624,11 +6624,255 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5164-extended-crop-marks">
+/* ===== V5.1.6.4｜延伸式裁切線 =====
+   只增加列印用四角裁切記號，不參與盒模型、不改卡片實體尺寸、不攔截操作。
+   既有卡片內緣虛線保留；延伸線畫在卡片外側。
+*/
+@media print{
+  /* 手機／穿戴：A4 cell 本身比卡片大，利用 cell 畫卡片四角向外延伸的 crop marks。 */
+  body.batch-print-mode .a4-cell:has(.phone-card),
+  body.batch-print-mode .a4-cell:has(.wear-card){
+    position:relative !important;
+    overflow:visible !important;
+  }
+  body.batch-print-mode .a4-cell:has(.phone-card)::before,
+  body.batch-print-mode .a4-cell:has(.wear-card)::before{
+    content:"" !important;
+    position:absolute !important;
+    left:50% !important;top:50% !important;
+    transform:translate(-50%,-50%) !important;
+    pointer-events:none !important;
+    z-index:6000 !important;
+    background-repeat:no-repeat !important;
+    background-image:
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555) !important;
+    background-position:
+      left 0 top 3mm, left 3mm top 0,
+      right 0 top 3mm, right 3mm top 0,
+      left 0 bottom 3mm, left 3mm bottom 0,
+      right 0 bottom 3mm, right 3mm bottom 0 !important;
+    background-size:
+      3mm .18mm, .18mm 3mm,
+      3mm .18mm, .18mm 3mm,
+      3mm .18mm, .18mm 3mm,
+      3mm .18mm, .18mm 3mm !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  body.batch-print-mode .a4-cell:has(.phone-card)::before{
+    width:61mm !important;height:91mm !important; /* 55×85 + 每邊 3mm */
+  }
+  body.batch-print-mode .a4-cell:has(.wear-card)::before{
+    width:61mm !important;height:66mm !important; /* 55×60 + 每邊 3mm */
+  }
+
+  /* 配件：65×40mm，外側延伸 1.5mm；剛好利用既有 3mm 欄距，避免相鄰標籤互相蓋線。 */
+  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item{
+    position:relative !important;
+    overflow:visible !important;
+  }
+  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item::before{
+    content:"" !important;
+    position:absolute !important;
+    left:50% !important;top:50% !important;
+    width:68mm !important;height:43mm !important;
+    transform:translate(-50%,-50%) !important;
+    pointer-events:none !important;
+    z-index:6000 !important;
+    background-repeat:no-repeat !important;
+    background-image:
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555),
+      linear-gradient(#555,#555),linear-gradient(#555,#555) !important;
+    background-position:
+      left 0 top 1.5mm, left 1.5mm top 0,
+      right 0 top 1.5mm, right 1.5mm top 0,
+      left 0 bottom 1.5mm, left 1.5mm bottom 0,
+      right 0 bottom 1.5mm, right 1.5mm bottom 0 !important;
+    background-size:
+      1.5mm .18mm, .18mm 1.5mm,
+      1.5mm .18mm, .18mm 1.5mm,
+      1.5mm .18mm, .18mm 1.5mm,
+      1.5mm .18mm, .18mm 1.5mm !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
+</style>
+
+
+<style id="v5165-a4-edge-cut-guides">
+/* ===== V5.1.6.5｜A4 紙邊滿版裁切導引線 =====
+   裁切基準延伸到 A4 紙張四邊；卡片仍維持原本 10mm 安全配置與實體尺寸。
+   手機／穿戴 A4 portrait：210×297mm；配件 A4 landscape：297×210mm。
+*/
+@media print{
+  /* 手機／穿戴：把原 10mm @page margin 轉為頁面內 padding，內部可用區仍是 190×277mm。 */
+  @page{size:A4 portrait;margin:0}
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page{
+    width:210mm !important;
+    height:297mm !important;
+    padding:10mm !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    position:relative !important;
+    background-color:#fff !important;
+  }
+
+  /* 關閉 V5.1.6.4 的局部角落延伸線，改用整張 A4 的連續導引線。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-cell:has(.phone-card)::before,
+  body.batch-print-mode:not(.accessory-print-mode) .a4-cell:has(.wear-card)::before,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item::before{
+    display:none !important;
+    content:none !important;
+  }
+
+  /* 共用垂直裁切線：55mm 卡寬置中於 190mm / 3 欄。
+     每欄 63.3333mm，卡片左右邊界相對欄起點為 4.1667 / 59.1667mm。
+     線從 A4 上緣一路到下緣。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::before{
+    content:"" !important;
+    position:absolute !important;
+    left:10mm !important;
+    top:0 !important;
+    width:190mm !important;
+    height:297mm !important;
+    z-index:7000 !important;
+    pointer-events:none !important;
+    background-image:repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent 4.1667mm,
+      #666 4.1667mm,
+      #666 4.3467mm,
+      transparent 4.3467mm,
+      transparent 59.1667mm,
+      #666 59.1667mm,
+      #666 59.3467mm,
+      transparent 59.3467mm,
+      transparent 63.3333mm
+    ) !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  /* 手機 55×85mm：190×277mm 內部 3×3；水平裁切線拉滿 A4 左右。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page)::after{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important;
+    top:10mm !important;
+    width:210mm !important;
+    height:277mm !important;
+    z-index:7000 !important;
+    pointer-events:none !important;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3.6667mm,
+      #666 3.6667mm,
+      #666 3.8467mm,
+      transparent 3.8467mm,
+      transparent 88.6667mm,
+      #666 88.6667mm,
+      #666 88.8467mm,
+      transparent 88.8467mm,
+      transparent 92.3333mm
+    ) !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  /* 穿戴 55×60mm：190×277mm 內部 3×4；水平裁切線拉滿 A4 左右。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page::after{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important;
+    top:10mm !important;
+    width:210mm !important;
+    height:277mm !important;
+    z-index:7000 !important;
+    pointer-events:none !important;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 4.625mm,
+      #666 4.625mm,
+      #666 4.805mm,
+      transparent 4.805mm,
+      transparent 64.625mm,
+      #666 64.625mm,
+      #666 64.805mm,
+      transparent 64.805mm,
+      transparent 69.25mm
+    ) !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  /* 配件 A4 landscape：297×210mm；原 277×190mm 安全區保留在 10mm padding 內。
+     4 欄 65mm + 3mm gap，整組 269mm 置中於 277mm，左右起點 14mm。 */
+  body.batch-print-mode.accessory-print-mode::before{
+    content:"" !important;
+    position:fixed !important;
+    left:14mm !important;
+    top:0 !important;
+    width:269mm !important;
+    height:210mm !important;
+    z-index:7000 !important;
+    pointer-events:none !important;
+    background-image:repeating-linear-gradient(
+      to right,
+      #666 0,
+      #666 .18mm,
+      transparent .18mm,
+      transparent 65mm,
+      #666 65mm,
+      #666 65.18mm,
+      transparent 65.18mm,
+      transparent 68mm
+    ) !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  body.batch-print-mode.accessory-print-mode::after{
+    content:"" !important;
+    position:fixed !important;
+    left:0 !important;
+    top:10mm !important;
+    width:297mm !important;
+    height:172.2mm !important;
+    z-index:7000 !important;
+    pointer-events:none !important;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      #666 0,
+      #666 .18mm,
+      transparent .18mm,
+      transparent 40mm,
+      #666 40mm,
+      #666 40.18mm,
+      transparent 40.18mm,
+      transparent 44mm
+    ) !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.3 操作恢復＋裁切線＋長品名修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.5 A4紙邊滿版裁切線版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7732,7 +7976,20 @@ function usedBatchCardHtml(r,i){const p=productAt(r);return `<div class="batch-p
 function renderUsedBatchPage(page=0){const grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');const pages=Math.max(1,Math.ceil(usedItems.length/9));usedBatchPage=Math.max(0,Math.min(page,pages-1));grid.className='batch-preview-grid fast-used-preview';if(!usedItems.length){grid.innerHTML='<div class="batch-empty">尚未匯入二手機資料</div>';pager.style.display='none';return}const start=usedBatchPage*9,end=Math.min(start+9,usedItems.length);let html='';for(let i=start;i<end;i++)html+=usedBatchCardHtml(usedItems[i],i);grid.innerHTML=html;pager.style.display='flex';pager.innerHTML=`<button class="btn ghost" ${usedBatchPage<=0?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage-1})">上一頁</button><span class="pager-info">第 ${usedBatchPage+1} / ${pages} 頁</span><button class="btn ghost" ${usedBatchPage>=pages-1?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage+1})">下一頁</button>`}
 function buildUsedPrintPagesFast(){const grid=document.getElementById('batchGrid'),phones=usedItems.filter(r=>r.tpl!=='穿戴'),wears=usedItems.filter(r=>r.tpl==='穿戴'),cells=[];cells.push('<div class="a4-preview-stack">');const add=(arr,per,wear)=>{const pages=Math.ceil(arr.length/per);for(let pg=0;pg<pages;pg++){cells.push(`<div class="a4-page${wear?' wear-page':''}">`);for(let c=0;c<per;c++){const r=arr[pg*per+c];cells.push('<div class="a4-cell">');if(r){const pp=productAt(r);cells.push('<div class="batch-preview-item">');cells.push(wear?usedWearHtml(pp,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(pp,r)}</div>`);cells.push('</div>')}cells.push('</div>')}cells.push(`<div class="a4-page-badge">A4｜${wear?'穿戴 3×4':'手機 3×3'}｜第 ${pg+1} / ${pages} 頁</div></div>`)}};add(phones,9,false);add(wears,12,true);cells.push('</div>');grid.className='batch-preview-grid a4-layout';grid.innerHTML=cells.join('')}
 function openBatchPreview(type,showModal=true){currentBatchType=type;const modal=document.getElementById('batchModal'),grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');grid.innerHTML='';grid.className='batch-preview-grid';pager.style.display='none';if(type==='new'){const warns=newItemWarnings(),phoneCount=newItems.filter(x=>x.tpl!=='穿戴').length,wearCount=newItems.length-phoneCount;setBatchMeta('新機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${newItems.length} 張`,false],[`A4 ${Math.ceil(newItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴／耳機 ${wearCount}`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!newItems.length)grid.innerHTML='<div class="batch-empty">尚未新增商品</div>';newItems.forEach((r,i)=>{normalizeItem(r);const p=productAt(r),item=document.createElement('div');item.className='batch-preview-item';item.innerHTML=`<div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(newDisplayName(r,p))}</span></div>${r.tpl==='穿戴'?newWearHtml(p,r):`<div class="phone-card new-phone-card">${newPhoneHtml(p,r)}</div>`}`;grid.appendChild(item)});applyA4BatchLayout(type)}else if(type==='accessory'){grid.classList.add('accessory');const total=accessoryRows.reduce((s,r)=>s+(r.qty||1),0),warns=[];accessoryRows.forEach((r,i)=>{if(!accessoryPrintName(r))warns.push(`配件 ${i+1}：缺少商品名稱`);if(!r.list)warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：缺少牌價`);if(isControlledBrand(r.brand)&&!(Number(r.member)>0))warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：控價商品缺少會員價，禁止列印`)});const ctlTotal=accessoryRows.reduce((s,r)=>s+(isControlledBrand(r.brand)?(r.qty||1):0),0);setBatchMeta('配件｜批次預覽','配件標卡尺寸 65×40 mm；A4 橫式每排 4 張自動排版',[[`共 ${total} 張`,false],[`商品 ${accessoryRows.length} 項`,false],[`控價 ${ctlTotal} 張`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!accessoryRows.length)grid.innerHTML='<div class="batch-empty">尚未加入待列印商品</div>';accessoryRows.forEach((r,i)=>{for(let q=0;q<(r.qty||1);q++){const item=document.createElement('div');item.className='batch-preview-item';const ctl=isControlledBrand(r.brand);item.innerHTML=`<div class="item-head"><b>${h(r.code||r.barcode||'配件')}</b><span>${h(r.brand||'')} ${ctl?'<span class="tag lock">🔒 控價</span>':''}</span></div>`;item.appendChild(accessoryCloneFor(r));grid.appendChild(item)}})}else{const phoneCount=usedItems.filter(x=>x.tpl!=='穿戴').length,wearCount=usedItems.length-phoneCount;setBatchMeta('二手機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${usedItems.length} 張`,false],[`A4 ${Math.ceil(usedItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴 / 耳機 ${wearCount}`,false]],[]);usedBatchPage=0;renderUsedBatchPage(0)}if(showModal)modal.classList.add('open')}
-function setAccessoryLandscapePrint(on){let st=document.getElementById('accessoryLandscapePrintStyle');if(on){if(!st){st=document.createElement('style');st.id='accessoryLandscapePrintStyle';st.textContent='@media print{@page{size:A4 landscape;margin:10mm}html,body,body.batch-print-mode,body.batch-print-mode #batchModal,body.batch-print-mode .batch-sheet,body.batch-print-mode .batch-preview-body,body.batch-print-mode .batch-preview-grid.accessory{background:#fff!important;background-color:#fff!important}body.batch-print-mode .batch-preview-body{width:277mm!important;margin:0 auto!important;min-height:0!important;height:auto!important;max-height:none!important;display:block!important;flex:none!important;overflow:visible!important}body.batch-print-mode .batch-preview-grid.accessory{min-height:0!important;height:auto!important;background:#fff!important}}';document.head.appendChild(st)}}else{st?.remove()}}
+function setAccessoryLandscapePrint(on){
+  document.body.classList.toggle('accessory-print-mode',!!on);
+  let st=document.getElementById('accessoryLandscapePrintStyle');
+  if(on){
+    if(!st){
+      st=document.createElement('style');
+      st.id='accessoryLandscapePrintStyle';
+      st.textContent='@media print{@page{size:A4 landscape;margin:0}html,body,body.batch-print-mode,body.batch-print-mode #batchModal,body.batch-print-mode .batch-sheet,body.batch-print-mode .batch-preview-body,body.batch-print-mode .batch-preview-grid.accessory{background:#fff!important;background-color:#fff!important}body.batch-print-mode .batch-preview-body{width:297mm!important;min-height:210mm!important;height:auto!important;margin:0!important;padding:10mm!important;box-sizing:border-box!important;display:block!important;flex:none!important;overflow:visible!important}body.batch-print-mode .batch-preview-grid.accessory{min-height:0!important;height:auto!important;background:transparent!important}}';
+      document.head.appendChild(st);
+    }
+  }else{
+    st?.remove();
+  }
+}
 function printBatchPreview(){const title=document.getElementById('batchTitle')?.textContent||'',pager=document.getElementById('batchPager');if(currentBatchType==='used'){if(!usedItems.length){toast('目前沒有可列印的標價卡');return}const keepPage=usedBatchPage;buildUsedPrintPagesFast();pager.style.display='none';setAccessoryLandscapePrint(false);document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');renderUsedBatchPage(keepPage)},40)}));return}if(title.startsWith('配件')){const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}setAccessoryLandscapePrint(true)}else{setAccessoryLandscapePrint(false);if(!document.querySelector('#batchGrid .a4-page')){toast('目前沒有可列印的標價卡');return}}document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false)},120)})}
 function printPage(p){if(p==='new'||p==='used'||p==='accessory'){if(p==='accessory'){if(!accessoryRows.length){toast('目前沒有可列印的配件標籤');return}const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}}else if(p==='new'&&!newItems.length){toast('目前沒有可列印的新機標價卡');return}else if(p==='used'&&!usedItems.length){toast('目前沒有可列印的二手機標價卡');return}openBatchPreview(p,false);requestAnimationFrame(()=>requestAnimationFrame(()=>printBatchPreview()));return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));document.getElementById('page-'+p).classList.add('printing');requestAnimationFrame(()=>{window.print();setTimeout(()=>document.getElementById('page-'+p).classList.remove('printing'),120)})}
 window.addEventListener('dragover',e=>{try{if(e.dataTransfer&&Array.from(e.dataTransfer.types||[]).includes('Files'))e.preventDefault()}catch(_){}});
