@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1.6.7｜容量硬性配對 Gate Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.1.6.10｜二手機調撥單智慧配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7120,11 +7120,187 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5169-grid-edge-extended-crop-guides">
+/* ===== V5.1.6.10｜交界點延伸裁切線 =====
+   不再以 A4 固定座標繪線；直接從實際卡片 grid 邊界向紙邊延伸。
+   因此裁切記號與 55×85 / 55×60 / 65×40 實體卡邊界天然同座標。
+*/
+@media print{
+  /* 關閉 V5.1.6.5~8 的 A4 固定座標裁切層。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::before,
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::after,
+  body.batch-print-mode.accessory-print-mode::before,
+  body.batch-print-mode.accessory-print-mode::after{
+    content:none !important;
+    display:none !important;
+    background:none !important;
+  }
+
+  /* ---------- 手機 / 穿戴：從真正 a4-cell 邊界延伸 ---------- */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page{
+    position:relative !important;
+    overflow:hidden !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page .a4-cell{
+    position:relative !important;
+    overflow:visible !important;
+    z-index:1 !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page .a4-cell > .batch-preview-item{
+    position:relative !important;
+    z-index:3 !important;
+  }
+
+  /* 手機 3×3：上方交界向上紙邊延伸。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(-n+3)::before{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:0 !important;
+    bottom:100% !important;
+    width:.18mm !important;
+    height:50mm !important;
+    background:#666 !important;
+    z-index:1 !important;
+    pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(3)::before{
+    box-shadow:55mm 0 0 #666 !important;
+  }
+  /* 手機：下方交界向下紙邊延伸。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(n+7)::before{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:0 !important;
+    top:100% !important;
+    width:.18mm !important;
+    height:50mm !important;
+    background:#666 !important;
+    z-index:1 !important;
+    pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(9)::before{
+    box-shadow:55mm 0 0 #666 !important;
+  }
+  /* 手機：每一列交界從左側向紙邊延伸。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(3n+1)::after{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    right:100% !important;
+    top:0 !important;
+    width:50mm !important;
+    height:.18mm !important;
+    background:#666 !important;
+    z-index:1 !important;
+    pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(7)::after{
+    box-shadow:0 85mm 0 #666 !important;
+  }
+  /* 手機：每一列交界從右側向紙邊延伸。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(3n)::after{
+    content:"" !important;
+    display:block !important;
+    position:absolute !important;
+    left:100% !important;
+    right:auto !important;
+    top:0 !important;
+    width:50mm !important;
+    height:.18mm !important;
+    background:#666 !important;
+    z-index:1 !important;
+    pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:not(.wear-page) .a4-cell:nth-child(9)::after{
+    box-shadow:0 85mm 0 #666 !important;
+  }
+
+  /* 穿戴 3×4：相同邏輯，列高 60mm。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(-n+3)::before{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:0 !important;bottom:100% !important;width:.18mm !important;height:50mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(3)::before{box-shadow:55mm 0 0 #666 !important;}
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(n+10)::before{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:0 !important;top:100% !important;width:.18mm !important;height:70mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(12)::before{box-shadow:55mm 0 0 #666 !important;}
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(3n+1)::after{
+    content:"" !important;display:block !important;position:absolute !important;
+    right:100% !important;top:0 !important;width:50mm !important;height:.18mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(10)::after{box-shadow:0 60mm 0 #666 !important;}
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(3n)::after{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:100% !important;right:auto !important;top:0 !important;width:50mm !important;height:.18mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page.wear-page .a4-cell:nth-child(12)::after{box-shadow:0 60mm 0 #666 !important;}
+
+  /* ---------- 配件 4欄：直接從每張 65×40 卡邊界延伸 ---------- */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory{
+    position:relative !important;
+    overflow:visible !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item{
+    position:relative !important;
+    overflow:visible !important;
+    z-index:1 !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item > .acc-label{
+    position:relative !important;
+    z-index:3 !important;
+  }
+  /* 第一排：每張配件卡左右邊界向上延伸。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(-n+4)::before{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:0 !important;bottom:100% !important;width:.18mm !important;height:30mm !important;
+    background:#666 !important;box-shadow:65mm 0 0 #666 !important;
+    z-index:1 !important;pointer-events:none !important;
+  }
+  /* 每列左端向左延伸。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1)::after{
+    content:"" !important;display:block !important;position:absolute !important;
+    right:100% !important;top:0 !important;width:30mm !important;height:.18mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  /* 每列右端向右延伸；不滿4張的最後一張也視為右端。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n)::after,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:last-child::after{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:100% !important;right:auto !important;top:0 !important;width:30mm !important;height:.18mm !important;
+    background:#666 !important;z-index:1 !important;pointer-events:none !important;
+  }
+  /* 最後一排：左右邊界向下延伸。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1):nth-last-child(-n+4)::before,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1):nth-last-child(-n+4) ~ .batch-preview-item::before{
+    content:"" !important;display:block !important;position:absolute !important;
+    left:0 !important;top:100% !important;bottom:auto !important;width:.18mm !important;height:30mm !important;
+    background:#666 !important;box-shadow:65mm 0 0 #666 !important;
+    z-index:1 !important;pointer-events:none !important;
+  }
+  /* 最後一排左右外側補下邊界延伸。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1):nth-last-child(-n+4)::after{
+    box-shadow:0 40mm 0 #666 !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:last-child::after{
+    box-shadow:0 40mm 0 #666 !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.8</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.8 A4紙邊裁切記號修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6.10</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6.10 交界點延伸裁切線版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -9135,6 +9311,91 @@ matchProductFromStock=function(s){
   if(capv){list=list.filter(a=>nrCap(a.p.rom)===capv);if(!list.length)return null}
   if(cat){const x=list.filter(a=>nrKey(a.p.category)===cat);if(x.length)list=x}
   return list.length===1?list[0]:null;
+};
+</script>
+
+
+<script id="v51610-transfer-smart-match-hotfix">
+/* ===== V5.1.6.10｜二手機調撥單智慧配對 Hotfix =====
+   目的：調撥單的回收機款常是展示名稱（年份/尺寸/WIFI/5G），且不一定帶 RAM/ROM。
+   既有 V5.1.6.7 容量 HARD GATE 保留；只有 importType=transfer 時，
+   額外使用：品牌 + 標準化商品名 + 建議售價 + 網路版本 做安全唯一配對。
+*/
+function v51610CanonTransferName(v){
+  let s=String(v||'').normalize('NFKC').trim().toLowerCase();
+  s=s.replace(/\+/g,' plus ');
+  s=s.replace(/[（(]\s*(?:19|20)\d{2}\s*[）)]/g,' ');
+  s=s.replace(/(?:^|[\s_\-])(?:wifi|wi-fi|5g|4g|lte)(?:$|[\s_\-])/ig,' ');
+  s=s.replace(/\b\d+(?:\.\d+)?\s*(?:吋|inch|inches|\")\b/ig,' ');
+  s=s.replace(/\bgalaxy\b/ig,' ');
+  s=s.replace(/\bapple\b|\bsamsung\b|\bgoogle\b|\boppo\b|\bvivo\b|\brealme\b|\bhonor\b|\bhuawei\b|\basus\b|\bsony\b|\bsharp\b|\bxiaomi\b|\bredmi\b|小米|紅米|三星|華為/ig,' ');
+  return s.replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+}
+function v51610TransferNet(row,parsed){
+  const txt=[parsed?.version,row?.name].filter(Boolean).join(' ');
+  if(/\bwi\s*[-_]?\s*fi\b|\bwifi\b/i.test(txt))return 'wifi';
+  if(/\b5g\b/i.test(txt))return '5g';
+  if(/\b4g\b|\blte\b/i.test(txt))return '4g';
+  return '';
+}
+function v51610ProductMsrp(p){
+  const a=Number(typeof hqSuggestedMsrpRaw==='function'?hqSuggestedMsrpRaw(p):0);
+  if(a>0)return Math.round(a);
+  const b=Number(p?.msrp||0);return b>0?Math.round(b):0;
+}
+function v51610TransferMatch(row){
+  const parsed=parseUsedMachine(row.name,row.brand);
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(row.brand):nrKey(row.brand));
+  const needRom=nrCap(parsed.capacity),needRam=nrCap(parsed.ram),needNet=v51610TransferNet(row,parsed);
+  const needMsrp=Math.round(Number(row.suggestedPrice)||0),nameKey=v51610CanonTransferName(parsed.cleanName||row.name);
+  let list=[];
+  PRODUCTS.forEach((p,idx)=>{
+    if(p.__v51UsedOnly)return; // 調撥單先對一般版主規格，避免狀態變體重複。
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(needRom&&nrCap(p.rom)!==needRom)return; // 來源有容量時仍是 HARD GATE。
+    if(needRam&&nrCap(p.ram)!==needRam)return;
+    list.push({idx,p,parsed});
+  });
+  if(!list.length)return null;
+
+  // 商品名先做標準化；exact 優先，若沒有 exact 才接受唯一的包含關係。
+  const exact=list.filter(x=>v51610CanonTransferName(x.p.name)===nameKey);
+  if(exact.length)list=exact;
+  else if(nameKey){
+    const fuzzy=list.filter(x=>{const k=v51610CanonTransferName(x.p.name);return k&&(k.includes(nameKey)||nameKey.includes(k))});
+    if(fuzzy.length)list=fuzzy;
+  }
+
+  // 調撥單本身的建議售價是重要 SKU 訊號；有命中時優先收斂。
+  if(needMsrp>0){
+    const ms=list.filter(x=>v51610ProductMsrp(x.p)===needMsrp);
+    if(ms.length)list=ms;
+  }
+
+  // WIFI / 5G / LTE 可再區分同名同價的平板版本。
+  if(needNet){
+    const ns=list.filter(x=>nrVersion(x.p.network)===needNet);
+    if(ns.length)list=ns;
+  }
+
+  if(list.length===1)return {...list[0],score:120,matchMode:'v51610-transfer-smart'};
+
+  // 最後只在候選的「品牌+名稱+RAM+ROM+網路」實際相同時放行，避免猜錯容量。
+  const sig=new Map();
+  for(const x of list){
+    const k=[v51610CanonTransferName(x.p.name),nrCap(x.p.ram),nrCap(x.p.rom),nrVersion(x.p.network)].join('|');
+    if(!sig.has(k))sig.set(k,x)
+  }
+  return sig.size===1?{...[...sig.values()][0],score:110,matchMode:'v51610-transfer-unique'}:null;
+}
+const _v51610UsedMatchProduct=usedMatchProduct;
+usedMatchProduct=function(row){
+  if(row?.importType==='transfer'){
+    const smart=v51610TransferMatch(row);
+    if(smart)return smart;
+  }
+  return _v51610UsedMatchProduct(row);
 };
 </script>
 
