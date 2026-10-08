@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.1.5｜二手機調撥單＋回收紀錄跨頁產卡版</title>
+<title>創宇標籤／標價卡列印工具 V5.1.6｜三頁多檔合併列印＋裁切線版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6564,11 +6564,36 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
   }
 }
 </style>
+
+<style id="v516-style">
+/* ===== V5.1.6｜三頁多檔合併列印＋裁切線版 ===== */
+/* 二手機來源轉配件卡：品牌 Logo + 等級 Logo（等級 Logo 疊在品牌 Logo 右下角） */
+.acc-used-grade-logo{
+  position:absolute;left:12.8mm;top:20.0mm;width:8.6mm;height:8.6mm;z-index:6;
+  display:none;align-items:center;justify-content:center;pointer-events:none;
+}
+.acc-used-grade-logo.show{display:flex}
+.acc-used-grade-logo img{display:block;width:100%;height:100%;object-fit:contain;background:transparent}
+
+/* 批次列印裁切線：outline 不參與盒模型，不改 65×40 / 55×85 / 55×60 實體尺寸。 */
+@media print{
+  body.batch-print-mode .a4-cell:has(.batch-preview-item){
+    outline:.16mm solid #777 !important;
+    outline-offset:0 !important;
+  }
+  body.batch-print-mode .batch-preview-grid.accessory .batch-preview-item{
+    outline:.16mm solid #777 !important;
+    outline-offset:0 !important;
+  }
+  body.batch-print-mode .acc-used-grade-logo{display:flex!important}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.5 二手機調撥單＋回收紀錄跨頁產卡版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.1.6</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.1.6 二手機調撥單＋回收紀錄跨頁產卡版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -6591,9 +6616,9 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
       <!-- ACCESSORY -->
       <section class="page active" id="page-accessory">
         <div class="page-fixed-head">
-        <div class="page-head"><div><h1>配件標籤</h1><p>可匯入配件庫存報表，或直接把二手機回收紀錄丟到這裡；二手機來源只取商品名稱、售價、牌價。</p></div><div class="actions"><button class="btn danger" onclick="clearAccessory()">清空本次作業</button><button class="btn primary" onclick="printPage('accessory')">列印清單</button></div></div>
+        <div class="page-head"><div><h1>配件標籤</h1><p>可一次匯入多份配件庫存報表／二手機回收紀錄；二手機來源的售價沿用回收紀錄，小米原價優先對應一般版中央建議售價，品牌／等級僅用於 Logo。</p></div><div class="actions"><button class="btn danger" onclick="clearAccessory()">清空本次作業</button><button class="btn primary" onclick="printPage('accessory')">列印清單</button></div></div>
         <div class="status-grid">
-          <div class="status-card source-drop-card" id="accDropZone" role="button" tabindex="0" title="點擊或拖曳配件庫存報表／二手機回收紀錄 Excel 至此" onclick="document.getElementById('accFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('accFile').click()}" ondragenter="handleAccDragOver(event)" ondragover="handleAccDragOver(event)" ondragleave="handleAccDragLeave(event)" ondrop="handleAccDrop(event)"><div class="k">商品來源</div><div class="v" id="accSourceStatus">點擊匯入</div><div class="s" id="accSourceSub">拖曳配件庫存報表／二手機回收紀錄至此</div><span id="accUploadHint" hidden></span><input id="accFile" type="file" accept=".xlsx,.xls,.xlsb" hidden onchange="accessoryFileLoaded(this)"></div>
+          <div class="status-card source-drop-card" id="accDropZone" role="button" tabindex="0" title="點擊或拖曳配件庫存報表／二手機回收紀錄 Excel 至此" onclick="document.getElementById('accFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('accFile').click()}" ondragenter="handleAccDragOver(event)" ondragover="handleAccDragOver(event)" ondragleave="handleAccDragLeave(event)" ondrop="handleAccDrop(event)"><div class="k">商品來源</div><div class="v" id="accSourceStatus">點擊匯入</div><div class="s" id="accSourceSub">可一次拖曳多份配件／二手機回收紀錄</div><span id="accUploadHint" hidden></span><input id="accFile" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="accessoryFileLoaded(this)"></div>
           <div class="status-card"><div class="k">控價品牌</div><div class="v">imos / Moshi / Lapo</div><div class="s">自動套用控價顯示</div></div>
           <div class="status-card"><div class="k">商品搜尋</div><div class="v">編碼 / 條碼 / 名稱</div><div class="s">支援掃碼槍直接輸入</div></div>
           <div class="status-card"><div class="k">本次待列印</div><div class="v" id="accCount">0 張</div><div class="s">重新整理即清空</div></div>
@@ -6633,7 +6658,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
         <div class="page-fixed-head">
         <div class="page-head"><div><h1>二手機標價卡</h1><p>可直接匯入二手機回收紀錄或二手機調撥單；售價依來源檔的「設定售價／牌價」自動帶入，不開放門市手動改價。</p></div><div class="actions"><button class="btn danger" onclick="resetUsedItems()">清空本次作業</button><button class="btn primary" onclick="printPage('used')">批次列印</button></div></div>
         <div class="status-grid">
-          <div class="status-card source-drop-card" id="usedDrop" role="button" tabindex="0" title="點擊或拖曳二手機回收紀錄／二手機調撥單 Excel 至此" onclick="document.getElementById('usedFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('usedFile').click()}" ondragenter="usedDragOver(event)" ondragover="usedDragOver(event)" ondragleave="usedDragLeave(event)" ondrop="usedDrop(event)"><div class="k">商品來源</div><div class="v" id="usedImportStatus">點擊匯入</div><div class="s" id="usedImportSub">拖曳二手機回收紀錄／調撥單 Excel 至此</div><input id="usedFile" type="file" accept=".xlsx,.xls,.xlsb" hidden onchange="usedFileLoaded(this)"></div>
+          <div class="status-card source-drop-card" id="usedDrop" role="button" tabindex="0" title="點擊或拖曳二手機回收紀錄／二手機調撥單 Excel 至此" onclick="document.getElementById('usedFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('usedFile').click()}" ondragenter="usedDragOver(event)" ondragover="usedDragOver(event)" ondragleave="usedDragLeave(event)" ondrop="usedDrop(event)"><div class="k">商品來源</div><div class="v" id="usedImportStatus">點擊匯入</div><div class="s" id="usedImportSub">可一次拖曳多份二手機回收紀錄／調撥單</div><input id="usedFile" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="usedFileLoaded(this)"></div>
           <div class="status-card"><div class="k">售價來源</div><div class="v" id="usedPriceSourceValue">設定售價</div><div class="s" id="usedPriceSourceSub">完全鎖定，不可手動修改</div></div>
           <div class="status-card"><div class="k">已產生標卡</div><div class="v" id="usedItemCount">0 筆</div><div class="s">手機 / 穿戴自動判斷</div></div>
         </div>
@@ -6652,7 +6677,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
       <section class="page" id="page-new">
         <div class="page-fixed-head">
         <div class="page-head"><div><h1>新機標價卡</h1><p>匯入「庫存報表＋IMEI報表」後自動產生商品資料；門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
-        <div class="status-grid"><div class="status-card source-drop-card" id="newReportDrop" role="button" tabindex="0" title="點擊或拖曳庫存報表＋IMEI報表 Excel 至此，可一次放入兩份" onclick="document.getElementById('newReportFiles').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('newReportFiles').click()}" ondragenter="newReportDragOver(event)" ondragover="newReportDragOver(event)" ondragleave="newReportDragLeave(event)" ondrop="newReportDrop(event)"><div class="k">商品來源</div><div class="v" id="newImportStatus">點擊匯入</div><div class="s" id="newImportSub">拖曳庫存＋IMEI報表至此</div><input id="newReportFiles" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="newReportFilesSelected(this.files)"></div><div class="status-card"><div class="k">標價卡售價來源</div><div class="v">牌價</div><div class="s">不抓銷售底價／會員價</div></div><div class="status-card"><div class="k">已產生標卡</div><div class="v" id="newItemCount">0 筆</div><div class="s">僅手動調整售價</div></div><div class="status-card"><div class="k">匯入異常</div><div class="v" id="newImportErrorCount">0 筆</div><div class="s">未配對／不可列印資料</div></div></div>
+        <div class="status-grid"><div class="status-card source-drop-card" id="newReportDrop" role="button" tabindex="0" title="點擊或拖曳庫存報表＋IMEI報表 Excel 至此，可一次放入兩份" onclick="document.getElementById('newReportFiles').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('newReportFiles').click()}" ondragenter="newReportDragOver(event)" ondragover="newReportDragOver(event)" ondragleave="newReportDragLeave(event)" ondrop="newReportDrop(event)"><div class="k">商品來源</div><div class="v" id="newImportStatus">點擊匯入</div><div class="s" id="newImportSub">可一次拖曳多份庫存＋IMEI報表</div><input id="newReportFiles" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="newReportFilesSelected(this.files)"></div><div class="status-card"><div class="k">標價卡售價來源</div><div class="v">牌價</div><div class="s">不抓銷售底價／會員價</div></div><div class="status-card"><div class="k">已產生標卡</div><div class="v" id="newItemCount">0 筆</div><div class="s">僅手動調整售價</div></div><div class="status-card"><div class="k">匯入異常</div><div class="v" id="newImportErrorCount">0 筆</div><div class="s">未配對／不可列印資料</div></div></div>
         <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">庫存報表＋IMEI報表到齊後自動產卡；找不到規格的資料不會硬印。</div></div>
         </div><!-- /page-fixed-head -->
         <div class="grid2">
@@ -6710,7 +6735,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.1.5</div>
+      <div class="value">V5.1.6</div>
       <div class="meta">多來源中央商品資料層</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -7089,7 +7114,7 @@ function handleAccDragOver(e){e.preventDefault();e.stopPropagation();if(e.dataTr
 function handleAccDragLeave(e){e.preventDefault();e.stopPropagation();document.getElementById('accDropZone')?.classList.remove('drag')}
 function handleAccDrop(e){e.preventDefault();e.stopPropagation();document.getElementById('accDropZone')?.classList.remove('drag');const fs=[...(e.dataTransfer?.files||[])];const f=fs.find(x=>/\.(xlsx|xls|xlsb)$/i.test(x.name))||fs[0];if(!f){toast('請拖入 Excel 檔案');return}accessoryLoadFile(f)}
 function accessoryFileLoaded(el){const f=el.files&&el.files[0];if(!f)return;accessoryLoadFile(f);el.value=''}
-/* ===== V5.1.5｜二手機回收紀錄 → 配件標卡（三欄模式） =====
+/* ===== V5.1.6｜二手機回收紀錄 → 配件標卡（三欄模式） =====
    僅取：商品名稱 / 售價 / 牌價。
    其他 IMEI、等級、規格、保固等欄位全部忽略，不進中央商品資料層。
 */
@@ -7236,7 +7261,7 @@ function clearAccessory(silent=false){
   const q=document.getElementById('accSearch');if(q)q.value='';
   const brand=document.getElementById('accBrand');if(brand)brand.innerHTML='<option selected>全部品牌</option>';
   const st=document.getElementById('accSourceStatus');if(st)st.textContent='點擊匯入';
-  const sub=document.getElementById('accSourceSub');if(sub)sub.textContent='拖曳配件庫存報表／二手機回收紀錄至此';
+  const sub=document.getElementById('accSourceSub');if(sub)sub.textContent='可一次拖曳多份配件／二手機回收紀錄';
   const hint=document.getElementById('accUploadHint');if(hint){hint.textContent='';hint.hidden=true;}
   const detect=document.getElementById('accDetectHint');if(detect)detect.textContent='可匯入配件庫存報表或二手機回收紀錄；二手機來源只取商品名稱、售價、牌價。品牌 Logo 依 GitHub manifest 載入。';
   const count=document.getElementById('accCount');if(count)count.textContent='0 張';
@@ -7358,7 +7383,7 @@ function buildUsedCardsFromRows(rows){
 function updateUsedImportUI(){
   const st=document.getElementById('usedImportStatus'),sub=document.getElementById('usedImportSub'),ct=document.getElementById('usedItemCount'),sum=document.getElementById('usedImportSummary');
   if(st)st.textContent=usedImportState.rows?(usedItems.length?'匯入完成':'匯入失敗'):'點擊匯入';
-  if(sub)sub.textContent=usedImportState.rows?`${usedImportState.file||'已載入 Excel'}｜${usedImportState.rows.length.toLocaleString()} 筆原始資料`:'拖曳二手機回收紀錄／調撥單 Excel 至此';
+  if(sub)sub.textContent=usedImportState.rows?`${usedImportState.file||'已載入 Excel'}｜${usedImportState.rows.length.toLocaleString()} 筆原始資料`:'可一次拖曳多份二手機回收紀錄／調撥單';
   if(ct)ct.textContent=usedItems.length+' 筆';
   if(sum){
     const phone=usedItems.filter(x=>x.tpl!=='穿戴').length,wear=usedItems.length-phone,manual=usedItems.filter(x=>x.manualSpec).length;
@@ -7522,7 +7547,7 @@ async function newReportFilesSelected(fileList){const files=[...(fileList||[])];
 function newReportDragOver(e){e.preventDefault();document.getElementById('newReportDrop')?.classList.add('drag')}
 function newReportDragLeave(e){e.preventDefault();document.getElementById('newReportDrop')?.classList.remove('drag')}
 function newReportDrop(e){e.preventDefault();document.getElementById('newReportDrop')?.classList.remove('drag');newReportFilesSelected(e.dataTransfer.files)}
-function updateNewReportUI(){const s=newReportState.stock,i=newReportState.imei,stockChip=document.getElementById('newStockChip'),imeiChip=document.getElementById('newImeiChip');if(stockChip){stockChip.className='import-chip '+(s?'ok':'');stockChip.textContent=s?`✓ 庫存報表 ${s.length.toLocaleString()} 筆`:'庫存報表：未載入'}if(imeiChip){const sell=i?i.filter(x=>nrKey(x.status)===nrKey('可銷售')).length:0;imeiChip.className='import-chip '+(i?'ok':'');imeiChip.textContent=i?`✓ IMEI報表 ${sell.toLocaleString()} 筆可銷售`:'IMEI報表：未載入'}const st=document.getElementById('newImportStatus'),sub=document.getElementById('newImportSub'),built=newReportState.lastBuild;if(st)st.textContent=built?'自動產卡完成':(s&&i?'正在自動產卡':(s||i?'已載入 1/2':'點擊匯入'));if(sub)sub.textContent=built?`${built.built} 張標卡｜${built.errors} 筆異常`:(s&&i?'兩份報表已到齊':(s?'尚缺 IMEI報表':i?'尚缺 庫存報表':'拖曳庫存＋IMEI報表至此'));const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=(newReportState.errors.length||0)+' 筆';const summary=document.getElementById('newImportSummary');if(summary&&!built){const sell=i?i.filter(x=>nrKey(x.status)===nrKey('可銷售')).length:0;summary.innerHTML=`<div class="summary-row"><span><b>庫存：</b>${s?s.length.toLocaleString()+' 筆':'未載入'}</span><span><b>可銷售 IMEI：</b>${i?sell.toLocaleString()+' 筆':'未載入'}</span><span><b>售價：</b>牌價</span></div><div class="summary-note">${s&&i?'兩份報表已到齊，系統正在自動 JOIN 並產生標卡。':'可一次選兩個 Excel，或分次載入；第二份到齊後會立即自動產卡。'}</div>`}}
+function updateNewReportUI(){const s=newReportState.stock,i=newReportState.imei,stockChip=document.getElementById('newStockChip'),imeiChip=document.getElementById('newImeiChip');if(stockChip){stockChip.className='import-chip '+(s?'ok':'');stockChip.textContent=s?`✓ 庫存報表 ${s.length.toLocaleString()} 筆`:'庫存報表：未載入'}if(imeiChip){const sell=i?i.filter(x=>nrKey(x.status)===nrKey('可銷售')).length:0;imeiChip.className='import-chip '+(i?'ok':'');imeiChip.textContent=i?`✓ IMEI報表 ${sell.toLocaleString()} 筆可銷售`:'IMEI報表：未載入'}const st=document.getElementById('newImportStatus'),sub=document.getElementById('newImportSub'),built=newReportState.lastBuild;if(st)st.textContent=built?'自動產卡完成':(s&&i?'正在自動產卡':(s||i?'已載入 1/2':'點擊匯入'));if(sub)sub.textContent=built?`${built.built} 張標卡｜${built.errors} 筆異常`:(s&&i?'兩份報表已到齊':(s?'尚缺 IMEI報表':i?'尚缺 庫存報表':'可一次拖曳多份庫存＋IMEI報表'));const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=(newReportState.errors.length||0)+' 筆';const summary=document.getElementById('newImportSummary');if(summary&&!built){const sell=i?i.filter(x=>nrKey(x.status)===nrKey('可銷售')).length:0;summary.innerHTML=`<div class="summary-row"><span><b>庫存：</b>${s?s.length.toLocaleString()+' 筆':'未載入'}</span><span><b>可銷售 IMEI：</b>${i?sell.toLocaleString()+' 筆':'未載入'}</span><span><b>售價：</b>牌價</span></div><div class="summary-note">${s&&i?'兩份報表已到齊，系統正在自動 JOIN 並產生標卡。':'可一次選兩個 Excel，或分次載入；第二份到齊後會立即自動產卡。'}</div>`}}
 function clearNewReportImport(){newReportState={stock:null,imei:null,stockFile:'',imeiFile:'',errors:[],lastBuild:null};updateNewReportUI();toast('已清除新機報表；目前已產生的標卡保留')}
 function newNameScore(a,b){const x=nrKey(a),y=nrKey(b);if(!x||!y)return 0;if(x===y)return 20;if(x.includes(y)||y.includes(x))return 12;let score=0;for(const token of ['iphone','ipad','galaxy','watch','airpods','pixel','m4','m3','m2','pro','max','ultra'])if(x.includes(token)&&y.includes(token))score+=2;return score}
 function matchProductFromStock(s){
@@ -8228,7 +8253,7 @@ setTimeout(v513RenderBatch,0);
 
 
 <script id="v515-used-transfer-order-script">
-/* ===== V5.1.5｜二手機調撥單直接產卡版 =====
+/* ===== V5.1.6｜二手機調撥單直接產卡版 =====
    支援原「二手機回收紀錄」與「二手機調撥單」共用同一匯入入口。
    調撥單只取可銷售、IMEI 有值、牌價 > 0 的商品；福利機同樣允許產卡。
    中央規格配對、四來源資料層與未建檔原地補編均沿用 V5.1.4。
@@ -8302,6 +8327,135 @@ updateUsedImportUI=function(){
   if(sub)sub.textContent=isTransfer?'由二手機調撥單直接帶入，不可手動修改':'完全鎖定，不可手動修改';
   const status=document.getElementById('usedImportSub');if(status&&usedImportState?.rows)status.textContent=`${usedImportState.file||'已載入 Excel'}｜${usedImportState.rows.length.toLocaleString()} 筆原始資料｜${isTransfer?'二手機調撥單':'二手機回收紀錄'}`;
   const sum=document.getElementById('usedImportSummary');if(sum&&usedImportState?.rows){const row=sum.querySelector('.summary-row');if(row)row.insertAdjacentHTML('afterbegin',`<span><b>來源格式：</b>${isTransfer?'二手機調撥單':'二手機回收紀錄'}</span>`)}
+};
+</script>
+
+
+<script id="v516-multifile-and-accessory-used-enhancement">
+/* ===== V5.1.6｜三頁多檔合併列印＋配件二手機來源補強 ===== */
+
+function v516ExcelFiles(fileList){
+  return [...(fileList||[])].filter(f=>/\.(xlsx|xls|xlsb)$/i.test(String(f?.name||'')));
+}
+function v516UniqRows(rows,keyFn){
+  const out=[],seen=new Set();
+  for(const r of rows||[]){const k=keyFn(r);if(k&&seen.has(k))continue;if(k)seen.add(k);out.push(r)}
+  return out;
+}
+
+/* ---------- 配件：二手機回收紀錄補品牌／等級／一般版建議售價 ---------- */
+function v516IsXiaomiFamily(v){
+  const k=typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+  return k==='xiaomi-family'||['mi','xiaomi','redmi','miredmi','小米','紅米'].includes(nrKey(v));
+}
+function v516AccessoryBrandKeys(brand){
+  const k=brandKey(brand),arr=[k];
+  if(v516IsXiaomiFamily(brand))arr.push(...['xiaomi','redmi','miredmi','mi','小米','紅米'].map(brandKey));
+  return [...new Set(arr.filter(Boolean))];
+}
+function v516FindAccessoryFamilyKey(store,brand){
+  for(const k of v516AccessoryBrandKeys(brand))if(store[k])return k;
+  if(v516IsXiaomiFamily(brand)){for(const k of Object.keys(store||{})){if(/xiaomi|redmi|miredmi|小米|紅米/i.test(k))return k}}
+  return '';
+}
+/* 讓 Redmi / Mi-Redmi / Xiaomi 能共用既有配件品牌 Logo。 */
+getAccBrandLogo=function(brand){const k=v516FindAccessoryFamilyKey(ACC_BRAND_LOGOS,brand);return k?ACC_BRAND_LOGOS[k]:null};
+getAccBrandScale=function(brand){const k=v516FindAccessoryFamilyKey(ACC_BRAND_OPTICAL_SCALE,brand);return k?ACC_BRAND_OPTICAL_SCALE[k]:1};
+
+function v516AccessoryCentralMsrp(brand,name,small=''){
+  if(!v516IsXiaomiFamily(brand))return 0;
+  try{
+    const row={brand,name,small,grade:'B',price:1,imei:'TEMP'};
+    const m=usedMatchProduct(row);
+    if(m?.p){const v=hqSuggestedMsrpRaw(m.p);if(Number(v)>0)return Number(v);if(Number(m.p.msrp)>0)return Number(m.p.msrp)}
+    /* 名稱唯一 fallback：只允許 Xiaomi family + 完整名稱唯一。 */
+    const nameKey=nrKey(parseUsedMachine(name,brand).cleanName||name),list=PRODUCTS.filter(p=>v516IsXiaomiFamily(p.brand)&&nrKey(p.name)===nameKey);
+    if(list.length===1){const v=hqSuggestedMsrpRaw(list[0]);return Number(v||list[0].msrp||0)}
+  }catch(_){ }
+  return 0;
+}
+function v516DetectUsedAccessorySheet(wb){
+  const signals=['回收機款','進貨單號','回收來源','所在門市','等級','imei','設定售價','實際售價','牌價'];let best=null;
+  for(const sn of wb.SheetNames||[]){const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:'',raw:false});
+    for(let r=0;r<Math.min(rows.length,40);r++){
+      const head=rows[r]||[],nameIdx=accFindHeaderIndex(head,['商品名稱','回收機款','機款','品名','名稱']),saleIdx=accFindHeaderIndex(head,['實際售價','售價','設定售價']),listIdx=accFindHeaderIndex(head,['牌價','建議售價','設定售價']);
+      const brandIdx=accFindHeaderIndex(head,['品牌','廠牌']),gradeIdx=accFindHeaderIndex(head,['等級','等級(文字)','等級文字']),smallIdx=accFindHeaderIndex(head,['商品小類','小類']);
+      const signalCount=head.reduce((n,v)=>n+(signals.includes(accNormHeader(v))?1:0),0);if(nameIdx<0||saleIdx<0||listIdx<0||signalCount<2)continue;
+      const score=signalCount*10+(head.some(v=>accNormHeader(v)==='回收機款')?20:0);if(!best||score>best.score)best={sheet:sn,rows,headerRow:r,nameIdx,saleIdx,listIdx,brandIdx,gradeIdx,smallIdx,score};
+    }
+  }return best;
+}
+function v516ParseAccessoryUsedWorkbook(wb){
+  const d=v516DetectUsedAccessorySheet(wb);if(!d)return null;const rows=[];
+  for(let r=d.headerRow+1;r<d.rows.length;r++){
+    const row=d.rows[r]||[],name=String(row[d.nameIdx]??'').trim();if(!name)continue;
+    let brand=d.brandIdx>=0?String(row[d.brandIdx]??'').trim():'';if(!brand&&typeof v515InferBrandFromMachineName==='function')brand=v515InferBrandFromMachineName(name);
+    if(typeof v511DisplayBrand==='function')brand=v511DisplayBrand(brand);
+    const grade=d.gradeIdx>=0?String(row[d.gradeIdx]??'').trim().toUpperCase():'',small=d.smallIdx>=0?String(row[d.smallIdx]??'').trim():'';
+    const sale=num(row[d.saleIdx]),sourceList=num(row[d.listIdx]);if(!(sale>0||sourceList>0))continue;
+    const centralMsrp=v516AccessoryCentralMsrp(brand,name,small);
+    rows.push({code:'',barcode:'',brand,name,grade,small,list:(v516IsXiaomiFamily(brand)&&centralMsrp>0)?centralMsrp:(sourceList>0?sourceList:sale),member:sale>0?sale:sourceList,status:'',sourceType:'used_recycle_accessory',centralMsrp:Number(centralMsrp)||0});
+  }
+  if(!rows.length)throw new Error('二手機回收紀錄沒有可用的商品名稱／售價／牌價資料');return {rows,sheet:d.sheet,mode:'used_recycle'};
+}
+async function v516ParseAccessoryFile(file){
+  const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),used=v516ParseAccessoryUsedWorkbook(wb);if(used)return used;
+  let best=[];for(const sn of wb.SheetNames){const a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});if(a.length>best.length)best=a}
+  let headerRow=-1,map={};for(let r=0;r<Math.min(best.length,40);r++){const mm={};best[r].forEach((v,c)=>{const k=mapHeader(v);if(k&&mm[k]==null)mm[k]=c});const core=['code','barcode','name'].filter(k=>mm[k]!=null).length,support=['brand','list','member'].filter(k=>mm[k]!=null).length;if(core>=2&&support>=1){headerRow=r;map=mm;break}}
+  if(headerRow<0)throw new Error('找不到可辨識的配件庫存報表或二手機回收紀錄');const rows=[];
+  for(let r=headerRow+1;r<best.length;r++){const row=best[r]||[],code=String(row[map.code]??'').trim(),barcode=String(row[map.barcode]??'').trim(),brand=String(row[map.brand]??'').trim(),name=String(row[map.name]??'').trim();const p={code:code||barcode,barcode:barcode||code,brand,name,list:num(row[map.list]),member:num(row[map.member]),status:String(row[map.status]??'').trim(),sourceType:'accessory_stock'};if(p.code||p.barcode||p.name)rows.push(p)}
+  if(!rows.length)throw new Error('沒有可用商品資料');return {rows,mode:'accessory'};
+}
+async function accessoryLoadFiles(fileList){
+  const files=v516ExcelFiles(fileList);if(!files.length)return toast('請選擇 Excel 檔案');if(typeof XLSX==='undefined')return toast('Excel 解析模組尚未載入');
+  const all=[],errs=[],modes=new Set();for(const f of files){try{const p=await v516ParseAccessoryFile(f);p.rows.forEach(x=>{x.__sourceFile=f.name});all.push(...p.rows);modes.add(p.mode)}catch(e){errs.push(`${f.name}：${e.message}`)}}
+  if(!all.length){toast('沒有成功載入任何配件資料'+(errs[0]?'：'+errs[0]:''));return}
+  all.forEach((r,i)=>{r._accId=i;r.printName=r.printName||r.name||''});accProducts=all;accResults=[...all];accCurrent=accResults[0]||null;accessoryRows=all.map(r=>({...r,qty:1}));
+  const bs=['全部品牌',...Array.from(new Set(all.map(x=>x.brand).filter(Boolean))).sort((a,b)=>a.localeCompare(b,'zh-Hant'))];document.getElementById('accBrand').innerHTML=bs.map((x,i)=>`<option ${i===0?'selected':''}>${h(x)}</option>`).join('');
+  document.getElementById('accSourceStatus').textContent=all.length.toLocaleString()+' 筆商品';document.getElementById('accSourceSub').textContent=`${files.length} 份 Excel 合併｜${files.map(f=>f.name).join('、')}`;document.getElementById('accSearch').value='';
+  const hint=document.getElementById('accDetectHint');if(hint)hint.textContent=`✓ 多檔合併完成：${files.length} 份｜${all.length.toLocaleString()} 張標卡${errs.length?'｜'+errs.length+' 份失敗':''}`;
+  renderAccResult(accResults);renderAccessory();if(accCurrent)renderAccessoryPreview(accCurrent);toast(`配件多檔合併完成：${files.length} 份｜${all.length.toLocaleString()} 張`);
+}
+accessoryFileLoaded=function(el){const fs=v516ExcelFiles(el.files);if(fs.length)accessoryLoadFiles(fs);el.value=''};
+handleAccDrop=function(e){e.preventDefault();e.stopPropagation();document.getElementById('accDropZone')?.classList.remove('drag');const fs=v516ExcelFiles(e.dataTransfer?.files);if(!fs.length)return toast('請拖入 Excel 檔案');accessoryLoadFiles(fs)};
+
+/* 二手機來源配件卡：疊加二手機等級 Logo。 */
+function v516ApplyAccessoryGradeLogo(label,p){
+  if(!label)return;let node=label.querySelector('.acc-used-grade-logo');if(!node){node=document.createElement('div');node.className='acc-used-grade-logo';label.appendChild(node)}
+  const g=String(p?.grade||'').trim().toUpperCase(),src=(typeof USED_GRADE_LOGOS!=='undefined')?USED_GRADE_LOGOS[g]:null;
+  if(p?.sourceType==='used_recycle_accessory'&&src){node.classList.add('show');node.innerHTML=`<img src="${src}" alt="${h(g)}級">`}else{node.classList.remove('show');node.innerHTML=''}
+}
+const _v516RenderAccessoryPreview=renderAccessoryPreview;renderAccessoryPreview=function(p){_v516RenderAccessoryPreview(p);v516ApplyAccessoryGradeLogo(document.getElementById('accLabelPreview'),p)};
+const _v516AccessoryCloneFor=accessoryCloneFor;accessoryCloneFor=function(p,opts){const c=_v516AccessoryCloneFor(p,opts);v516ApplyAccessoryGradeLogo(c,p);return c};
+
+/* ---------- 二手機：多檔合併 ---------- */
+async function usedLoadWorkbooks(fileList){
+  const files=v516ExcelFiles(fileList);if(!files.length)return toast('請選擇 Excel 檔案');const all=[],errs=[],types=new Set();
+  for(const f of files){try{const wb=XLSX.read(await f.arrayBuffer(),{type:'array'}),rows=parseUsedWorkbook(wb);types.add(rows.__v515SourceType||'recycle');for(const r of rows){r.__sourceFile=f.name;all.push(r)}}catch(e){errs.push(`${f.name}：${e.message}`)}}
+  if(!all.length){usedImportState={rows:null,file:files.map(f=>f.name).join('、'),errors:errs};usedItems=[];updateUsedImportUI();renderUsedItems();return toast('二手機多檔匯入失敗：'+(errs[0]||'無可用資料'))}
+  all.__v515SourceType=types.size===1?[...types][0]:'mixed';usedImportState={rows:all,file:`${files.length} 份 Excel`,files:files.map(f=>f.name),errors:errs};buildUsedCardsFromRows(all);requestAnimationFrame(()=>document.getElementById('usedItems')?.scrollIntoView?.({block:'nearest',behavior:'smooth'}));toast(`二手機多檔合併完成：${files.length} 份｜${usedItems.length} 張`)
+}
+usedFileLoaded=function(el){const fs=v516ExcelFiles(el.files);if(fs.length)usedLoadWorkbooks(fs);el.value=''};
+usedDrop=function(e){e.preventDefault();e.stopPropagation();document.getElementById('usedDrop')?.classList.remove('drag');const fs=v516ExcelFiles(e.dataTransfer?.files);if(!fs.length)return toast('請拖入 Excel 檔案');usedLoadWorkbooks(fs)};
+const _v516UpdateUsedImportUI=updateUsedImportUI;updateUsedImportUI=function(){_v516UpdateUsedImportUI();if(Array.isArray(usedImportState?.files)&&usedImportState.files.length>1){const sub=document.getElementById('usedImportSub');if(sub)sub.textContent=`${usedImportState.files.length} 份 Excel 合併｜${usedImportState.rows?.length||0} 筆原始資料`;const sum=document.getElementById('usedImportSummary');const note=sum?.querySelector('.summary-note');if(note)note.insertAdjacentHTML('beforeend',`<br>✓ 多檔合併：${usedImportState.files.map(h).join('、')}`)}};
+
+/* ---------- 新機：多份庫存 / IMEI 報表合併 ---------- */
+async function newReportFilesSelected(fileList){
+  const files=v516ExcelFiles(fileList);if(!files.length)return;let stock=[...(newReportState.stock||[])],imei=[...(newReportState.imei||[])],stockFiles=[...(newReportState.stockFiles||[])],imeiFiles=[...(newReportState.imeiFiles||[])],errs=[];
+  for(const file of files){try{const p=await newParseReportFile(file);if(p.type==='stock'||p.type==='both'){stock.push(...(p.type==='both'?p.stock:p.rows));stockFiles.push(file.name)}if(p.type==='imei'||p.type==='both'){imei.push(...(p.type==='both'?p.imei:p.rows));imeiFiles.push(file.name)}}catch(err){errs.push(file.name+'：'+err.message)}}
+  stock=v516UniqRows(stock,r=>[nrKey(r.code),nrKey(r.store),nrKey(r.name),Number(r.price||0)].join('|'));imei=v516UniqRows(imei,r=>[nrKey(r.imei),nrKey(r.code),nrKey(r.store)].join('|'));
+  newReportState.stock=stock.length?stock:null;newReportState.imei=imei.length?imei:null;newReportState.stockFiles=[...new Set(stockFiles)];newReportState.imeiFiles=[...new Set(imeiFiles)];newReportState.stockFile=newReportState.stockFiles.join('、');newReportState.imeiFile=newReportState.imeiFiles.join('、');newReportState.errors=errs;newReportState.lastBuild=null;updateNewReportUI();
+  if(newReportState.stock&&newReportState.imei)buildNewCardsFromReports();else if(errs.length)toast('部分檔案無法辨識：'+errs[0]);else toast('已載入部分新機報表，等待另一類報表');const input=document.getElementById('newReportFiles');if(input)input.value='';
+}
+const _v516UpdateNewReportUI=updateNewReportUI;updateNewReportUI=function(){_v516UpdateNewReportUI();const sf=newReportState.stockFiles||[],ifiles=newReportState.imeiFiles||[],sub=document.getElementById('newImportSub');if(sub&&(sf.length+ifiles.length)>2)sub.textContent=`多檔合併｜庫存 ${sf.length} 份＋IMEI ${ifiles.length} 份｜${newItems.length} 張標卡`};
+
+/* 多門市／多單合併時，商品編碼相同可依 IMEI 所在門市優先取同門市庫存資料。 */
+buildNewCardsFromReports=function(){
+  const stocks=newReportState.stock,imeis=newReportState.imei;if(!stocks||!imeis){toast('請先載入庫存報表與 IMEI報表');return}
+  const stockByCode=new Map(),stockByCodeStore=new Map();for(const s of stocks){const ck=nrKey(s.code),sk=ck+'|'+nrKey(s.store);if(!stockByCode.has(ck))stockByCode.set(ck,s);if(!stockByCodeStore.has(sk))stockByCodeStore.set(sk,s)}
+  const sellable=imeis.filter(x=>nrKey(x.status)===nrKey('可銷售')),seen=new Set(),built=[],errors=[...(newReportState.errors||[])],unmatchedCodes=new Set();
+  for(const ir of sellable){if(!ir.imei){errors.push(`商品 ${ir.code||'—'}：IMEI/SN 空白`);continue}const ik=nrKey(ir.imei);if(seen.has(ik)){errors.push(`重複 IMEI/SN：${ir.imei}`);continue}seen.add(ik);const ck=nrKey(ir.code),s=stockByCodeStore.get(ck+'|'+nrKey(ir.store))||stockByCode.get(ck);if(!s){errors.push(`IMEI ${ir.imei}：找不到商品編碼 ${ir.code} 的庫存資料`);unmatchedCodes.add(ir.code);continue}if(!(Number(s.price)>0)){errors.push(`${ir.code}｜${s.name}：牌價為 0，禁止產卡`);continue}if(s.status&&nrKey(s.status)!==nrKey('啟用')){errors.push(`${ir.code}｜${s.name}：商品狀態「${s.status}」非啟用`);continue}const m=matchProductFromStock(s);if(!m){errors.push(`${ir.code}｜${s.brand} ${s.name}：中央規格未配對（型號 ${s.model||'—'}／容量 ${s.capacity||'—'}／版本 ${s.version||'—'}）`);unmatchedCodes.add(ir.code);continue}const p=m.p;built.push({productIndex:m.idx,color:normalizeImportedColor(p,s.color),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,imei:ir.imei,warranty:'創宇保固一年',tpl:autoTemplate(p.category,p.name),grade:'A',sourceCode:s.code,sourceStore:ir.store||s.store||'',sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,sourceCapacity:s.capacity,sourceVersion:s.version,sourcePriceType:'牌價'})}
+  newItems=sortItemsByBrandAZ(built);activeNewIndex=0;newItems.forEach(normalizeItem);newReportState.errors=errors;newReportState.lastBuild={sellable:sellable.length,built:built.length,errors:errors.length,unmatchedCodes:[...unmatchedCodes]};renderNewItems();updateNewReportUI();const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=errors.length+' 筆';const summary=document.getElementById('newImportSummary');if(summary)summary.innerHTML=`<div class="summary-row"><span><b>可銷售 IMEI：</b>${sellable.length.toLocaleString()} 筆</span><span><b>成功產卡：</b>${built.length.toLocaleString()} 張</span><span><b>異常：</b>${errors.length.toLocaleString()} 筆</span><span><b>售價來源：</b>牌價</span></div><div class="summary-note">${errors.length?'異常資料未產卡：'+h(errors.slice(0,3).join('｜'))+(errors.length>3?'…':''):'✓ 全部可銷售資料已成功配對中央規格。'}</div>`;toast(`新機標卡產生完成：${built.length} 張${errors.length?'｜異常 '+errors.length+' 筆':''}`)
 };
 </script>
 
