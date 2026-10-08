@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2｜正式驗收鎖定版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.1｜調撥單等級售價智慧配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -6262,7 +6262,7 @@ body{min-width:1080px}
 </style>
 
 
-<!-- V5.2 正式驗收鎖定版｜封版基準：V5.1.6.10；產卡／列印／資料／GitHub 邏輯原樣封存。 -->
+<!-- V5.2.1 調撥單等級售價智慧配對 Hotfix｜封版基準：V5.1.6.10；產卡／列印／資料／GitHub 邏輯原樣封存。 -->
 
 <style id="v501-fixed-workspace-heads">
 /* ===== V5.0.1｜配件／二手機／新機 上方操作區固定 Hotfix =====
@@ -7300,7 +7300,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2 正式驗收鎖定版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.1 調撥單等級售價智慧配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7409,7 +7409,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2｜正式驗收鎖定版</div>
+      <div class="hq31-hero-title">V5.2.1｜調撥單等級售價智慧配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8694,7 +8694,7 @@ let V51_LOADING=false;
 function v51CellText(v){if(v==null)return '';return String(v).replace(/\u00a0/g,' ').trim()}
 function v51HeaderMap(row){
   const defs={
-    category:['品項'],brand:['廠牌','品牌'],network:['網路'],name:['標價卡用名稱','名稱','商品名稱'],model:['型號'],ram:['Ram','RAM'],rom:['Rom','ROM','容量'],sim:['SIM卡'],simType:['SIM型態'],microSD:['MicroSD'],manufactureDate:['出廠年份','出廠日期','上市日期'],msrp:['建議售價'],os:['作業系統'],processor:['處理器'],cores:['處理器核心'],display:['螢幕技術','螢幕尺寸'],battery:['電池容量'],fastCharge:['快充瓦數'],colors:['顏色'],front1:['前鏡頭1(自拍)'],front2:['前鏡頭2(自拍)'],rear1:['後鏡頭-1'],rear2:['後鏡頭-2'],rear3:['後鏡頭-3'],rear4:['後鏡頭-4'],rear5:['後鏡頭-5'],biometric:['生物辨識'],accessories:['附屬配件'],ncc:['NCC認證碼']
+    category:['品項'],brand:['廠牌','品牌'],network:['網路'],name:['標價卡用名稱','名稱','商品名稱'],model:['型號'],ram:['Ram','RAM'],rom:['Rom','ROM','容量'],sim:['SIM卡'],simType:['SIM型態'],microSD:['MicroSD'],manufactureDate:['出廠年份','出廠日期','上市日期'],msrp:['建議售價'],priceS:['S級'],priceA:['A級'],priceB:['B級'],priceC:['C級'],os:['作業系統'],processor:['處理器'],cores:['處理器核心'],display:['螢幕技術','螢幕尺寸'],battery:['電池容量'],fastCharge:['快充瓦數'],colors:['顏色'],front1:['前鏡頭1(自拍)'],front2:['前鏡頭2(自拍)'],rear1:['後鏡頭-1'],rear2:['後鏡頭-2'],rear3:['後鏡頭-3'],rear4:['後鏡頭-4'],rear5:['後鏡頭-5'],biometric:['生物辨識'],accessories:['附屬配件'],ncc:['NCC認證碼']
   },map={};
   (row||[]).forEach((v,c)=>{for(const [k,names] of Object.entries(defs)){if(map[k]==null&&names.some(n=>nrKey(n)===nrKey(v)))map[k]=c}});return map
 }
@@ -8713,7 +8713,7 @@ function v51ParseWorkbook(wb,type){
     const rear=['rear1','rear2','rear3','rear4','rear5'].map(k=>v51CellText(gv(row,k))).filter(Boolean).join(' / '),front=['front1','front2'].map(k=>v51CellText(gv(row,k))).filter(Boolean).join(' / ');
     const rawDate=gv(row,'manufactureDate'),date=hqNormalizeProductDate(rawDate)||v51CellText(rawDate);
     const p={
-      category:v51CellText(gv(row,'category')),brand,network:v51CellText(gv(row,'network')),name,model:v51CellText(gv(row,'model')),ram:v51CellText(gv(row,'ram')),rom:v51CellText(gv(row,'rom')),sim:v51CellText(gv(row,'sim')),simType:v51CellText(gv(row,'simType')),microSD:v51CellText(gv(row,'microSD')),year:date,msrp:num(gv(row,'msrp'))||'',newPrice:'',os:v51CellText(gv(row,'os')),processor:v51CellText(gv(row,'processor')),cores:v51CellText(gv(row,'cores')),display:v51CellText(gv(row,'display')),battery:v51CellText(gv(row,'battery')),fastCharge:v51CellText(gv(row,'fastCharge')),colors:v51CellText(gv(row,'colors')),frontCamera:front,rearCamera:rear,biometric:v51CellText(gv(row,'biometric')),accessories:v51CellText(gv(row,'accessories')),ncc:v51CellText(gv(row,'ncc')),
+      category:v51CellText(gv(row,'category')),brand,network:v51CellText(gv(row,'network')),name,model:v51CellText(gv(row,'model')),ram:v51CellText(gv(row,'ram')),rom:v51CellText(gv(row,'rom')),sim:v51CellText(gv(row,'sim')),simType:v51CellText(gv(row,'simType')),microSD:v51CellText(gv(row,'microSD')),year:date,msrp:num(gv(row,'msrp'))||'',priceS:num(gv(row,'priceS'))||'',priceA:num(gv(row,'priceA'))||'',priceB:num(gv(row,'priceB'))||'',priceC:num(gv(row,'priceC'))||'',newPrice:'',os:v51CellText(gv(row,'os')),processor:v51CellText(gv(row,'processor')),cores:v51CellText(gv(row,'cores')),display:v51CellText(gv(row,'display')),battery:v51CellText(gv(row,'battery')),fastCharge:v51CellText(gv(row,'fastCharge')),colors:v51CellText(gv(row,'colors')),frontCamera:front,rearCamera:rear,biometric:v51CellText(gv(row,'biometric')),accessories:v51CellText(gv(row,'accessories')),ncc:v51CellText(gv(row,'ncc')),
       __v51Source:type,__v51BaseName:v51StripDecorators(name),__v51UsedOnly:type!=='general'
     };
     if(type==='international')p.__v51InternationalVersion=v51InternationalLabel(name);
@@ -8726,7 +8726,7 @@ function v51ParseWorkbook(wb,type){
 function v51BaseKey(p){return [nrKey(p?.brand),nrKey(p?.model),nrCap(p?.rom)].join('|')}
 function v51NameKey(p){return [nrKey(p?.brand),nrKey(p?.name),nrCap(p?.rom)].join('|')}
 function v51MergeProduct(target,source){
-  const fields=['category','brand','network','name','model','ram','rom','sim','simType','microSD','year','msrp','os','processor','cores','display','battery','fastCharge','colors','frontCamera','rearCamera','biometric','accessories','ncc'];
+  const fields=['category','brand','network','name','model','ram','rom','sim','simType','microSD','year','msrp','priceS','priceA','priceB','priceC','os','processor','cores','display','battery','fastCharge','colors','frontCamera','rearCamera','biometric','accessories','ncc'];
   for(const k of fields){const v=source[k];if(v!==''&&v!=null&&!(typeof v==='number'&&!Number.isFinite(v)))target[k]=v}
   target.__v51Source='general';return target
 }
@@ -9343,6 +9343,13 @@ function v51610ProductMsrp(p){
   if(a>0)return Math.round(a);
   const b=Number(p?.msrp||0);return b>0?Math.round(b):0;
 }
+function v521ProductGradePrice(p,grade){
+  const g=String(grade||'').trim().toUpperCase().replace(/級$/,'');
+  const key=g==='S'?'priceS':g==='A'?'priceA':g==='B'?'priceB':g==='C'?'priceC':'';
+  if(!key)return 0;
+  const n=Number(p?.[key]||0);
+  return n>0?Math.round(n):0;
+}
 function v51610TransferMatch(row){
   const parsed=parseUsedMachine(row.name,row.brand);
   const brand=(typeof v511BrandKey==='function'?v511BrandKey(row.brand):nrKey(row.brand));
@@ -9365,6 +9372,14 @@ function v51610TransferMatch(row){
   else if(nameKey){
     const fuzzy=list.filter(x=>{const k=v51610CanonTransferName(x.p.name);return k&&(k.includes(nameKey)||nameKey.includes(k))});
     if(fuzzy.length)list=fuzzy;
+  }
+
+  // V5.2.1：調撥單若缺容量，優先用「等級 + 實際售價」定位一般版 SKU。
+  // 例如 iPhone 12 / B級 / $6,666 可唯一鎖定 128GB；若無唯一命中則不強行縮窄。
+  const needSale=Math.round(Number(row.price)||0),needGrade=String(row.grade||'').trim().toUpperCase();
+  if(needSale>0&&needGrade){
+    const gp=list.filter(x=>v521ProductGradePrice(x.p,needGrade)===needSale);
+    if(gp.length)list=gp;
   }
 
   // 調撥單本身的建議售價是重要 SKU 訊號；有命中時優先收斂。
