@@ -7296,11 +7296,97 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v523-new-meta-special-compact">
+/* ===== V5.2.3｜新機狀態標籤寬度優化版 =====
+   保留 20px 高度，但縮小橫向占用，避免建議售價數字被擠壓。
+   只影響新機手機卡 meta 列。
+*/
+.phone-card.new-phone-card .cr-meta{
+  grid-template-columns:auto 62px auto minmax(0,1fr)!important;
+  column-gap:3px!important;
+}
+.phone-card.new-phone-card .new-msrp-with-specials{
+  justify-content:flex-end!important;
+  gap:2px!important;
+  padding-right:1px!important;
+}
+.phone-card.new-phone-card .new-meta-specials{gap:2px!important;}
+.phone-card.new-phone-card .new-meta-special{
+  min-height:20px!important;
+  height:20px!important;
+  padding:2px 5px!important;
+  font-size:9.5px!important;
+  letter-spacing:-.02em!important;
+}
+.phone-card.new-phone-card .new-msrp-value{
+  font-size:10px!important;
+  min-width:0!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta{
+    grid-template-columns:auto 62px auto minmax(0,1fr)!important;
+    column-gap:3px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-meta-special{
+    min-height:20px!important;height:20px!important;padding:2px 5px!important;font-size:9.5px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-msrp-value{font-size:10px!important;}
+}
+</style>
+
+<style id="v524-new-phone-meta-five-columns">
+/* ===== V5.2.4｜新機 Meta 五格固定版 =====
+   上市日期｜日期｜建議售價｜價格｜狀態註記，各自獨立占位。
+   避免瀏覽器縮放時建議售價與保期不足/盒損/拆封新品互相覆蓋。
+*/
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+  grid-template-columns:50px 58px 54px 48px minmax(0,1fr)!important;
+  column-gap:2px!important;
+  left:5px!important;right:5px!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed > *{min-width:0!important;box-sizing:border-box!important;}
+.phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{
+  padding:2px 5px!important;font-size:10px!important;overflow:hidden!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .new-date-value,
+.phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important;
+  text-overflow:clip!important;font-size:10px!important;line-height:1!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot{
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;
+  min-width:0!important;overflow:hidden!important;height:20px!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot > .new-meta-specials{
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;
+  gap:1px!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot .new-meta-special{
+  flex:0 1 auto!important;min-width:0!important;height:20px!important;min-height:20px!important;
+  padding:2px 4px!important;font-size:9px!important;letter-spacing:-.025em!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+}
+/* 舊版同格 flex 不再參與新機固定五格。 */
+.phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-with-specials{display:contents!important;}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+    grid-template-columns:50px 58px 54px 48px minmax(0,1fr)!important;
+    column-gap:2px!important;left:5px!important;right:5px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{font-size:10px!important;padding:2px 5px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-date-value,
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{font-size:10px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-meta-specials-slot .new-meta-special{font-size:9px!important;padding:2px 4px!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.2 配件 Logo 快取＋新機組合容量 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.4</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.4 新機 Meta 五格固定版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8378,7 +8464,7 @@ function resetNewItems(silent=false){
 }
 function shortWarranty(w){return String(w||'').replace('原廠保固','原廠 ').replace('創宇保固','創宇 ')}
 const NEW_GRADE_LOGO='./assets/static/img-c0456fc81227250d.png';
-function newPhoneHtml(p,r,opt={}){const sale=money(r.price)||'—';const date=hqProductDisplayDate(p,p.year),displayName=newDisplayName(r,p);const metaSpecials=newPhoneMetaSpecials(r,p);r.warranty='創宇保固一年';const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(displayName)}">${h(displayName)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta"><span class="cr-pill">上市日期</span><span class="cr-meta-val">${h(date)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-with-specials"><span class="new-msrp-value">${formatSuggestedMsrp(p)}</span>${metaSpecials}</span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div><div class="spec-value">${h(ramText(p.ram))} / ${h(cap(p.rom))}</div></div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div><div class="spec-value yellow cpu-value ${cpuTextClass(p.processor)}">${h(p.processor||'—')}</div></div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div><div class="spec-value">${h(p.display||'—')}</div></div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div><div class="spec-value yellow">${h(mainCameraText(p.rearCamera))}</div></div><div class="spec-line double"><div class="spec-label dark">電池</div><div class="spec-value yellow battery-capacity-value">${h(formatBatteryCapacityDisplay(p.battery))}</div><div class="spec-label dark">通訊<br>網路</div><div class="spec-value">${h(p.network||'—')}</div></div><div class="spec-line"><div class="spec-label">保固</div><div class="spec-value">${h('創宇保固一年')}</div></div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`}
+function newPhoneHtml(p,r,opt={}){const sale=money(r.price)||'—';const date=hqProductDisplayDate(p,p.year),displayName=newDisplayName(r,p);const metaSpecials=newPhoneMetaSpecials(r,p);r.warranty='創宇保固一年';const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(displayName)}">${h(displayName)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta new-phone-meta-fixed"><span class="cr-pill">上市日期</span><span class="cr-meta-val new-date-value">${h(date)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-value">${formatSuggestedMsrp(p)}</span><span class="new-meta-specials-slot">${metaSpecials}</span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div><div class="spec-value">${h(ramText(p.ram))} / ${h(cap(p.rom))}</div></div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div><div class="spec-value yellow cpu-value ${cpuTextClass(p.processor)}">${h(p.processor||'—')}</div></div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div><div class="spec-value">${h(p.display||'—')}</div></div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div><div class="spec-value yellow">${h(mainCameraText(p.rearCamera))}</div></div><div class="spec-line double"><div class="spec-label dark">電池</div><div class="spec-value yellow battery-capacity-value">${h(formatBatteryCapacityDisplay(p.battery))}</div><div class="spec-label dark">通訊<br>網路</div><div class="spec-value">${h(p.network||'—')}</div></div><div class="spec-line"><div class="spec-label">保固</div><div class="spec-value">${h('創宇保固一年')}</div></div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`}
 function wearDisplayDate(val){if(!val)return '—';const s=String(val).trim();if(/^\d{4}$/.test(s))return `${s}-01-01`;const m=s.match(/^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})$/);if(m)return `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`;return s}
 function wearSecondLine(p,r){const bits=[];if(r&&r.color&&r.color!=='—')bits.push(r.color);const rom=cap(p.rom);if(rom&&rom!=='—')bits.push(rom);if(p.model&&bits.length<2&&!bits.join(' ').includes(p.model))bits.push(p.model);if(!bits.length&&p.colors)bits.push(String(p.colors).split('、')[0]);return bits.join(' ')|| '—'}
 function wearNetworkText(p){const v=(p.network||'').trim();if(!v||v==='—')return /(耳機|Ring|Watch|手錶|手環|穿戴)/i.test(String(p.category||'')+' '+String(p.name||''))?'藍牙':'—';return v}
