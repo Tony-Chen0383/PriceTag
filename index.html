@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.1｜調撥單等級售價智慧配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.2｜配件 Logo 快取＋新機組合容量 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7300,7 +7300,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.1 調撥單等級售價智慧配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.2 配件 Logo 快取＋新機組合容量 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7409,7 +7409,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.1｜調撥單等級售價智慧配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.2｜配件 Logo 快取＋新機組合容量 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7739,6 +7739,7 @@ const ACC_BRAND_NAME_MAP = Object.fromEntries(ACC_BRAND_DISPLAY_NAMES.map(n=>[br
 const ACC_BRAND_LOGOS = {};
 const ACC_BRAND_OPTICAL_SCALE = {};
 const ACC_BRAND_MANIFEST_PATH = './assets/accessory-logos/manifest.json';
+const ACC_BRAND_MANIFEST_CACHE_KEY = 'smartmobile:accessory-logo-manifest:v1';
 let ACC_BRAND_MANIFEST_READY = false;
 function updateHqLogoDashboard(ok,count=0,message=''){
   const card=document.getElementById('hqOverviewLogoCard');
@@ -7750,49 +7751,67 @@ function updateHqLogoDashboard(ok,count=0,message=''){
   if(ct)ct.textContent=ok?`${Number(count||0).toLocaleString()} 個品牌已載入`:(message||'使用品牌文字 fallback');
   if(dt)dt.textContent=ok?`配件 Logo：已載入 ${Number(count||0).toLocaleString()} 個品牌`:`配件 Logo：Fallback${message?'｜'+message:''}`;
 }
+function applyAccessoryLogoManifest(data,{fromCache=false}={}){
+  const baseUrl=new URL('./assets/accessory-logos/',location.href);
+  const brands=(data&&data.brands)||{};
+  Object.keys(ACC_BRAND_LOGOS).forEach(k=>delete ACC_BRAND_LOGOS[k]);
+  Object.keys(ACC_BRAND_OPTICAL_SCALE).forEach(k=>delete ACC_BRAND_OPTICAL_SCALE[k]);
+  const version=String(data?.version||data?.updatedAt||'stable');
+  for(const [rawKey,entryRaw] of Object.entries(brands)){
+    const entry=typeof entryRaw==='string'?{file:entryRaw}:entryRaw||{};
+    const key=brandKey(rawKey);
+    if(!key||!entry.file)continue;
+    const logoUrl=new URL(entry.file,baseUrl);
+    logoUrl.searchParams.set('v',version);
+    ACC_BRAND_LOGOS[key]=logoUrl.href;
+    ACC_BRAND_OPTICAL_SCALE[key]=Number(entry.scale)||1;
+    const display=entry.displayName||ACC_BRAND_NAME_MAP[key]||rawKey;
+    ACC_BRAND_NAME_MAP[key]=display;
+    const aliases=Array.isArray(entry.aliases)?entry.aliases:[];
+    for(const alias of aliases){
+      const ak=brandKey(alias);if(!ak)continue;
+      ACC_BRAND_LOGOS[ak]=ACC_BRAND_LOGOS[key];
+      ACC_BRAND_OPTICAL_SCALE[ak]=ACC_BRAND_OPTICAL_SCALE[key];
+      ACC_BRAND_NAME_MAP[ak]=display;
+    }
+  }
+  ACC_BRAND_MANIFEST_READY=true;
+  updateHqLogoDashboard(true,Object.keys(brands).length,fromCache?'瀏覽器快取':'');
+  const hint=document.getElementById('accDetectHint');
+  if(hint)hint.textContent=`配件 Logo 已${fromCache?'由瀏覽器快取':'由 GitHub 外部 manifest'}載入 ${Object.keys(brands).length} 個品牌；imos / Moshi / Lapo 維持控價版型。`;
+  try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
+  return Object.keys(brands).length;
+}
+function loadAccessoryLogoManifestCache(){
+  try{
+    const raw=localStorage.getItem(ACC_BRAND_MANIFEST_CACHE_KEY);
+    if(!raw)return false;
+    const data=JSON.parse(raw);
+    if(!data||!data.brands)return false;
+    applyAccessoryLogoManifest(data,{fromCache:true});
+    return true;
+  }catch(_){return false}
+}
 async function loadAccessoryLogoManifest(){
   try{
     const manifestUrl=new URL(ACC_BRAND_MANIFEST_PATH,location.href);
-    manifestUrl.searchParams.set('v',Date.now());
-    const res=await fetch(manifestUrl,{cache:'no-store'});
+    const res=await fetch(manifestUrl,{cache:'no-cache'});
     if(!res.ok)throw new Error(`HTTP ${res.status}`);
     const data=await res.json();
-    const baseUrl=new URL('./assets/accessory-logos/',location.href);
-    const brands=(data&&data.brands)||{};
-    Object.keys(ACC_BRAND_LOGOS).forEach(k=>delete ACC_BRAND_LOGOS[k]);
-    Object.keys(ACC_BRAND_OPTICAL_SCALE).forEach(k=>delete ACC_BRAND_OPTICAL_SCALE[k]);
-    for(const [rawKey,entryRaw] of Object.entries(brands)){
-      const entry=typeof entryRaw==='string'?{file:entryRaw}:entryRaw||{};
-      const key=brandKey(rawKey);
-      if(!key||!entry.file)continue;
-      const logoUrl=new URL(entry.file,baseUrl);logoUrl.searchParams.set('v',String(data.version||data.updatedAt||Date.now()));ACC_BRAND_LOGOS[key]=logoUrl.href;
-      ACC_BRAND_OPTICAL_SCALE[key]=Number(entry.scale)||1;
-      const display=entry.displayName||ACC_BRAND_NAME_MAP[key]||rawKey;
-      ACC_BRAND_NAME_MAP[key]=display;
-      const aliases=Array.isArray(entry.aliases)?entry.aliases:[];
-      for(const alias of aliases){
-        const ak=brandKey(alias);
-        if(!ak)continue;
-        ACC_BRAND_LOGOS[ak]=ACC_BRAND_LOGOS[key];
-        ACC_BRAND_OPTICAL_SCALE[ak]=ACC_BRAND_OPTICAL_SCALE[key];
-        ACC_BRAND_NAME_MAP[ak]=display;
-      }
-    }
-    ACC_BRAND_MANIFEST_READY=true;
-    updateHqLogoDashboard(true,Object.keys(brands).length);
-    const hint=document.getElementById('accDetectHint');
-    if(hint)hint.textContent=`配件 Logo 已由 GitHub 外部 manifest 載入 ${Object.keys(brands).length} 個品牌；imos / Moshi / Lapo 維持控價版型。`;
-    try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
+    applyAccessoryLogoManifest(data,{fromCache:false});
+    try{localStorage.setItem(ACC_BRAND_MANIFEST_CACHE_KEY,JSON.stringify(data))}catch(_){}
     return true;
   }catch(err){
+    if(ACC_BRAND_MANIFEST_READY)return true; // 已有快取可用時，不讓背景更新失敗把 Logo 清掉。
     ACC_BRAND_MANIFEST_READY=false;
     updateHqLogoDashboard(false,0,String(err&&err.message||err));
     console.warn('Accessory logo manifest load failed:',err);
     const hint=document.getElementById('accDetectHint');
-    if(hint)hint.textContent='配件 Logo manifest 尚未載入；目前以品牌文字 fallback，不影響 Excel 匯入與產卡。GitHub Pages 部署後會自動讀取外部 Logo。';
+    if(hint)hint.textContent='配件 Logo manifest 尚未載入；目前以品牌文字 fallback，不影響 Excel 匯入與產卡。';
     return false;
   }
 }
+loadAccessoryLogoManifestCache();
 loadAccessoryLogoManifest();
 const ACC_BRAND_OPTICAL_SCALE_LEGACY_MARKER = null;
 function getAccBrandLogo(brand){const key=brandKey(brand);return ACC_BRAND_LOGOS[key]||null;}
@@ -9411,6 +9430,75 @@ usedMatchProduct=function(row){
     if(smart)return smart;
   }
   return _v51610UsedMatchProduct(row);
+};
+</script>
+
+
+<script id="v522-logo-cache-and-new-memory-hotfix">
+/* ===== V5.2.2｜配件 Logo 快取＋新機組合容量 Hotfix =====
+   1) 配件 Logo：manifest 使用 localStorage 快取，GitHub 僅背景 revalidate；Logo URL version 穩定以便瀏覽器快取。
+   2) 新機：支援庫存容量欄 12+256GB / 12GB+256GB / 12G/256G 等 RAM+ROM 組合格式。
+      RAM 與 ROM 只要來源有明確值皆為 HARD GATE，避免 512 -> 256 或 12+256 無法配對。
+*/
+function v522PreloadAccessoryLogoBrands(items){
+  const arr=Array.isArray(items)?items:(items?[items]:[]),seen=new Set();
+  for(const p of arr){
+    const src=getAccBrandLogo(p?.brand);if(!src||seen.has(src))continue;seen.add(src);
+    try{const img=new Image();img.decoding='async';img.src=src}catch(_){}
+  }
+}
+const _v522RenderAccResult=renderAccResult;
+renderAccResult=function(list){v522PreloadAccessoryLogoBrands(list);return _v522RenderAccResult(list)};
+
+function v522ParseStockMemory(v){
+  const raw=String(v??'').normalize('NFKC').trim().toUpperCase().replace(/[，,\s]+/g,'');
+  if(!raw)return {ram:'',rom:''};
+  let m=raw.match(/^(\d+(?:\.\d+)?)(?:GB|G)?[+＋\/](\d+(?:\.\d+)?)(TB|T|GB|G)?$/i);
+  if(!m)return {ram:'',rom:nrCap(raw)};
+  const ram=nrCap(m[1]);
+  const unit=(m[3]||'GB').toUpperCase();
+  const rom=nrCap(String(m[2])+(unit==='T'||unit==='TB'?'TB':'GB'));
+  return {ram,rom};
+}
+function v522CanonNewName(v){
+  return nrKey(String(v||'')
+    .replace(/[（(]\s*(?:盒損|保期不足|拆封新品)\s*[）)]/gi,' ')
+    .replace(/\bgalaxy\b/ig,' '));
+}
+matchProductFromStock=function(s){
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(s.brand):nrKey(s.brand));
+  const model=nrKey(s.model),mem=v522ParseStockMemory(s.capacity),capv=mem.rom,ramv=mem.ram;
+  const ver=nrVersion(s.version),cat=nrKey(s.mid||s.category||s.small),name=v522CanonNewName(s.name);
+  let best=null,bestScore=-1;
+  PRODUCTS.forEach((p,idx)=>{
+    if(p.__v51UsedOnly)return;
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(capv&&nrCap(p.rom)!==capv)return; // ROM HARD GATE
+    if(ramv&&nrCap(p.ram)!==ramv)return; // RAM HARD GATE
+    let score=0;
+    if(brand)score+=10;
+    if(model){if(nrKey(p.model)===model)score+=50;else return}
+    if(capv)score+=30;
+    if(ramv)score+=12;
+    if(ver){const pv=nrVersion(p.network);if(pv===ver)score+=18;else if((ver==='wifi'||ver==='5g'||ver==='4g')&&pv)score-=5}
+    if(cat&&nrKey(p.category)===cat)score+=10;
+    score+=newNameScore(String(s.name||'').replace(/[（(]\s*(?:盒損|保期不足|拆封新品)\s*[）)]/gi,''),p.name);
+    if(score>bestScore){bestScore=score;best={idx,p,score,matchMode:'v522-new-memory'}}
+  });
+  if(best&&best.score>=45)return best;
+  let list=[];
+  PRODUCTS.forEach((p,idx)=>{
+    if(p.__v51UsedOnly)return;
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
+    if(brand&&pb!==brand)return;
+    if(!name||v522CanonNewName(p.name)!==name)return;
+    if(capv&&nrCap(p.rom)!==capv)return;
+    if(ramv&&nrCap(p.ram)!==ramv)return;
+    list.push({idx,p,score:40,matchMode:'v522-new-memory-exact'});
+  });
+  if(cat){const x=list.filter(a=>nrKey(a.p.category)===cat);if(x.length)list=x}
+  return list.length===1?list[0]:null;
 };
 </script>
 
