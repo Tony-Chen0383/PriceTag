@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.2｜配件 Logo 快取＋新機組合容量 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.7｜新機Meta彈性欄位穩定版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7428,11 +7428,80 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v527-new-phone-meta-fluid">
+/* ===== V5.2.7｜新機 Meta 彈性欄位穩定版 =====
+   修正不同瀏覽器縮放比例下，上市日期／日期／建議售價／價格／狀態標籤被裁切或互壓。
+   不改卡片尺寸，只調整新機 meta 列的 grid 配比。
+*/
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+  grid-template-columns:52px minmax(64px,1.18fr) 54px minmax(60px,1fr) minmax(58px,.95fr)!important;
+  column-gap:1px!important;
+  left:3px!important;
+  right:3px!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed > *{
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{
+  width:100%!important;
+  padding:2px 3px!important;
+  font-size:9.2px!important;
+  letter-spacing:-.02em!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .new-date-value{
+  font-size:9.2px!important;
+  letter-spacing:-.02em!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{
+  font-size:9.6px!important;
+  letter-spacing:-.015em!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot{
+  min-width:58px!important;
+  overflow:visible!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot > .new-meta-specials{
+  width:100%!important;
+  max-width:100%!important;
+  justify-content:flex-end!important;
+  overflow:visible!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot .new-meta-special{
+  flex:0 1 auto!important;
+  max-width:100%!important;
+  padding:2px 3px!important;
+  font-size:8.6px!important;
+  letter-spacing:-.025em!important;
+  white-space:nowrap!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+    grid-template-columns:52px minmax(64px,1.18fr) 54px minmax(60px,1fr) minmax(58px,.95fr)!important;
+    column-gap:1px!important;left:3px!important;right:3px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{
+    padding:2px 3px!important;font-size:9.2px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-date-value{font-size:9.2px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{font-size:9.6px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-meta-specials-slot .new-meta-special{font-size:8.6px!important;padding:2px 3px!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.5 新機 Meta 欄寬再平衡版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.7</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.7 新機Meta彈性欄位穩定版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7541,7 +7610,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.2｜配件 Logo 快取＋新機組合容量 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.7｜新機Meta彈性欄位穩定版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8396,7 +8465,7 @@ async function loadHqSuggestedPrices(force=false){
     HQ_PRICE_BY_NAME_ROM=new Map();HQ_PRICE_BY_MODEL_ROM=new Map();HQ_DATE_BY_NAME_ROM=new Map();HQ_DATE_BY_MODEL_ROM=new Map();HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err&&err.message||err);console.warn('HQ suggested price load failed:',err);updateHqPriceStatus();return false
   }finally{HQ_PRICE_STATE.loading=false;updateHqPriceStatus()}
 }
-loadHqSuggestedPrices();
+/* V5.2.6：一般版價格與中央主資料改由單一快取載入流程啟動。 */
 function newFindHeaderMap(row,defs){const map={};(row||[]).forEach((v,c)=>{const k=nrText(v);for(const [field,names] of Object.entries(defs)){if(map[field]==null&&names.some(n=>nrKey(n)===nrKey(k)))map[field]=c}});return map}
 function newDetectSheet(workbook,defs,required){let best=null;for(const sn of workbook.SheetNames){const rows=XLSX.utils.sheet_to_json(workbook.Sheets[sn],{header:1,defval:'',raw:false});for(let r=0;r<Math.min(rows.length,30);r++){const map=newFindHeaderMap(rows[r],defs),score=required.filter(k=>map[k]!=null).length;if(score===required.length&&(!best||Object.keys(map).length>best.score))best={sheet:sn,rows,headerRow:r,map,score:Object.keys(map).length}}}return best}
 function newCell(row,map,k){return map[k]==null?'':row[map[k]]}
@@ -8946,7 +9015,7 @@ const _v51UpdateUsedImportUI=updateUsedImportUI;
 updateUsedImportUI=function(){_v51UpdateUsedImportUI();const sum=document.getElementById('usedImportSummary');if(sum&&usedImportState?.rows){const multi=usedItems.filter(r=>{const p=productAt(r);return p&&p.__v51Source&&p.__v51Source!=='general'}).length;if(multi){const note=sum.querySelector('.summary-note');if(note)note.innerHTML+=`<br>✓ 多來源中央資料補強：${multi.toLocaleString()} 張（特殊規格／國際版／烙印版）`}}};
 
 /* 初始化：先建立多來源中央索引。 */
-setTimeout(()=>v51LoadCatalogs(false),0);
+/* V5.2.6：中央四來源改由 v526LoadCentralData() 統一啟動。 */
 </script>
 
 
@@ -9632,6 +9701,141 @@ matchProductFromStock=function(s){
   if(cat){const x=list.filter(a=>nrKey(a.p.category)===cat);if(x.length)list=x}
   return list.length===1?list[0]:null;
 };
+</script>
+
+
+<script id="v526-central-index-cache-performance">
+/* ===== V5.2.6｜中央資料索引快取效能優化版 =====
+   - 一般版只下載／解析一次，同時供 HQ 建議售價與中央主規格使用。
+   - 四來源解析結果快取至 IndexedDB；manifest 版本未變時直接還原解析結果。
+   - 重新檢查按鈕 force=true 時繞過快取重新下載，並更新快取。
+   - 配對規則完全不改，只縮短「下載 + XLSB 解析 + 重建中央資料」耗時。
+*/
+const V526_CACHE_DB='smartmobile-price-tag-cache-v1';
+const V526_CACHE_STORE='centralCatalog';
+const V526_CACHE_SCHEMA=1;
+const V526_CACHE_MAX_AGE=14*24*60*60*1000;
+let V526_CACHE_HITS=0;
+let V526_CACHE_TOTAL=0;
+let V526_LAST_LOAD_MS=0;
+let V526_LOADING_ALL=false;
+
+function v526OpenDb(){
+  return new Promise((resolve,reject)=>{
+    if(!('indexedDB' in window))return resolve(null);
+    const req=indexedDB.open(V526_CACHE_DB,V526_CACHE_SCHEMA);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(V526_CACHE_STORE))db.createObjectStore(V526_CACHE_STORE,{keyPath:'type'})};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error('IndexedDB open failed'));
+  });
+}
+async function v526CacheGet(type){
+  try{
+    const db=await v526OpenDb();if(!db)return null;
+    return await new Promise((resolve,reject)=>{const tx=db.transaction(V526_CACHE_STORE,'readonly'),q=tx.objectStore(V526_CACHE_STORE).get(type);q.onsuccess=()=>resolve(q.result||null);q.onerror=()=>reject(q.error)});
+  }catch(_){return null}
+}
+async function v526CachePut(type,payload){
+  try{
+    const db=await v526OpenDb();if(!db)return false;
+    await new Promise((resolve,reject)=>{const tx=db.transaction(V526_CACHE_STORE,'readwrite');tx.objectStore(V526_CACHE_STORE).put({type,...payload,cachedAt:Date.now()});tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});return true;
+  }catch(_){return false}
+}
+async function v526CacheClear(type){
+  try{const db=await v526OpenDb();if(!db)return;await new Promise((resolve,reject)=>{const tx=db.transaction(V526_CACHE_STORE,'readwrite');tx.objectStore(V526_CACHE_STORE).delete(type);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}catch(_){ }
+}
+function v526StableSig(v){
+  try{return JSON.stringify(v||{})}catch(_){return String(v||'')}
+}
+async function v526FetchJson(url,force=false){
+  const u=new URL(url,location.href);if(force)u.searchParams.set('_',Date.now());
+  const r=await fetch(u,{cache:force?'reload':'no-cache'});if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();
+}
+async function v526ManifestState(force=false){
+  let price=null,catalog=null;
+  await Promise.all([
+    v526FetchJson(HQ_PRICE_MANIFEST_URL,force).then(x=>price=x).catch(()=>{}),
+    v526FetchJson(V51_CATALOG_MANIFEST_URL,force).then(x=>catalog=x).catch(()=>{})
+  ]);
+  const cs=catalog?.sources||{};
+  return {
+    price,catalog,
+    sigs:{
+      general:v526StableSig({updatedAt:price?.updatedAt||'',sourceFileName:price?.sourceFileName||'',currentFile:price?.currentFile||'',rows:price?.lastValidatedRows||''}),
+      special:v526StableSig(cs.special||{}),
+      international:v526StableSig(cs.international||{}),
+      screenBurn:v526StableSig(cs.screenBurn||{})
+    }
+  };
+}
+async function v526LoadOne(type,sig,force=false){
+  V526_CACHE_TOTAL++;
+  if(!force){
+    const cached=await v526CacheGet(type);
+    const fresh=cached && cached.products?.length && ((sig&&cached.sig===sig)||(!sig&&Date.now()-Number(cached.cachedAt||0)<V526_CACHE_MAX_AGE));
+    if(fresh){V526_CACHE_HITS++;return {products:cached.products,reportDate:cached.reportDate||'',sheet:cached.sheet||'系統版',fromCache:true}}
+  }
+  const url=new URL(V51_CATALOG_PATHS[type],location.href);
+  if(sig)url.searchParams.set('v',encodeURIComponent(sig).slice(0,80));
+  if(force)url.searchParams.set('_',Date.now());
+  const r=await fetch(url,{cache:force?'reload':'default'});if(!r.ok)throw new Error(`${V51_SOURCE_LABELS[type]} HTTP ${r.status}`);
+  const buf=await r.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),parsed=v51ParseWorkbook(wb,type);
+  await v526CachePut(type,{sig,products:parsed.products,reportDate:parsed.reportDate||'',sheet:parsed.sheet||'系統版'});
+  return {...parsed,fromCache:false};
+}
+function v526ApplyGeneralPriceMaps(manifest){
+  const products=V51_SOURCE_PRODUCTS.general||[];
+  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map();let count=0;
+  for(const p of products){
+    const brand=nrText(p.brand),name=nrText(p.name),model=nrText(p.model),rom=nrText(p.rom),msrp=Number(p.msrp||0),dt=hqNormalizeProductDate(p.year)||'';
+    if(brand&&name&&rom&&dt){dateByName.set(hqPriceMapKey(brand,name,rom),dt);if(model)dateByModel.set(hqPriceMapKey(brand,model,rom),dt)}
+    if(!brand||!name||!rom||!(msrp>0))continue;
+    byName.set(hqPriceMapKey(brand,name,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++;
+  }
+  HQ_PRICE_BY_NAME_ROM=byName;HQ_PRICE_BY_MODEL_ROM=byModel;HQ_DATE_BY_NAME_ROM=dateByName;HQ_DATE_BY_MODEL_ROM=dateByModel;
+  let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}
+  Object.assign(HQ_PRICE_STATE,{ready:count>0,loading:false,error:count?'':'一般版沒有可用建議售價',rows:count,matchedProducts:matched,reportDate:V51_SOURCE_STATE.general.date||'',file:manifest?.currentFile||'./current/hq-suggested-price.xlsb',sheet:'系統版',updatedAt:manifest?.updatedAt||''});
+  updateHqPriceStatus();
+}
+function v526UpdatePerfUi(){
+  const note=document.getElementById('v51CatalogLoadNote');
+  if(note&&!V51_LOADING){
+    const hit=`快取 ${V526_CACHE_HITS}/${V526_CACHE_TOTAL}`;
+    const ms=V526_LAST_LOAD_MS?`｜${(V526_LAST_LOAD_MS/1000).toFixed(2)} 秒`:'';
+    note.textContent=`已建立 ${PRODUCTS.length.toLocaleString()} 筆中央商品索引｜${hit}${ms}`;
+  }
+}
+async function v526LoadCentralData(force=false,onlyTypes=null){
+  if(V526_LOADING_ALL&&!force)return false;
+  V526_LOADING_ALL=true;V51_LOADING=true;HQ_PRICE_STATE.loading=true;HQ_PRICE_STATE.error='';V526_CACHE_HITS=0;V526_CACHE_TOTAL=0;
+  const started=performance.now();updateHqPriceStatus();v51UpdateOverview();
+  try{
+    if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');
+    const mf=await v526ManifestState(force),types=Array.isArray(onlyTypes)&&onlyTypes.length?onlyTypes:['general','special','international','screenBurn'];
+    const results=await Promise.all(types.map(async type=>{
+      try{return [type,await v526LoadOne(type,mf.sigs[type],force),null]}catch(err){return [type,null,err]}
+    }));
+    for(const [type,res,err] of results){
+      if(res){V51_SOURCE_PRODUCTS[type]=res.products;Object.assign(V51_SOURCE_STATE[type],{ready:true,rows:res.products.length,error:'',date:res.reportDate||''})}
+      else if(err){if(!V51_SOURCE_PRODUCTS[type]?.length){V51_SOURCE_PRODUCTS[type]=[];Object.assign(V51_SOURCE_STATE[type],{ready:false,rows:0,error:String(err?.message||err),date:''})}else{V51_SOURCE_STATE[type].error=String(err?.message||err)}}
+      v51UpdateSourceUi(type);
+    }
+    v51RebuildProductLayer();
+    v526ApplyGeneralPriceMaps(mf.price);
+    try{if(usedItems.length){renderUsedItems();renderUsedPreview()}if(newItems.length){renderNewItems();renderNewPreview()}}catch(_){ }
+    return true;
+  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);console.warn('V5.2.6 central cache load failed',err);return false}
+  finally{
+    V526_LAST_LOAD_MS=performance.now()-started;V51_LOADING=false;HQ_PRICE_STATE.loading=false;V526_LOADING_ALL=false;updateHqPriceStatus();v51UpdateOverview();v526UpdatePerfUi();
+  }
+}
+
+/* 既有按鈕維持原名稱，但改走統一快取載入流程。 */
+loadHqSuggestedPrices=async function(force=false){return v526LoadCentralData(force,['general'])};
+v51LoadCatalogs=async function(force=false){return v526LoadCentralData(force,['general','special','international','screenBurn'])};
+
+/* 頁面啟動只跑一次，不再讓一般版被兩套模組重複解析。 */
+setTimeout(()=>v526LoadCentralData(false),0);
 </script>
 
 </body>
