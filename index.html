@@ -7382,11 +7382,57 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v525-new-phone-meta-rebalance">
+/* ===== V5.2.5｜新機 Meta 欄寬再平衡版 =====
+   固定五格結構不變，只重分配欄寬：
+   上市日期｜完整日期｜建議售價｜價格｜狀態註記。
+   目標：完整容納 YYYY-MM-DD、6 位數建議售價與單一狀態標籤。
+*/
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+  grid-template-columns:46px 70px 52px 60px minmax(0,1fr)!important;
+  column-gap:2px!important;
+  left:5px!important;right:5px!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{
+  padding:2px 4px!important;
+  font-size:9.7px!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .new-date-value{
+  font-size:9.7px!important;
+  letter-spacing:-.015em!important;
+}
+.phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{
+  font-size:10px!important;
+  letter-spacing:-.01em!important;
+}
+.phone-card.new-phone-card .new-meta-specials-slot .new-meta-special{
+  font-size:9px!important;
+  padding:2px 4px!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed{
+    grid-template-columns:46px 70px 52px 60px minmax(0,1fr)!important;
+    column-gap:2px!important;
+    left:5px!important;right:5px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .cr-pill{
+    padding:2px 4px!important;font-size:9.7px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-date-value{
+    font-size:9.7px!important;letter-spacing:-.015em!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .new-phone-meta-fixed .new-msrp-value{
+    font-size:10px!important;letter-spacing:-.01em!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.4</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.4 新機 Meta 五格固定版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.5</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.5 新機 Meta 欄寬再平衡版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
