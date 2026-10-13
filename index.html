@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.9｜二手機機型名稱硬性配對 Gate Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7501,7 +7501,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.8</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.8 二手機機型名稱硬性配對 Gate Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.9</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.9 二手機機型名稱硬性配對 Gate Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7610,7 +7610,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix</div>
+      <div class="hq31-hero-title">V5.2.9｜二手機機型名稱硬性配對 Gate Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8373,7 +8373,41 @@ let HQ_PRICE_BY_NAME_ROM=new Map();
 let HQ_PRICE_BY_MODEL_ROM=new Map();
 let HQ_DATE_BY_NAME_ROM=new Map();
 let HQ_DATE_BY_MODEL_ROM=new Map();
+let HQ_FOREIGN_MSRP_BY_NAME_ROM=new Set();
+let HQ_FOREIGN_MSRP_BY_MODEL_ROM=new Set();
 function hqPriceMapKey(brand,nameOrModel,rom){return [nrKey(brand),nrKey(nameOrModel),nrCap(rom)].join('|')}
+function v529CurrencyInfo(v){
+  const s=String(v??'').normalize('NFKC').trim().toUpperCase();
+  if(!s)return {foreign:false,currency:'TWD'};
+  if(/(?:^|[^A-Z])(TWD|NTD)(?:$|[^A-Z])|NT\$|新台幣|新臺幣|台幣|臺幣/.test(s))return {foreign:false,currency:'TWD'};
+  const defs=[
+    ['USD',/(?:^|[^A-Z])USD(?:$|[^A-Z])|US\$|美元/],
+    ['JPY',/(?:^|[^A-Z])JPY(?:$|[^A-Z])|日圓|日元|円|¥/],
+    ['CNY',/(?:^|[^A-Z])CNY(?:$|[^A-Z])|(?:^|[^A-Z])RMB(?:$|[^A-Z])|人民幣|人民币|￥/],
+    ['HKD',/(?:^|[^A-Z])HKD(?:$|[^A-Z])|HK\$|港幣|港币/],
+    ['EUR',/(?:^|[^A-Z])EUR(?:$|[^A-Z])|歐元|欧元|€/],
+    ['GBP',/(?:^|[^A-Z])GBP(?:$|[^A-Z])|英鎊|英镑|£/],
+    ['KRW',/(?:^|[^A-Z])KRW(?:$|[^A-Z])|韓元|韩元|₩/],
+    ['SGD',/(?:^|[^A-Z])SGD(?:$|[^A-Z])|SG\$|新加坡元/],
+    ['AUD',/(?:^|[^A-Z])AUD(?:$|[^A-Z])|AU\$|澳幣|澳元/],
+    ['CAD',/(?:^|[^A-Z])CAD(?:$|[^A-Z])|CA\$|加幣|加元/]
+  ];
+  for(const [currency,re] of defs)if(re.test(s))return {foreign:true,currency};
+  return {foreign:false,currency:'TWD'};
+}
+function v529CellCurrencyInfo(wb,sheet,rowIndex,colIndex,rawValue){
+  try{
+    const ws=wb?.Sheets?.[sheet],addr=(typeof XLSX!=='undefined'&&XLSX.utils?.encode_cell)?XLSX.utils.encode_cell({r:rowIndex,c:colIndex}):'';
+    const cell=ws&&addr?ws[addr]:null;
+    return v529CurrencyInfo([rawValue,cell?.w||'',cell?.z||''].join(' '));
+  }catch(_){return v529CurrencyInfo(rawValue)}
+}
+function hqSuggestedMsrpIsForeign(p){
+  if(!p)return false;
+  if(p.__v529MsrpForeign)return true;
+  const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);
+  return HQ_FOREIGN_MSRP_BY_NAME_ROM.has(k1)||HQ_FOREIGN_MSRP_BY_MODEL_ROM.has(k2);
+}
 function hqNormalizeProductDate(v){
   if(v==null||v==='')return '';
   if(v instanceof Date&&!isNaN(v)){return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}-${String(v.getDate()).padStart(2,'0')}`}
@@ -8398,12 +8432,12 @@ function hqProductDateRaw(p){
 }
 function hqProductDisplayDate(p,fallback){return hqProductDateRaw(p)||wearDisplayDate(fallback||p?.year||'')}
 function hqSuggestedMsrpRaw(p){
-  if(!p||!HQ_PRICE_STATE.ready)return null;
+  if(!p||!HQ_PRICE_STATE.ready||hqSuggestedMsrpIsForeign(p))return null;
   const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);
   return HQ_PRICE_BY_NAME_ROM.get(k1) ?? HQ_PRICE_BY_MODEL_ROM.get(k2) ?? null
 }
-function hqSuggestedMsrp(p,fallback){const v=hqSuggestedMsrpRaw(p);if(Number(v)>0)return Number(v);const fb=Number(fallback||p?.msrp||0);return fb>0?fb:0}
-function formatSuggestedMsrp(p,fallback){const v=hqSuggestedMsrp(p,fallback);return v?'$'+Number(v).toLocaleString('zh-TW'):'—'}
+function hqSuggestedMsrp(p,fallback){if(hqSuggestedMsrpIsForeign(p))return 0;const v=hqSuggestedMsrpRaw(p);if(Number(v)>0)return Number(v);const fb=Number(fallback||p?.msrp||0);return fb>0?fb:0}
+function formatSuggestedMsrp(p,fallback){if(hqSuggestedMsrpIsForeign(p))return '—';const v=hqSuggestedMsrp(p,fallback);return v?'$'+Number(v).toLocaleString('zh-TW'):'—'}
 function hqFindHeaderMap(row){
   const defs={brand:['廠牌','品牌'],name:['標價卡用名稱','商品名稱','名稱'],model:['型號','商品型號'],rom:['Rom','ROM','容量'],manufactureDate:['出廠年份','出廠日期','上市日期'],msrp:['建議售價']},map={};
   (row||[]).forEach((v,c)=>{for(const [k,names] of Object.entries(defs)){if(map[k]==null&&names.some(n=>nrKey(n)===nrKey(v)))map[k]=c}});return map
@@ -8448,21 +8482,24 @@ async function loadHqSuggestedPrices(force=false){
     const cleanManifestUrl=new URL(HQ_PRICE_MANIFEST_URL,location.href),fileUrl=new URL(manifest.currentFile||'./current/hq-suggested-price.xlsb',cleanManifestUrl);fileUrl.searchParams.set('_',Date.now());
     const fr=await fetch(fileUrl,{cache:'no-store'});if(!fr.ok)throw new Error(`價格檔 HTTP ${fr.status}`);const buf=await fr.arrayBuffer(),wb=XLSX.read(buf,{type:'array'});
     const d=hqDetectPriceSheet(wb,manifest.sheetName||'系統版');if(!d)throw new Error('找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');
-    const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map();let count=0;
+    const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map(),foreignByName=new Set(),foreignByModel=new Set();let count=0;
     for(let r=d.headerRow+1;r<d.rows.length;r++){
-      const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),name=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]),productDate=d.map.manufactureDate==null?'':hqNormalizeProductDate(row[d.map.manufactureDate]);
-      if(brand&&name&&rom&&productDate){dateByName.set(hqPriceMapKey(brand,name,rom),productDate);if(model)dateByModel.set(hqPriceMapKey(brand,model,rom),productDate)}
-      if(!brand||!name||!rom||!(msrp>0))continue;
-      byName.set(hqPriceMapKey(brand,name,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++
+      const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),name=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),rawMsrp=row[d.map.msrp],currency=v529CellCurrencyInfo(wb,d.sheet,r,d.map.msrp,rawMsrp),msrp=num(rawMsrp),productDate=d.map.manufactureDate==null?'':hqNormalizeProductDate(row[d.map.manufactureDate]);
+      const k1=(brand&&name&&rom)?hqPriceMapKey(brand,name,rom):'',k2=(brand&&model&&rom)?hqPriceMapKey(brand,model,rom):'';
+      if(brand&&name&&rom&&productDate){dateByName.set(k1,productDate);if(k2)dateByModel.set(k2,productDate)}
+      if(!brand||!name||!rom)continue;
+      if(currency.foreign){foreignByName.add(k1);if(k2)foreignByModel.add(k2);continue}
+      if(!(msrp>0))continue;
+      byName.set(k1,msrp);if(k2)byModel.set(k2,msrp);count++
     }
     if(!count)throw new Error('價格檔沒有可用建議售價');
-    HQ_PRICE_BY_NAME_ROM=byName;HQ_PRICE_BY_MODEL_ROM=byModel;HQ_DATE_BY_NAME_ROM=dateByName;HQ_DATE_BY_MODEL_ROM=dateByModel;
+    HQ_PRICE_BY_NAME_ROM=byName;HQ_PRICE_BY_MODEL_ROM=byModel;HQ_DATE_BY_NAME_ROM=dateByName;HQ_DATE_BY_MODEL_ROM=dateByModel;HQ_FOREIGN_MSRP_BY_NAME_ROM=foreignByName;HQ_FOREIGN_MSRP_BY_MODEL_ROM=foreignByModel;
     let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}
     HQ_PRICE_STATE.ready=true;HQ_PRICE_STATE.rows=count;HQ_PRICE_STATE.matchedProducts=matched;HQ_PRICE_STATE.sheet=d.sheet;HQ_PRICE_STATE.reportDate=hqPriceReportDate(d.rows,d.headerRow);HQ_PRICE_STATE.file=manifest.currentFile||'';HQ_PRICE_STATE.updatedAt=manifest.updatedAt||'';
     try{if(usedItems.length){renderUsedItems();renderUsedPreview()}if(newItems.length){renderNewItems();renderNewPreview()}}catch(_){ }
     updateHqPriceStatus();return true
   }catch(err){
-    HQ_PRICE_BY_NAME_ROM=new Map();HQ_PRICE_BY_MODEL_ROM=new Map();HQ_DATE_BY_NAME_ROM=new Map();HQ_DATE_BY_MODEL_ROM=new Map();HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err&&err.message||err);console.warn('HQ suggested price load failed:',err);updateHqPriceStatus();return false
+    HQ_PRICE_BY_NAME_ROM=new Map();HQ_PRICE_BY_MODEL_ROM=new Map();HQ_DATE_BY_NAME_ROM=new Map();HQ_DATE_BY_MODEL_ROM=new Map();HQ_FOREIGN_MSRP_BY_NAME_ROM=new Set();HQ_FOREIGN_MSRP_BY_MODEL_ROM=new Set();HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err&&err.message||err);console.warn('HQ suggested price load failed:',err);updateHqPriceStatus();return false
   }finally{HQ_PRICE_STATE.loading=false;updateHqPriceStatus()}
 }
 /* V5.2.6：一般版價格與中央主資料改由單一快取載入流程啟動。 */
@@ -8931,10 +8968,10 @@ function v51ParseWorkbook(wb,type){
   for(let r=d.headerRow+1;r<d.rows.length;r++){
     const row=d.rows[r]||[],brand=v51CellText(gv(row,'brand')),name=v51CellText(gv(row,'name'));if(!brand||!name)continue;
     const rear=['rear1','rear2','rear3','rear4','rear5'].map(k=>v51CellText(gv(row,k))).filter(Boolean).join(' / '),front=['front1','front2'].map(k=>v51CellText(gv(row,k))).filter(Boolean).join(' / ');
-    const rawDate=gv(row,'manufactureDate'),date=hqNormalizeProductDate(rawDate)||v51CellText(rawDate);
+    const rawDate=gv(row,'manufactureDate'),date=hqNormalizeProductDate(rawDate)||v51CellText(rawDate),rawMsrp=gv(row,'msrp'),msrpCurrency=v529CellCurrencyInfo(wb,d.sheet,r,d.map.msrp,rawMsrp);
     const p={
-      category:v51CellText(gv(row,'category')),brand,network:v51CellText(gv(row,'network')),name,model:v51CellText(gv(row,'model')),ram:v51CellText(gv(row,'ram')),rom:v51CellText(gv(row,'rom')),sim:v51CellText(gv(row,'sim')),simType:v51CellText(gv(row,'simType')),microSD:v51CellText(gv(row,'microSD')),year:date,msrp:num(gv(row,'msrp'))||'',priceS:num(gv(row,'priceS'))||'',priceA:num(gv(row,'priceA'))||'',priceB:num(gv(row,'priceB'))||'',priceC:num(gv(row,'priceC'))||'',newPrice:'',os:v51CellText(gv(row,'os')),processor:v51CellText(gv(row,'processor')),cores:v51CellText(gv(row,'cores')),display:v51CellText(gv(row,'display')),battery:v51CellText(gv(row,'battery')),fastCharge:v51CellText(gv(row,'fastCharge')),colors:v51CellText(gv(row,'colors')),frontCamera:front,rearCamera:rear,biometric:v51CellText(gv(row,'biometric')),accessories:v51CellText(gv(row,'accessories')),ncc:v51CellText(gv(row,'ncc')),
-      __v51Source:type,__v51BaseName:v51StripDecorators(name),__v51UsedOnly:type!=='general'
+      category:v51CellText(gv(row,'category')),brand,network:v51CellText(gv(row,'network')),name,model:v51CellText(gv(row,'model')),ram:v51CellText(gv(row,'ram')),rom:v51CellText(gv(row,'rom')),sim:v51CellText(gv(row,'sim')),simType:v51CellText(gv(row,'simType')),microSD:v51CellText(gv(row,'microSD')),year:date,msrp:num(rawMsrp)||'',priceS:num(gv(row,'priceS'))||'',priceA:num(gv(row,'priceA'))||'',priceB:num(gv(row,'priceB'))||'',priceC:num(gv(row,'priceC'))||'',newPrice:'',os:v51CellText(gv(row,'os')),processor:v51CellText(gv(row,'processor')),cores:v51CellText(gv(row,'cores')),display:v51CellText(gv(row,'display')),battery:v51CellText(gv(row,'battery')),fastCharge:v51CellText(gv(row,'fastCharge')),colors:v51CellText(gv(row,'colors')),frontCamera:front,rearCamera:rear,biometric:v51CellText(gv(row,'biometric')),accessories:v51CellText(gv(row,'accessories')),ncc:v51CellText(gv(row,'ncc')),
+      __v51Source:type,__v51BaseName:v51StripDecorators(name),__v51UsedOnly:type!=='general',__v529MsrpForeign:!!msrpCurrency.foreign,__v529MsrpCurrency:msrpCurrency.currency,__v529MsrpRaw:v51CellText(rawMsrp)
     };
     if(type==='international')p.__v51InternationalVersion=v51InternationalLabel(name);
     if(type==='screenBurn')p.__v51ScreenBurn=v51BurnLabel(name);
@@ -8948,6 +8985,7 @@ function v51NameKey(p){return [nrKey(p?.brand),nrKey(p?.name),nrCap(p?.rom)].joi
 function v51MergeProduct(target,source){
   const fields=['category','brand','network','name','model','ram','rom','sim','simType','microSD','year','msrp','priceS','priceA','priceB','priceC','os','processor','cores','display','battery','fastCharge','colors','frontCamera','rearCamera','biometric','accessories','ncc'];
   for(const k of fields){const v=source[k];if(v!==''&&v!=null&&!(typeof v==='number'&&!Number.isFinite(v)))target[k]=v}
+  if(Object.prototype.hasOwnProperty.call(source,'__v529MsrpForeign')){target.__v529MsrpForeign=!!source.__v529MsrpForeign;target.__v529MsrpCurrency=source.__v529MsrpCurrency||'TWD';target.__v529MsrpRaw=source.__v529MsrpRaw||''}
   target.__v51Source='general';return target
 }
 function v51RebuildProductLayer(){
@@ -9153,10 +9191,10 @@ function v513RenderBatch(){
 }
 async function v513ParseGeneral(file,buf,wb){
   const d=hqDetectPriceSheet(wb,'系統版');if(!d)throw new Error('一般版找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');const parsed=v51ParseWorkbook(wb,'general');if(!parsed.products.length)throw new Error('一般版系統版沒有有效商品');
-  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map();let count=0;
-  for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]),dt=d.map.manufactureDate==null?'':hqNormalizeProductDate(row[d.map.manufactureDate]);if(!brand||!nm||!rom)continue;const k1=hqPriceMapKey(brand,nm,rom),k2=model?hqPriceMapKey(brand,model,rom):'';if(msrp>0){byName.set(k1,msrp);if(k2)byModel.set(k2,msrp);count++}if(dt){dateByName.set(k1,dt);if(k2)dateByModel.set(k2,dt)}}
-  if(!count)throw new Error('一般版沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}
-  return {ok:true,type:'general',file,buffer:buf,products:parsed.products,reportDate:parsed.reportDate||hqPriceReportDate(d.rows,d.headerRow)||'',sheet:d.sheet,priceRows:count,matched,byName,byModel,dateByName,dateByModel}
+  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map(),foreignByName=new Set(),foreignByModel=new Set();let count=0;
+  for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),rawMsrp=row[d.map.msrp],currency=v529CellCurrencyInfo(wb,d.sheet,r,d.map.msrp,rawMsrp),msrp=num(rawMsrp),dt=d.map.manufactureDate==null?'':hqNormalizeProductDate(row[d.map.manufactureDate]);if(!brand||!nm||!rom)continue;const k1=hqPriceMapKey(brand,nm,rom),k2=model?hqPriceMapKey(brand,model,rom):'';if(currency.foreign){foreignByName.add(k1);if(k2)foreignByModel.add(k2)}else if(msrp>0){byName.set(k1,msrp);if(k2)byModel.set(k2,msrp);count++}if(dt){dateByName.set(k1,dt);if(k2)dateByModel.set(k2,dt)}}
+  if(!count&&!foreignByName.size)throw new Error('一般版沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2)||foreignByName.has(k1)||foreignByModel.has(k2))matched++}
+  return {ok:true,type:'general',file,buffer:buf,products:parsed.products,reportDate:parsed.reportDate||hqPriceReportDate(d.rows,d.headerRow)||'',sheet:d.sheet,priceRows:count,matched,byName,byModel,dateByName,dateByModel,foreignByName,foreignByModel}
 }
 async function v513ParseOne(file){
   if(!/\.xlsb$/i.test(file.name))throw new Error('只接受公司制式 .xlsb');if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'});let type=v513TypeFromFileName(file.name);
@@ -9184,7 +9222,7 @@ async function v513PublishBatch(){
     if(V513_BATCH.general?.ok){let m={};try{m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH)}catch(_){}m.updatedAt=now;m.sourceFileName=V513_BATCH.general.file.name;m.lastValidatedRows=V513_BATCH.general.priceRows;m.lastMatchedProducts=V513_BATCH.general.matched;m.publishedVia='V5.1.4 batch web publish';m.currentFile=m.currentFile||'./current/hq-suggested-price.xlsb';entries.push({path:GH32_PRICE_MANIFEST_PATH,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
     const aux=selected.filter(p=>p.type!=='general');if(aux.length){let m={version:'5.1.3',updatedAt:now,sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}m.version='5.1.3';m.updatedAt=now;m.sources=m.sources||{};for(const p of aux){const path=V51_CATALOG_REPO_PATHS[p.type];m.sources[p.type]={file:'./'+path.split('/').pop(),sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:now}}entries.push({path:V51_CATALOG_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
     const labels=selected.map(p=>V51_SOURCE_LABELS[p.type]).join(' / '),commit=await v513SingleCommit(entries,`V5.1.4 central catalog batch update｜${labels}｜${now}`);
-    for(const p of selected){V51_SOURCE_PRODUCTS[p.type]=p.products;Object.assign(V51_SOURCE_STATE[p.type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||''});v51UpdateSourceUi(p.type);if(p.type==='general'){HQ_PRICE_BY_NAME_ROM=p.byName;HQ_PRICE_BY_MODEL_ROM=p.byModel;HQ_DATE_BY_NAME_ROM=p.dateByName;HQ_DATE_BY_MODEL_ROM=p.dateByModel;Object.assign(HQ_PRICE_STATE,{ready:true,loading:false,error:'',rows:p.priceRows,matchedProducts:p.matched,reportDate:p.reportDate||'',file:'./current/hq-suggested-price.xlsb',sheet:p.sheet||'系統版',updatedAt:now});updateHqPriceStatus()}}
+    for(const p of selected){V51_SOURCE_PRODUCTS[p.type]=p.products;Object.assign(V51_SOURCE_STATE[p.type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||''});v51UpdateSourceUi(p.type);if(p.type==='general'){HQ_PRICE_BY_NAME_ROM=p.byName;HQ_PRICE_BY_MODEL_ROM=p.byModel;HQ_DATE_BY_NAME_ROM=p.dateByName;HQ_DATE_BY_MODEL_ROM=p.dateByModel;HQ_FOREIGN_MSRP_BY_NAME_ROM=p.foreignByName||new Set();HQ_FOREIGN_MSRP_BY_MODEL_ROM=p.foreignByModel||new Set();Object.assign(HQ_PRICE_STATE,{ready:true,loading:false,error:'',rows:p.priceRows,matchedProducts:p.matched,reportDate:p.reportDate||'',file:'./current/hq-suggested-price.xlsb',sheet:p.sheet||'系統版',updatedAt:now});updateHqPriceStatus()}}
     v51RebuildProductLayer();v51UpdateOverview();if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ GitHub 發布成功｜${selected.length} 份資料｜單一 Commit ${String(commit.sha||'').slice(0,7)}`};toast(`中央資料已一次發布 ${selected.length} 份`)
   }catch(err){if(prog){prog.className='v513-batch-progress bad';prog.textContent='發布失敗：'+String(err?.message||err)}toast('批次發布失敗')}finally{v513RenderBatch()}
 }
@@ -9785,14 +9823,17 @@ async function v526LoadOne(type,sig,force=false){
 }
 function v526ApplyGeneralPriceMaps(manifest){
   const products=V51_SOURCE_PRODUCTS.general||[];
-  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map();let count=0;
+  const byName=new Map(),byModel=new Map(),dateByName=new Map(),dateByModel=new Map(),foreignByName=new Set(),foreignByModel=new Set();let count=0;
   for(const p of products){
     const brand=nrText(p.brand),name=nrText(p.name),model=nrText(p.model),rom=nrText(p.rom),msrp=Number(p.msrp||0),dt=hqNormalizeProductDate(p.year)||'';
     if(brand&&name&&rom&&dt){dateByName.set(hqPriceMapKey(brand,name,rom),dt);if(model)dateByModel.set(hqPriceMapKey(brand,model,rom),dt)}
-    if(!brand||!name||!rom||!(msrp>0))continue;
-    byName.set(hqPriceMapKey(brand,name,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++;
+    if(!brand||!name||!rom)continue;
+    const k1=hqPriceMapKey(brand,name,rom),k2=model?hqPriceMapKey(brand,model,rom):'';
+    if(p.__v529MsrpForeign){foreignByName.add(k1);if(k2)foreignByModel.add(k2);continue}
+    if(!(msrp>0))continue;
+    byName.set(k1,msrp);if(k2)byModel.set(k2,msrp);count++;
   }
-  HQ_PRICE_BY_NAME_ROM=byName;HQ_PRICE_BY_MODEL_ROM=byModel;HQ_DATE_BY_NAME_ROM=dateByName;HQ_DATE_BY_MODEL_ROM=dateByModel;
+  HQ_PRICE_BY_NAME_ROM=byName;HQ_PRICE_BY_MODEL_ROM=byModel;HQ_DATE_BY_NAME_ROM=dateByName;HQ_DATE_BY_MODEL_ROM=dateByModel;HQ_FOREIGN_MSRP_BY_NAME_ROM=foreignByName;HQ_FOREIGN_MSRP_BY_MODEL_ROM=foreignByModel;
   let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}
   Object.assign(HQ_PRICE_STATE,{ready:count>0,loading:false,error:count?'':'一般版沒有可用建議售價',rows:count,matchedProducts:matched,reportDate:V51_SOURCE_STATE.general.date||'',file:manifest?.currentFile||'./current/hq-suggested-price.xlsb',sheet:'系統版',updatedAt:manifest?.updatedAt||''});
   updateHqPriceStatus();
@@ -9840,7 +9881,7 @@ setTimeout(()=>v526LoadCentralData(false),0);
 
 
 <script id="v528-used-name-hard-gate-hotfix">
-/* ===== V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix =====
+/* ===== V5.2.9｜二手機機型名稱硬性配對 Gate Hotfix =====
    目的：二手機來源已明確提供商品機型名稱時，名稱必須先吻合才可進入中央規格候選。
    例如 Xiaomi Redmi 7A(創)[2+32GB/霧光金/4G] 不可只因 2+32GB/4G 相同而誤配其他 Xiaomi SKU。
    原有 RAM/ROM HARD GATE、品牌家族、調撥單智慧配對皆保留。
