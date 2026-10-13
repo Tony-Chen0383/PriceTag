@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.10｜跨電腦 A4 分頁穩定版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.11｜二手機「在途中」可列印版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7596,7 +7596,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.10</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.10 跨電腦 A4 分頁穩定版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.11</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.11 二手機「在途中」可列印版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7705,7 +7705,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.10｜跨電腦 A4 分頁穩定版</div>
+      <div class="hq31-hero-title">V5.2.11｜二手機「在途中」可列印版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8385,7 +8385,9 @@ function buildUsedCardsFromRows(rows){
   const seen=new Set(),built=[],errors=[];let manualCount=0;
   rows.forEach((row,idx)=>{
     const n=idx+1,grade=String(row.grade||'').trim().toUpperCase();
-    if(row.status&&nrKey(row.status)!==nrKey('可銷售'))return;
+    /* V5.2.11：二手機回收紀錄允許「可銷售」與「在途中」產卡；調撥單仍只允許「可銷售」。 */
+    const usedStatusKey=nrKey(row.status),usedStatusAllowed=!row.status||usedStatusKey===nrKey('可銷售')||(row.importType!=='transfer'&&usedStatusKey===nrKey('在途中'));
+    if(!usedStatusAllowed)return;
     if(!row.name){errors.push(`第 ${n} 筆：回收機款空白`);return}
     if(!row.imei){errors.push(`第 ${n} 筆｜${row.name}：IMEI 空白`);return}
     const ik=nrKey(row.imei);if(seen.has(ik)){errors.push(`第 ${n} 筆｜${row.name}：重複 IMEI ${row.imei}`);return}seen.add(ik);
