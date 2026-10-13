@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610131752",
+  "version": "5.0-202610131759",
   "updatedAt": "2026-10-13",
   "fallbackMode": "text",
-  "brandCount": 89,
+  "brandCount": 90,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -791,6 +791,15 @@
       "aliases": [
         "Enerpad",
         "enerpad"
+      ],
+      "scale": 1
+    },
+    "uniqcoehl": {
+      "displayName": "UNIQ Coehl",
+      "file": "./brands/uniqcoehl.png",
+      "aliases": [
+        "UNIQ Coehl",
+        "uniqcoehl"
       ],
       "scale": 1
     }
