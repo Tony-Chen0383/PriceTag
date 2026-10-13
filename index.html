@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.7｜新機Meta彈性欄位穩定版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7501,7 +7501,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.7</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.7 新機Meta彈性欄位穩定版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.8</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.8 二手機機型名稱硬性配對 Gate Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7610,7 +7610,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.7｜新機Meta彈性欄位穩定版</div>
+      <div class="hq31-hero-title">V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -9836,6 +9836,89 @@ v51LoadCatalogs=async function(force=false){return v526LoadCentralData(force,['g
 
 /* 頁面啟動只跑一次，不再讓一般版被兩套模組重複解析。 */
 setTimeout(()=>v526LoadCentralData(false),0);
+</script>
+
+
+<script id="v528-used-name-hard-gate-hotfix">
+/* ===== V5.2.8｜二手機機型名稱硬性配對 Gate Hotfix =====
+   目的：二手機來源已明確提供商品機型名稱時，名稱必須先吻合才可進入中央規格候選。
+   例如 Xiaomi Redmi 7A(創)[2+32GB/霧光金/4G] 不可只因 2+32GB/4G 相同而誤配其他 Xiaomi SKU。
+   原有 RAM/ROM HARD GATE、品牌家族、調撥單智慧配對皆保留。
+*/
+function v528UsedIdentityKey(v){
+  let s=String(v||'').normalize('NFKC').toLowerCase().trim();
+  if(!s)return '';
+  s=s.replace(/\[[^\]]*\]/g,' ');
+  s=s.replace(/[（(]\s*(?:盒損|保期不足|拆封新品|新標配版|輕度|中度|重度|國際版|日版)\s*[）)]/gi,' ');
+  s=s.replace(/[（(]\s*(?:19|20)\d{2}\s*[）)]/g,' ');
+  /* 只去掉品牌/系列前綴；機型本體（例如 7A、Note 12 Pro、iPhone 13）保留。 */
+  let prev='';
+  while(prev!==s){
+    prev=s;
+    s=s.replace(/^\s*(?:xiaomi|mi[-_\s]*redmi|redmi|mi|小米|紅米|samsung|三星|apple|google|oppo|vivo|realme|honor|huawei|華為|asus|sony|sharp|htc|oneplus|nothing)\b[\s_\-]*/i,' ');
+  }
+  /* Samsung 的 Galaxy 是系列前綴，中央資料有時有、有時沒有。 */
+  s=s.replace(/^\s*galaxy\b[\s_\-]*/i,' ');
+  /* 網路字樣由既有 version Gate 判斷，不納入機型名稱 identity。 */
+  s=s.replace(/(?:^|[\s_\-])(wifi|wi-fi|5g|4g|lte)(?:$|[\s_\-])/ig,' ');
+  /* 保留 Plus 語意，避免 A1+ 與 A1、Pro+ 與 Pro 被視為同一機型。 */
+  s=s.replace(/\+/g,'plus');
+  return s.replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+}
+function v528HasExplicitUsedName(k){
+  if(!k||k.length<2)return false;
+  return !['手機','二手機','平板','穿戴','耳機','周邊','phone','tablet'].includes(k);
+}
+const _v528PrevUsedMatchProduct=usedMatchProduct;
+usedMatchProduct=function(row){
+  /* 調撥單已使用 V5.1.6.10 / V5.2.1 的專用智慧配對，不改該流程。 */
+  if(row?.importType==='transfer')return _v528PrevUsedMatchProduct(row);
+
+  const parsed=parseUsedMachine(row?.name,row?.brand);
+  const sourceNameKey=v528UsedIdentityKey(parsed?.cleanName||row?.name||'');
+  if(!v528HasExplicitUsedName(sourceNameKey))return _v528PrevUsedMatchProduct(row);
+
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(row?.brand):nrKey(row?.brand));
+  const cat=nrKey(row?.small),needRom=nrCap(parsed?.capacity),needRam=nrCap(parsed?.ram);
+  const needVer=parsed?.version?nrVersion(parsed.version):'';
+  let list=[];
+
+  PRODUCTS.forEach((p,idx)=>{
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p?.brand):nrKey(p?.brand));
+    if(brand&&pb!==brand)return;
+    /* NAME HARD GATE：有明確來源名稱時，中央候選名稱必須是同一機型 identity。 */
+    if(v528UsedIdentityKey(p?.name)!==sourceNameKey)return;
+    if(needRom&&nrCap(p?.rom)!==needRom)return;
+    if(needRam&&nrCap(p?.ram)!==needRam)return;
+    list.push({idx,p,parsed,score:100,matchMode:'v528-name-hard-gate'});
+  });
+
+  if(!list.length)return null; // 寧可進中央未建檔補編，也不猜錯 SKU。
+
+  if(needVer){
+    const byVer=list.filter(x=>nrVersion(x.p?.network)===needVer);
+    if(byVer.length)list=byVer;
+  }
+  if(cat){
+    const byCat=list.filter(x=>nrKey(x.p?.category)===cat);
+    if(byCat.length)list=byCat;
+  }
+  if(parsed?.model){
+    const mk=nrKey(parsed.model);
+    const byModel=list.filter(x=>nrKey(x.p?.model)===mk);
+    if(byModel.length)list=byModel;
+  }
+
+  if(list.length===1)return list[0];
+
+  /* 多來源資料可能產生同一 SKU 的狀態變體；若實際規格簽章一致才視為安全唯一。 */
+  const sig=new Map();
+  for(const x of list){
+    const k=[nrKey(x.p?.model),nrCap(x.p?.ram),nrCap(x.p?.rom),nrVersion(x.p?.network),v528UsedIdentityKey(x.p?.name)].join('|');
+    if(!sig.has(k))sig.set(k,x);
+  }
+  return sig.size===1?[...sig.values()][0]:null;
+};
 </script>
 
 </body>
