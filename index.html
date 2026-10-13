@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.9｜二手機機型名稱硬性配對 Gate Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.10｜跨電腦 A4 分頁穩定版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7497,11 +7497,106 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5210-cross-pc-a4-pagination-stability">
+/* ===== V5.2.10｜跨電腦 A4 分頁穩定版 =====
+   問題：部分 Chrome / Edge / Brother 驅動會保留「自訂邊界」，若列印 DOM 本身剛好是
+   210×297mm / 297×210mm，瀏覽器會把不足幾毫米的 overflow 推成額外空白頁。
+   原則：卡片實體尺寸、3×3 / 3×4 / 配件 4 欄與既有裁切交界全部不變；
+         只把「每張紙的 DOM 外框」收回安全列印區，避免頁面盒與驅動邊界相加。
+*/
+@media print{
+  /* ---------- 手機 / 穿戴：A4 portrait 安全頁框 ---------- */
+  @page{size:A4 portrait;margin:0}
+
+  html,body{
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  body.batch-print-mode:not(.accessory-print-mode) #batchModal,
+  body.batch-print-mode:not(.accessory-print-mode) .batch-sheet,
+  body.batch-print-mode:not(.accessory-print-mode) .batch-preview-body,
+  body.batch-print-mode:not(.accessory-print-mode) .batch-preview-grid.a4-layout{
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+
+  /* 190×277mm 在 A4 四周各保留約 10mm 容錯。
+     即使門市瀏覽器還記著 4~5mm 自訂邊界，也不會把 210×297mm 全頁盒擠到下一頁。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-preview-stack{
+    display:block !important;
+    width:190mm !important;
+    min-width:190mm !important;
+    max-width:190mm !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    gap:0 !important;
+    overflow:visible !important;
+  }
+
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page{
+    width:190mm !important;
+    min-width:190mm !important;
+    max-width:190mm !important;
+    height:277mm !important;
+    min-height:277mm !important;
+    max-height:277mm !important;
+    padding:0 !important;
+    margin:0 auto !important;
+    box-sizing:border-box !important;
+    border:0 !important;
+    box-shadow:none !important;
+    overflow:hidden !important;
+    break-before:auto !important;
+    page-break-before:auto !important;
+    break-after:page !important;
+    page-break-after:always !important;
+    break-inside:avoid-page !important;
+    page-break-inside:avoid !important;
+  }
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page:last-child{
+    break-after:auto !important;
+    page-break-after:auto !important;
+  }
+
+  /* 不讓舊版「滿 A4 紙邊」層重新撐出 210×297mm。V5.1.6.9 的實際 grid 交界裁切線仍保留。 */
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::before,
+  body.batch-print-mode:not(.accessory-print-mode) .a4-page::after{
+    max-width:190mm !important;
+    max-height:277mm !important;
+  }
+
+  /* ---------- 配件：A4 landscape 安全寬度 ----------
+     動態 style 已改為 286×199mm 外框；這裡再限制裁切線長度，避免 pseudo-element
+     超出可列印寬度而被 Chromium 判定為另一頁。卡片仍為 65×40mm。 */
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory{
+    width:260mm !important;
+    max-width:260mm !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(-n+4)::before,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1):nth-last-child(-n+4)::before,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1):nth-last-child(-n+4) ~ .batch-preview-item::before{
+    height:8mm !important;
+  }
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n+1)::after,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:nth-child(4n)::after,
+  body.batch-print-mode.accessory-print-mode .batch-preview-grid.accessory .batch-preview-item:last-child::after{
+    width:8mm !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.9</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.9 二手機機型名稱硬性配對 Gate Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.10</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.10 跨電腦 A4 分頁穩定版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7610,7 +7705,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.9｜二手機機型名稱硬性配對 Gate Hotfix</div>
+      <div class="hq31-hero-title">V5.2.10｜跨電腦 A4 分頁穩定版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8670,7 +8765,7 @@ function setAccessoryLandscapePrint(on){
     if(!st){
       st=document.createElement('style');
       st.id='accessoryLandscapePrintStyle';
-      st.textContent='@media print{@page{size:A4 landscape;margin:0}html,body,body.batch-print-mode,body.batch-print-mode #batchModal,body.batch-print-mode .batch-sheet,body.batch-print-mode .batch-preview-body,body.batch-print-mode .batch-preview-grid.accessory{background:#fff!important;background-color:#fff!important}body.batch-print-mode .batch-preview-body{width:297mm!important;min-height:210mm!important;height:auto!important;margin:0!important;padding:10mm!important;box-sizing:border-box!important;display:block!important;flex:none!important;overflow:visible!important}body.batch-print-mode .batch-preview-grid.accessory{min-height:0!important;height:auto!important;background:transparent!important}}';
+      st.textContent='@media print{@page{size:A4 landscape;margin:0}html,body,body.batch-print-mode,body.batch-print-mode #batchModal,body.batch-print-mode .batch-sheet,body.batch-print-mode .batch-preview-body,body.batch-print-mode .batch-preview-grid.accessory{background:#fff!important;background-color:#fff!important}body.batch-print-mode .batch-preview-body{width:286mm!important;max-width:286mm!important;min-width:286mm!important;min-height:199mm!important;height:auto!important;margin:0 auto!important;padding:10mm!important;box-sizing:border-box!important;display:block!important;flex:none!important;overflow:visible!important}body.batch-print-mode .batch-preview-grid.accessory{width:260mm!important;max-width:260mm!important;min-height:0!important;height:auto!important;margin:0 auto!important;background:transparent!important}}';
       document.head.appendChild(st);
     }
   }else{
