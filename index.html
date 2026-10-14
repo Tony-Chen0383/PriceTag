@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.15｜中央多來源狀態隔離＋RAM 格式 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7596,7 +7596,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.14</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.14 二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.15</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.15 中央多來源狀態隔離＋RAM 格式 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7705,7 +7705,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.15｜中央多來源狀態隔離＋RAM 格式 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8442,7 +8442,7 @@ const uniq=a=>[...new Set(a.filter(v=>v!==''&&v!=null))];
 const h=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
 const money=v=>{const n=String(v??'').replace(/[^0-9]/g,'');return n?Number(n).toLocaleString('zh-TW'):''};
 const cap=v=>{if(v===''||v==null)return '—';const s=String(v);return /[TGM]B?$/i.test(s)?(/B$/i.test(s)?s:s+'B'):s+'GB'};
-const ramText=v=>v?String(v).replace(/\.0$/,'')+'GB':'—';
+const ramText=v=>{let s=String(v??'').trim().replace(/\.0$/,'');if(!s)return'—';if(/TB$/i.test(s))return s.toUpperCase();if(/MB$/i.test(s))return s.toUpperCase();if(/GB$/i.test(s))return s.toUpperCase();if(/G$/i.test(s))return s.replace(/G$/i,'GB');return s+'GB'};
 function specLabel(p){return [p.model,ramText(p.ram),cap(p.rom)].filter(x=>x&&x!=='—').join('｜')||'未標示規格'}
 function splitColors(s){if(!s)return ['未指定'];return uniq(String(s).split(/[、,，\/]/).map(x=>x.trim()).filter(Boolean))}
 function autoTemplate(category,name=''){const t=String(category||'')+' '+String(name||'');return /(穿戴|耳機|手錶|手環|戒指|Watch|AirPods|\bRing\b)/i.test(t)?'穿戴':'手機'}
@@ -10178,7 +10178,7 @@ v511BrandKey=function(v){
 
 
 <script id="v5214-used-name-normalize-and-grade-print-stability">
-/* ===== V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix =====
+/* ===== V5.2.15｜中央多來源狀態隔離＋RAM 格式 Hotfix =====
    A) V5.2.12 的跨來源 NAME HARD GATE 保留，但把「年份／螢幕尺寸／WIFI/LTE/5G／新標配版」
       視為來源描述，不納入機型 identity。解決 iPad 7(2019)10.2\"_LTE、iPhone 11(2020新標配版)
       等明明中央有資料卻落入中央未建檔的問題；7A/A1+ 等真正不同機型仍維持硬性隔離。
@@ -10320,6 +10320,115 @@ printBatchPreview=async function(){
   await v5214WaitBatchPrintAssets();
   window.print();
   setTimeout(()=>{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false)},160);
+};
+</script>
+
+
+
+<script id="v5215-used-source-layer-isolation-hotfix">
+/* ===== V5.2.15｜中央多來源狀態隔離＋RAM 格式 Hotfix =====
+   問題：V5.2.14 為了讓二手機跨來源名稱 identity 一致，會把「國際版／輕度／中度／重度」
+   等裝飾字移除後再比對；因此一般台版、國際版、烙印版可能同時成為同一機型候選。
+   例如標準 Galaxy S23 Ultra 12/256 會同時命中一般版與烙印版，規格簽章不同後被判定 null，
+   雖然來源列本身仍有 RAM/ROM/日期/建議售價，CPU/螢幕/相機/電池卻落入手動補編。
+   修正：先依來源列的「國際版本／螢幕烙印」選中央資料層，再做既有機型、容量、售價 Gate。
+   無烙印＋台版／空白時優先一般版；一般版沒有才允許特殊規格。禁止一般資料被國際版或烙印版搶走。
+*/
+function v5215BurnNeed(row){
+  const a=String(row?.screenBurn||'').trim();
+  let m=a.match(/(輕度|中度|重度)/);if(m)return m[1];
+  m=String(row?.name||'').match(/[（(]\s*(輕度|中度|重度)\s*[）)]/);return m?m[1]:'';
+}
+function v5215IntlNeed(row){
+  const raw=String(row?.internationalVersion||'').trim();
+  const name=String(row?.name||'');
+  const s=raw||((name.match(/[（(]\s*(國際版|日版|日|港版|港|美版|美|韓版|韓)\s*[）)]/)||[])[1]||'');
+  if(!s)return '';
+  if(/^(?:台版|台灣版|台灣|tw)$/i.test(s))return '台版';
+  if(/日/.test(s))return '日版';
+  if(/港/.test(s))return '港版';
+  if(/美/.test(s))return '美版';
+  if(/韓/.test(s))return '韓版';
+  if(/國際/.test(s))return '國際版';
+  return s;
+}
+function v5215SourceType(p){
+  if(p?.__v51Source)return p.__v51Source;
+  return p?.__v51UsedOnly?'other':'general';
+}
+function v5215SelectSourceLayer(list,row){
+  let out=[...list];
+  const burn=v5215BurnNeed(row),intl=v5215IntlNeed(row);
+
+  if(burn){
+    const exact=out.filter(x=>v5215SourceType(x.p)==='screenBurn'&&String(x.p?.__v51ScreenBurn||'').trim()===burn);
+    return exact;
+  }
+  /* 明確無烙印或未標示烙印時，不讓烙印版成為一般商品候選。 */
+  out=out.filter(x=>v5215SourceType(x.p)!=='screenBurn');
+
+  if(intl&&intl!=='台版'){
+    const exact=out.filter(x=>v5215SourceType(x.p)==='international'&&String(x.p?.__v51InternationalVersion||'').trim()===intl);
+    return exact;
+  }
+  /* 台版／空白版本不讓國際版搶走一般版。 */
+  out=out.filter(x=>v5215SourceType(x.p)!=='international');
+
+  /* 一般二手機先用一般版主規格；若該 identity 根本沒有一般版，才允許特殊規格。 */
+  const general=out.filter(x=>v5215SourceType(x.p)==='general');
+  if(general.length)return general;
+  const special=out.filter(x=>v5215SourceType(x.p)==='special');
+  if(special.length)return special;
+  return out;
+}
+const _v5215PrevUsedMatchProduct=usedMatchProduct;
+usedMatchProduct=function(row){
+  const parsed=parseUsedMachine(row?.name,row?.brand),isTransfer=row?.importType==='transfer';
+  const nameKey=v5212UsedNameKey(row,parsed);
+  if(!v5212ExplicitName(nameKey))return _v5215PrevUsedMatchProduct(row);
+
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(row?.brand):nrKey(row?.brand));
+  const needRom=nrCap(parsed?.capacity),needRam=nrCap(parsed?.ram),cat=nrKey(row?.small);
+  const needNet=isTransfer&&typeof v51610TransferNet==='function'
+    ?v51610TransferNet(row,parsed)
+    :(parsed?.version?nrVersion(parsed.version):'');
+  let list=[];
+
+  PRODUCTS.forEach((p,idx)=>{
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p?.brand):nrKey(p?.brand));
+    if(brand&&pb!==brand)return;
+    if(v5212ProductNameKey(p,isTransfer)!==nameKey)return;
+    if(needRom&&nrCap(p?.rom)!==needRom)return;
+    if(needRam&&nrCap(p?.ram)!==needRam)return;
+    list.push({idx,p,parsed,score:160,matchMode:'v5215-source-layer-isolated'});
+  });
+  if(!list.length)return null;
+
+  /* 先鎖中央資料層，避免一般／國際／烙印同名候選互相衝突。 */
+  list=v5215SelectSourceLayer(list,row);
+  if(!list.length)return null;
+
+  if(cat)list=v5212FilterIfAny(list,x=>nrKey(x.p?.category)===cat);
+  if(needNet)list=v5212FilterIfAny(list,x=>nrVersion(x.p?.network)===needNet);
+
+  if(isTransfer){
+    const needSale=Math.round(Number(row?.price)||0),needGrade=String(row?.grade||'').trim().toUpperCase();
+    if(needSale>0&&needGrade&&typeof v521ProductGradePrice==='function'){
+      list=v5212FilterIfAny(list,x=>v521ProductGradePrice(x.p,needGrade)===needSale);
+    }
+    const needMsrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(needMsrp>0&&typeof v51610ProductMsrp==='function'){
+      list=v5212FilterIfAny(list,x=>v51610ProductMsrp(x.p)===needMsrp);
+    }
+  }else if(parsed?.model){
+    const mk=nrKey(parsed.model);list=v5212FilterIfAny(list,x=>nrKey(x.p?.model)===mk);
+  }
+
+  if(list.length===1)return list[0];
+  const sig=new Map();
+  for(const x of list){const k=v5212SpecSignature(x.p);if(!sig.has(k))sig.set(k,[]);sig.get(k).push(x)}
+  if(sig.size===1)return v5212PreferComplete(list);
+  return null;
 };
 </script>
 
