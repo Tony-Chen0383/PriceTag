@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.13｜MOTO / Motorola 品牌別名 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7596,7 +7596,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.13</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.13 MOTO / Motorola 品牌別名 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.14</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.14 二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7705,7 +7705,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.13｜MOTO / Motorola 品牌別名 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -10173,6 +10173,153 @@ v511BrandKey=function(v){
   const k=nrKey(v);
   if(['moto','motorola','摩托羅拉'].includes(k))return 'motorola-family';
   return _v5213PrevBrandKey(v);
+};
+</script>
+
+
+<script id="v5214-used-name-normalize-and-grade-print-stability">
+/* ===== V5.2.14｜二手機名稱正規化＋等級 Logo 列印穩定 Hotfix =====
+   A) V5.2.12 的跨來源 NAME HARD GATE 保留，但把「年份／螢幕尺寸／WIFI/LTE/5G／新標配版」
+      視為來源描述，不納入機型 identity。解決 iPad 7(2019)10.2\"_LTE、iPhone 11(2020新標配版)
+      等明明中央有資料卻落入中央未建檔的問題；7A/A1+ 等真正不同機型仍維持硬性隔離。
+   B) 二手機等級 Logo 是外部 PNG。舊列印流程 build 完 A4 後只等兩個 animation frame 就呼叫 print，
+      慢一點的電腦會在圖片尚未 decode 時先進列印預覽，造成同一張紙隨機漏 B/S/C 等級圖。
+      本版預載全部等級圖，列印前等待 batch 內圖片 decode；若個別圖仍載入失敗，列印 DOM
+      自動退回文字等級圓章，確保至少不會印成空白。
+*/
+function v5214CanonUsedModelName(v){
+  let s=String(v||'').normalize('NFKC').toLowerCase().trim();
+  if(!s)return '';
+  /* [容量/顏色/網路] 等規格交由既有 Gate 處理。 */
+  s=s.replace(/\[[^\]]*\]/g,' ');
+  /* 只要括號中含四位年份，整段視為世代/來源註記；例如 (2019)、(2020新標配版)。 */
+  s=s.replace(/[（(][^）)]*(?:19|20)\d{2}[^）)]*[）)]/g,' ');
+  s=s.replace(/[（(]\s*(?:盒損|保期不足|拆封新品|新標配版|新標配|標配版|輕度|中度|重度|國際版|日版)\s*[）)]/gi,' ');
+  s=s.replace(/\b(?:19|20)\d{2}\b/g,' ');
+  /* 來源名稱常把螢幕尺寸接在年份後：10.2\"、11\"、7.9\"。尺寸不是機型 identity。 */
+  s=s.replace(/(?:^|[\s_\-])\d+(?:\.\d+)?\s*(?:吋|inch|inches|[\"”])(?=$|[\s_\-])/ig,' ');
+  /* 網路版本交由 needNet Gate 判斷。 */
+  s=s.replace(/(?:^|[\s_\-])(?:wifi|wi\s*[-_]?\s*fi|5g|4g|lte)(?=$|[\s_\-])/ig,' ');
+  let prev='';
+  while(prev!==s){
+    prev=s;
+    s=s.replace(/^\s*(?:xiaomi|mi[-_\s]*redmi|redmi|mi|小米|紅米|samsung|三星|apple|google|oppo|vivo|realme|honor|huawei|華為|asus|sony|sharp|htc|oneplus|nothing|moto|motorola|摩托羅拉)\b[\s_\-]*/i,' ');
+  }
+  s=s.replace(/^\s*galaxy\b[\s_\-]*/i,' ');
+  /* Plus 必須保留語意：A1+ != A1。 */
+  s=s.replace(/\+/g,'plus');
+  return s.replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+}
+
+/* V5.2.12 的 matcher 會動態呼叫這兩個 key 函式，因此只替換 identity 正規化，不放寬後續 Gate。 */
+v5212UsedNameKey=function(row,parsed){
+  return v5214CanonUsedModelName((parsed&&parsed.cleanName)||row?.name||'');
+};
+v5212ProductNameKey=function(p,isTransfer){
+  return v5214CanonUsedModelName(p?.name||'');
+};
+
+/* -------- 等級 Logo / 列印圖片 Ready Gate -------- */
+const V5214_PRINT_ASSET_PROMISES=new Map();
+function v5214LoadPrintAsset(src){
+  if(!src)return Promise.resolve(false);
+  if(V5214_PRINT_ASSET_PROMISES.has(src))return V5214_PRINT_ASSET_PROMISES.get(src);
+  const p=new Promise(resolve=>{
+    try{
+      const img=new Image();
+      let done=false;
+      const finish=(ok)=>{if(done)return;done=true;resolve(!!ok)};
+      img.onload=async()=>{try{if(img.decode)await img.decode()}catch(_){}finish(img.naturalWidth>0)};
+      img.onerror=()=>finish(false);
+      img.decoding='async';
+      img.src=src;
+      if(img.complete)setTimeout(()=>finish(img.naturalWidth>0),0);
+      setTimeout(()=>finish(img.naturalWidth>0),4000);
+    }catch(_){resolve(false)}
+  });
+  V5214_PRINT_ASSET_PROMISES.set(src,p);return p;
+}
+function v5214PrimePrintAssets(){
+  const arr=[];
+  try{arr.push(...Object.values(USED_GRADE_LOGOS||{}))}catch(_){}
+  try{arr.push(NEW_GRADE_LOGO)}catch(_){}
+  try{arr.push(ON_SALE_BADGE_IMAGE)}catch(_){}
+  [...new Set(arr.filter(Boolean))].forEach(v5214LoadPrintAsset);
+}
+async function v5214WaitImageElement(img,timeout=3500){
+  if(!img)return false;
+  if(img.complete&&img.naturalWidth>0){try{if(img.decode)await img.decode()}catch(_){}return true}
+  return await new Promise(resolve=>{
+    let done=false;
+    const finish=async(ok)=>{if(done)return;done=true;try{if(ok&&img.decode)await img.decode()}catch(_){}resolve(!!(ok&&img.naturalWidth>0))};
+    img.addEventListener('load',()=>finish(true),{once:true});
+    img.addEventListener('error',()=>finish(false),{once:true});
+    setTimeout(()=>finish(img.complete&&img.naturalWidth>0),timeout);
+  });
+}
+function v5214GradeTextFallback(root){
+  if(!root)return 0;let n=0;
+  root.querySelectorAll('.cr-grade img, .wear-grade-logo img').forEach(img=>{
+    if(img.complete&&img.naturalWidth>0)return;
+    const alt=String(img.alt||'').trim(),parent=img.parentElement;if(!parent)return;
+    let label='';
+    const m=alt.match(/^([SABCDEFGH])級$/i);
+    if(m)label=m[1].toUpperCase();else if(alt==='全新品')label='全新';else return;
+    if(parent.classList.contains('cr-grade')){
+      parent.classList.remove('has-image');parent.classList.add('pending');
+      if(label==='全新'){
+        parent.style.setProperty('--grade','#303640');parent.style.setProperty('--grade-text','#fff');
+        parent.innerHTML='<span class="grade-big" style="font-size:20px;line-height:1">全新</span>';
+      }else parent.innerHTML=`<span class="grade-big">${label}</span><span class="grade-small">級</span>`;
+    }else{
+      parent.classList.add('pending-grade');parent.textContent=label==='全新'?'全新':label+'級';
+    }
+    n++;
+  });
+  return n;
+}
+async function v5214WaitBatchPrintAssets(){
+  const root=document.getElementById('batchGrid');
+  v5214PrimePrintAssets();
+  const imgs=root?[...root.querySelectorAll('img')]:[];
+  if(imgs.length)await Promise.all(imgs.map(img=>v5214WaitImageElement(img)));
+  /* CSS background 的 ON SALE 也先完成預載；最多不額外等待超過既有 image timeout。 */
+  const staticPromises=[];
+  try{staticPromises.push(...Object.values(USED_GRADE_LOGOS||{}).map(v5214LoadPrintAsset))}catch(_){}
+  try{staticPromises.push(v5214LoadPrintAsset(NEW_GRADE_LOGO),v5214LoadPrintAsset(ON_SALE_BADGE_IMAGE))}catch(_){}
+  if(staticPromises.length)await Promise.all(staticPromises);
+  v5214GradeTextFallback(root);
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
+setTimeout(v5214PrimePrintAssets,0);
+
+/* 原函式會在 buildUsedPrintPagesFast() 後立刻 print；改成等圖片 ready 再呼叫。 */
+printBatchPreview=async function(){
+  const title=document.getElementById('batchTitle')?.textContent||'',pager=document.getElementById('batchPager');
+  if(currentBatchType==='used'){
+    if(!usedItems.length){toast('目前沒有可列印的標價卡');return}
+    const keepPage=usedBatchPage;
+    buildUsedPrintPagesFast();
+    if(pager)pager.style.display='none';
+    setAccessoryLandscapePrint(false);
+    document.body.classList.add('batch-print-mode');
+    await v5214WaitBatchPrintAssets();
+    window.print();
+    setTimeout(()=>{document.body.classList.remove('batch-print-mode');renderUsedBatchPage(keepPage)},120);
+    return;
+  }
+  if(title.startsWith('配件')){
+    const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));
+    if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}
+    setAccessoryLandscapePrint(true);
+  }else{
+    setAccessoryLandscapePrint(false);
+    if(!document.querySelector('#batchGrid .a4-page')){toast('目前沒有可列印的標價卡');return}
+  }
+  document.body.classList.add('batch-print-mode');
+  await v5214WaitBatchPrintAssets();
+  window.print();
+  setTimeout(()=>{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false)},160);
 };
 </script>
 
