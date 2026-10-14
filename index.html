@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.16｜陸版／國際版來源分流 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.17｜二手機上市日期完整顯示 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7592,11 +7592,73 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v5217-used-date-full-display">
+/* ===== V5.2.17｜二手機上市日期完整顯示 Hotfix =====
+   只調整二手機手機卡的 Meta 列欄寬：
+   上市日期｜YYYY-MM-DD｜建議售價｜金額。
+   不變更中央資料、JOIN、規格、售價、等級、55×85mm 或列印分頁邏輯。 */
+.phone-card.used-phone-card .cr-meta{
+  grid-template-columns:52px 74px 56px minmax(60px,1fr)!important;
+  column-gap:2px!important;
+  left:4px!important;
+  right:4px!important;
+}
+.phone-card.used-phone-card .cr-meta > *{
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.phone-card.used-phone-card .cr-pill{
+  width:100%!important;
+  padding:2px 4px!important;
+  font-size:10.5px!important;
+  letter-spacing:-.015em!important;
+  white-space:nowrap!important;
+}
+.phone-card.used-phone-card .cr-meta-val{
+  width:100%!important;
+  max-width:100%!important;
+  font-size:10.8px!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+/* 第二格就是上市日期值；預留完整 10 碼日期寬度。 */
+.phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(2){
+  font-size:10.5px!important;
+  letter-spacing:-.025em!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(4){
+  font-size:10.7px!important;
+  letter-spacing:-.015em!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta{
+    grid-template-columns:52px 74px 56px minmax(60px,1fr)!important;
+    column-gap:2px!important;
+    left:4px!important;
+    right:4px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-pill{
+    padding:2px 4px!important;
+    font-size:10.5px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(2){
+    font-size:10.5px!important;
+    letter-spacing:-.025em!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(4){
+    font-size:10.7px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.16</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.16 陸版／國際版來源分流 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.17</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.17 二手機上市日期完整顯示 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7705,7 +7767,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.16｜陸版／國際版來源分流 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.17｜二手機上市日期完整顯示 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
