@@ -7594,62 +7594,65 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
 
 <style id="v5217-used-date-full-display">
-/* ===== V5.2.17｜二手機上市日期完整顯示 Hotfix =====
-   只調整二手機手機卡的 Meta 列欄寬：
-   上市日期｜YYYY-MM-DD｜建議售價｜金額。
-   不變更中央資料、JOIN、規格、售價、等級、55×85mm 或列印分頁邏輯。 */
+/* V5.2.17 日期欄位排版修正：只作用於二手機上方 Meta 四欄。
+   明確分配標籤 / 日期 / 標籤 / 售價，避免日期和後方標籤互壓。
+   不修改 JS、資料配對、卡片外框尺寸或印表機設定。 */
 .phone-card.used-phone-card .cr-meta{
-  grid-template-columns:52px 74px 56px minmax(60px,1fr)!important;
+  display:grid!important;
+  grid-template-columns:56px 83px 62px minmax(0,1fr)!important;
   column-gap:2px!important;
   left:4px!important;
   right:4px!important;
-}
-.phone-card.used-phone-card .cr-meta > *{
-  min-width:0!important;
+  align-items:center!important;
+  justify-items:stretch!important;
   box-sizing:border-box!important;
 }
-.phone-card.used-phone-card .cr-pill{
-  width:100%!important;
-  padding:2px 4px!important;
-  font-size:10.5px!important;
-  letter-spacing:-.015em!important;
-  white-space:nowrap!important;
-}
-.phone-card.used-phone-card .cr-meta-val{
-  width:100%!important;
+.phone-card.used-phone-card .cr-meta > *{
+  box-sizing:border-box!important;
+  min-width:0!important;
   max-width:100%!important;
-  font-size:10.8px!important;
-  font-weight:700!important;
+  margin:0!important;
+  position:static!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-pill{
+  display:flex!important;
+  width:100%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:2px 2px!important;
+  font-size:10.5px!important;
+  letter-spacing:-.02em!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-meta-val{
+  display:block!important;
+  width:100%!important;
+  padding:0!important;
+  text-align:center!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:clip!important;
+  font-weight:700!important;
+  line-height:1.1!important;
+  font-variant-numeric:tabular-nums!important;
 }
-/* 第二格就是上市日期值；預留完整 10 碼日期寬度。 */
-.phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(2){
-  font-size:10.5px!important;
+.phone-card.used-phone-card .cr-meta > :nth-child(2){
+  font-size:11px!important;
   letter-spacing:-.025em!important;
 }
-.phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(4){
-  font-size:10.7px!important;
-  letter-spacing:-.015em!important;
+.phone-card.used-phone-card .cr-meta > :nth-child(4){
+  font-size:11px!important;
+  letter-spacing:-.02em!important;
 }
 @media print{
   body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta{
-    grid-template-columns:52px 74px 56px minmax(60px,1fr)!important;
+    display:grid!important;
+    grid-template-columns:56px 83px 62px minmax(0,1fr)!important;
     column-gap:2px!important;
     left:4px!important;
     right:4px!important;
-  }
-  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-pill{
-    padding:2px 4px!important;
-    font-size:10.5px!important;
-  }
-  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(2){
-    font-size:10.5px!important;
-    letter-spacing:-.025em!important;
-  }
-  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val:nth-child(4){
-    font-size:10.7px!important;
   }
 }
 </style>
