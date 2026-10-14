@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.11｜二手機「在途中」可列印版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.12｜二手機跨來源機型硬性配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7596,7 +7596,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.11</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.11 二手機「在途中」可列印版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.12</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.12 二手機跨來源機型硬性配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7705,7 +7705,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.11｜二手機「在途中」可列印版</div>
+      <div class="hq31-hero-title">V5.2.12｜二手機跨來源機型硬性配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -10056,6 +10056,108 @@ usedMatchProduct=function(row){
     if(!sig.has(k))sig.set(k,x);
   }
   return sig.size===1?[...sig.values()][0]:null;
+};
+</script>
+
+
+<script id="v5212-used-unified-name-hard-gate-hotfix">
+/* ===== V5.2.12｜二手機跨來源機型硬性配對 Hotfix =====
+   問題：V5.2.8 的 NAME HARD GATE 對二手機回收紀錄有效，但調撥單仍先走舊版
+   V5.1.6.10 智慧配對；當一般版沒有完全相同商品名時，可能只靠品牌家族 + RAM/ROM + 售價
+   收斂到另一台 SKU（例如 Redmi 7A 2+32GB -> A1+ 2+32GB）。
+   修正：回收紀錄 / 在途中 / 調撥單統一先做「品牌家族 + 機型名稱 identity」HARD GATE，
+   再套 RAM/ROM / 等級售價 / 建議售價 / 網路等條件。找不到同機型時直接回傳 null，
+   寧可進中央未建檔補編，也禁止跨機型猜測。
+*/
+function v5212UsedNameKey(row,parsed){
+  const raw=(parsed&&parsed.cleanName)||row?.name||'';
+  if(row?.importType==='transfer'&&typeof v51610CanonTransferName==='function'){
+    const k=v51610CanonTransferName(raw);
+    if(k)return k;
+  }
+  return typeof v528UsedIdentityKey==='function'?v528UsedIdentityKey(raw):nrKey(raw);
+}
+function v5212ProductNameKey(p,isTransfer){
+  if(isTransfer&&typeof v51610CanonTransferName==='function'){
+    const k=v51610CanonTransferName(p?.name||'');
+    if(k)return k;
+  }
+  return typeof v528UsedIdentityKey==='function'?v528UsedIdentityKey(p?.name||''):nrKey(p?.name||'');
+}
+function v5212ExplicitName(k){
+  if(typeof v528HasExplicitUsedName==='function')return v528HasExplicitUsedName(k);
+  return !!k&&k.length>=2;
+}
+function v5212SpecSignature(p){
+  return [
+    nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),
+    nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),
+    nrKey(p?.frontCamera),nrKey(p?.rearCamera)
+  ].join('|');
+}
+function v5212Completeness(p){
+  return ['model','ram','rom','network','processor','display','battery','frontCamera','rearCamera','year']
+    .reduce((n,k)=>n+(String(p?.[k]||'').trim()?1:0),0);
+}
+function v5212PreferComplete(list){
+  return [...list].sort((a,b)=>v5212Completeness(b.p)-v5212Completeness(a.p))[0]||null;
+}
+function v5212FilterIfAny(list,pred){
+  const x=list.filter(pred);return x.length?x:list;
+}
+const _v5212PrevUsedMatchProduct=usedMatchProduct;
+usedMatchProduct=function(row){
+  const parsed=parseUsedMachine(row?.name,row?.brand),isTransfer=row?.importType==='transfer';
+  const nameKey=v5212UsedNameKey(row,parsed);
+  if(!v5212ExplicitName(nameKey))return _v5212PrevUsedMatchProduct(row);
+
+  const brand=(typeof v511BrandKey==='function'?v511BrandKey(row?.brand):nrKey(row?.brand));
+  const needRom=nrCap(parsed?.capacity),needRam=nrCap(parsed?.ram),cat=nrKey(row?.small);
+  const needNet=isTransfer&&typeof v51610TransferNet==='function'
+    ?v51610TransferNet(row,parsed)
+    :(parsed?.version?nrVersion(parsed.version):'');
+  let list=[];
+
+  PRODUCTS.forEach((p,idx)=>{
+    const pb=(typeof v511BrandKey==='function'?v511BrandKey(p?.brand):nrKey(p?.brand));
+    if(brand&&pb!==brand)return;
+    /* NAME HARD GATE：所有來源（general / special / international / screenBurn）都可成為候選，
+       但商品機型 identity 必須先完全相同。 */
+    if(v5212ProductNameKey(p,isTransfer)!==nameKey)return;
+    if(needRom&&nrCap(p?.rom)!==needRom)return;
+    if(needRam&&nrCap(p?.ram)!==needRam)return;
+    list.push({idx,p,parsed,score:140,matchMode:'v5212-unified-name-hard-gate'});
+  });
+
+  /* 明確機型名稱卻沒有同機型候選：禁止退回舊版跨機型猜測。 */
+  if(!list.length)return null;
+
+  if(cat)list=v5212FilterIfAny(list,x=>nrKey(x.p?.category)===cat);
+  if(needNet)list=v5212FilterIfAny(list,x=>nrVersion(x.p?.network)===needNet);
+
+  if(isTransfer){
+    /* 保留 V5.2.1 的「等級 + 實際售價」定位能力，但只能在同機型候選內運作。 */
+    const needSale=Math.round(Number(row?.price)||0),needGrade=String(row?.grade||'').trim().toUpperCase();
+    if(needSale>0&&needGrade&&typeof v521ProductGradePrice==='function'){
+      list=v5212FilterIfAny(list,x=>v521ProductGradePrice(x.p,needGrade)===needSale);
+    }
+    const needMsrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(needMsrp>0&&typeof v51610ProductMsrp==='function'){
+      list=v5212FilterIfAny(list,x=>v51610ProductMsrp(x.p)===needMsrp);
+    }
+  }else if(parsed?.model){
+    const mk=nrKey(parsed.model);list=v5212FilterIfAny(list,x=>nrKey(x.p?.model)===mk);
+  }
+
+  if(list.length===1)return list[0];
+
+  /* 同一機型若只是多來源重複，而且完整規格完全一致，可安全視為同一 SKU。 */
+  const sig=new Map();
+  for(const x of list){const k=v5212SpecSignature(x.p);if(!sig.has(k))sig.set(k,[]);sig.get(k).push(x)}
+  if(sig.size===1)return v5212PreferComplete(list);
+
+  /* 多來源同名卻實際規格不同：不再任選第一筆。 */
+  return null;
 };
 </script>
 
