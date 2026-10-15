@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.17｜二手機上市日期完整顯示 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.18｜Xiaomi 17T Pro 中央規格配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7770,7 +7770,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.17｜二手機上市日期完整顯示 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.18｜Xiaomi 17T Pro 中央規格配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -10551,6 +10551,22 @@ v5215SelectSourceLayer=function(list,row){
   return out;
 };
 </script>
+<script id="v5218-xiaomi-17t-pro-identity-hotfix">
+/* V5.2.18 | Xiaomi 17T Pro 中央規格配對 Hotfix
+   對來源「小米 17T Pro」作狹義品牌前綴正規化，中央「Mi / 17T Pro」不變。
+   其餘品牌/機型、RAM/ROM/版本/來源分流、安全 Hard Gate 全部保留。 */
+(function(){
+  const previous=v5214CanonUsedModelName;
+  v5214CanonUsedModelName=function(value){
+    const raw=String(value||'').normalize('NFKC').trim();
+    /* 僅處理完整 17T Pro 型號；不影響 17 Pro / 17T / Redmi 等不同 identity。 */
+    const match=raw.match(/^小米[\s_\-]*17[\s_\-]*t[\s_\-]*pro(?=$|[\s_\-\[（(])/i);
+    if(match)return previous(raw.replace(/^小米[\s_\-]*/i,''));
+    return previous(value);
+  };
+})();
+</script>
+
 
 </body>
 </html>
