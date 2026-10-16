@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.18｜Xiaomi 17T Pro 中央規格配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.19｜配件 Logo 即時預覽同步 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7661,7 +7661,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.17</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.17 二手機上市日期完整顯示 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.19</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.19 配件 Logo 即時預覽同步 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7770,7 +7770,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.18｜Xiaomi 17T Pro 中央規格配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.19｜配件 Logo 即時預覽同步 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8140,7 +8140,7 @@ function applyAccessoryLogoManifest(data,{fromCache=false}={}){
   updateHqLogoDashboard(true,Object.keys(brands).length,fromCache?'瀏覽器快取':'');
   const hint=document.getElementById('accDetectHint');
   if(hint)hint.textContent=`配件 Logo 已${fromCache?'由瀏覽器快取':'由 GitHub 外部 manifest'}載入 ${Object.keys(brands).length} 個品牌；imos / Moshi / Lapo 維持控價版型。`;
-  try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
+  try{renderAccessoryPreview(accCurrent);renderAccResult(accResults);renderAccessory()}catch(_){}
   return Object.keys(brands).length;
 }
 function loadAccessoryLogoManifestCache(){
@@ -8943,7 +8943,7 @@ async function gh32PublishLogo(){
     ACC_BRAND_MANIFEST_READY=true;
     updateHqLogoDashboard(true,Object.keys(brands).length);
     gh32RenderLogoOptions(manifest,key);
-    try{renderAccessoryPreview(accCurrent);renderAccResult(accCurrent);renderAccessory()}catch(_){}
+    try{renderAccessoryPreview(accCurrent);renderAccResult(accResults);renderAccessory()}catch(_){}
 
     if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功｜本頁已立即套用新 Logo／品牌'}
     toast(`${displayName} Logo 已發布並立即套用`);
@@ -10552,7 +10552,7 @@ v5215SelectSourceLayer=function(list,row){
 };
 </script>
 <script id="v5218-xiaomi-17t-pro-identity-hotfix">
-/* V5.2.18 | Xiaomi 17T Pro 中央規格配對 Hotfix
+/* V5.2.19 | 配件 Logo 即時預覽同步 Hotfix
    對來源「小米 17T Pro」作狹義品牌前綴正規化，中央「Mi / 17T Pro」不變。
    其餘品牌/機型、RAM/ROM/版本/來源分流、安全 Hard Gate 全部保留。 */
 (function(){
