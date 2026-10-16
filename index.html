@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.19｜配件 Logo 即時預覽同步 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.20｜MODiAN 品牌別名配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7661,7 +7661,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.19</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.19 配件 Logo 即時預覽同步 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.20</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.20 MODiAN 品牌別名配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7770,7 +7770,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.19｜配件 Logo 即時預覽同步 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.20｜MODiAN 品牌別名配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -9492,6 +9492,8 @@ function v516IsXiaomiFamily(v){
 }
 function v516AccessoryBrandKeys(brand){
   const k=brandKey(brand),arr=[k];
+  /* V5.2.20: 僅配件 Logo 查找使用 MODiAN / MODiAN 墨點 / 墨點 別名。 */
+  if(['modian','modian墨點','墨點'].includes(k))arr.push('modian','modian墨點','墨點');
   if(v516IsXiaomiFamily(brand))arr.push(...['xiaomi','redmi','miredmi','mi','小米','紅米'].map(brandKey));
   return [...new Set(arr.filter(Boolean))];
 }
