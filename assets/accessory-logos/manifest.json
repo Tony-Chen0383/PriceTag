@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610131759",
-  "updatedAt": "2026-10-13",
+  "version": "5.0-202610161253",
+  "updatedAt": "2026-10-16",
   "fallbackMode": "text",
   "brandCount": 90,
   "brands": {
@@ -574,7 +574,7 @@
     },
     "modian": {
       "displayName": "MODiAN",
-      "file": "./brands/modian.jpg",
+      "file": "./brands/modian.png",
       "aliases": [
         "MODiAN",
         "modian"
