@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610161324",
+  "version": "5.0-202610161406",
   "updatedAt": "2026-10-16",
   "fallbackMode": "text",
-  "brandCount": 90,
+  "brandCount": 91,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -800,6 +800,15 @@
       "aliases": [
         "UNIQ Coehl",
         "uniqcoehl"
+      ],
+      "scale": 1
+    },
+    "ibridge": {
+      "displayName": "iBRIDGE",
+      "file": "./brands/ibridge.png",
+      "aliases": [
+        "iBRIDGE",
+        "ibridge"
       ],
       "scale": 1
     }
