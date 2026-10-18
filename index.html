@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.22｜新機 Wi-Fi／5G 建議售價來源隔離 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.23｜Xiaomi 13 Pro 中央規格配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7678,7 +7678,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.22</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.22 新機 Wi-Fi／5G 建議售價來源隔離 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.23</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.23 Xiaomi 13 Pro 中央規格配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7787,7 +7787,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.22｜新機 Wi-Fi／5G 建議售價來源隔離 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.23｜Xiaomi 13 Pro 中央規格配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -10625,6 +10625,29 @@ function v5222NewSkuMsrp(p,fallback){
   const local=Number(p.msrp||fallback||0);
   return Number.isFinite(local)&&local>0?'$'+Math.round(local).toLocaleString('zh-TW'):'—';
 }
+</script>
+
+
+<script id="v5223-xiaomi-13pro-used-name-identity-hotfix">
+/* ===== V5.2.23｜Xiaomi 13 Pro 中央規格配對 Hotfix =====
+   Scope: used-phone Xiaomi 13 Pro display-name identity only.
+   Central: Mi / 13 Pro (12GB / 512GB). Source: 小米 13 Pro.
+   Root cause: previous leading-brand regex uses \b after Chinese 小米,
+   which is NOT a JS word boundary before whitespace; it leaves 小米 in the key.
+   Keep original same-model HARD GATE, capacity, brand, source-layer filters intact.
+   Do not affect previous 17T Pro hotfix or different 13/Redmi identities.
+*/
+(function(){
+  const previous=v5214CanonUsedModelName;
+  v5214CanonUsedModelName=function(value){
+    const raw=String(value||'').normalize('NFKC').trim();
+    const candidate=raw.replace(/\s*[（(]\s*創\s*[）)]\s*/g,' ').trim();
+    if(/^小米[\s_\-]*13[\s_\-]*pro(?=$|[\s_\-\[（(])/i.test(candidate)){
+      return previous(candidate.replace(/^小米[\s_\-]*/,'').trim());
+    }
+    return previous(value);
+  };
+})();
 </script>
 
 </body>
