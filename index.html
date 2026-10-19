@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.27｜新機／二手機日期欄位與美版共通規格補編 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.28｜新機／二手機／穿戴日期完整顯示 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7749,11 +7749,165 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v528-meta-complete-date-isolation">
+/* V5.2.28｜手機與穿戴上方日期完整顯示 Hotfix
+   獨立處理二手機四欄、新機手機五欄、穿戴四欄。
+   只修改 Meta 欄寬、字體數字度量與標籤邊界；不改尺寸、資料、條碼或印表機頁框。 */
+
+/* 共通：數值單元不可因舊版 flex/grid 自動最小寬度擠壓鄰欄。 */
+.phone-card.used-phone-card .cr-meta,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed {
+  display:grid!important;
+  align-items:center!important;
+  justify-items:stretch!important;
+  grid-auto-flow:row!important;
+  width:auto!important;
+  height:22px!important;
+  box-sizing:border-box!important;
+  column-gap:2px!important;
+}
+.phone-card.used-phone-card .cr-meta {
+  left:4px!important;
+  right:4px!important;
+  bottom:3px!important;
+  grid-template-columns:52px minmax(88px,1fr) 60px minmax(72px,1fr)!important;
+}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed {
+  left:3px!important;
+  right:3px!important;
+  bottom:3px!important;
+  grid-template-columns:48px 75px 54px minmax(61px,1fr) minmax(52px,.8fr)!important;
+}
+.phone-card.used-phone-card .cr-meta > *,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > * {
+  box-sizing:border-box!important;
+  min-width:0!important;
+  max-width:100%!important;
+  width:100%!important;
+  margin:0!important;
+  position:static!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-pill,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-pill {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:9.3px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  padding:2px 2px!important;
+  min-height:19px!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-meta-val,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-meta-val {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:Arial,"Microsoft JhengHei",sans-serif!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  letter-spacing:-.1px!important;
+  font-variant-numeric:tabular-nums!important;
+  line-height:1.1!important;
+  padding:0!important;
+}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-date-value {font-size:10.4px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-msrp-value {font-size:10.2px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-meta-specials-slot {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-meta-specials-slot .new-meta-specials {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:1px!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+/* 新機與二手機穿戴：原本日期採 ellipsis，改用足夠欄寬容納完整 YYYY-MM-DD。 */
+.wear-card .wear-meta-row {
+  display:grid!important;
+  grid-template-columns:60px minmax(91px,1.08fr) 60px minmax(70px,.95fr)!important;
+  column-gap:2px!important;
+  align-items:center!important;
+  padding:0 3px!important;
+  box-sizing:border-box!important;
+}
+.wear-card .wear-meta-row > * {
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.wear-card .wear-meta-pill {
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:9.2px!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  padding:1px 3px!important;
+  white-space:nowrap!important;
+}
+.wear-card .wear-meta-val,
+.wear-card .wear-meta-val.price {
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:Arial,"Microsoft JhengHei",sans-serif!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  font-variant-numeric:tabular-nums!important;
+  letter-spacing:-.1px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+
+/* 列印原有縮放及每頁張數完全保留，只同步顯示欄位配置。 */
+@media print {
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta {
+    left:4px!important;right:4px!important;
+    grid-template-columns:52px minmax(88px,1fr) 60px minmax(72px,1fr)!important;
+    column-gap:2px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed {
+    left:3px!important;right:3px!important;
+    grid-template-columns:48px 75px 54px minmax(61px,1fr) minmax(52px,.8fr)!important;
+    column-gap:2px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val,
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-meta-val {
+    font-size:11px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-date-value {font-size:10.4px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-msrp-value {font-size:10.2px!important;}
+  body.batch-print-mode .a4-cell .wear-card .wear-meta-row {
+    grid-template-columns:60px minmax(91px,1.08fr) 60px minmax(70px,.95fr)!important;
+    column-gap:2px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.27</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.27 日期欄位與美版共通規格補編 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.28</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.28 日期完整顯示 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7862,7 +8016,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.27｜新機／二手機日期欄位與美版共通規格補編 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.28｜新機／二手機／穿戴日期完整顯示 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
