@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.28｜新機／二手機／穿戴日期完整顯示 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.29｜國際版中央配對與標卡 Meta 優化 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7903,11 +7903,92 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v529-meta-clarity-hotfix">
+/* V5.2.29 | Increase readability without changing bar height, physical
+   card size or print scale. Only new/used phone + wear Meta row. */
+.phone-card.used-phone-card .cr-meta {
+  left:4px!important;right:4px!important;bottom:3px!important;
+  grid-template-columns:62px minmax(86px,1fr) 70px minmax(64px,.82fr)!important;
+  column-gap:2px!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-pill,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-pill {
+  background:#d72034!important;color:#fff!important;
+  border-radius:999px!important;font-size:11.4px!important;
+  font-weight:900!important;letter-spacing:0!important;
+  padding:2px 3px!important;min-height:18px!important;
+  white-space:nowrap!important;overflow:hidden!important;
+}
+.phone-card.used-phone-card .cr-meta > .cr-meta-val,
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-meta-val {
+  font-family:Arial,'Microsoft JhengHei',sans-serif!important;
+  font-size:12.4px!important;font-weight:850!important;color:#1b2637!important;
+  font-variant-numeric:tabular-nums!important;letter-spacing:0!important;
+  overflow:hidden!important;text-overflow:clip!important;
+  white-space:nowrap!important;
+}
+/* Four content columns when no special tag; the empty fifth slot no longer
+   steals room from date / MSRP. */
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:has(>.new-meta-specials-slot:empty) {
+  grid-template-columns:62px minmax(90px,1fr) 70px minmax(69px,.85fr)!important;
+  column-gap:2px!important;left:4px!important;right:4px!important;
+}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .new-meta-specials-slot:empty {display:none!important;}
+/* When box-damage / short-warranty labels are present, reserve their column. */
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:not(:has(>.new-meta-specials-slot:empty)) {
+  grid-template-columns:52px 74px 62px 62px minmax(0,1fr)!important;
+  column-gap:2px!important;left:3px!important;right:3px!important;
+}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:not(:has(>.new-meta-specials-slot:empty)) > .cr-pill {font-size:10.2px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-date-value {font-size:12.2px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-msrp-value {font-size:12.2px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:not(:has(>.new-meta-specials-slot:empty)) .new-date-value {font-size:10.5px!important;}
+.phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:not(:has(>.new-meta-specials-slot:empty)) .new-msrp-value {font-size:10.6px!important;}
+.wear-card .wear-meta-row {
+  grid-template-columns:64px minmax(96px,1.1fr) 65px minmax(79px,.9fr)!important;
+  column-gap:2px!important;padding:0 3px!important;
+}
+.wear-card .wear-meta-row > .wear-meta-pill {
+  background:#bf3662!important;color:#fff!important;
+  border-radius:999px!important;min-height:20px!important;
+  font-size:11.4px!important;font-weight:900!important;
+  padding:1px 3px!important;letter-spacing:0!important;
+}
+.wear-card .wear-meta-row > .wear-meta-val,
+.wear-card .wear-meta-row > .wear-meta-val.price {
+  font-size:13.3px!important;font-weight:850!important;
+  color:#18243a!important;letter-spacing:0!important;
+  font-variant-numeric:tabular-nums!important;
+  text-overflow:clip!important;
+}
+@media print {
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta {
+    grid-template-columns:62px minmax(86px,1fr) 70px minmax(64px,.82fr)!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:has(>.new-meta-specials-slot:empty) {
+    grid-template-columns:62px minmax(90px,1fr) 70px minmax(69px,.85fr)!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed:not(:has(>.new-meta-specials-slot:empty)) {
+    grid-template-columns:52px 74px 62px 62px minmax(0,1fr)!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.used-phone-card .cr-meta > .cr-meta-val,
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed > .cr-meta-val {
+    font-size:12.4px!important;
+  }
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-date-value {font-size:12.2px!important;}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card .cr-meta.new-phone-meta-fixed .new-msrp-value {font-size:12.2px!important;}
+  body.batch-print-mode .a4-cell .wear-card .wear-meta-row {
+    grid-template-columns:64px minmax(96px,1.1fr) 65px minmax(79px,.9fr)!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.28</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.28 日期完整顯示 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.29</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.29 國際版中央配對與標卡 Meta 優化 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8016,7 +8097,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.28｜新機／二手機／穿戴日期完整顯示 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.29｜國際版中央配對與標卡 Meta 優化 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11044,6 +11125,101 @@ function v5222NewSkuMsrp(p,fallback){
     return item?.manualProduct?.__v527ReferenceOnly
       ?markup.replace('中央未建檔｜目前為示意卡','美版尚未精確建檔｜同機型共通規格供核對')
       :markup;
+  };
+})();
+</script>
+
+
+<script id="v529-international-common-spec-and-status-hotfix">
+/* V5.2.29 | Prefer exact regional match. If and ONLY if a US regional entry
+   is absent, a model+ROM+RAM exact, unambiguous "國際版" row may supply
+   common HARDWARE. This is not a validated US SKU, and does not create one.
+   No Taiwan row, no screen-burn row, no cross-model/capacity guess, no price
+   substitution. Retains the V5.2.16 Hard Gate and all earlier hotfixes. */
+(function(){
+  const previousMatch = usedMatchProduct;
+  function keyBrand(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function sourceKey(row,parsed){return v5212UsedNameKey(row,parsed)}
+  function exactSame(p,brand,nameKey,rom,ram){
+    if(keyBrand(p?.brand)!==brand)return false;
+    if(v5212ProductNameKey(p,false)!==nameKey)return false;
+    if(nrCap(p?.rom)!==rom)return false;
+    if(ram&&nrCap(p?.ram)!==ram)return false;
+    return true;
+  }
+  function actualSpecsPresent(p){
+    return ['ram','processor','display','rearCamera','battery'].every(k=>{
+      const v=String(p?.[k]||'').trim();return !!v&&v!=='—'&&v!=='-';
+    });
+  }
+  function hardwareSignature(p){
+    return ['ram','rom','processor','display','rearCamera','battery','network']
+      .map(k=>nrKey(p[k])).join('|');
+  }
+  usedMatchProduct=function(row){
+    const exact=previousMatch(row);
+    if(exact)return exact;
+    if(!row||typeof v5216IntlRoute!=='function')return exact;
+    const route=v5216IntlRoute(row);
+    if(route.kind!=='exact'||route.label!=='美版')return exact;
+    if(v5215BurnNeed(row))return exact;
+    // If the latest international catalog is not loaded, do not claim a match.
+    if(!V51_SOURCE_STATE?.international?.ready)return exact;
+    const parsed=parseUsedMachine(row.name,row.brand);
+    const nameKey=sourceKey(row,parsed),rom=nrCap(parsed.capacity),ram=nrCap(parsed.ram);
+    const brand=keyBrand(row.brand);
+    if(!brand||!nameKey||!rom||!v5212ExplicitName(nameKey))return exact;
+    // US-specific catalog entry exists: never hide a failed exact gate.
+    if(PRODUCTS.some(p=>p?.__v51Source==='international' &&
+      p.__v51InternationalVersion==='美版' && exactSame(p,brand,nameKey,rom,ram)))return exact;
+    const matching=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(p?.__v51Source!=='international'||p.__v51InternationalVersion!=='國際版')return;
+      if(!exactSame(p,brand,nameKey,rom,ram)||!actualSpecsPresent(p))return;
+      matching.push({idx,p,parsed,score:160,matchMode:'v529-generic-international-hardware-only'});
+    });
+    if(!matching.length)return exact;
+    if(new Set(matching.map(x=>hardwareSignature(x.p))).size!==1)return exact;
+    return matching[0];
+  };
+  function commonIntlReference(item){
+    if(!item||item.manualSpec||item.__v529ExactRegionalSKU)return false;
+    const route=v5216IntlRoute({internationalVersion:item.internationalVersion||'',name:item.sourceName||''});
+    const p=productAt(item);
+    return route.kind==='exact'&&route.label==='美版' &&
+      p?.__v51Source==='international'&&p.__v51InternationalVersion==='國際版' &&
+      nrCap(p.rom)===nrCap(item.sourceCapacity) &&
+      v5212ProductNameKey(p,false)===v5212UsedNameKey({name:item.sourceName,brand:p.brand},parseUsedMachine(item.sourceName,p.brand));
+  }
+  const previousInline=usedInlineCardHtml;
+  usedInlineCardHtml=function(item,index){
+    let html=previousInline(item,index);
+    if(commonIntlReference(item)){
+      const badge='<div class="used-manual-banner v529-shared-international-banner"><span class="used-manual-banner-text">國際版共通規格已補齊｜美版專屬型號待核（非精確美版 SKU）</span></div>';
+      html=html.replace(/(<div class="item-head">[\s\S]*?<\/div>)/, '$1'+badge);
+    } else if(item?.manualSpec&&item.manualProduct?.__v527ReferenceOnly){
+      const p=item.manualProduct;
+      if(actualSpecsPresent(p)){
+        html=html.replace(/中央未建檔｜直接點卡片欄位補資料(?:｜尚缺 \d+ 項|｜資料已補齊)?/,
+          '同機型共通硬體規格已補齊｜美版來源待核');
+        html=html.replace('>表單編輯</button>','>檢視資料</button>');
+      }
+    }
+    return html;
+  };
+  const previousUI=updateUsedImportUI;
+  updateUsedImportUI=function(){
+    previousUI();
+    const refs=usedItems.filter(commonIntlReference);
+    if(!refs.length)return;
+    const sum=document.getElementById('usedImportSummary');
+    if(!sum)return;
+    const note=sum.querySelector('.summary-note');
+    if(note){
+      const manual=usedItems.filter(x=>x.manualSpec).length;
+      note.textContent=`${refs.length} 張使用同機型同容量「國際版共通硬體規格」；美版專屬型號仍待核對，但無需重複補填已具備的共通規格。` +
+        (manual?` 另有 ${manual} 張尚待補資料。`:'');
+    }
   };
 })();
 </script>
