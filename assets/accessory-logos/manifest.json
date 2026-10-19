@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610161406",
-  "updatedAt": "2026-10-16",
+  "version": "5.0-202610191753",
+  "updatedAt": "2026-10-19",
   "fallbackMode": "text",
-  "brandCount": 91,
+  "brandCount": 92,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -809,6 +809,14 @@
       "aliases": [
         "iBRIDGE",
         "ibridge"
+      ],
+      "scale": 1
+    },
+    "藍光盾": {
+      "displayName": "藍光盾",
+      "file": "./brands/藍光盾.png",
+      "aliases": [
+        "藍光盾"
       ],
       "scale": 1
     }
