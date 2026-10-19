@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.32｜中央資料同步與快取完整性 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.33｜中央資料版本日期顯示＋預約發布版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.32</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.32 中央資料同步與快取完整性 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.33</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.33 中央資料同步與快取完整性 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.32｜中央資料同步與快取完整性 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.33｜中央資料版本日期顯示＋預約發布版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8273,6 +8273,20 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
           <div class="v513-batch-item" id="v513Item-international"><div class="v513-batch-item-top"><span class="v513-batch-name">國際版</span><span class="v513-batch-state" id="v513State-international">未選</span></div><div class="v513-batch-file" id="v513File-international">—</div><div class="v513-batch-meta" id="v513Meta-international">國際版／日版等版本資料</div></div>
           <div class="v513-batch-item" id="v513Item-screenBurn"><div class="v513-batch-item-top"><span class="v513-batch-name">烙印版</span><span class="v513-batch-state" id="v513State-screenBurn">未選</span></div><div class="v513-batch-file" id="v513File-screenBurn">—</div><div class="v513-batch-meta" id="v513Meta-screenBurn">輕度／中度／重度烙印資料</div></div>
         </div>
+        <div class="v533-schedule-box" id="v533ScheduleBox">
+          <div class="v533-schedule-title">發布方式</div>
+          <div class="v533-schedule-options">
+            <label class="v533-mode"><input type="radio" name="v533PublishMode" value="immediate" checked onchange="v533PublishModeChanged()"> <span><b>立即生效</b><small>發布完成後，GitHub Pages 可讀到新版即使用</small></span></label>
+            <label class="v533-mode"><input type="radio" name="v533PublishMode" value="scheduled" onchange="v533PublishModeChanged()"> <span><b>預約生效</b><small>檔案先上傳，指定時間前門市繼續使用目前正式版</small></span></label>
+          </div>
+          <div class="v533-schedule-time-row" id="v533ScheduleTimeRow">
+            <label for="v533EffectiveAt">預約生效時間</label>
+            <input type="datetime-local" id="v533EffectiveAt" step="60" disabled onchange="v533UpdateScheduleHint()">
+            <span class="v533-timezone">依目前電腦時區</span>
+          </div>
+          <div class="v533-schedule-hint" id="v533ScheduleHint">目前為立即生效。若檔名是未來日期，可切換「預約生效」。</div>
+        </div>
+
         <div class="v513-batch-foot">
           <span class="v513-batch-progress" id="v513BatchProgress">尚未選擇批次更新檔案。</span>
           <button type="button" class="btn primary" id="v513BatchPublishBtn" onclick="v513PublishBatch()" disabled>一鍵發布已選資料</button>
@@ -8281,7 +8295,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
       <div class="v512-catalog-table" role="table" aria-label="中央商品資料來源">
         <div class="v512-table-head" role="row">
-          <span>資料來源</span><span>狀態</span><span>筆數</span><span>最後更新</span><span>操作</span>
+          <span>資料來源</span><span>狀態</span><span>筆數</span><span>資料版本</span><span>操作</span>
         </div>
 
         <div class="v512-source-row" data-v51-source="general" role="row">
@@ -10324,7 +10338,7 @@ matchProductFromStock=function(s){
 const V526_CACHE_DB='smartmobile-price-tag-cache-v1';
 const V526_CACHE_STORE='centralCatalog';
 const V526_CACHE_SCHEMA=1;
-const V526_CACHE_MAX_AGE=5*60*1000; // V5.2.32: 每台瀏覽器快取最多保留 5 分鐘；按重新檢查時立即跳過
+const V526_CACHE_MAX_AGE=5*60*1000; // V5.2.33: 每台瀏覽器快取最多保留 5 分鐘；按重新檢查時立即跳過
 let V526_CACHE_HITS=0;
 let V526_CACHE_TOTAL=0;
 let V526_LAST_LOAD_MS=0;
@@ -10359,7 +10373,7 @@ function v526StableSig(v){
   try{return JSON.stringify(v||{})}catch(_){return String(v||'')}
 }
 async function v526FetchJson(url,force=false){
-  // V5.2.32：manifest 每次以新 URL + no-store 取得，不能用上次結果假裝新版。
+  // V5.2.33：manifest 每次以新 URL + no-store 取得，不能用上次結果假裝新版。
   const u=new URL(url,location.href);u.searchParams.set('_',Date.now());
   const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error(`${u.pathname} HTTP ${r.status}`);return r.json();
 }
@@ -10460,7 +10474,7 @@ async function v526LoadCentralData(force=false,onlyTypes=null){
       return false;
     }
     return true;
-  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;console.warn('V5.2.32 central refresh failed',err);return false}
+  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;console.warn('V5.2.33 central refresh failed',err);return false}
   finally{
     V526_LAST_LOAD_MS=performance.now()-started;V51_LOADING=false;HQ_PRICE_STATE.loading=false;V526_LOADING_ALL=false;updateHqPriceStatus();v51UpdateOverview();v526UpdatePerfUi();
   }
@@ -11303,6 +11317,201 @@ function v5222NewSkuMsrp(p,fallback){
     }
   };
 })();
+</script>
+
+
+<style id="v533-scheduled-publish-style">
+/* ===== V5.2.33｜中央資料版本日期顯示＋預約發布版 ===== */
+.v533-schedule-box{margin-top:12px;padding:13px 14px;border:1px solid #dbe5f2;border-radius:14px;background:#f8fbff;display:grid;gap:10px}
+.v533-schedule-title{font-size:12px;font-weight:950;color:#203a61}
+.v533-schedule-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.v533-mode{display:flex;align-items:flex-start;gap:8px;padding:10px 11px;border:1px solid #d8e3f1;border-radius:11px;background:#fff;cursor:pointer}
+.v533-mode:has(input:checked){border-color:#6b98cf;box-shadow:0 0 0 2px rgba(48,111,180,.08);background:#f7fbff}
+.v533-mode input{margin-top:2px}.v533-mode span{display:grid;gap:2px}.v533-mode b{font-size:12px;color:#18385f}.v533-mode small{font-size:10.5px;line-height:1.35;color:#718099}
+.v533-schedule-time-row{display:grid;grid-template-columns:auto minmax(210px,320px) auto;gap:8px;align-items:center}.v533-schedule-time-row label{font-size:11.5px;font-weight:900;color:#304764}.v533-schedule-time-row input{height:36px;border:1px solid #ccd9e9;border-radius:9px;padding:0 10px;background:#fff;color:#203651;font-weight:750}.v533-schedule-time-row input:disabled{background:#edf2f8;color:#98a4b5}.v533-timezone{font-size:10.5px;color:#7a8799}
+.v533-schedule-hint{font-size:11px;line-height:1.45;color:#586b84}.v533-schedule-hint.warn{color:#a45a00;font-weight:800}.v533-schedule-hint.good{color:#147548;font-weight:800}
+.v512-source-date{display:grid;gap:2px;line-height:1.15}.v533-ver-main{font-size:12px;font-weight:950;color:#233e64}.v533-ver-sub{font-size:9.5px;font-weight:700;color:#8290a4}.v533-pending-chip{display:inline-flex;align-items:center;gap:4px;width:max-content;max-width:100%;padding:3px 6px;border-radius:999px;background:#fff4df;border:1px solid #f1c875;color:#915700;font-size:9.5px;font-weight:900;white-space:nowrap}.v533-pending-chip.live{background:#e9f8ef;border-color:#9bd9b2;color:#197548}.v533-cancel{border:0;background:transparent;color:#a85b18;font-size:9px;font-weight:900;padding:0;cursor:pointer;text-decoration:underline}
+.v533-source-extra{font-size:10px;color:#6f8098;line-height:1.4;margin-top:2px}
+@media(max-width:900px){.v533-schedule-options{grid-template-columns:1fr}.v533-schedule-time-row{grid-template-columns:1fr}.v533-schedule-time-row input{width:100%}}
+</style>
+
+<script id="v533-scheduled-publish-script">
+/* ===== V5.2.33｜中央資料版本日期顯示＋預約發布版 =====
+   1. HQ 主表以 sourceFileName 的 YYYYMMDD 作為「資料版本」；reportDate 僅作報表日期。
+   2. 預約發布不覆蓋目前正式固定檔：先寫入 scheduled/ 版本檔，再把 pending metadata 寫入 manifest。
+   3. 門市在 effectiveAt 前讀目前正式檔；到時後自動改讀 pending 檔。頁面保持開啟時亦會在生效時間自動重抓。
+   4. 立即發布會清除該來源舊的 pending，避免未來排程反向覆蓋新版。
+*/
+let V533_MANIFEST_SNAPSHOT=null;
+let V533_ACTIVATION_TIMER=0;
+
+function v533Esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function v533VersionFromFilename(name){
+  const m=String(name||'').match(/(?:^|\D)((?:19|20)\d{6})(?:\D|$)/);if(!m)return'';
+  const s=m[1],y=+s.slice(0,4),mo=+s.slice(4,6),d=+s.slice(6,8);const dt=new Date(y,mo-1,d);
+  if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==d)return'';
+  return `${s.slice(0,4)}.${s.slice(4,6)}.${s.slice(6,8)}`;
+}
+function v533CompactVersion(name){return v533VersionFromFilename(name).replace(/\./g,'')}
+function v533FormatDateTime(v){
+  if(!v)return'';const d=new Date(v);if(!Number.isFinite(d.getTime()))return String(v).replace('T',' ').slice(0,16);
+  const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function v533ParseTime(v){const n=Date.parse(v||'');return Number.isFinite(n)?n:NaN}
+function v533PendingEffective(p,now=Date.now()){const t=v533ParseTime(p?.effectiveAt);return !!(p?.file&&Number.isFinite(t)&&t<=now)}
+function v533PendingFuture(p,now=Date.now()){const t=v533ParseTime(p?.effectiveAt);return !!(p?.file&&Number.isFinite(t)&&t>now)}
+function v533ActivePrice(price){return {file:price?.currentFile||'./current/hq-suggested-price.xlsb',sourceFileName:price?.sourceFileName||'',rows:price?.lastValidatedRows||0,reportDate:price?.reportDate||'',updatedAt:price?.updatedAt||'',effectiveAt:'',fromPending:false}}
+function v533ActiveCatalog(src){const s=src||{};return {file:s.file||'',sourceFileName:s.sourceFileName||'',rows:s.rows||0,reportDate:s.reportDate||'',updatedAt:s.updatedAt||'',effectiveAt:'',fromPending:false}}
+function v533ResolveMeta(active,pending,now=Date.now()){return v533PendingEffective(pending,now)?{...pending,fromPending:true}:{...active,fromPending:false}}
+function v533ManifestMeta(price,catalog){
+  const cs=catalog?.sources||{},now=Date.now();
+  const active={general:v533ActivePrice(price),special:v533ActiveCatalog(cs.special),international:v533ActiveCatalog(cs.international),screenBurn:v533ActiveCatalog(cs.screenBurn)};
+  const pending={general:price?.pending||null,special:cs.special?.pending||null,international:cs.international?.pending||null,screenBurn:cs.screenBurn?.pending||null};
+  const resolved={};for(const t of V513_TYPES)resolved[t]=v533ResolveMeta(active[t],pending[t],now);
+  return {active,pending,resolved};
+}
+function v533ResolveFileUrl(type,file){
+  const manifestBase=new URL(type==='general'?HQ_PRICE_MANIFEST_URL:V51_CATALOG_MANIFEST_URL,location.href);
+  return new URL(file||(type==='general'?'./current/hq-suggested-price.xlsb':V51_CATALOG_PATHS[type]),manifestBase);
+}
+function v533ApplyStateMeta(type,resolved,pending,parsedReportDate=''){
+  const st=V51_SOURCE_STATE[type]||(V51_SOURCE_STATE[type]={});
+  st.sourceFileName=resolved?.sourceFileName||'';st.dataVersion=v533VersionFromFilename(st.sourceFileName)||'';
+  st.reportDate=parsedReportDate||resolved?.reportDate||st.date||'';st.updatedAt=resolved?.updatedAt||'';st.effectiveAt=resolved?.effectiveAt||'';st.file=resolved?.file||'';st.fromPending=!!resolved?.fromPending;
+  st.pending=pending||null;st.pendingVersion=v533VersionFromFilename(pending?.sourceFileName||'')||'';st.pendingEffectiveAt=pending?.effectiveAt||'';
+}
+function v533ArmActivationRefresh(meta){
+  if(V533_ACTIVATION_TIMER){clearTimeout(V533_ACTIVATION_TIMER);V533_ACTIVATION_TIMER=0}
+  const future=Object.values(meta?.pending||{}).map(p=>v533ParseTime(p?.effectiveAt)).filter(t=>Number.isFinite(t)&&t>Date.now()).sort((a,b)=>a-b);
+  if(!future.length)return;const wait=Math.max(500,Math.min(2147483000,future[0]-Date.now()+1200));
+  V533_ACTIVATION_TIMER=setTimeout(async()=>{V533_ACTIVATION_TIMER=0;try{await v526LoadCentralData(true)}catch(_){}},wait);
+}
+
+/* 取代 V5.2.33 前的 manifest 解析：同時解析 active / pending，簽章以實際生效來源為準。 */
+v526ManifestState=async function(force=false){
+  const [price,catalog]=await Promise.all([v526FetchJson(HQ_PRICE_MANIFEST_URL,force),v526FetchJson(V51_CATALOG_MANIFEST_URL,force)]);
+  if(!price?.currentFile||!catalog?.sources)throw new Error('中央資料 Manifest 欄位缺失，請檢查 GitHub Pages 部署');
+  for(const type of ['special','international','screenBurn'])if(!catalog.sources[type]?.file)throw new Error(`${V51_SOURCE_LABELS[type]} Manifest 路徑缺失，已停止快取判定`);
+  const mm=v533ManifestMeta(price,catalog);V533_MANIFEST_SNAPSHOT={price,catalog,...mm};v533ArmActivationRefresh(mm);
+  const sigs={};for(const type of V513_TYPES){const r=mm.resolved[type]||{};sigs[type]=v526StableSig({file:r.file||'',sourceFileName:r.sourceFileName||'',updatedAt:r.updatedAt||'',effectiveAt:r.effectiveAt||'',rows:r.rows||r.lastValidatedRows||'',reportDate:r.reportDate||'',fromPending:!!r.fromPending})}
+  return {price,catalog,...mm,sigs};
+};
+
+v526LoadOne=async function(type,sig,force=false,fileOverride=''){
+  V526_CACHE_TOTAL++;
+  if(!force){const cached=await v526CacheGet(type),age=Date.now()-Number(cached?.cachedAt||0),fresh=!!(cached?.products?.length&&sig&&cached.sig===sig&&age>=0&&age<V526_CACHE_MAX_AGE);if(fresh){V526_CACHE_HITS++;return {products:cached.products,reportDate:cached.reportDate||'',sheet:cached.sheet||'系統版',fromCache:true}}}
+  const url=v533ResolveFileUrl(type,fileOverride);if(sig)url.searchParams.set('v',v532FullSigHash(sig));if(force)url.searchParams.set('_',Date.now());
+  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`${V51_SOURCE_LABELS[type]} HTTP ${r.status}`);const buf=await r.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),parsed=v51ParseWorkbook(wb,type);await v526CachePut(type,{sig,products:parsed.products,reportDate:parsed.reportDate||'',sheet:parsed.sheet||'系統版'});return {...parsed,fromCache:false};
+};
+
+v526LoadCentralData=async function(force=false,onlyTypes=null){
+  if(V526_LOADING_ALL&&!force)return false;V526_LOADING_ALL=true;V51_LOADING=true;HQ_PRICE_STATE.loading=true;HQ_PRICE_STATE.error='';V526_LAST_LOAD_ERROR='';V526_CACHE_HITS=0;V526_CACHE_TOTAL=0;
+  const started=performance.now();updateHqPriceStatus();v51UpdateOverview();
+  try{
+    if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const mf=await v526ManifestState(force),types=Array.isArray(onlyTypes)&&onlyTypes.length?onlyTypes:V513_TYPES;
+    const results=await Promise.all(types.map(async type=>{try{return [type,await v526LoadOne(type,mf.sigs[type],force,mf.resolved[type]?.file||''),null]}catch(err){return [type,null,err]}}));
+    for(const [type,res,err] of results){
+      if(res){V51_SOURCE_PRODUCTS[type]=res.products;Object.assign(V51_SOURCE_STATE[type],{ready:true,rows:res.products.length,error:'',date:res.reportDate||''});v533ApplyStateMeta(type,mf.resolved[type],mf.pending[type],res.reportDate||'')}
+      else if(err){if(!V51_SOURCE_PRODUCTS[type]?.length){V51_SOURCE_PRODUCTS[type]=[];Object.assign(V51_SOURCE_STATE[type],{ready:false,rows:0,error:String(err?.message||err),date:''})}else{V51_SOURCE_STATE[type].error=String(err?.message||err)};v533ApplyStateMeta(type,mf.resolved[type],mf.pending[type],V51_SOURCE_STATE[type].date||'')}
+      v51UpdateSourceUi(type);
+    }
+    v51RebuildProductLayer();v526ApplyGeneralPriceMaps(mf.price);const gr=mf.resolved.general||{};Object.assign(HQ_PRICE_STATE,{file:gr.file||HQ_PRICE_STATE.file,updatedAt:gr.updatedAt||HQ_PRICE_STATE.updatedAt,reportDate:V51_SOURCE_STATE.general.reportDate||HQ_PRICE_STATE.reportDate});updateHqPriceStatus();
+    try{if(usedItems.length){renderUsedItems();renderUsedPreview()}if(newItems.length){renderNewItems();renderNewPreview()}}catch(_){}
+    const failures=results.filter(x=>!!x[2]);if(failures.length){HQ_PRICE_STATE.error=failures.map(x=>`${V51_SOURCE_LABELS[x[0]]}：${String(x[2]?.message||x[2])}`).join('｜');V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;const note=document.getElementById('v51CatalogLoadNote');if(note)note.textContent='部分中央資料更新失敗，保留舊資料，請勿認定已同步：'+HQ_PRICE_STATE.error;return false}
+    return true;
+  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;console.warn('V5.2.33 central refresh failed',err);return false}
+  finally{V526_LAST_LOAD_MS=performance.now()-started;V51_LOADING=false;HQ_PRICE_STATE.loading=false;V526_LOADING_ALL=false;updateHqPriceStatus();v51UpdateOverview();v526UpdatePerfUi()}
+};
+loadHqSuggestedPrices=async function(force=false){return v526LoadCentralData(force,['general'])};
+v51LoadCatalogs=async function(force=false){return v526LoadCentralData(force,V513_TYPES)};
+
+/* 版本日期顯示：sourceFileName 日期是資料版本；Excel 內 reportDate 分開列示。 */
+function v533RenderVersionCell(type){
+  const st=V51_SOURCE_STATE[type]||{},el=document.getElementById('v512Date-'+type);if(!el)return;
+  const activeVer=st.dataVersion||v533VersionFromFilename(st.sourceFileName)||st.reportDate||st.date||'—',report=st.reportDate||st.date||'',pending=st.pending;
+  let h=`<span class="v533-ver-main">${v533Esc(activeVer)}</span>`;
+  if(report&&report!==activeVer)h+=`<span class="v533-ver-sub">報表 ${v533Esc(report)}</span>`;
+  if(st.updatedAt)h+=`<span class="v533-ver-sub">更新 ${v533Esc(String(st.updatedAt).replace('T',' ').slice(0,16))}</span>`;
+  if(v533PendingFuture(pending)){
+    const pv=v533VersionFromFilename(pending.sourceFileName)||'待發布';h+=`<span class="v533-pending-chip">待生效 ${v533Esc(pv)}・${v533Esc(v533FormatDateTime(pending.effectiveAt))}</span><button class="v533-cancel" type="button" onclick="v533CancelPending('${type}',event)">取消預約</button>`;
+  }else if(st.fromPending){h+=`<span class="v533-pending-chip live">✓ 已依預約生效</span>`}
+  el.innerHTML=h;
+  const meta=document.getElementById('v51Meta-'+type);if(meta&&st.ready&&!st.error){const base=type==='general'?'主規格／建議售價／上市日期':type==='special'?'特殊 SKU Alias':type==='international'?'國際版／日版版本層':'輕度／中度／重度烙印層';meta.textContent=`${base}｜資料版本 ${activeVer}${report&&report!==activeVer?'｜報表 '+report:''}${st.updatedAt?'｜GitHub '+String(st.updatedAt).replace('T',' ').slice(0,16):''}`+(v533PendingFuture(pending)?`｜待生效 ${v533VersionFromFilename(pending.sourceFileName)||pending.sourceFileName} ${v533FormatDateTime(pending.effectiveAt)}`:'')}
+}
+function v533SyncTableHeader(){const head=document.querySelector('.v512-table-head');if(head?.children?.[3])head.children[3].textContent='資料版本'}
+const _v533PriorSourceUi=v51UpdateSourceUi;
+v51UpdateSourceUi=function(type){_v533PriorSourceUi(type);v533RenderVersionCell(type)};
+const _v533PriorOverview=v51UpdateOverview;
+v51UpdateOverview=function(){_v533PriorOverview();v533SyncTableHeader();for(const t of V513_TYPES)v533RenderVersionCell(t)};
+const _v533PriorPriceStatus=updateHqPriceStatus;
+updateHqPriceStatus=function(){
+  _v533PriorPriceStatus();if(!HQ_PRICE_STATE.ready)return;const st=V51_SOURCE_STATE.general||{},ver=st.dataVersion||v533VersionFromFilename(st.sourceFileName)||HQ_PRICE_STATE.reportDate||'';
+  const dt=document.getElementById('hqPriceDetail'),topDate=document.getElementById('topHqPriceDate');if(topDate&&ver)topDate.textContent=ver;if(dt&&ver)dt.textContent=`資料版本 ${ver}${st.reportDate&&st.reportDate!==ver?'｜報表 '+st.reportDate:''}｜${HQ_PRICE_STATE.sheet||'系統版'}｜${HQ_PRICE_STATE.rows.toLocaleString()} 筆｜目前規格匹配 ${HQ_PRICE_STATE.matchedProducts.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}`;
+};
+
+/* ===== 預約發布 UI ===== */
+function v533Mode(){return document.querySelector('input[name="v533PublishMode"]:checked')?.value||'immediate'}
+function v533LocalValueFromDate(d){const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`}
+function v533FilenameDate(fileName){const v=v533VersionFromFilename(fileName);if(!v)return null;const [y,m,d]=v.split('.').map(Number);return new Date(y,m-1,d,0,0,0,0)}
+function v533SuggestedFutureDate(){const ds=V513_TYPES.map(t=>V513_BATCH[t]?.file?.name).filter(Boolean).map(v533FilenameDate).filter(Boolean);if(!ds.length)return null;const unique=[...new Set(ds.map(d=>d.getTime()))];return unique.length===1&&unique[0]>Date.now()?new Date(unique[0]):null}
+function v533PublishModeChanged(){const inp=document.getElementById('v533EffectiveAt'),scheduled=v533Mode()==='scheduled';if(inp)inp.disabled=!scheduled;if(scheduled&&inp&&!inp.value){const d=v533SuggestedFutureDate()||new Date(Date.now()+24*60*60*1000);d.setSeconds(0,0);inp.value=v533LocalValueFromDate(d)}v533UpdateScheduleHint();v533UpdateBatchButton()}
+function v533UpdateScheduleHint(){
+  const hint=document.getElementById('v533ScheduleHint'),inp=document.getElementById('v533EffectiveAt');if(!hint)return;hint.className='v533-schedule-hint';
+  const suggested=v533SuggestedFutureDate();if(v533Mode()==='immediate'){
+    if(suggested){hint.classList.add('warn');hint.textContent=`偵測到檔名版本 ${v533VersionFromFilename(V513_TYPES.map(t=>V513_BATCH[t]?.file?.name).find(Boolean)||'')} 為未來日期；立即發布會提前生效。若要到指定時間才換價，請選「預約生效」。`}
+    else hint.textContent='目前為立即生效。GitHub Pages 部署完成後門市會使用新版。';return;
+  }
+  const t=inp?.value?new Date(inp.value):null;if(!t||!Number.isFinite(t.getTime())){hint.classList.add('warn');hint.textContent='請設定預約生效時間。';return}if(t.getTime()<=Date.now()){hint.classList.add('warn');hint.textContent='預約時間必須晚於現在。';return}
+  hint.classList.add('good');hint.textContent=`將先上傳至 GitHub，門市於 ${v533FormatDateTime(t.toISOString())} 前仍使用目前正式版；到時自動切換。`;
+}
+function v533UpdateBatchButton(){const btn=document.getElementById('v513BatchPublishBtn');if(!btn)return;const chosen=V513_TYPES.filter(t=>V513_BATCH[t]).length;if(!chosen)return;btn.textContent=v533Mode()==='scheduled'?`預約發布 ${chosen} 份資料`:`一鍵發布 ${chosen} 份資料`}
+function v533SuggestScheduleFromBatch(){const inp=document.getElementById('v533EffectiveAt'),d=v533SuggestedFutureDate();if(d&&inp&&!inp.value)inp.value=v533LocalValueFromDate(d);v533UpdateScheduleHint();v533UpdateBatchButton()}
+const _v533PriorRenderBatch=v513RenderBatch;
+v513RenderBatch=function(){_v533PriorRenderBatch();v533UpdateBatchButton();v533UpdateScheduleHint()};
+const _v533PriorBatchFilesSelected=v513BatchFilesSelected;
+v513BatchFilesSelected=async function(fileList){await _v533PriorBatchFilesSelected(fileList);v533SuggestScheduleFromBatch()};
+function v533GetPlan(){if(v533Mode()!=='scheduled')return {ok:true,mode:'immediate',effectiveAt:''};const inp=document.getElementById('v533EffectiveAt'),d=inp?.value?new Date(inp.value):null;if(!d||!Number.isFinite(d.getTime()))return {ok:false,error:'請先設定預約生效時間'};if(d.getTime()<=Date.now()+30000)return {ok:false,error:'預約生效時間必須至少晚於現在 30 秒'};return {ok:true,mode:'scheduled',effectiveAt:d.toISOString()}}
+function v533PathStamp(effectiveAt){const d=new Date(effectiveAt||Date.now()),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}-${String(Date.now()).slice(-6)}`}
+function v533ScheduledRepoPath(type,effectiveAt){const s=v533PathStamp(effectiveAt);return type==='general'?`data/hq/suggested-prices/scheduled/general-${s}.xlsb`:`data/hq/catalog/scheduled/${type}-${s}.xlsb`}
+function v533ManifestRelative(type,repoPath){if(type==='general')return './scheduled/'+repoPath.split('/').pop();return './scheduled/'+repoPath.split('/').pop()}
+function v533PendingMeta(p,repoPath,effectiveAt,now){return {file:v533ManifestRelative(p.type,repoPath),sourceFileName:p.file.name,rows:p.products?.length||0,reportDate:p.reportDate||'',updatedAt:now,effectiveAt,scheduledAt:now,...(p.type==='general'?{lastValidatedRows:p.priceRows||0,lastMatchedProducts:p.matched||0}: {})}}
+function v533PromoteEffectivePricePending(m){
+  if(v533PendingEffective(m?.pending)){const p=m.pending;m.currentFile=p.file||m.currentFile;m.sourceFileName=p.sourceFileName||m.sourceFileName;m.reportDate=p.reportDate||'';m.lastValidatedRows=p.lastValidatedRows??p.rows??m.lastValidatedRows;m.lastMatchedProducts=p.lastMatchedProducts??m.lastMatchedProducts;m.updatedAt=p.updatedAt||m.updatedAt;delete m.pending}return m
+}
+function v533PromoteEffectiveCatalogPending(src){
+  const s=src||{};if(v533PendingEffective(s.pending)){const p=s.pending;s.file=p.file||s.file;s.sourceFileName=p.sourceFileName||s.sourceFileName;s.rows=p.rows??s.rows;s.reportDate=p.reportDate||'';s.updatedAt=p.updatedAt||s.updatedAt;delete s.pending}return s
+}
+
+v513PublishBatch=async function(){
+  const selected=V513_TYPES.map(t=>V513_BATCH[t]).filter(Boolean),bad=selected.filter(p=>!p.ok);if(!selected.length)return toast('請先選擇要更新的 XLSB');if(bad.length)return toast('仍有檔案未通過預檢');const plan=v533GetPlan();if(!plan.ok)return toast(plan.error);if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+  const btn=document.getElementById('v513BatchPublishBtn'),prog=document.getElementById('v513BatchProgress');try{
+    if(btn)btn.disabled=true;if(prog){prog.className='v513-batch-progress';prog.textContent=plan.mode==='scheduled'?'正在建立預約發布 Commit…':'正在建立立即發布 Commit…'}
+    const entries=[],now=gh32NowIso(),repoPaths={};
+    for(const p of selected){const path=plan.mode==='scheduled'?v533ScheduledRepoPath(p.type,plan.effectiveAt):(p.type==='general'?GH32_PRICE_PATH:V51_CATALOG_REPO_PATHS[p.type]);repoPaths[p.type]=path;entries.push({path,b64:gh32BytesToBase64(new Uint8Array(p.buffer))})}
+    if(V513_BATCH.general?.ok){let m={};try{m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH)}catch(_){}m=v533PromoteEffectivePricePending(m);m.currentFile=m.currentFile||'./current/hq-suggested-price.xlsb';if(plan.mode==='scheduled'){m.pending=v533PendingMeta(V513_BATCH.general,repoPaths.general,plan.effectiveAt,now)}else{m.currentFile='./current/hq-suggested-price.xlsb';m.updatedAt=now;m.sourceFileName=V513_BATCH.general.file.name;m.reportDate=V513_BATCH.general.reportDate||'';m.lastValidatedRows=V513_BATCH.general.priceRows;m.lastMatchedProducts=V513_BATCH.general.matched;m.publishedVia='V5.2.33 immediate batch publish';delete m.pending}entries.push({path:GH32_PRICE_MANIFEST_PATH,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
+    const aux=selected.filter(p=>p.type!=='general');if(aux.length){let m={version:'5.2.33',updatedAt:now,sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}m.version='5.2.33';m.sources=m.sources||{};if(plan.mode==='immediate')m.updatedAt=now;for(const p of aux){const cur=v533PromoteEffectiveCatalogPending(m.sources[p.type]||{file:'./'+V51_CATALOG_REPO_PATHS[p.type].split('/').pop()});if(plan.mode==='scheduled'){cur.pending=v533PendingMeta(p,repoPaths[p.type],plan.effectiveAt,now);m.sources[p.type]=cur}else{m.sources[p.type]={file:'./'+V51_CATALOG_REPO_PATHS[p.type].split('/').pop(),sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:now};} }entries.push({path:V51_CATALOG_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
+    const labels=selected.map(p=>V51_SOURCE_LABELS[p.type]).join(' / '),commit=await v513SingleCommit(entries,`${plan.mode==='scheduled'?'V5.2.33 scheduled':'V5.2.33 immediate'} central catalog｜${labels}｜${now}`);
+    if(plan.mode==='scheduled'){
+      for(const p of selected){const pm=v533PendingMeta(p,repoPaths[p.type],plan.effectiveAt,now),st=V51_SOURCE_STATE[p.type]||{};st.pending=pm;st.pendingVersion=v533VersionFromFilename(pm.sourceFileName);st.pendingEffectiveAt=pm.effectiveAt;v51UpdateSourceUi(p.type)}
+      if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ 預約發布完成｜${selected.length} 份｜生效 ${v533FormatDateTime(plan.effectiveAt)}｜Commit ${String(commit.sha||'').slice(0,7)}`};toast(`已預約 ${selected.length} 份中央資料，指定時間前不影響目前正式版`)
+    }else{
+      for(const p of selected){V51_SOURCE_PRODUCTS[p.type]=p.products;Object.assign(V51_SOURCE_STATE[p.type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||'',sourceFileName:p.file.name,dataVersion:v533VersionFromFilename(p.file.name),reportDate:p.reportDate||'',updatedAt:now,pending:null,pendingVersion:'',pendingEffectiveAt:'',fromPending:false});v51UpdateSourceUi(p.type);if(p.type==='general'){HQ_PRICE_BY_NAME_ROM=p.byName;HQ_PRICE_BY_MODEL_ROM=p.byModel;HQ_DATE_BY_NAME_ROM=p.dateByName;HQ_DATE_BY_MODEL_ROM=p.dateByModel;HQ_FOREIGN_MSRP_BY_NAME_ROM=p.foreignByName||new Set();HQ_FOREIGN_MSRP_BY_MODEL_ROM=p.foreignByModel||new Set();Object.assign(HQ_PRICE_STATE,{ready:true,loading:false,error:'',rows:p.priceRows,matchedProducts:p.matched,reportDate:p.reportDate||'',file:'./current/hq-suggested-price.xlsb',sheet:p.sheet||'系統版',updatedAt:now});updateHqPriceStatus()}}
+      v51RebuildProductLayer();v51UpdateOverview();if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ GitHub 立即發布成功｜${selected.length} 份｜Commit ${String(commit.sha||'').slice(0,7)}`};toast(`中央資料已立即發布 ${selected.length} 份`)
+    }
+  }catch(err){if(prog){prog.className='v513-batch-progress bad';prog.textContent='發布失敗：'+String(err?.message||err)}toast('中央資料發布失敗')}finally{v513RenderBatch()}
+};
+
+async function v533CancelPending(type,event){
+  try{event?.preventDefault?.();event?.stopPropagation?.();if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');if(!confirm(`確定取消「${V51_SOURCE_LABELS[type]}」的預約生效？目前正式資料不會被修改。`))return;
+    if(type==='general'){const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);if(!m.pending)return toast('目前沒有預約資料');delete m.pending;m.updatedAt=m.updatedAt||gh32NowIso();await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`V5.2.33 cancel general schedule ${gh32NowIso()}`)}
+    else{const m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO);if(!m.sources?.[type]?.pending)return toast('目前沒有預約資料');delete m.sources[type].pending;await gh32PutJson(V51_CATALOG_MANIFEST_REPO,m,`V5.2.33 cancel ${type} schedule ${gh32NowIso()}`)}
+    if(V51_SOURCE_STATE[type]){V51_SOURCE_STATE[type].pending=null;V51_SOURCE_STATE[type].pendingVersion='';V51_SOURCE_STATE[type].pendingEffectiveAt=''}v51UpdateSourceUi(type);toast('已取消預約；目前正式資料維持不變');setTimeout(()=>v51LoadCatalogs(true),2500)
+  }catch(err){toast('取消預約失敗：'+String(err?.message||err))}
+}
+
+/* 單檔舊按鈕維持立即發布，避免隱性套用排程。 */
+for(const id of ['v51Publish-special','v51Publish-international','v51Publish-screenBurn','gh32PricePublishBtn']){const b=document.getElementById(id);if(b)b.title='此單檔按鈕為立即生效；需要預約請使用上方「中央資料四檔批次更新」'}
+v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V513_TYPES)v533RenderVersionCell(t)},0);
 </script>
 
 </body>
