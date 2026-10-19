@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.31｜手機長品名完整顯示 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.32｜中央資料同步與快取完整性 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.31</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.31 手機長品名完整顯示 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.32</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.32 中央資料同步與快取完整性 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.31｜手機長品名完整顯示 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.32｜中央資料同步與快取完整性 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -9284,7 +9284,7 @@ async function gh32PriceFileSelected(file){
   GH32_PRICE_PENDING=null;const name=document.getElementById('gh32PriceFileName'),pv=document.getElementById('gh32PricePreview'),pr=document.getElementById('gh32PriceProgress');if(pr)pr.textContent='';if(name)name.textContent=file?file.name:'尚未選檔';if(!file){if(pv){pv.className='hq32-preview';pv.innerHTML='尚未選擇檔案。'}gh32UpdatePublishButtons();return}try{if(!/\.xlsb$/i.test(file.name))throw new Error('請選擇公司制式 .xlsb 檔案');if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),d=hqDetectPriceSheet(wb,'系統版');if(!d)throw new Error('找不到「廠牌／標價卡用名稱／Rom／建議售價」表頭');const byName=new Map(),byModel=new Map();let count=0;for(let r=d.headerRow+1;r<d.rows.length;r++){const row=d.rows[r]||[],brand=nrText(row[d.map.brand]),nm=nrText(row[d.map.name]),model=d.map.model==null?'':nrText(row[d.map.model]),rom=nrText(row[d.map.rom]),msrp=num(row[d.map.msrp]);if(!brand||!nm||!rom||!(msrp>0))continue;byName.set(hqPriceMapKey(brand,nm,rom),msrp);if(model)byModel.set(hqPriceMapKey(brand,model,rom),msrp);count++}if(!count)throw new Error('價格檔沒有有效建議售價');let matched=0;for(const p of PRODUCTS){const k1=hqPriceMapKey(p.brand,p.name,p.rom),k2=hqPriceMapKey(p.brand,p.model,p.rom);if(byName.has(k1)||byModel.has(k2))matched++}GH32_PRICE_PENDING={ok:true,file,buffer:buf,sheet:d.sheet,rows:count,matched,reportDate:hqPriceReportDate(d.rows,d.headerRow)};if(pv){pv.className='hq32-preview ok';pv.innerHTML=`✓ 預檢 PASS｜工作表：<b>${h(d.sheet)}</b>｜有效建議售價：<b>${count.toLocaleString()}</b> 筆｜商品匹配：<b>${matched.toLocaleString()} / ${PRODUCTS.length.toLocaleString()}</b>｜出廠年份欄：<b>${d.map.manufactureDate!=null?'已辨識':'未辨識'}</b>${GH32_PRICE_PENDING.reportDate?'｜報表日期：'+h(GH32_PRICE_PENDING.reportDate):''}`}}catch(err){GH32_PRICE_PENDING={ok:false,error:String(err.message||err)};if(pv){pv.className='hq32-preview bad';pv.textContent='預檢失敗：'+GH32_PRICE_PENDING.error}}gh32UpdatePublishButtons()
 }
 async function gh32PublishPrice(){
-  if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V5.1 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e)}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub 發布成功'}toast('價格檔已發布到 GitHub');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
+  if(!GH32_PRICE_PENDING?.ok)return toast('請先選擇並通過預檢的價格檔');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('gh32PricePublishBtn'),p=document.getElementById('gh32PriceProgress');try{if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='正在上傳價格檔…'}const b64=gh32BytesToBase64(new Uint8Array(GH32_PRICE_PENDING.buffer));await gh32PutBase64(GH32_PRICE_PATH,b64,`HQ suggested price update ${gh32NowIso()}`);if(p)p.textContent='價格檔完成，更新 manifest…';try{const m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);m.updatedAt=gh32NowIso();m.sourceFileName=GH32_PRICE_PENDING.file.name;m.lastValidatedRows=GH32_PRICE_PENDING.rows;m.lastMatchedProducts=GH32_PRICE_PENDING.matched;m.publishedVia='V5.1 web direct publish';await gh32PutJson(GH32_PRICE_MANIFEST_PATH,m,`HQ price manifest update ${gh32NowIso()}`)}catch(e){console.warn('price manifest update failed',e);throw new Error('價格檔已寫入 Repository，但 Manifest 更新失敗；發布尚未完成：'+String(e.message||e))}if(p){p.className='hq32-progress hq32-success';p.textContent='✓ GitHub Repository 寫入成功｜待 Pages 部署驗證'}toast('已寫入 GitHub，請待 Pages 部署並重新檢查全部資料');setTimeout(()=>loadHqSuggestedPrices(true),3500)}catch(err){if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}toast('價格檔發布失敗')}finally{gh32UpdatePublishButtons()}
 }
 function gh32RenderLogoOptions(manifest,selectedKey=''){
   const sel=document.getElementById('gh32LogoBrandSelect');if(!sel)return;
@@ -9557,12 +9557,12 @@ function v51RebuildProductLayer(){
 }
 function v51UpdateSourceUi(type){
   const st=V51_SOURCE_STATE[type]||{},card=document.querySelector(`[data-v51-source="${type}"]`),status=document.getElementById('v51Status-'+type),meta=document.getElementById('v51Meta-'+type);
-  if(card){card.classList.remove('ok','warn','bad');card.classList.add(st.ready?'ok':(st.error?'bad':'warn'))}
-  if(status)status.textContent=st.ready?`${Number(st.rows||0).toLocaleString()} 筆`:(st.error?'載入失敗':'未上傳');
-  if(meta){const base=type==='general'?'主規格／建議售價／出廠年份':type==='special'?'特殊 SKU Alias':type==='international'?'國際版／日版版本層':'輕度／中度／重度烙印層';meta.textContent=st.ready?`${base}｜${st.date||'最新版'}｜${Number(st.rows||0).toLocaleString()} 筆`:(st.error?`無法讀取：${st.error}`:base)}
+  if(card){card.classList.remove('ok','warn','bad');card.classList.add(st.error?'bad':(st.ready?'ok':'warn'))}
+  if(status)status.textContent=st.error?(st.ready?'更新失敗・沿用舊資料':'載入失敗'):(st.ready?`${Number(st.rows||0).toLocaleString()} 筆`:'未上傳');
+  if(meta){const base=type==='general'?'主規格／建議售價／出廠年份':type==='special'?'特殊 SKU Alias':type==='international'?'國際版／日版版本層':'輕度／中度／重度烙印層';meta.textContent=st.error?`更新異常：${st.error}${st.ready?'｜已保留舊資料':''}`:(st.ready?`${base}｜${st.date||'最新版'}｜${Number(st.rows||0).toLocaleString()} 筆`:base)}
 }
 function v51UpdateOverview(){
-  const states=Object.values(V51_SOURCE_STATE),ready=states.filter(x=>x.ready).length,total=states.reduce((s,x)=>s+(x.rows||0),0),card=document.getElementById('v51CatalogOverviewCard'),val=document.getElementById('v51CatalogOverviewStatus'),meta=document.getElementById('v51CatalogOverviewMeta'),badge=document.getElementById('v51CatalogBadge'),note=document.getElementById('v51CatalogLoadNote');
+  const states=Object.values(V51_SOURCE_STATE),ready=states.filter(x=>x.ready&&!x.error).length,total=states.reduce((s,x)=>s+(x.rows||0),0),card=document.getElementById('v51CatalogOverviewCard'),val=document.getElementById('v51CatalogOverviewStatus'),meta=document.getElementById('v51CatalogOverviewMeta'),badge=document.getElementById('v51CatalogBadge'),note=document.getElementById('v51CatalogLoadNote');
   if(card){card.classList.toggle('warn',ready<4);card.classList.toggle('muted',V51_LOADING)}if(val)val.textContent=V51_LOADING?'載入中…':`${ready}/4 已連線`;if(meta)meta.textContent=`中央來源 ${total.toLocaleString()} 筆｜商品索引 ${PRODUCTS.length.toLocaleString()} 筆`;if(badge){badge.textContent=ready===4?'4/4 已連線':`${ready}/4`;badge.classList.toggle('pending',ready<4)}if(note)note.textContent=V51_LOADING?'正在建立中央商品索引…':`已建立 ${PRODUCTS.length.toLocaleString()} 筆中央商品索引；${ready===4?'4 來源完整':'部分來源 fallback'}`;
 }
 async function v51FetchSource(type){
@@ -9576,7 +9576,7 @@ function v51SourceFileSelected(type,file){
   (async()=>{try{if(!/\.xlsb$/i.test(file.name))throw new Error('請選公司制式 .xlsb');const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),parsed=v51ParseWorkbook(wb,type);if(!parsed.products.length)throw new Error('系統版沒有有效商品');V51_PENDING[type]={ok:true,file,buffer:buf,products:parsed.products,reportDate:parsed.reportDate||''};if(st)st.textContent='預檢 PASS';if(meta)meta.textContent=`${file.name}｜${parsed.products.length.toLocaleString()} 筆${parsed.reportDate?'｜'+parsed.reportDate:''}`;if(btn)btn.disabled=false}catch(err){V51_PENDING[type]={ok:false,error:String(err?.message||err)};if(st)st.textContent='預檢失敗';if(meta)meta.textContent=V51_PENDING[type].error}})()
 }
 async function v51PublishSource(type){
-  const p=V51_PENDING[type];if(!p?.ok)return toast('請先選擇並通過預檢的 XLSB');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('v51Publish-'+type);try{if(btn){btn.disabled=true;btn.textContent='發布中…'}const path=V51_CATALOG_REPO_PATHS[type],b64=gh32BytesToBase64(new Uint8Array(p.buffer));await gh32PutBase64(path,b64,`V5.1 ${V51_SOURCE_LABELS[type]} catalog update ${gh32NowIso()}`);let m={version:'5.1',updatedAt:gh32NowIso(),sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}m.version='5.1';m.updatedAt=gh32NowIso();m.sources=m.sources||{};m.sources[type]={file:'./'+path.split('/').slice(-1)[0],sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:gh32NowIso()};try{await gh32PutJson(V51_CATALOG_MANIFEST_REPO,m,`V5.1 catalog manifest update ${gh32NowIso()}`)}catch(e){console.warn('V5.1 manifest update failed',e)}V51_SOURCE_PRODUCTS[type]=p.products;Object.assign(V51_SOURCE_STATE[type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||''});v51UpdateSourceUi(type);v51RebuildProductLayer();v51UpdateOverview();toast(`${V51_SOURCE_LABELS[type]} 已發布到 GitHub`)}catch(err){toast('發布失敗：'+String(err?.message||err));const st=document.getElementById('v51Status-'+type);if(st)st.textContent='發布失敗'}finally{if(btn){btn.disabled=!V51_PENDING[type]?.ok;btn.textContent=type==='special'?'發布特殊規格':type==='international'?'發布國際版':'發布烙印版'}}
+  const p=V51_PENDING[type];if(!p?.ok)return toast('請先選擇並通過預檢的 XLSB');if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');const btn=document.getElementById('v51Publish-'+type);try{if(btn){btn.disabled=true;btn.textContent='發布中…'}const path=V51_CATALOG_REPO_PATHS[type],b64=gh32BytesToBase64(new Uint8Array(p.buffer));await gh32PutBase64(path,b64,`V5.1 ${V51_SOURCE_LABELS[type]} catalog update ${gh32NowIso()}`);let m={version:'5.1',updatedAt:gh32NowIso(),sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}m.version='5.1';m.updatedAt=gh32NowIso();m.sources=m.sources||{};m.sources[type]={file:'./'+path.split('/').slice(-1)[0],sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:gh32NowIso()};try{await gh32PutJson(V51_CATALOG_MANIFEST_REPO,m,`V5.1 catalog manifest update ${gh32NowIso()}`)}catch(e){console.warn('V5.1 manifest update failed',e);throw new Error('XLSB 已寫入 Repository，但中央 Manifest 更新失敗；發布尚未完成：'+String(e.message||e))}V51_SOURCE_PRODUCTS[type]=p.products;Object.assign(V51_SOURCE_STATE[type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||''});v51UpdateSourceUi(type);v51RebuildProductLayer();v51UpdateOverview();toast(`${V51_SOURCE_LABELS[type]} 已寫入 GitHub，需待 Pages 部署後按重新檢查全部資料`)}catch(err){toast('發布失敗：'+String(err?.message||err));const st=document.getElementById('v51Status-'+type);if(st)st.textContent='發布失敗'}finally{if(btn){btn.disabled=!V51_PENDING[type]?.ok;btn.textContent=type==='special'?'發布特殊規格':type==='international'?'發布國際版':'發布烙印版'}}
 }
 
 /* 新機商品選單不顯示二手機專用的國際／烙印／特殊變體。 */
@@ -10324,11 +10324,12 @@ matchProductFromStock=function(s){
 const V526_CACHE_DB='smartmobile-price-tag-cache-v1';
 const V526_CACHE_STORE='centralCatalog';
 const V526_CACHE_SCHEMA=1;
-const V526_CACHE_MAX_AGE=14*24*60*60*1000;
+const V526_CACHE_MAX_AGE=5*60*1000; // V5.2.32: 每台瀏覽器快取最多保留 5 分鐘；按重新檢查時立即跳過
 let V526_CACHE_HITS=0;
 let V526_CACHE_TOTAL=0;
 let V526_LAST_LOAD_MS=0;
 let V526_LOADING_ALL=false;
+let V526_LAST_LOAD_ERROR='';
 
 function v526OpenDb(){
   return new Promise((resolve,reject)=>{
@@ -10358,16 +10359,21 @@ function v526StableSig(v){
   try{return JSON.stringify(v||{})}catch(_){return String(v||'')}
 }
 async function v526FetchJson(url,force=false){
-  const u=new URL(url,location.href);if(force)u.searchParams.set('_',Date.now());
-  const r=await fetch(u,{cache:force?'reload':'no-cache'});if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();
+  // V5.2.32：manifest 每次以新 URL + no-store 取得，不能用上次結果假裝新版。
+  const u=new URL(url,location.href);u.searchParams.set('_',Date.now());
+  const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error(`${u.pathname} HTTP ${r.status}`);return r.json();
 }
 async function v526ManifestState(force=false){
-  let price=null,catalog=null;
-  await Promise.all([
-    v526FetchJson(HQ_PRICE_MANIFEST_URL,force).then(x=>price=x).catch(()=>{}),
-    v526FetchJson(V51_CATALOG_MANIFEST_URL,force).then(x=>catalog=x).catch(()=>{})
+  // 無法取得任一份 manifest 時明確報錯：禁止用空簽章命中舊 IndexedDB。
+  const [price,catalog]=await Promise.all([
+    v526FetchJson(HQ_PRICE_MANIFEST_URL,force),
+    v526FetchJson(V51_CATALOG_MANIFEST_URL,force)
   ]);
-  const cs=catalog?.sources||{};
+  if(!price?.currentFile||!catalog?.sources)throw new Error('中央資料 Manifest 欄位缺失，請檢查 GitHub Pages 部署');
+  const cs=catalog.sources;
+  for(const type of ['special','international','screenBurn']){
+    if(!cs[type]?.file)throw new Error(`${V51_SOURCE_LABELS[type]} Manifest 路徑缺失，已停止快取判定`);
+  }
   return {
     price,catalog,
     sigs:{
@@ -10378,17 +10384,25 @@ async function v526ManifestState(force=false){
     }
   };
 }
+function v532FullSigHash(sig){
+  // 以全部簽章計算 FNV-1a，取代原本 encodeURIComponent(sig).slice(0,80)。
+  // 尤其要保證 updatedAt 位於後段時，仍會改變 XLSB 網址。
+  let h=2166136261;const t=String(sig||'');
+  for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)>>>0}
+  return h.toString(16).padStart(8,'0')+'-'+t.length;
+}
 async function v526LoadOne(type,sig,force=false){
   V526_CACHE_TOTAL++;
   if(!force){
     const cached=await v526CacheGet(type);
-    const fresh=cached && cached.products?.length && ((sig&&cached.sig===sig)||(!sig&&Date.now()-Number(cached.cachedAt||0)<V526_CACHE_MAX_AGE));
+    const age=Date.now()-Number(cached?.cachedAt||0);
+    const fresh=!!(cached?.products?.length && sig && cached.sig===sig && age>=0 && age<V526_CACHE_MAX_AGE);
     if(fresh){V526_CACHE_HITS++;return {products:cached.products,reportDate:cached.reportDate||'',sheet:cached.sheet||'系統版',fromCache:true}}
   }
   const url=new URL(V51_CATALOG_PATHS[type],location.href);
-  if(sig)url.searchParams.set('v',encodeURIComponent(sig).slice(0,80));
+  if(sig)url.searchParams.set('v',v532FullSigHash(sig));
   if(force)url.searchParams.set('_',Date.now());
-  const r=await fetch(url,{cache:force?'reload':'default'});if(!r.ok)throw new Error(`${V51_SOURCE_LABELS[type]} HTTP ${r.status}`);
+  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`${V51_SOURCE_LABELS[type]} HTTP ${r.status}`);
   const buf=await r.arrayBuffer(),wb=XLSX.read(buf,{type:'array'}),parsed=v51ParseWorkbook(wb,type);
   await v526CachePut(type,{sig,products:parsed.products,reportDate:parsed.reportDate||'',sheet:parsed.sheet||'系統版'});
   return {...parsed,fromCache:false};
@@ -10415,12 +10429,14 @@ function v526UpdatePerfUi(){
   if(note&&!V51_LOADING){
     const hit=`快取 ${V526_CACHE_HITS}/${V526_CACHE_TOTAL}`;
     const ms=V526_LAST_LOAD_MS?`｜${(V526_LAST_LOAD_MS/1000).toFixed(2)} 秒`:'';
-    note.textContent=`已建立 ${PRODUCTS.length.toLocaleString()} 筆中央商品索引｜${hit}${ms}`;
+    const failed=Object.entries(V51_SOURCE_STATE).filter(([type,st])=>!!st.error).map(([type,st])=>`${V51_SOURCE_LABELS[type]}更新失敗`);
+    if(V526_LAST_LOAD_ERROR){note.textContent='中央資料同步失敗：'+V526_LAST_LOAD_ERROR+'｜未清除既有快取';return}
+    note.textContent=failed.length?`中央資料更新異常：${failed.join('、')}｜保留先前資料，請檢查發布及網路`:`已建立 ${PRODUCTS.length.toLocaleString()} 筆中央商品索引｜${hit}${ms}｜快取上限 5 分鐘`;
   }
 }
 async function v526LoadCentralData(force=false,onlyTypes=null){
   if(V526_LOADING_ALL&&!force)return false;
-  V526_LOADING_ALL=true;V51_LOADING=true;HQ_PRICE_STATE.loading=true;HQ_PRICE_STATE.error='';V526_CACHE_HITS=0;V526_CACHE_TOTAL=0;
+  V526_LOADING_ALL=true;V51_LOADING=true;HQ_PRICE_STATE.loading=true;HQ_PRICE_STATE.error='';V526_LAST_LOAD_ERROR='';V526_CACHE_HITS=0;V526_CACHE_TOTAL=0;
   const started=performance.now();updateHqPriceStatus();v51UpdateOverview();
   try{
     if(typeof XLSX==='undefined')throw new Error('Excel 解析模組尚未載入');
@@ -10436,8 +10452,15 @@ async function v526LoadCentralData(force=false,onlyTypes=null){
     v51RebuildProductLayer();
     v526ApplyGeneralPriceMaps(mf.price);
     try{if(usedItems.length){renderUsedItems();renderUsedPreview()}if(newItems.length){renderNewItems();renderNewPreview()}}catch(_){ }
+    const failures=results.filter(x=>!!x[2]);
+    if(failures.length){
+      HQ_PRICE_STATE.error=failures.map(x=>`${V51_SOURCE_LABELS[x[0]]}：${String(x[2]?.message||x[2])}`).join('｜');V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;
+      const note=document.getElementById('v51CatalogLoadNote');
+      if(note)note.textContent='部分中央資料更新失敗，保留舊資料，請勿認定已同步：'+HQ_PRICE_STATE.error;
+      return false;
+    }
     return true;
-  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);console.warn('V5.2.6 central cache load failed',err);return false}
+  }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;console.warn('V5.2.32 central refresh failed',err);return false}
   finally{
     V526_LAST_LOAD_MS=performance.now()-started;V51_LOADING=false;HQ_PRICE_STATE.loading=false;V526_LOADING_ALL=false;updateHqPriceStatus();v51UpdateOverview();v526UpdatePerfUi();
   }
