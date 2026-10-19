@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610191753",
+  "version": "5.0-202610191754",
   "updatedAt": "2026-10-19",
   "fallbackMode": "text",
-  "brandCount": 92,
+  "brandCount": 93,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -817,6 +817,14 @@
       "file": "./brands/藍光盾.png",
       "aliases": [
         "藍光盾"
+      ],
+      "scale": 1
+    },
+    "moto": {
+      "displayName": "moto",
+      "file": "./brands/moto.png",
+      "aliases": [
+        "moto"
       ],
       "scale": 1
     }
