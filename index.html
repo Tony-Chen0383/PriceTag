@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.29｜國際版中央配對與標卡 Meta 優化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.30｜國際版提示卡與預覽排版 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -7984,11 +7984,44 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 }
 </style>
 
+
+<style id="v530-international-used-preview-layout-hotfix">
+/* V5.2.30 | The V5.2.29 international shared-spec notice is a sibling of the
+   label card. fast-used-preview uses a row flexbox by default; with a notice
+   present that row places them side-by-side and clips the label. Scope this
+   ONLY to item cards containing this notice; do not alter card sizes, the
+   item content, the international lookup, A4 print or other item types. */
+@media screen {
+  .batch-preview-grid.fast-used-preview .batch-preview-item:has(> .v529-shared-international-banner) {
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    min-width:0!important;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item > .v529-shared-international-banner {
+    display:block!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    flex:0 0 auto!important;
+    align-self:stretch!important;
+    overflow-wrap:anywhere!important;
+    margin:0 0 8px!important;
+  }
+  .batch-preview-grid.fast-used-preview .batch-preview-item:has(> .v529-shared-international-banner) > .phone-card,
+  .batch-preview-grid.fast-used-preview .batch-preview-item:has(> .v529-shared-international-banner) > .wear-card {
+    flex:0 0 auto!important;
+    align-self:center!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.29</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.29 國際版中央配對與標卡 Meta 優化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.30</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.30 國際版提示卡與預覽排版 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8097,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.29｜國際版中央配對與標卡 Meta 優化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.30｜國際版提示卡與預覽排版 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
