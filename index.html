@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.33｜中央資料版本日期顯示＋預約發布版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.34｜中央規格配對補強＋提示簡化 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.33</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.33 中央資料同步與快取完整性 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.34</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.34 中央規格配對補強＋提示簡化 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.33｜中央資料版本日期顯示＋預約發布版</div>
+      <div class="hq31-hero-title">V5.2.34｜中央規格配對補強＋提示簡化 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11512,6 +11512,166 @@ async function v533CancelPending(type,event){
 /* 單檔舊按鈕維持立即發布，避免隱性套用排程。 */
 for(const id of ['v51Publish-special','v51Publish-international','v51Publish-screenBurn','gh32PricePublishBtn']){const b=document.getElementById(id);if(b)b.title='此單檔按鈕為立即生效；需要預約請使用上方「中央資料四檔批次更新」'}
 v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V513_TYPES)v533RenderVersionCell(t)},0);
+</script>
+
+
+<style id="v534-used-central-match-note-style">
+/* V5.2.34｜中央規格配對補強＋提示簡化
+   來源待核資訊只屬於網頁作業提示，不進入標價卡本體與列印頁。 */
+.v534-central-note{
+  margin:8px 4px 0;padding:7px 10px;border:1px solid #d8e4f2;border-radius:9px;
+  background:#f8fbff;color:#536780;font-size:11px;font-weight:800;line-height:1.35;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap
+}
+.v534-central-note strong{color:#294b72;font-weight:950}
+.v534-central-note .v534-warn{color:#9a6500;font-weight:950}
+.batch-preview-grid.fast-used-preview .batch-preview-item.v534-has-note{flex-direction:column!important;align-items:center!important;justify-content:flex-start!important}
+.batch-preview-grid.fast-used-preview .batch-preview-item.v534-has-note>.v534-central-note{width:min(100%,390px);box-sizing:border-box;align-self:center}
+@media print{.v534-central-note{display:none!important}}
+</style>
+
+<script id="v534-used-central-match-and-note-hotfix">
+/* ===== V5.2.34｜中央規格配對補強＋提示簡化 Hotfix =====
+   A. Reno6 Z：只允許 OPPO / Reno 6Z / 同容量(及有值時同 RAM/網路)的單一規格候選。
+      不放寬其他 OPPO 型號，避免 Reno6 / Reno6 Pro / Reno7Z 等跨機型誤配。
+   B. iPad 9 國際版：國際版精確 SKU 不存在時，可使用一般版「同世代＋同容量＋同網路」
+      的共通硬體規格。仍保留原國際版本文字，不把一般版宣稱成精確國際 SKU。
+   C. 移除標卡上方大型黃色來源說明；改成預覽卡下方小型來源狀態，列印不顯示。
+*/
+(function(){
+  const previousMatch=usedMatchProduct;
+  const previousInline=usedInlineCardHtml;
+  const previousPreview=renderUsedPreview;
+
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function srcType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):(p?.__v51Source||'general')}
+  function good(v){const s=String(v??'').trim();return !!s&&s!=='—'&&s!=='-'}
+  function completePhone(p){return ['ram','rom','processor','display','rearCamera','battery'].every(k=>good(p?.[k]))}
+  function specSig(p){return ['model','ram','rom','network','processor','display','rearCamera','battery'].map(k=>nrKey(p?.[k])).join('|')}
+  function aliasKey(v){
+    const raw=String(v||'').normalize('NFKC').toLowerCase();
+    const base=typeof v5214CanonUsedModelName==='function'?v5214CanonUsedModelName(raw):nrKey(raw);
+    /* OPPO Reno6 Z / Reno 6Z / Reno6Z / Reno 6 Z 5G -> reno6z，只限完整型號。 */
+    const compact=raw.replace(/oppo/gi,'').replace(/[（(][^）)]*[）)]/g,' ').replace(/[^a-z0-9]+/g,'');
+    if(/^reno6z(?:5g)?$/.test(compact))return 'reno6z';
+    /* iPad 9(2021)10.2\"_WIFI / iPad 9 / iPad9 -> ipad9。 */
+    if(base==='ipad9'||/^ipad9(?:2021)?(?:102)?(?:wifi)?$/.test(compact))return 'ipad9';
+    return base;
+  }
+  function preferUnique(list){
+    if(!list.length)return null;
+    const sigs=new Map();
+    for(const x of list){const k=specSig(x.p);if(!sigs.has(k))sigs.set(k,[]);sigs.get(k).push(x)}
+    if(sigs.size!==1)return null;
+    const arr=[...sigs.values()][0];
+    return typeof v5212PreferComplete==='function'?v5212PreferComplete(arr):arr[0];
+  }
+  function exactCapRamNet(p,parsed,{requireWifi=false}={}){
+    const rom=nrCap(parsed?.capacity),ram=nrCap(parsed?.ram),net=parsed?.version?nrVersion(parsed.version):'';
+    if(rom&&nrCap(p?.rom)!==rom)return false;
+    if(ram&&nrCap(p?.ram)!==ram)return false;
+    if(requireWifi&&nrVersion(p?.network)!=='wifi')return false;
+    if(net&&nrVersion(p?.network)!==net)return false;
+    return true;
+  }
+
+  usedMatchProduct=function(row){
+    const exact=previousMatch(row);
+    if(exact)return exact;
+    if(!row)return exact;
+    const parsed=parseUsedMachine(row.name,row.brand),b=brandKey(row.brand),k=aliasKey(parsed.cleanName||row.name);
+    const route=typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none',label:''};
+
+    /* 1) OPPO Reno6 Z 台版／未標區域：狹義同機型 fallback。 */
+    if(b==='oppo'&&k==='reno6z'&&(route.kind==='none'||route.kind==='taiwan')){
+      const list=[];
+      PRODUCTS.forEach((p,idx)=>{
+        if(brandKey(p?.brand)!=='oppo'||aliasKey(p?.name)!=='reno6z')return;
+        if(!['general'].includes(srcType(p)))return;
+        if(!exactCapRamNet(p,parsed))return;
+        if(nrVersion(p?.network)!=='5g'||!completePhone(p))return;
+        list.push({idx,p,parsed,score:220,matchMode:'v534-reno6z-exact-family'});
+      });
+      const chosen=preferUnique(list);if(chosen)return chosen;
+    }
+
+    /* 2) iPad 9 國際版：國際資料沒有精確列時，僅借同世代/容量/Wi-Fi 共通硬體。 */
+    if(b==='apple'&&k==='ipad9'&&route.kind==='international-generic'){
+      const rom=nrCap(parsed?.capacity);
+      if(!rom)return exact;
+      /* 若中央國際版已有同機型同容量資料，前面的正式 Gate 應處理；此處不越權覆蓋。 */
+      const hasIntl=PRODUCTS.some(p=>srcType(p)==='international'&&brandKey(p?.brand)==='apple'&&aliasKey(p?.name)==='ipad9'&&nrCap(p?.rom)===rom);
+      if(!hasIntl){
+        const list=[];
+        PRODUCTS.forEach((p,idx)=>{
+          if(srcType(p)!=='general'||brandKey(p?.brand)!=='apple'||aliasKey(p?.name)!=='ipad9')return;
+          if(!exactCapRamNet(p,parsed,{requireWifi:true})||!completePhone(p))return;
+          list.push({idx,p,parsed,score:210,matchMode:'v534-ipad9-common-hardware'});
+        });
+        const chosen=preferUnique(list);if(chosen)return chosen;
+      }
+    }
+    return exact;
+  };
+
+  function commonIntlUS(item){
+    if(!item||item.manualSpec||typeof v5216IntlRoute!=='function')return false;
+    const route=v5216IntlRoute({internationalVersion:item.internationalVersion||'',name:item.sourceName||''});
+    const p=productAt(item);if(route.kind!=='exact'||route.label!=='美版'||!p)return false;
+    return srcType(p)==='international'&&String(p.__v51InternationalVersion||'').trim()==='國際版'&&
+      (!item.sourceCapacity||nrCap(p.rom)===nrCap(item.sourceCapacity));
+  }
+  function ipad9Common(item){
+    if(!item||item.manualSpec||typeof v5216IntlRoute!=='function')return false;
+    const p=productAt(item);if(!p)return false;
+    const route=v5216IntlRoute({internationalVersion:item.internationalVersion||'',name:item.sourceName||''});
+    return route.kind==='international-generic'&&brandKey(p.brand)==='apple'&&aliasKey(item.sourceName)==='ipad9'&&aliasKey(p.name)==='ipad9'&&srcType(p)==='general';
+  }
+  function resolvedManualRef(item){return !!(item?.manualSpec&&item.manualProduct?.__v527ReferenceOnly&&completePhone(item.manualProduct))}
+  function noteHtml(item){
+    if(commonIntlUS(item))return '<div class="v534-central-note"><strong>資料來源：國際版共通規格</strong><span class="v534-warn">美版型號待核</span></div>';
+    if(ipad9Common(item))return '<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span>國際版型號待核</span></div>';
+    if(resolvedManualRef(item))return '<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span class="v534-warn">美版型號待核</span></div>';
+    return '';
+  }
+  function removeBigStatus(html,item){
+    let out=String(html||'');
+    /* V5.2.29 美版共通規格大 Banner。 */
+    out=out.replace(/<div class="used-manual-banner v529-shared-international-banner">[\s\S]*?<\/div>/g,'');
+    if(resolvedManualRef(item)){
+      /* 已有完整共通硬體的 reference-only 卡，不再以「中央未建檔」大警告呈現。 */
+      out=out.replace(/<div class="used-manual-banner">[\s\S]*?<\/div>/g,'');
+      out=out.replace(/\sused-manual-item(?=["\s])/g,'');
+    }
+    return out;
+  }
+  usedInlineCardHtml=function(item,index){
+    let html=removeBigStatus(previousInline(item,index),item),note=noteHtml(item);
+    if(note){html=html.replace('batch-preview-item','batch-preview-item v534-has-note');html=html.replace(/<\/div>\s*$/,note+'</div>');}
+    return html;
+  };
+
+  renderUsedPreview=function(){
+    previousPreview();
+    const item=usedItems?.[activeUsedIndex];if(!item)return;
+    const tag=document.getElementById('usedPreviewTag'),title=document.getElementById('usedPreviewTitle');
+    if(commonIntlUS(item)||ipad9Common(item)||resolvedManualRef(item)){
+      if(tag)tag.textContent='中央共通規格';
+      if(title)title.textContent=`商品 ${activeUsedIndex+1}｜${item.tpl==='穿戴'?'二手機穿戴卡':'二手機手機卡'}`;
+    }
+  };
+
+  /* Summary 只提醒真正仍缺資料的卡；已補齊共通規格不再算成門市待補。 */
+  const previousUI=updateUsedImportUI;
+  updateUsedImportUI=function(){
+    previousUI();
+    const sum=document.getElementById('usedImportSummary');if(!sum)return;
+    const resolved=usedItems.filter(x=>commonIntlUS(x)||ipad9Common(x)||resolvedManualRef(x)).length;
+    const unresolved=usedItems.filter(x=>x.manualSpec&&!(resolvedManualRef(x))&&usedManualMissingCount(x)>0).length;
+    const note=sum.querySelector('.summary-note');
+    if(note&&resolved){note.textContent=`✓ ${resolved} 張已以同機型共通規格自動補齊；${unresolved?`另有 ${unresolved} 張仍缺中央規格，可補資料。`:'本次不需門市補資料。'}`}
+  };
+})();
 </script>
 
 </body>
