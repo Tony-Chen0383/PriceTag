@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.34｜中央規格配對補強＋提示簡化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.35｜iPad 9 美版共通規格配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.34</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.34 中央規格配對補強＋提示簡化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.35</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.35 iPad 9 美版共通規格配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.34｜中央規格配對補強＋提示簡化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.35｜iPad 9 美版共通規格配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11596,11 +11596,11 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     }
 
     /* 2) iPad 9 國際版：國際資料沒有精確列時，僅借同世代/容量/Wi-Fi 共通硬體。 */
-    if(b==='apple'&&k==='ipad9'&&route.kind==='international-generic'){
+    if(b==='apple'&&k==='ipad9'&&(route.kind==='international-generic'||(route.kind==='exact'&&route.label==='美版'))){
       const rom=nrCap(parsed?.capacity);
       if(!rom)return exact;
       /* 若中央國際版已有同機型同容量資料，前面的正式 Gate 應處理；此處不越權覆蓋。 */
-      const hasIntl=PRODUCTS.some(p=>srcType(p)==='international'&&brandKey(p?.brand)==='apple'&&aliasKey(p?.name)==='ipad9'&&nrCap(p?.rom)===rom);
+      const hasIntl=PRODUCTS.some(p=>srcType(p)==='international'&&brandKey(p?.brand)==='apple'&&aliasKey(p?.name)==='ipad9'&&nrCap(p?.rom)===rom&&(route.kind!=='exact'||String(p?.__v51InternationalVersion||'').trim()===route.label));
       if(!hasIntl){
         const list=[];
         PRODUCTS.forEach((p,idx)=>{
@@ -11625,12 +11625,12 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     if(!item||item.manualSpec||typeof v5216IntlRoute!=='function')return false;
     const p=productAt(item);if(!p)return false;
     const route=v5216IntlRoute({internationalVersion:item.internationalVersion||'',name:item.sourceName||''});
-    return route.kind==='international-generic'&&brandKey(p.brand)==='apple'&&aliasKey(item.sourceName)==='ipad9'&&aliasKey(p.name)==='ipad9'&&srcType(p)==='general';
+    return (route.kind==='international-generic'||(route.kind==='exact'&&route.label==='美版'))&&brandKey(p.brand)==='apple'&&aliasKey(item.sourceName)==='ipad9'&&aliasKey(p.name)==='ipad9'&&srcType(p)==='general';
   }
   function resolvedManualRef(item){return !!(item?.manualSpec&&item.manualProduct?.__v527ReferenceOnly&&completePhone(item.manualProduct))}
   function noteHtml(item){
     if(commonIntlUS(item))return '<div class="v534-central-note"><strong>資料來源：國際版共通規格</strong><span class="v534-warn">美版型號待核</span></div>';
-    if(ipad9Common(item))return '<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span>國際版型號待核</span></div>';
+    if(ipad9Common(item)){const r=typeof v5216IntlRoute==='function'?v5216IntlRoute({internationalVersion:item.internationalVersion||'',name:item.sourceName||''}):{kind:'international-generic',label:'國際版'};const label=r.kind==='exact'&&r.label?r.label:'國際版';return `<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span>${label}型號待核</span></div>`;}
     if(resolvedManualRef(item))return '<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span class="v534-warn">美版型號待核</span></div>';
     return '';
   }
@@ -11673,6 +11673,8 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   };
 })();
 </script>
+
+<!-- V5.2.35: iPad 9 美版若無精確 SKU，允許同世代＋同容量＋同 Wi-Fi 一般版共通硬體；不跨世代/容量/網路。 -->
 
 </body>
 </html>
