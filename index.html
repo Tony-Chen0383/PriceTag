@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+c<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.37｜Watch Ultra 47mm LTE 強制精確配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.38｜Watch Ultra 47mm LTE 產卡後精確校正 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.37</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.37 Watch Ultra 47mm LTE 強制精確配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.38</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.38 Watch Ultra 47mm LTE 產卡後精確校正 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.37｜Watch Ultra 47mm LTE 強制精確配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.38｜Watch Ultra 47mm LTE 產卡後精確校正 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11679,7 +11679,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 
 <script id="v536-eu-iphone-watch-ultra-match-hotfix">
-/* ===== V5.2.37｜Watch Ultra 47mm LTE 強制精確配對 Hotfix =====
+/* ===== V5.2.38｜Watch Ultra 47mm LTE 產卡後精確校正 Hotfix =====
    A. Apple 歐版：只在精確歐版 SKU 不存在時，允許同一 iPhone 機型＋同容量（RAM 有值時亦同 RAM）
       的一般版共通硬體補齊；只借 RAM/CPU/螢幕/相機/電池，不借型號、SIM、地區或售價。
    B. Samsung Galaxy Watch Ultra 47mm LTE：來源名稱可對應一般版 Watch Ultra 2024 LTE。
@@ -11806,7 +11806,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 
 <script id="v537-watch-ultra-preemptive-hard-gate-hotfix">
-/* ===== V5.2.37｜Watch Ultra 47mm LTE 強制精確配對 Hotfix =====
+/* ===== V5.2.38｜Watch Ultra 47mm LTE 產卡後精確校正 Hotfix =====
    問題：V5.2.36 的 fallback 位於 prevMatch(row) 之後；舊流程若先回傳不完整候選，新規則不會執行。
    修正：只針對 Samsung Galaxy Watch Ultra 47mm LTE（且來源未標 2025）先做狹義 Hard Gate，
          強制命中一般版 2024 Watch Ultra / SM-L705F / LTE；其餘商品完全交回既有流程。
@@ -11858,5 +11858,74 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 <!-- V5.2.37: Samsung Galaxy Watch Ultra 47mm LTE 先行狹義 Hard Gate，避免舊候選搶先命中。 -->
 
+
+<script id="v538-watch-ultra-post-build-final-gate">
+/* ===== V5.2.38｜Watch Ultra 47mm LTE 產卡後精確校正 Hotfix =====
+   V5.2.37 的 usedMatchProduct() 在獨立測試可命中，但真實匯入仍可能被其他舊流程保留為 manualSpec。
+   因此在 buildUsedCardsFromRows() 完成後加入最後一道「產卡結果校正 Gate」。
+   僅處理：Samsung + Galaxy Watch Ultra + 47mm + LTE + 非 2025，且結果仍為 manualSpec 的項目。
+   只允許唯一的 2024 Watch Ultra / SM-L705F / 32GB / LTE 中央規格；若候選不唯一則完全不動。
+*/
+(function(){
+  const prevBuildUsedCardsFromRows=buildUsedCardsFromRows;
+  function bkey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function isTargetItem(r){
+    if(!r||!r.manualSpec)return false;
+    const p=productAt(r)||r.manualProduct||{};
+    const brand=bkey(p.brand||'');
+    const raw=String(r.sourceName||p.name||'').normalize('NFKC');
+    if(brand!=='samsung'&&!/(?:samsung|三星)/i.test(raw))return false;
+    if(!/watch\s*ultra/i.test(raw))return false;
+    if(!/47\s*mm/i.test(raw))return false;
+    if(!/(?:\blte\b|_lte\b)/i.test(raw))return false;
+    if(/(?:^|[^0-9])2025(?:[^0-9]|$)/.test(raw))return false;
+    return true;
+  }
+  function candidates(){
+    const arr=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(bkey(p?.brand)!=='samsung')return;
+      if(p?.__v51Source&&p.__v51Source!=='general')return;
+      if(nrKey(p?.category)!==nrKey('手錶'))return;
+      const nk=nrKey(p?.name);
+      if(nk!==nrKey('Watch Ultra'))return;
+      if(String(p?.year||'').trim()!=='2024')return;
+      if(nrKey(p?.model)!==nrKey('SM-L705F'))return;
+      if(nrCap(p?.rom)!==nrCap('32GB'))return;
+      if(nrVersion(p?.network)!=='4g')return;
+      if(nrKey(p?.battery)!==nrKey('590mAh'))return;
+      if(!(Number(p?.msrp)>0))return;
+      arr.push({idx,p});
+    });
+    /* 允許中央資料有內容完全相同的重複列，但不可有不同規格。 */
+    const sig=x=>['name','year','model','ram','rom','network','battery','msrp','processor','display']
+      .map(k=>nrKey(x.p?.[k])).join('|');
+    return arr.length&&new Set(arr.map(sig)).size===1?arr:[];
+  }
+  buildUsedCardsFromRows=function(rows){
+    prevBuildUsedCardsFromRows(rows);
+    const cands=candidates();
+    if(!cands.length)return;
+    let changed=0;
+    for(const r of usedItems||[]){
+      if(!isTargetItem(r))continue;
+      const hit=cands[0];
+      r.productIndex=hit.idx;
+      delete r.manualProduct;
+      r.manualSpec=false;
+      r.__v538FinalResolved=true;
+      r.__v538MatchMode='watch-ultra-47-lte-2024-post-build-final-gate';
+      r.tpl='穿戴';
+      changed++;
+    }
+    if(changed){
+      if(usedImportState)usedImportState.manualCount=(usedItems||[]).filter(x=>x.manualSpec).length;
+      updateUsedImportUI();
+      renderUsedItems();
+    }
+  };
+})();
+</script>
+<!-- V5.2.38: Watch Ultra 47mm LTE 若真實匯入仍被舊流程留為補編，產卡後最後校正到唯一 2024 SM-L705F / LTE / 32GB。 -->
 </body>
 </html>
