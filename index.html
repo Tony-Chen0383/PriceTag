@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.35｜iPad 9 美版共通規格配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.36｜歐版 iPhone＋Watch Ultra 配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.35</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.35 iPad 9 美版共通規格配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.36</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.36 歐版 iPhone＋Watch Ultra 配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.35｜iPad 9 美版共通規格配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.36｜歐版 iPhone＋Watch Ultra 配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11675,6 +11675,134 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 
 <!-- V5.2.35: iPad 9 美版若無精確 SKU，允許同世代＋同容量＋同 Wi-Fi 一般版共通硬體；不跨世代/容量/網路。 -->
+
+
+
+<script id="v536-eu-iphone-watch-ultra-match-hotfix">
+/* ===== V5.2.36｜歐版 iPhone＋Watch Ultra 配對 Hotfix =====
+   A. Apple 歐版：只在精確歐版 SKU 不存在時，允許同一 iPhone 機型＋同容量（RAM 有值時亦同 RAM）
+      的一般版共通硬體補齊；只借 RAM/CPU/螢幕/相機/電池，不借型號、SIM、地區或售價。
+   B. Samsung Galaxy Watch Ultra 47mm LTE：來源名稱可對應一般版 Watch Ultra 2024 LTE。
+      明確排除 Watch Ultra(2025)，不跨世代、不跨 LTE/GPS/BT。
+   C. 共通硬體補齊後不再顯示大型「中央未建檔」Banner；僅保留非列印的小型來源提示。
+*/
+(function(){
+  const prevRoute=v5216IntlRoute;
+  v5216IntlRoute=function(row){
+    const raw=String(row?.internationalVersion||'').trim();
+    const name=String(row?.name||'');
+    const inferred=(name.match(/[（(]\s*(歐洲版|歐版|EU版|Europe版)\s*[）)]/i)||[])[1]||'';
+    const s=raw||inferred;
+    if(/(?:歐洲|歐版|^eu(?:版)?$|europe)/i.test(s))return {kind:'exact',label:'歐版'};
+    return prevRoute(row);
+  };
+
+  const prevBuildManual=buildManualUsedProduct;
+  function bkey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function canon(v){return typeof v5214CanonUsedModelName==='function'?v5214CanonUsedModelName(v):nrKey(v)}
+  function filled(v){const s=String(v??'').trim();return !!s&&s!=='—'&&s!=='-'}
+  function phoneHardwareComplete(p){return ['ram','processor','display','rearCamera','battery'].every(k=>filled(p?.[k]))}
+  function sameHwSig(p){return ['ram','processor','display','rearCamera','battery'].map(k=>nrKey(p?.[k])).join('|')}
+
+  buildManualUsedProduct=function(row,parsed){
+    const manual=prevBuildManual(row,parsed);
+    if(!row||!parsed||bkey(row.brand)!=='apple')return manual;
+    const route=v5216IntlRoute(row);
+    if(route.kind!=='exact'||route.label!=='歐版')return manual;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return manual;
+    const nameKey=canon(parsed.cleanName||row.name),rom=nrCap(parsed.capacity),ram=nrCap(parsed.ram);
+    if(!/^iphone/.test(nameKey)||!rom)return manual;
+    /* 若中央已有精確歐版，應交由正式 international Gate，不使用共通 fallback。 */
+    const hasExact=PRODUCTS.some(p=>p?.__v51Source==='international'&&String(p.__v51InternationalVersion||'').trim()==='歐版'&&
+      bkey(p.brand)==='apple'&&canon(p.name)===nameKey&&nrCap(p.rom)===rom&&(!ram||nrCap(p.ram)===ram));
+    if(hasExact)return manual;
+    const refs=PRODUCTS.filter(p=>(!p.__v51Source||p.__v51Source==='general')&&!p.__v51UsedOnly&&
+      bkey(p.brand)==='apple'&&canon(p.name)===nameKey&&nrCap(p.rom)===rom&&(!ram||nrCap(p.ram)===ram)&&phoneHardwareComplete(p));
+    if(!refs.length||new Set(refs.map(sameHwSig)).size!==1)return manual;
+    const ref=refs[0];
+    ['ram','processor','display','rearCamera','battery'].forEach(k=>manual[k]=ref[k]);
+    /* network 若來源已是 5G/4G 可保留；不從台版複製地區/SIM/model。 */
+    if(!filled(manual.network)&&filled(ref.network))manual.network=ref.network;
+    manual.__v536ReferenceOnly=true;
+    manual.__v536RegionLabel='歐版';
+    manual.__v536ReferenceNote='歐版專屬 SKU 尚待核對；共通硬體參照同機型同容量一般版';
+    return manual;
+  };
+
+  const prevMatch=usedMatchProduct;
+  function watchKey(v){
+    let s=String(v||'').normalize('NFKC').toLowerCase();
+    s=s.replace(/[（(]\s*2025\s*[）)]/g,' 2025 ');
+    s=s.replace(/samsung|三星|galaxy/g,' ');
+    s=s.replace(/[_\-]+/g,' ');
+    s=s.replace(/\b(?:lte|5g|4g|gps|bt|bluetooth)\b/g,' ');
+    s=s.replace(/\b47\s*mm\b/g,' ');
+    return s.replace(/[^a-z0-9]+/g,'').trim();
+  }
+  function watchSig(p){return ['year','model','rom','network','battery','msrp'].map(k=>nrKey(p?.[k])).join('|')}
+  usedMatchProduct=function(row){
+    const exact=prevMatch(row);if(exact)return exact;
+    if(!row||bkey(row.brand)!=='samsung')return exact;
+    const raw=String(row.name||'');
+    if(!/watch\s*ultra/i.test(raw)||!/47\s*mm/i.test(raw)||!/(?:_|\b)lte\b/i.test(raw))return exact;
+    /* 有明寫 2025 的來源不可落到 2024 fallback。 */
+    if(/2025/.test(raw))return exact;
+    const parsed=parseUsedMachine(row.name,row.brand),list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(bkey(p?.brand)!=='samsung'||(p?.__v51Source&&p.__v51Source!=='general'))return;
+      if(watchKey(p?.name)!=='watchultra')return;
+      if(String(p?.year||'').trim()!=='2024')return;
+      if(nrVersion(p?.network)!=='4g')return;
+      if(!filled(p?.battery)||!(Number(p?.msrp)>0))return;
+      list.push({idx,p,parsed,score:230,matchMode:'v536-watch-ultra-47-lte-2024'});
+    });
+    if(!list.length||new Set(list.map(x=>watchSig(x.p))).size!==1)return exact;
+    return list[0];
+  };
+
+  function resolvedEu(item){
+    return !!(item?.manualSpec&&item.manualProduct?.__v536ReferenceOnly&&phoneHardwareComplete(item.manualProduct)&&usedManualMissingCount(item)===0)
+  }
+  const prevInline=usedInlineCardHtml;
+  usedInlineCardHtml=function(item,index){
+    let html=prevInline(item,index);
+    if(!resolvedEu(item))return html;
+    html=html.replace(/<div class="used-manual-banner">[\s\S]*?<\/div>/g,'');
+    html=html.replace(/\sused-manual-item(?=["\s])/g,'');
+    const note='<div class="v534-central-note"><strong>資料來源：同機型共通規格</strong><span class="v534-warn">歐版型號待核</span></div>';
+    html=html.replace('batch-preview-item','batch-preview-item v534-has-note');
+    html=html.replace(/<\/div>\s*$/,note+'</div>');
+    return html;
+  };
+
+  const prevPreview=renderUsedPreview;
+  renderUsedPreview=function(){
+    prevPreview();
+    const item=usedItems?.[activeUsedIndex];if(!resolvedEu(item))return;
+    const tag=document.getElementById('usedPreviewTag');
+    if(tag)tag.textContent='中央共通規格';
+  };
+
+  const prevUI=updateUsedImportUI;
+  updateUsedImportUI=function(){
+    prevUI();
+    const sum=document.getElementById('usedImportSummary');if(!sum)return;
+    const resolved=usedItems.filter(resolvedEu).length;
+    if(!resolved)return;
+    const unresolved=usedItems.filter(x=>x.manualSpec&&!resolvedEu(x)&&usedManualMissingCount(x)>0).length;
+    const row=sum.querySelector('.summary-row');
+    if(row){
+      [...row.querySelectorAll('span')].forEach(el=>{
+        if((el.textContent||'').includes('中央未建檔補編'))el.innerHTML=`<b>中央未建檔補編：</b>${unresolved.toLocaleString()} 張`;
+      });
+    }
+    const note=sum.querySelector('.summary-note');
+    if(note)note.textContent=`✓ ${resolved} 張歐版 iPhone 已以同機型共通規格補齊；${unresolved?`另有 ${unresolved} 張仍缺中央規格，可補資料。`:'本次不需門市補資料。'}`;
+  };
+})();
+</script>
+
+<!-- V5.2.36: 歐版 iPhone 共通硬體＋Galaxy Watch Ultra 47mm LTE 2024 狹義配對。 -->
 
 </body>
 </html>
