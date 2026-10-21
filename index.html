@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.41｜穿戴長品名自動縮字 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.40</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.40 Watch Ultra(2025) 47mm LTE 精確配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.41</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.41 穿戴長品名自動縮字 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.41｜穿戴長品名自動縮字 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -11679,7 +11679,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 
 <script id="v536-eu-iphone-watch-ultra-match-hotfix">
-/* ===== V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix =====
+/* ===== V5.2.41｜穿戴長品名自動縮字 Hotfix =====
    A. Apple 歐版：只在精確歐版 SKU 不存在時，允許同一 iPhone 機型＋同容量（RAM 有值時亦同 RAM）
       的一般版共通硬體補齊；只借 RAM/CPU/螢幕/相機/電池，不借型號、SIM、地區或售價。
    B. Samsung Galaxy Watch Ultra 47mm LTE：來源名稱可對應一般版 Watch Ultra 2024 LTE。
@@ -11806,7 +11806,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 
 <script id="v537-watch-ultra-preemptive-hard-gate-hotfix">
-/* ===== V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix =====
+/* ===== V5.2.41｜穿戴長品名自動縮字 Hotfix =====
    問題：V5.2.36 的 fallback 位於 prevMatch(row) 之後；舊流程若先回傳不完整候選，新規則不會執行。
    修正：只針對 Samsung Galaxy Watch Ultra 47mm LTE（且來源未標 2025）先做狹義 Hard Gate，
          強制命中一般版 2024 Watch Ultra / SM-L705F / LTE；其餘商品完全交回既有流程。
@@ -11861,7 +11861,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 <!-- V5.2.39：依 20261021 一般版 XLSB 實檔修正：Watch Ultra(2024) 的出廠年份解析值為 2024-07-24，年份 Gate 改接受完整 YYYY-MM-DD，不再要求字串必須恰為 2024。 -->
 <script id="v538-watch-ultra-post-build-final-gate">
-/* ===== V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix =====
+/* ===== V5.2.41｜穿戴長品名自動縮字 Hotfix =====
    V5.2.37 的 usedMatchProduct() 在獨立測試可命中，但真實匯入仍可能被其他舊流程保留為 manualSpec。
    因此在 buildUsedCardsFromRows() 完成後加入最後一道「產卡結果校正 Gate」。
    僅處理：Samsung + Galaxy Watch Ultra + 47mm + LTE + 非 2025，且結果仍為 manualSpec 的項目。
@@ -11932,7 +11932,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 <!-- V5.2.40：Samsung Galaxy Watch Ultra(2025) 47mm LTE 精確配對。依 20261021 一般版 XLSB：Watch Ultra(2025) / SM-L705F / 2GB / 64GB / LTE / 590mAh / MSRP 21990。 -->
 <script id="v540-watch-ultra-2025-exact-gate">
-/* ===== V5.2.40｜Watch Ultra(2025) 47mm LTE 精確配對 Hotfix =====
+/* ===== V5.2.41｜穿戴長品名自動縮字 Hotfix =====
    只處理 Samsung + Galaxy Watch Ultra + 2025 + 47mm + LTE。
    唯一允許命中：Watch Ultra(2025) / SM-L705F / 2GB / 64GB / LTE。
    不會落到 2024 Watch Ultra(32GB)，也不會命中 Watch Ultra2。
@@ -12012,6 +12012,86 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.40: Watch Ultra(2025) 47mm LTE 精確 SKU Gate。 -->
+
+
+
+<!-- V5.2.41：穿戴／耳機長品名顯示優化。僅調整顯示，不修改中央資料、配對、售價或列印尺寸。 -->
+<style id="v541-wear-long-name-autofit">
+/* 顯示層：允許 JS 依實際可用寬高自動縮字；卡片尺寸與黃底區高度維持 V5.2.40。 */
+.wear-card .wear-name-main{
+  max-width:100% !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+  hyphens:none !important;
+}
+</style>
+<script id="v541-wear-long-name-autofit-script">
+(function(){
+  const MAX=17.5, MIN=11.5, STEP=.5;
+  function cleanDisplayName(el){
+    const card=el.closest('.wear-card');
+    if(!card)return;
+    const brand=(card.querySelector('.wear-top-brand')?.textContent||'').trim();
+    let name=(el.textContent||'').trim();
+    if(!name)return;
+    /* 品名本身若又帶一次品牌，只做畫面去重，不改來源資料。 */
+    if(brand){
+      const esc=brand.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      name=name.replace(new RegExp('^\\s*'+esc+'(?:\\s+|(?=[A-Z0-9（(]))','i'),'').trim();
+    }
+    /* 來源常用底線連接版本資訊；顯示時改為空格，避免任意斷在字母中間。 */
+    name=name.replace(/_/g,' ').replace(/\)\s*(?=\d)/g,') ').replace(/(\d)mm(?=[A-Za-z])/gi,'$1mm ').replace(/\s{2,}/g,' ').trim();
+    if(name && el.textContent!==name) el.textContent=name;
+  }
+  function fitOne(el){
+    const band=el.closest('.wear-name-band');
+    if(!band)return;
+    cleanDisplayName(el);
+    el.style.setProperty('display','block','important');
+    el.style.setProperty('width','100%','important');
+    el.style.setProperty('line-height','1.04','important');
+    el.style.setProperty('word-break','normal','important');
+    el.style.setProperty('overflow-wrap','break-word','important');
+    el.style.setProperty('white-space','normal','important');
+    const cs=getComputedStyle(band);
+    const avail=Math.max(1,band.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0));
+    let size=MAX;
+    el.style.setProperty('font-size',size+'px','important');
+    /* scrollHeight 是實際文字高度；逐階縮字直到完整落在既有 60px 名稱區。 */
+    while(size>MIN && el.scrollHeight>avail+0.5){
+      size=Math.max(MIN,size-STEP);
+      el.style.setProperty('font-size',size+'px','important');
+    }
+    /* 極端無空白長字串才允許 anywhere，避免一般英文被拆得難讀。 */
+    if(el.scrollHeight>avail+0.5){
+      el.style.setProperty('overflow-wrap','anywhere','important');
+      while(size>10.5 && el.scrollHeight>avail+0.5){
+        size=Math.max(10.5,size-STEP);
+        el.style.setProperty('font-size',size+'px','important');
+      }
+    }
+    el.dataset.v541FitSize=String(size);
+  }
+  function fitAll(root=document){
+    root.querySelectorAll?.('.wear-card .wear-name-main').forEach(fitOne);
+  }
+  function schedule(){requestAnimationFrame(()=>requestAnimationFrame(()=>fitAll()));}
+  ['renderUsedItems','renderNewItems'].forEach(k=>{
+    const fn=window[k];
+    if(typeof fn==='function'){
+      window[k]=function(){const r=fn.apply(this,arguments);schedule();return r;};
+    }
+  });
+  addEventListener('beforeprint',()=>fitAll());
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
+  const mo=new MutationObserver(muts=>{
+    if(muts.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.wear-card,.wear-name-main')||n.querySelector?.('.wear-name-main')))))schedule();
+  });
+  document.addEventListener('DOMContentLoaded',()=>mo.observe(document.body,{childList:true,subtree:true}),{once:true});
+})();
+</script>
+<!-- V5.2.41：短品名維持原 17.5px；長品名依實際高度逐階縮小，並移除重複品牌字樣。 -->
 
 </body>
 </html>
