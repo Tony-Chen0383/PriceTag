@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.41｜穿戴長品名自動縮字 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.42｜Apple 區域名稱 Identity 正規化 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.41</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.41 穿戴長品名自動縮字 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.42</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.42 Apple 區域名稱 Identity 正規化 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.41｜穿戴長品名自動縮字 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.42｜Apple 區域名稱 Identity 正規化 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12093,5 +12093,31 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 <!-- V5.2.41：短品名維持原 17.5px；長品名依實際高度逐階縮小，並移除重複品牌字樣。 -->
 
+
+
+<!-- V5.2.42：Apple/二手機來源名稱若把「美版／港版／韓版／陸版／中國版／大陸版」寫進品名括號，
+     地區標籤不得參與機型 identity；實際來源區域仍由 v5216IntlRoute 獨立 Hard Gate 判斷。 -->
+<script id="v542-used-regional-name-identity-normalization-hotfix">
+/* ===== V5.2.42｜Apple 區域名稱 Identity 正規化 Hotfix =====
+   可重現案例：iPhone 13 mini(美版) + 256GB。
+   舊的兩層機型 identity 正規化（v528 / v5214）只移除 (國際版)/(日版)，
+   卻保留 (美版)，造成 source identity=iphone13mini美版、central=iphone13mini，Hard Gate 失敗。
+   本版只把「括號中的區域標籤」從機型 identity 移除；區域來源仍由 v5216IntlRoute(row)
+   獨立 Hard Gate 判斷，因此不會因為名稱正規化而跨區誤配。
+*/
+(function(){
+  function stripRegionDecorator(v){
+    return String(v||'').replace(/[（(]\s*(?:美版|美|港版|港|韓版|韓|陸版|陸|中國版|大陸版|台版|台灣版|台灣|台)\s*[）)]/gi,' ');
+  }
+  if(typeof v528UsedIdentityKey==='function'){
+    const prev528=v528UsedIdentityKey;
+    v528UsedIdentityKey=function(v){return prev528(stripRegionDecorator(v));};
+  }
+  if(typeof v5214CanonUsedModelName==='function'){
+    const prev5214=v5214CanonUsedModelName;
+    v5214CanonUsedModelName=function(v){return prev5214(stripRegionDecorator(v));};
+  }
+})();
+</script>
 </body>
 </html>
