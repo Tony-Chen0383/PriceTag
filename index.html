@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.43｜Apple 區域版中央配對穩定化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.43</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.43 Apple 區域版中央配對穩定化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.44</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.44 Apple Pencil 1 中央配對＋模板修正 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.43｜Apple 區域版中央配對穩定化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12124,7 +12124,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 <!-- V5.2.43：Apple 美/港/韓等區域版若沒有精確區域中央列，改以「實際存在的國際版候選」做安全 fallback。
      不依賴 V51_SOURCE_STATE.ready 旗標；仍要求同品牌、同機型 identity、同容量、同網路，並優先型號/等級售價收斂。 -->
 <script id="v543-apple-regional-central-fallback-stability-hotfix">
-/* ===== V5.2.43｜Apple 區域版中央配對穩定化 Hotfix =====
+/* ===== V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix =====
    真實案例（2026-10-22 門市回收檔）：
    Apple iPhone 14[A2882][256GB/午夜色/5G] / B / $9,900 / 美版。
    20261021 國際版中央資料存在：iPhone 14 (國際版) / A2882 / 6GB / 256GB / 5G / B $9,900。
@@ -12215,6 +12215,62 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.43：區域版 fallback 以實際 international PRODUCTS 為準，不再因 ready 旗標時序落入補編。 -->
+
+
+
+<!-- V5.2.44：Apple Pencil 1 名稱別名＋周邊模板修正。 -->
+<script id="v544-apple-pencil1-match-template-hotfix">
+/* ===== V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix =====
+   來源常寫 Pencil 1 / Apple Pencil 1，但中央正式名稱為 Apple Pencil (第1代)。
+   僅限 Apple + Pencil 1 且未標示 USB-C/轉接器/第2代/Pro，安全命中 A1603 第一代。
+   同時將 Pencil/手寫筆/觸控筆視為穿戴樣式，避免誤套手機 RAM/CPU/相機欄位。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  const prevAutoTemplate=autoTemplate;
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function isPencil1Source(row){
+    if(!row||brandKey(row.brand)!=='apple')return false;
+    const raw=String(row.name||'').normalize('NFKC').toLowerCase();
+    if(!/pencil/.test(raw))return false;
+    if(/usb\s*-?\s*c|轉接器|第\s*2\s*代|2nd|second|pro/.test(raw))return false;
+    return /(?:^|\b)pencil\s*1(?:\b|$)|apple\s*pencil\s*1|pencil\s*\(?第\s*1\s*代\)?/.test(raw);
+  }
+  function pencil1Candidates(){
+    const arr=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(brandKey(p?.brand)!=='apple')return;
+      if(nrKey(p?.category)!==nrKey('周邊'))return;
+      if(nrKey(p?.name)!==nrKey('Apple Pencil (第1代)'))return;
+      if(nrKey(p?.model)!==nrKey('A1603'))return;
+      if(Number(p?.msrp)!==3090)return;
+      arr.push({idx,p});
+    });
+    return arr;
+  }
+  usedMatchProduct=function(row){
+    if(isPencil1Source(row)){
+      let c=pencil1Candidates();
+      const needSale=Math.round(Number(row.price)||0),grade=String(row.grade||'').trim().toUpperCase();
+      if(c.length&&needSale>0&&grade&&typeof v521ProductGradePrice==='function'){
+        const exact=c.filter(x=>v521ProductGradePrice(x.p,grade)===needSale);
+        if(exact.length)c=exact;
+      }
+      if(c.length===1){
+        const parsed=parseUsedMachine(row.name,row.brand);
+        return {idx:c[0].idx,p:c[0].p,parsed,score:500,matchMode:'v544-apple-pencil1-a1603-exact'};
+      }
+    }
+    return prevMatch(row);
+  };
+  autoTemplate=function(category,name=''){
+    const text=String(category||'')+' '+String(name||'');
+    if(/pencil|手寫筆|觸控筆|stylus/i.test(text))return '穿戴';
+    return prevAutoTemplate(category,name);
+  };
+})();
+</script>
+<!-- V5.2.44：Pencil 1 → Apple Pencil (第1代) / A1603；Pencil 類不再套手機模板。 -->
 
 </body>
 </html>
