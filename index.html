@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.42｜Apple 區域名稱 Identity 正規化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.43｜Apple 區域版中央配對穩定化 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.42</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.42 Apple 區域名稱 Identity 正規化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.43</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.43 Apple 區域版中央配對穩定化 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.42｜Apple 區域名稱 Identity 正規化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.43｜Apple 區域版中央配對穩定化 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12119,5 +12119,102 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   }
 })();
 </script>
+
+
+<!-- V5.2.43：Apple 美/港/韓等區域版若沒有精確區域中央列，改以「實際存在的國際版候選」做安全 fallback。
+     不依賴 V51_SOURCE_STATE.ready 旗標；仍要求同品牌、同機型 identity、同容量、同網路，並優先型號/等級售價收斂。 -->
+<script id="v543-apple-regional-central-fallback-stability-hotfix">
+/* ===== V5.2.43｜Apple 區域版中央配對穩定化 Hotfix =====
+   真實案例（2026-10-22 門市回收檔）：
+   Apple iPhone 14[A2882][256GB/午夜色/5G] / B / $9,900 / 美版。
+   20261021 國際版中央資料存在：iPhone 14 (國際版) / A2882 / 6GB / 256GB / 5G / B $9,900。
+
+   V5.2.29 已有「美版 -> 國際版共通硬體」fallback，但會先要求
+   V51_SOURCE_STATE.international.ready===true。正式站若中央資料已在 PRODUCTS 中、
+   但 ready 狀態旗標尚未同步完成，會錯誤落入 manualSpec。
+
+   本版修正原則：
+   1) 只處理 Apple + 美版且前序精確 matcher 已失敗。
+   2) 若中央有同區域精確列，絕不改走 generic，避免蓋掉真正區域 SKU。
+   3) generic fallback 必須來自 international 層且標記「國際版」。
+   4) 品牌、機型 identity、ROM 必須完全一致；RAM/網路有來源值時也需一致。
+   5) 來源有 model 時，候選只能是相同 model 或中央 model 空白；若存在相同 model 優先鎖定。
+   6) 等級售價若能唯一收斂就採用；售價不同不作為跨 SKU 猜測依據。
+   7) 最後仍需規格簽章唯一，禁止跨機型／跨容量／跨網路誤配。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function regionRoute(row){return typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none',label:''}}
+  function sameName(p,nameKey){return typeof v5212ProductNameKey==='function'&&v5212ProductNameKey(p,false)===nameKey}
+  function completeHardware(p){
+    return ['ram','processor','display','rearCamera','battery'].every(k=>{
+      const v=String(p?.[k]||'').trim();return !!v&&v!=='—'&&v!=='-';
+    });
+  }
+  function sig(p){
+    return ['ram','rom','network','processor','display','rearCamera','battery']
+      .map(k=>nrKey(p?.[k])).join('|');
+  }
+  function exactRegionalExists(row,parsed,route,brand,nameKey,rom,ram){
+    return PRODUCTS.some(p=>{
+      if(p?.__v51Source!=='international')return false;
+      if(String(p?.__v51InternationalVersion||'').trim()!==route.label)return false;
+      if(brandKey(p?.brand)!==brand||!sameName(p,nameKey)||nrCap(p?.rom)!==rom)return false;
+      if(ram&&nrCap(p?.ram)!==ram)return false;
+      if(parsed?.version&&nrVersion(p?.network)!==nrVersion(parsed.version))return false;
+      if(parsed?.model&&p?.model&&nrKey(p.model)!==nrKey(parsed.model))return false;
+      return true;
+    });
+  }
+  usedMatchProduct=function(row){
+    const hit=prevMatch(row);
+    if(hit)return hit;
+    if(!row||v5215BurnNeed(row))return hit;
+    const route=regionRoute(row);
+    if(route.kind!=='exact'||route.label!=='美版')return hit;
+    if(brandKey(row.brand)!=='apple')return hit;
+
+    const parsed=parseUsedMachine(row.name,row.brand);
+    const nameKey=v5212UsedNameKey(row,parsed),rom=nrCap(parsed.capacity),ram=nrCap(parsed.ram),brand=brandKey(row.brand);
+    if(!brand||!nameKey||!rom||!v5212ExplicitName(nameKey))return hit;
+
+    /* 真正區域 SKU 存在時，維持既有 exact Gate，不用 generic 蓋過。 */
+    if(exactRegionalExists(row,parsed,route,brand,nameKey,rom,ram))return hit;
+
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(p?.__v51Source!=='international'||String(p?.__v51InternationalVersion||'').trim()!=='國際版')return;
+      if(brandKey(p?.brand)!==brand||!sameName(p,nameKey)||nrCap(p?.rom)!==rom)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(parsed?.version&&nrVersion(p?.network)!==nrVersion(parsed.version))return;
+      if(parsed?.model&&p?.model&&nrKey(p.model)!==nrKey(parsed.model))return;
+      if(!completeHardware(p))return;
+      list.push({idx,p,parsed,score:190,matchMode:'v543-apple-regional-generic-international'});
+    });
+    if(!list.length)return hit;
+
+    /* 有精確 model 的候選時優先；中央 model 空白只作同機型/容量唯一候選的備援。 */
+    if(parsed?.model){
+      const mk=nrKey(parsed.model),exactModel=list.filter(x=>nrKey(x.p?.model)===mk);
+      if(exactModel.length)list=exactModel;
+    }
+
+    /* 若門市售價剛好等於中央該等級價，用來進一步收斂；沒有相等時不硬擋，避免售價政策差異。 */
+    const needSale=Math.round(Number(row.price)||0),grade=String(row.grade||'').trim().toUpperCase();
+    if(needSale>0&&grade&&typeof v521ProductGradePrice==='function'){
+      const priceExact=list.filter(x=>v521ProductGradePrice(x.p,grade)===needSale);
+      if(priceExact.length)list=priceExact;
+    }
+
+    const uniq=new Map();
+    for(const x of list){const k=[nrKey(x.p?.model),sig(x.p)].join('|');if(!uniq.has(k))uniq.set(k,x)}
+    if(uniq.size!==1)return hit;
+    return [...uniq.values()][0];
+  };
+})();
+</script>
+<!-- V5.2.43：區域版 fallback 以實際 international PRODUCTS 為準，不再因 ready 旗標時序落入補編。 -->
+
 </body>
 </html>
