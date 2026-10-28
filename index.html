@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.44</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.44 Apple Pencil 1 中央配對＋模板修正 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.46</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.46 Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.44｜Apple Pencil 1 中央配對＋模板修正 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12271,6 +12271,307 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.44：Pencil 1 → Apple Pencil (第1代) / A1603；Pencil 類不再套手機模板。 -->
+
+
+
+<!-- V5.2.45：Apple 國際區域版統一配對＋調撥單單容量格式解析。 -->
+<script id="v545-apple-regional-unified-transfer-parse-hotfix">
+/* ===== V5.2.45｜Apple 國際區域版統一配對＋調撥單解析 Hotfix =====
+   真實來源回歸：
+   - 回收紀錄：Apple iPhone 14 Pro[A2890][128GB/深紫色/5G] / B / 港版。
+   - 調撥單：Apple iPhone 15 Pro Max[256GB/黑色鈦金屬/5G] / B / 韓版 / MSRP 44,900 / 牌價 20,300。
+
+   修正原則：
+   1) 調撥單只有一組 [256GB/顏色/5G] 時，256GB 是 ROM，不可誤當 model。
+   2) 調撥單商品 identity 會移除 (國際版/美版/港版/韓版/日版/歐版...) 裝飾字，區域仍由 internationalVersion 獨立 Gate。
+   3) Apple 美/港/韓/日/歐版：先找同區域 international 精確列；沒有該區域中央家族時，才允許 international「國際版」共通規格。
+   4) 同品牌 + 同機型 identity + 同 ROM + 同網路為 Hard Gate；來源有 model 時不得跨 model。
+   5) 調撥單沒有 model 時，以等級牌價、建議售價進一步收斂；最後必須規格簽章唯一才放行。
+   6) 有精確區域中央家族但條件不一致時，禁止退回 generic，避免跨區/跨 SKU 猜測。
+   7) 烙印流程、非 Apple、台版、陸版/國際版既有來源分流全部維持原邏輯。
+*/
+(function(){
+  const prevParseUsedMachine=parseUsedMachine;
+  const prevMatch=usedMatchProduct;
+  const prevTransferCanon=typeof v51610CanonTransferName==='function'?v51610CanonTransferName:null;
+
+  function stripRegionDecorator(v){
+    return String(v||'').normalize('NFKC')
+      .replace(/[（(]\s*(?:國際版|日版|日|港版|港|美版|美|韓版|韓|歐洲版|歐版|EU版|Europe版|陸版|陸|中國版|大陸版|台版|台灣版|台灣|台)\s*[）)]/gi,' ')
+      .replace(/\s{2,}/g,' ').trim();
+  }
+
+  /* 調撥單 identity 不把區域裝飾文字當成機型名稱的一部分。 */
+  if(prevTransferCanon){
+    v51610CanonTransferName=function(v){return prevTransferCanon(stripRegionDecorator(v));};
+  }
+
+  /* 單一規格括號：[256GB/黑色鈦金屬/5G] → ROM/顏色/網路，model 必須為空。 */
+  parseUsedMachine=function(raw,brand=''){
+    const out=prevParseUsedMachine(raw,brand)||{};
+    const text=String(raw||'').normalize('NFKC').trim();
+    const parts=[...text.matchAll(/\[([^\]]+)\]/g)].map(x=>String(x[1]||'').trim()).filter(Boolean);
+    if(parts.length===1){
+      const bits=parts[0].split('/').map(x=>String(x||'').trim()).filter(Boolean);
+      const m=(bits[0]||'').match(/^(\d+(?:\.\d+)?)\s*(TB|T|GB|G)$/i);
+      if(m){
+        const unit=String(m[2]||'GB').toUpperCase();
+        out.model='';
+        out.ram='';
+        out.capacity=String(m[1]).replace(/\.0$/,'')+((unit==='T'||unit==='TB')?'TB':'GB');
+        if(bits[1])out.color=bits[1];
+        if(bits[2])out.version=bits[2];
+      }
+    }
+    return out;
+  };
+
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function routeOf(row){return typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none',label:''}}
+  function sourceType(p){return String(p?.__v51Source||'').trim()}
+  function intlLabel(p){return String(p?.__v51InternationalVersion||'').trim()}
+  function sameName(p,row,parsed){
+    const isTransfer=row?.importType==='transfer';
+    const rk=typeof v5212UsedNameKey==='function'?v5212UsedNameKey(row,parsed):nrKey(parsed?.cleanName||row?.name);
+    const pk=typeof v5212ProductNameKey==='function'?v5212ProductNameKey(p,isTransfer):nrKey(p?.name);
+    return !!rk&&rk===pk;
+  }
+  function filled(v){const s=String(v??'').trim();return !!s&&s!=='—'&&s!=='-'}
+  function completeHardware(p){return ['ram','processor','display','rearCamera','battery'].every(k=>filled(p?.[k]))}
+  function networkNeed(row,parsed){
+    if(row?.importType==='transfer'&&typeof v51610TransferNet==='function')return v51610TransferNet(row,parsed);
+    return parsed?.version?nrVersion(parsed.version):'';
+  }
+  function hardwareSig(p){
+    return [nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.rearCamera),nrKey(p?.battery)].join('|');
+  }
+  function narrowCommercial(list,row){
+    let out=[...list];
+    const sale=Math.round(Number(row?.price)||0),grade=String(row?.grade||'').trim().toUpperCase();
+    if(sale>0&&grade&&typeof v521ProductGradePrice==='function'){
+      const x=out.filter(a=>v521ProductGradePrice(a.p,grade)===sale);if(x.length)out=x;
+    }
+    const msrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(msrp>0&&typeof v51610ProductMsrp==='function'){
+      const x=out.filter(a=>v51610ProductMsrp(a.p)===msrp);if(x.length)out=x;
+    }
+    return out;
+  }
+  function chooseUnique(list,row,parsed,mode){
+    let out=[...list];
+    if(parsed?.model){
+      const mk=nrKey(parsed.model);
+      const exact=out.filter(a=>nrKey(a.p?.model)===mk);
+      if(exact.length)out=exact;
+      else out=out.filter(a=>!filled(a.p?.model)); /* 明確 model 不可跨到另一個 model。 */
+    }
+    out=narrowCommercial(out,row);
+    if(out.length===1)return {...out[0],score:260,matchMode:mode};
+    const uniq=new Map();
+    for(const a of out){const k=hardwareSig(a.p);if(!uniq.has(k))uniq.set(k,a)}
+    return uniq.size===1?{...[...uniq.values()][0],score:250,matchMode:mode+'-unique'}:null;
+  }
+
+  function collect(row,parsed,label){
+    const rom=nrCap(parsed?.capacity),ram=nrCap(parsed?.ram),net=networkNeed(row,parsed),brand=brandKey(row?.brand);
+    const list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(sourceType(p)!=='international'||intlLabel(p)!==label)return;
+      if(brandKey(p?.brand)!==brand||!sameName(p,row,parsed))return;
+      if(rom&&nrCap(p?.rom)!==rom)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(net&&nrVersion(p?.network)!==net)return;
+      if(!completeHardware(p))return;
+      list.push({idx,p,parsed});
+    });
+    return list;
+  }
+
+  usedMatchProduct=function(row){
+    if(!row||brandKey(row.brand)!=='apple')return prevMatch(row);
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return prevMatch(row);
+    const route=routeOf(row);
+    const supported=new Set(['美版','港版','韓版','日版','歐版']);
+    if(route.kind!=='exact'||!supported.has(route.label))return prevMatch(row);
+
+    const parsed=parseUsedMachine(row.name,row.brand),rom=nrCap(parsed.capacity);
+    if(!rom)return null; /* 國際 Apple 無容量不做跨 SKU 猜測。 */
+
+    /* 先嘗試真正的區域精確中央列。 */
+    const exact=collect(row,parsed,route.label);
+    const exactHit=chooseUnique(exact,row,parsed,'v545-apple-regional-exact-'+route.label);
+    if(exactHit)return exactHit;
+
+    /* 只要中央已存在該區域同機型/同容量家族，就不准 generic 蓋過條件衝突。 */
+    const exactFamily=PRODUCTS.some(p=>sourceType(p)==='international'&&intlLabel(p)===route.label&&brandKey(p?.brand)==='apple'&&sameName(p,row,parsed)&&nrCap(p?.rom)===rom);
+    if(exactFamily)return null;
+
+    /* 無區域精確家族時，才用國際版共通硬體。 */
+    const generic=collect(row,parsed,'國際版');
+    const genericHit=chooseUnique(generic,row,parsed,'v545-apple-regional-generic-'+route.label);
+    if(genericHit)return genericHit;
+
+    /* 歐版既有一般版共通硬體補齊留給後續 manual enrichment；其餘維持未配對。 */
+    return null;
+  };
+
+  /* 測試/診斷用唯讀 helper，不參與產卡。 */
+  window.__v545Diagnostics={stripRegionDecorator};
+})();
+</script>
+<!-- V5.2.45：港/韓/美/日/歐 Apple 區域版統一 Gate；單容量調撥格式不再誤認 model。 -->
+
+
+
+<!-- V5.2.46：Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示。 -->
+<style id="v546-apple-watch-unified-style">
+/* ===== V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix ===== */
+.v546-price-warning{margin-top:8px;padding:8px 10px;border:1px solid #f0cf7a;border-radius:10px;background:#fff9e8;color:#7d5600;font-size:11px;font-weight:800;line-height:1.45;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;text-align:center}
+.v546-price-warning strong{font-weight:950;color:#9b5e00}.v546-price-warning .v546-arrow{color:#a88643;font-weight:900}.v546-price-warning .v546-note{color:#7c6c4d;font-weight:700}
+#v546PriceWarning{margin:10px 12px 0}
+@media print{.v546-price-warning,#v546PriceWarning{display:none!important}}
+</style>
+<script id="v546-apple-watch-unified-match-hotfix">
+/* ===== V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 =====
+   真實驗收案例：
+   Apple Watch Series 11 鋁金屬款 GPS+4G-46mm[MFCJ4TA/A][.../LTE]
+   A級 / $11,900 / 台版 / IMEI 355202681799105
+   → 中央 WATCH S11-46mm-LTE / A3337 / 1GB+64GB / LTE / MSRP $16,900。
+
+   原則：
+   1) Series 11 與 S11 視為同一世代；尺寸為 Hard Gate。
+   2) GPS+4G / 4G / LTE 正規化為 LTE；GPS 與 LTE 絕不互配。
+   3) 鋁金屬 / 不鏽鋼 / 鈦金屬 / 米蘭款 / Hermès 視為版本 Hard Gate。
+   4) MFCJ4TA/A 這類 Apple 銷售料號不是 A3337 裝置 Model，不拿來與中央 Axxxx Hard Gate。
+      若來源真的帶 Axxxx 裝置 Model，仍維持 Model Hard Gate。
+   5) 等級牌價只做差異提示，不再作為 Watch 規格匹配的拒絕條件。
+   6) 標卡實際售價仍鎖定來源「設定售價」，中央價格不覆寫門市售價。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  const prevBuild=buildUsedCardsFromRows;
+  const prevInline=usedInlineCardHtml;
+  const prevPreview=renderUsedPreview;
+  const prevUI=updateUsedImportUI;
+
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function isAppleWatchRow(row){
+    return !!row&&brandKey(row.brand)==='apple'&&(/watch/i.test(String(row.name||''))||/智慧手錶|手錶/.test(String(row.small||'')));
+  }
+  function seriesNo(v){
+    const s=String(v||'').normalize('NFKC');
+    let m=s.match(/(?:watch\s*)?series\s*(\d{1,2})/i);if(m)return m[1];
+    m=s.match(/(?:watch\s*)?s\s*(\d{1,2})(?!\d)/i);if(m)return m[1];
+    return '';
+  }
+  function sizeMm(v){const m=String(v||'').normalize('NFKC').match(/(?:^|[^0-9])(\d{2})\s*mm\b/i);return m?m[1]:''}
+  function watchNet(v,parsed){
+    /* 網路先看商品主名稱；錶帶尺寸 S/M/L 不得被第二括號中的字串誤判成 LTE。 */
+    const main=String(parsed?.cleanName||v||'').normalize('NFKC');
+    if(/gps\s*\+\s*(?:4g|lte)|\b(?:4g|lte)\b/i.test(main))return '4g';
+    if(/\bgps\b/i.test(main))return 'gps';
+    const fallback=String(parsed?.version||'').normalize('NFKC');
+    if(/\b(?:4g|lte)\b/i.test(fallback))return '4g';
+    if(/\bgps\b/i.test(fallback))return 'gps';
+    return '';
+  }
+  function materialKind(v){
+    const s=String(v||'').normalize('NFKC').toLowerCase();
+    if(/herm[eè]s|愛馬仕/.test(s))return 'hermes';
+    if(/米蘭/.test(s))return 'milanese';
+    if(/不鏽鋼|不銹鋼|stainless/.test(s))return 'steel';
+    if(/鈦金屬|鈦殼|titanium/.test(s))return 'titanium';
+    if(/鋁金屬|鋁殼|aluminum|aluminium/.test(s))return 'aluminum';
+    return '';
+  }
+  function productMaterial(p){
+    const s=(String(p?.name||'')+' '+String(p?.colors||'')).normalize('NFKC');
+    const k=materialKind(s);if(k)return k;
+    /* Apple Watch 中央標準款未特別寫材質時即為鋁金屬款；特殊材質均有名稱標示。 */
+    if(seriesNo(p?.name))return 'aluminum';
+    return '';
+  }
+  function deviceModel(v){const s=String(v||'').normalize('NFKC').trim().toUpperCase();return /^A\d{4}$/.test(s)?s:''}
+  function retailSku(v){const s=String(v||'').normalize('NFKC').trim().toUpperCase();return !!s&&!deviceModel(s)&&/^[A-Z0-9\-]{5,}\/A$/.test(s)}
+  function watchProduct(p){return brandKey(p?.brand)==='apple'&&(/watch/i.test(String(p?.name||''))||nrKey(p?.category)==='手錶')}
+  function productSig(p){return [seriesNo(p?.name),sizeMm(p?.name),nrVersion(p?.network),productMaterial(p),nrKey(p?.model),nrCap(p?.rom)].join('|')}
+
+  function watchMatch(row){
+    if(!isAppleWatchRow(row))return null;
+    const parsed=parseUsedMachine(row.name,row.brand),src=String(row.name||''),gen=seriesNo(src),size=sizeMm(src),net=watchNet(src,parsed),mat=materialKind(src),dev=deviceModel(parsed.model);
+    if(!gen||!size||!net)return null;
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!watchProduct(p))return;
+      if(seriesNo(p.name)!==gen)return;
+      if(sizeMm(p.name)!==size)return;
+      if(nrVersion(p.network)!==net)return;
+      if(mat&&productMaterial(p)!==mat)return;
+      if(dev&&nrKey(p.model)!==nrKey(dev))return;
+      list.push({idx,p,parsed});
+    });
+    if(!list.length)return null;
+    if(list.length===1)return {...list[0],score:460,matchMode:'v546-apple-watch-series-size-net'};
+    const uniq=new Map();for(const x of list){const k=productSig(x.p);if(!uniq.has(k))uniq.set(k,x)}
+    if(uniq.size===1)return { ...[...uniq.values()][0],score:450,matchMode:'v546-apple-watch-unique-spec' };
+    return null;
+  }
+
+  usedMatchProduct=function(row){
+    const hit=watchMatch(row);if(hit)return hit;
+    return prevMatch(row);
+  };
+
+  function isAppleWatchItem(item){const p=productAt(item);return !!item&&!item.manualSpec&&watchProduct(p)&&/watch/i.test(String(item.sourceName||p?.name||''))}
+  function calcPriceDiff(item){
+    if(!isAppleWatchItem(item)||typeof v521ProductGradePrice!=='function')return null;
+    const p=productAt(item),grade=String(item.grade||'').trim().toUpperCase(),source=Math.round(Number(item.sourcePrice||item.price)||0),central=v521ProductGradePrice(p,grade);
+    if(!(source>0&&central>0)||source===central)return null;
+    return {source,central,grade};
+  }
+  function annotatePriceDiff(){
+    if(!Array.isArray(usedItems))return;
+    for(const item of usedItems){const d=calcPriceDiff(item);if(d)item.v546PriceDiff=d;else delete item.v546PriceDiff;}
+  }
+  function moneyInt(v){return Number(v||0).toLocaleString('en-US')}
+  function warnHtml(item){
+    const d=item?.v546PriceDiff;if(!d)return '';
+    return `<div class="v546-price-warning"><strong>價格與中央 ${h(d.grade)}級不一致</strong><span>來源 $${h(moneyInt(d.source))}</span><span class="v546-arrow">→</span><span>中央 $${h(moneyInt(d.central))}</span><span class="v546-note">規格已配對，標卡售價仍使用來源設定售價</span></div>`;
+  }
+
+  buildUsedCardsFromRows=function(rows){
+    prevBuild(rows);
+    annotatePriceDiff();
+    /* prevBuild 已先 render；標註完成後重繪一次即可。 */
+    updateUsedImportUI();renderUsedItems();
+  };
+
+  usedInlineCardHtml=function(item,index){
+    let html=prevInline(item,index),w=warnHtml(item);if(!w)return html;
+    return html.replace(/<\/div>\s*$/,w+'</div>');
+  };
+
+  renderUsedPreview=function(){
+    prevPreview();
+    const paper=document.getElementById('usedPaper');if(!paper||!paper.parentElement)return;
+    let el=document.getElementById('v546PriceWarning');
+    if(!el){el=document.createElement('div');el.id='v546PriceWarning';paper.insertAdjacentElement('afterend',el)}
+    const item=usedItems?.[activeUsedIndex];const w=warnHtml(item);
+    el.innerHTML=w;el.style.display=w?'block':'none';
+  };
+
+  updateUsedImportUI=function(){
+    prevUI();
+    annotatePriceDiff();
+    const cnt=usedItems.filter(x=>x.v546PriceDiff).length;if(!cnt)return;
+    const sum=document.getElementById('usedImportSummary'),note=sum?.querySelector('.summary-note');
+    if(note)note.textContent=`⚠ ${cnt} 張 Apple Watch 的來源設定售價與中央同等級價格不同；規格仍已安全配對，標卡售價維持來源設定售價。`;
+  };
+
+  window.__v546Diagnostics={seriesNo,sizeMm,watchNet,materialKind,deviceModel,retailSku,watchMatch};
+})();
+</script>
+<!-- V5.2.46：Apple Watch 的世代、尺寸、GPS/LTE、材質為 Hard Gate；TA/A 銷售料號不再與 Axxxx 裝置 Model 混用；價格差異只提示不擋規格。 -->
 
 </body>
 </html>
