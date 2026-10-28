@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.47｜Apple 區域版一般版共通硬體 Bridge Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.46</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.46 Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.47</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.47 Apple 區域版一般版共通硬體 Bridge Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.46｜Apple Watch 世代／尺寸／LTE 統一配對＋價格差異提示 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.47｜Apple 區域版一般版共通硬體 Bridge Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12572,6 +12572,156 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.46：Apple Watch 的世代、尺寸、GPS/LTE、材質為 Hard Gate；TA/A 銷售料號不再與 Axxxx 裝置 Model 混用；價格差異只提示不擋規格。 -->
+
+
+<!-- V5.2.47：Apple 區域版若 international 層無法形成唯一完整硬體候選，
+     改以一般版/內建主資料的同機型共通硬體做第二階段 Bridge。
+     區域身份永遠沿用來源欄位，不借一般版的地區/SIM；有 Axxxx 裝置 Model 時仍為 Hard Gate。 -->
+<style id="v547-apple-regional-general-bridge-style">
+.v547-regional-note{margin-top:8px;padding:7px 10px;border:1px solid #d7e4f4;border-radius:10px;background:#f7fbff;color:#3d5878;font-size:11px;font-weight:800;line-height:1.4;text-align:center}
+.v547-regional-note strong{color:#234a78;font-weight:950}.v547-regional-note .v547-warn{color:#8d6500;margin-left:6px}
+#v547RegionalPreviewNote{margin:8px 12px 0}
+@media print{.v547-regional-note,#v547RegionalPreviewNote{display:none!important}}
+</style>
+<script id="v547-apple-regional-general-hardware-bridge-hotfix">
+/* ===== V5.2.47｜Apple 區域版一般版共通硬體 Bridge Hotfix =====
+   真實回歸：
+   1) 回收紀錄：Apple iPhone 14 Pro[A2890][128GB/深紫色/5G] / B / 港版 / $12,700
+      → 一般版同機型 A2890 / 6GB+128GB / 5G / A16 / OLED 6.1 / 3200mAh。
+   2) 調撥單：Apple iPhone 15 Pro Max[256GB/黑色鈦金屬/5G] / B / 韓版 / MSRP 44,900 / $20,300
+      → 一般版同機型 256GB / 5G / MSRP 44,900 的唯一共通硬體。
+
+   流程：
+   A. 先完整執行 V5.2.46 以前所有 exact / international generic / Watch Gate。
+   B. 只有 Apple iPhone + 美/港/韓/日/歐版仍未命中時才進本 Bridge。
+   C. 候選只允許 general/base 主資料，不碰 special/international/screenBurn。
+   D. 同機型 identity + ROM + network 必須一致。
+   E. 來源若帶 Axxxx 裝置 Model，候選 Model 必須完全相同；TA/A 銷售料號不視為裝置 Model。
+   F. 來源沒有裝置 Model（典型調撥單）時，以 MSRP/等級價格輔助收斂，最後硬體簽章必須唯一。
+   G. 只借共通硬體；標卡「國際版本」仍顯示來源港版/韓版/美版等，不改成台版。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  const prevBuild=buildUsedCardsFromRows;
+  const prevInline=usedInlineCardHtml;
+  const prevPreview=renderUsedPreview;
+  const prevUI=updateUsedImportUI;
+
+  function bkey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function routeOf(row){return typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none',label:''}}
+  function srcType(p){return String(p?.__v51Source||'base').trim()||'base'}
+  function isGeneral(p){const s=srcType(p);return (s==='base'||s==='general')&&!p?.__v51UsedOnly}
+  function isIPhoneRow(row){return !!row&&bkey(row.brand)==='apple'&&/\biphone\b/i.test(String(row.name||''))}
+  function deviceModel(v){const s=String(v||'').normalize('NFKC').trim().toUpperCase();return /^A\d{4}$/.test(s)?s:''}
+  function filled(v){const s=String(v??'').trim();return !!s&&s!=='—'&&s!=='-'}
+  function completePhone(p){return ['ram','processor','display','rearCamera','battery'].every(k=>filled(p?.[k]))}
+  function sameName(p,row,parsed){
+    const rk=typeof v5212UsedNameKey==='function'?v5212UsedNameKey(row,parsed):nrKey(parsed?.cleanName||row?.name);
+    const pk=typeof v5212ProductNameKey==='function'?v5212ProductNameKey(p,row?.importType==='transfer'):nrKey(p?.name);
+    return !!rk&&rk===pk;
+  }
+  function needNet(row,parsed){
+    if(row?.importType==='transfer'&&typeof v51610TransferNet==='function')return v51610TransferNet(row,parsed);
+    return parsed?.version?nrVersion(parsed.version):'';
+  }
+  function hwSig(p){
+    return [nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.rearCamera),nrKey(p?.battery)].join('|');
+  }
+  function chooseGeneral(row,parsed,route){
+    const rom=nrCap(parsed?.capacity),ram=nrCap(parsed?.ram),net=needNet(row,parsed),dev=deviceModel(parsed?.model);
+    if(!rom)return null;
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!isGeneral(p)||bkey(p?.brand)!=='apple'||!sameName(p,row,parsed))return;
+      if(nrCap(p?.rom)!==rom)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(net&&nrVersion(p?.network)!==net)return;
+      if(dev&&deviceModel(p?.model)!==dev)return;
+      if(!completePhone(p))return;
+      list.push({idx,p,parsed,score:235,matchMode:'v547-apple-regional-general-common-'+route.label});
+    });
+    if(!list.length)return null;
+
+    /* 無裝置 Model 的調撥單：建議售價是最穩定的額外 SKU Gate。 */
+    const msrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(!dev&&msrp>0){
+      const exact=list.filter(x=>Math.round(Number(x.p?.msrp)||0)===msrp);
+      if(exact.length)list=exact;
+    }
+
+    /* 等級牌價只作輔助；不存在相同價格時不硬擋，避免公司價格政策與中央不同。 */
+    const sale=Math.round(Number(row?.price)||0),grade=String(row?.grade||'').trim().toUpperCase();
+    if(sale>0&&grade&&typeof v521ProductGradePrice==='function'){
+      const exact=list.filter(x=>v521ProductGradePrice(x.p,grade)===sale);
+      if(exact.length)list=exact;
+    }
+
+    if(list.length===1)return list[0];
+    const uniq=new Map();
+    for(const x of list){const k=hwSig(x.p);if(!uniq.has(k))uniq.set(k,x)}
+    return uniq.size===1?[...uniq.values()][0]:null;
+  }
+
+  usedMatchProduct=function(row){
+    const hit=prevMatch(row);if(hit)return hit;
+    if(!isIPhoneRow(row))return hit;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return hit;
+    const route=routeOf(row),supported=new Set(['美版','港版','韓版','日版','歐版']);
+    if(route.kind!=='exact'||!supported.has(route.label))return hit;
+    const parsed=parseUsedMachine(row.name,row.brand);
+    return chooseGeneral(row,parsed,route)||hit;
+  };
+
+  function markRegionalCommon(){
+    if(!Array.isArray(usedItems))return;
+    for(const item of usedItems){
+      delete item.v547RegionCommon;
+      if(!item||item.manualSpec||!/iphone/i.test(String(item.sourceName||'')))continue;
+      const route=routeOf({internationalVersion:item.internationalVersion||'',name:item.sourceName||''});
+      if(route.kind!=='exact'||!new Set(['美版','港版','韓版','日版','歐版']).has(route.label))continue;
+      const p=productAt(item);if(!p||!isGeneral(p))continue;
+      item.v547RegionCommon=route.label;
+    }
+  }
+  function noteHtml(item){
+    if(!item?.v547RegionCommon)return '';
+    return `<div class="v547-regional-note"><strong>資料來源：同機型共通規格</strong><span class="v547-warn">${h(item.v547RegionCommon)}型號待核</span></div>`;
+  }
+
+  buildUsedCardsFromRows=function(rows){
+    prevBuild(rows);
+    markRegionalCommon();
+    updateUsedImportUI();renderUsedItems();
+  };
+
+  usedInlineCardHtml=function(item,index){
+    let html=prevInline(item,index),note=noteHtml(item);if(!note)return html;
+    if(html.includes('v547-regional-note'))return html;
+    html=html.replace('batch-preview-item','batch-preview-item v534-has-note');
+    return html.replace(/<\/div>\s*$/,note+'</div>');
+  };
+
+  renderUsedPreview=function(){
+    prevPreview();
+    const item=usedItems?.[activeUsedIndex],paper=document.getElementById('usedPaper');
+    if(!paper||!paper.parentElement)return;
+    let el=document.getElementById('v547RegionalPreviewNote');
+    if(!el){el=document.createElement('div');el.id='v547RegionalPreviewNote';paper.insertAdjacentElement('afterend',el)}
+    const note=noteHtml(item);el.innerHTML=note;el.style.display=note?'block':'none';
+    if(note){const tag=document.getElementById('usedPreviewTag');if(tag)tag.textContent='中央共通規格'}
+  };
+
+  updateUsedImportUI=function(){
+    prevUI();markRegionalCommon();
+    const n=usedItems.filter(x=>x.v547RegionCommon).length;if(!n)return;
+    const sum=document.getElementById('usedImportSummary'),note=sum?.querySelector('.summary-note');
+    if(note)note.textContent=`✓ ${n} 張 Apple 區域版 iPhone 已以同機型共通硬體安全補齊；地區版本仍依來源保留。`;
+  };
+
+  window.__v547Diagnostics={chooseGeneral,deviceModel};
+})();
+</script>
+<!-- V5.2.47：港/韓/美/日/歐 iPhone 若 international 層無完整唯一候選，才 bridge 到一般版同機型共通硬體。 -->
 
 </body>
 </html>
