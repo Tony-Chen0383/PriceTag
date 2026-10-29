@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.47｜Apple 區域版一般版共通硬體 Bridge Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.47</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.47 Apple 區域版一般版共通硬體 Bridge Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.48</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.48 Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.47｜Apple 區域版一般版共通硬體 Bridge Hotfix</div>
+      <div class="hq31-hero-title">V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12722,6 +12722,142 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.47：港/韓/美/日/歐 iPhone 若 international 層無完整唯一候選，才 bridge 到一般版同機型共通硬體。 -->
+
+
+
+<!-- V5.2.48：Nintendo Switch／遊戲主機配對＋周邊簡化標卡。 -->
+<style id="v548-nintendo-switch-game-console-style">
+/* ===== V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix ===== */
+.game-console-card .wear-top-brand{font-size:18px!important;line-height:1!important}
+.game-console-card .wear-name-main{font-size:18px!important;line-height:1.04!important;font-weight:950!important;text-align:center}
+.wear-card.game-console-card .wear-name-sub{display:block!important;font-size:12px!important;line-height:1!important;font-weight:900!important;margin-top:3px;overflow:visible!important}
+.game-console-card .wear-spec-label{font-size:11px;line-height:1.05}
+.game-console-card .wear-spec-value{font-size:14px;line-height:1.05}
+.game-console-card .game-console-spec-main{font-weight:900}
+.game-console-card .game-console-region{font-weight:900}
+@media print{
+  .game-console-card .wear-name-main{font-size:18px!important;line-height:1.04!important}
+  .wear-card.game-console-card .wear-name-sub{display:block!important;font-size:12px!important;line-height:1!important}
+}
+</style>
+<script id="v548-nintendo-switch-game-console-hotfix">
+/* ===== V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix =====
+   真實來源回歸：
+   - 庫存：Nintendo / NS Switch 2 日版 / 商品編碼 CYAD9989990000057 / 黑色 / 牌價 10,880 / 啟用。
+   - IMEI：HAJ50144816654 / NS Switch 2 日版[黑色]_CY / 可銷售 / 台中NOVA。
+   - 中央：Nintendo / Switch 2 / BEE-001 / 12GB+256GB / 2025 / MSRP 14,380。
+
+   原則：
+   1) 僅 Nintendo + Switch 2 單機本體走狹義 Hard Gate；組合包/OLED/Lite/遊戲片全部排除。
+   2) 庫存即使沒有 model/capacity，也可在唯一候選時命中 BEE-001 / 256GB。
+   3) 內部沿用穿戴 3×4 A4 尺寸以避免重寫列印引擎，但視覺改成遊戲主機簡化卡。
+   4) 遊戲主機卡只顯示儲存、記憶體、型號、版本、保固、SN；不顯示手機相機/CPU欄位。
+*/
+(function(){
+  const prevMatch=matchProductFromStock;
+  const prevAutoTemplate=autoTemplate;
+  const prevNewWearHtml=newWearHtml;
+  const prevRenderNewItems=renderNewItems;
+  const prevRenderNewPreview=renderNewPreview;
+  const prevOpenBatchPreview=openBatchPreview;
+
+  function bkey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function sourceType(p){return String(p?.__v51Source||'base').trim()||'base'}
+  function isGeneralProduct(p){const s=sourceType(p);return (s==='base'||s==='general')&&!p?.__v51UsedOnly}
+  function cleanSwitchText(v){
+    return String(v||'').normalize('NFKC').replace(/[_＿]/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function isBlockedSwitchVariant(v){
+    const t=cleanSwitchText(v);
+    return /(瑪利歐|馬力歐|賽車|組合|套裝|同捆|bundle|oled|lite|遊戲片|卡帶|軟體|game\s*card)/i.test(t);
+  }
+  function isSwitch2Source(s){
+    if(!s||bkey(s.brand)!=='nintendo')return false;
+    const t=cleanSwitchText(s.name);
+    if(!/(?:^|\s)(?:ns\s*)?switch\s*2(?:\s|$)/i.test(t)&&!/nintendo\s*switch\s*2/i.test(t))return false;
+    if(isBlockedSwitchVariant(t))return false;
+    return true;
+  }
+  function switch2Candidates(){
+    const arr=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!isGeneralProduct(p)||bkey(p?.brand)!=='nintendo')return;
+      if(nrKey(p?.name)!==nrKey('Switch 2'))return;
+      if(nrKey(p?.model)!==nrKey('BEE-001'))return;
+      if(nrCap(p?.rom)!==nrCap('256GB'))return;
+      if(isBlockedSwitchVariant(p?.name))return;
+      arr.push({idx,p});
+    });
+    arr.sort((a,b)=>{
+      const sc=x=>(sourceType(x.p)==='general'?4:2)+(Number(x.p?.msrp)===14380?2:0)+(nrCap(x.p?.ram)===nrCap('12GB')?1:0);
+      return sc(b)-sc(a);
+    });
+    return arr;
+  }
+  function sig(p){return [nrKey(p?.brand),nrKey(p?.name),nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),Number(p?.msrp)||0].join('|')}
+  function switch2Match(s){
+    if(!isSwitch2Source(s))return null;
+    let list=switch2Candidates();
+    if(!list.length)return null;
+    const uniq=new Map();for(const x of list){const k=sig(x.p);if(!uniq.has(k))uniq.set(k,x)}
+    const x=[...uniq.values()][0];
+    return x?{idx:x.idx,p:x.p,score:600,matchMode:'v548-nintendo-switch2-bee001-exact'}:null;
+  }
+
+  matchProductFromStock=function(s){
+    const hit=switch2Match(s);if(hit)return hit;
+    return prevMatch(s);
+  };
+
+  function isGameProduct(p){
+    return !!p&&bkey(p.brand)==='nintendo'&&nrKey(p.name)===nrKey('Switch 2')&&nrKey(p.model)===nrKey('BEE-001');
+  }
+  function isGameItem(item){return !!item&&isGameProduct(productAt(item))}
+  autoTemplate=function(category,name=''){
+    const t=String(category||'')+' '+String(name||'');
+    if(/switch\s*2/i.test(t)&&!/oled|lite|瑪利歐|馬力歐|組合|遊戲片/i.test(t))return '穿戴';
+    return prevAutoTemplate(category,name);
+  };
+  function regionText(r){
+    const s=String(r?.sourceVersion||'')+' '+String(r?.sourceName||'');
+    const m=s.match(/(日版|台版|台灣版|國際版|美版|港版|韓版|歐版|中國版|大陸版|陸版)/);
+    return m?m[1]:'—';
+  }
+  function consoleName(p){return nrKey(p?.name)===nrKey('Switch 2')?'Switch 2':String(p?.name||'—')}
+  function gameConsoleCardHtml(p,r,opt={}){
+    r.warranty='創宇保固一年';
+    const sale=money(r.price)||'—',date=hqProductDisplayDate(p,p.year),msrp=v5222NewSkuMsrp(p),imei=r.imei||'尚未輸入';
+    const rom=cap(p.rom)||'—',ram=ramText(p.ram)||'—',model=p.model||'—',region=regionText(r);
+    const saleValue=opt.editablePrice?`<div class="wear-sale-value inline-edit-price" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</div>`:`<div class="wear-sale-value">${h(sale)}</div>`;
+    return `<div class="wear-card new-tone game-console-card">${wearGradeHtml(true,'全新')}<div class="wear-top-brand">${h((p.brand||'Nintendo')+' · '+model)}</div><div class="wear-name-band"><div class="wear-name-main">${h(consoleName(p))}</div></div><div class="wear-sale-row"><div class="wear-sale-mark">ON<br>SALE</div><div class="wear-sale-currency">$</div>${saleValue}</div><div class="wear-meta-row"><div class="wear-meta-pill">上市日期</div><div class="wear-meta-val">${h(date)}</div><div class="wear-meta-pill">建議售價</div><div class="wear-meta-val price">${h(msrp)}</div></div><div class="wear-specs"><div class="wear-spec-row"><div class="wear-spec-label">記憶體</div><div class="wear-spec-value game-console-spec-main">${h(ram)}</div><div class="wear-spec-label dark">儲存<br>容量</div><div class="wear-spec-value game-console-spec-main">${h(rom)}</div></div><div class="wear-spec-row"><div class="wear-spec-label dark">版本</div><div class="wear-spec-value game-console-region">${h(region)}</div><div class="wear-spec-label">保固</div><div class="wear-spec-value">創宇一年</div></div><div class="wear-spec-row single"><div class="wear-spec-label">${h(identifierLabel(imei))}</div><div class="wear-spec-value wear-imei-box imei-barcode-value">${identifierBarcodeHtml(imei)}</div></div></div></div>`;
+  }
+
+  newWearHtml=function(p,r,opt={}){
+    if(isGameProduct(p))return gameConsoleCardHtml(p,r,opt);
+    return prevNewWearHtml(p,r,opt);
+  };
+
+  function relabelGameCards(){
+    const cards=document.querySelectorAll('#newItems .new-preview-card');
+    newItems.forEach((item,i)=>{if(!isGameItem(item))return;const tag=cards[i]?.querySelector('.tag.auto');if(tag)tag.textContent='遊戲主機'});
+  }
+  renderNewItems=function(){prevRenderNewItems();relabelGameCards()};
+  renderNewPreview=function(){
+    prevRenderNewPreview();
+    const r=newItems?.[activeNewIndex];if(!isGameItem(r))return;
+    const lab=document.getElementById('newPreviewLabel');if(lab)lab.textContent=`商品 ${activeNewIndex+1}｜新機遊戲主機卡`;
+  };
+  openBatchPreview=function(type,showModal=true){
+    prevOpenBatchPreview(type,showModal);
+    if(type!=='new')return;
+    const n=newItems.filter(isGameItem).length;if(!n)return;
+    const sub=document.getElementById('batchSub');if(sub)sub.textContent='手機 A4 3×3；穿戴／耳機／遊戲主機 A4 3×4，每頁最多 12 張';
+  };
+
+  window.__v548Diagnostics={isSwitch2Source,switch2Candidates,switch2Match,isGameProduct,regionText,gameConsoleCardHtml};
+})();
+</script>
+<!-- V5.2.48：NS Switch 2 日版安全命中 Switch 2 / BEE-001 / 256GB；遊戲主機改用簡化周邊卡。 -->
 
 </body>
 </html>
