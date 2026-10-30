@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.49｜Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.48</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.48 Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.49</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.49 Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.48｜Nintendo Switch／遊戲主機配對＋周邊標卡 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.49｜Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12859,5 +12859,87 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 <!-- V5.2.48：NS Switch 2 日版安全命中 Switch 2 / BEE-001 / 256GB；遊戲主機改用簡化周邊卡。 -->
 
+
+<!-- V5.2.49：Xiaomi／Redmi 中文品牌前綴 Identity Hotfix。 -->
+<script id="v549-xiaomi-redmi-chinese-prefix-identity-hotfix">
+/* ===== V5.2.49｜Xiaomi／Redmi 中文品牌前綴＋年份機型 Identity Hotfix =====
+   真實案例：
+   - Xiaomi / 小米 15 / 12+256GB：來源 identity 被保留為「小米15」，中央 Mi / 15 為「15」。
+   - Xiaomi / 紅米10 2022 4G / 4+64GB：舊共用 identity 會把 2022 視為描述年份移除，
+     造成「紅米 10 2022」與舊「紅米 10」同時變成 10，最後因候選不唯一而拒絕配對。
+   修正原則：
+   1) 中文品牌前綴「小米／紅米」在來源與中央兩邊一致剝除。
+   2) 既有 matcher 先跑；只有原流程失敗且品牌屬 Xiaomi family 時才啟用狹義 fallback。
+   3) Xiaomi fallback 保留型號名稱中的 2022 等年份，避免 Redmi 10 2022 與 Redmi 10 混淆。
+   4) RAM/ROM、model、network、source routing、烙印來源層全部沿用既有 Hard Gate。
+   5) Redmi 7A / A1+、Note / Pro / 5G 等不同 identity 不可互相代用。 */
+(function(){
+  function stripZhXiaomiPrefix(v){
+    return String(v||'').normalize('NFKC')
+      .replace(/^\s*(?:小米|紅米)(?=\s|[_\-]|\d|[a-z]|$)/i,' ');
+  }
+  if(typeof v528UsedIdentityKey==='function'){
+    const prev528=v528UsedIdentityKey;
+    v528UsedIdentityKey=function(v){return prev528(stripZhXiaomiPrefix(v));};
+  }
+  if(typeof v5214CanonUsedModelName==='function'){
+    const prev5214=v5214CanonUsedModelName;
+    v5214CanonUsedModelName=function(v){return prev5214(stripZhXiaomiPrefix(v));};
+  }
+
+  function xiaomiKey(v){
+    let s=String(v||'').normalize('NFKC').toLowerCase().trim();
+    if(!s)return '';
+    s=s.replace(/\[[^\]]*\]/g,' ');
+    s=s.replace(/[（(]\s*(?:盒損|保期不足|拆封新品|新標配版|新標配|標配版|輕度|中度|重度|國際版|日版|美版|港版|韓版|台版|台灣版)\s*[）)]/gi,' ');
+    s=s.replace(/^\s*(?:xiaomi|mi[-_\s]*redmi|redmi|mi|小米|紅米)(?=\s|[_\-]|\d|[a-z]|$)[\s_\-]*/i,' ');
+    /* 網路由獨立 network Gate 判斷，但年份保留：2022 對 Redmi 10 是機型 identity。 */
+    s=s.replace(/(?:^|[\s_\-])(?:wifi|wi\s*[-_]?\s*fi|5g|4g|lte)(?=$|[\s_\-])/ig,' ');
+    s=s.replace(/\+/g,'plus');
+    return s.replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+  }
+
+  const prevMatch=usedMatchProduct;
+  usedMatchProduct=function(row){
+    const hit=prevMatch(row);
+    if(hit)return hit;
+    const brand=typeof v511BrandKey==='function'?v511BrandKey(row?.brand):nrKey(row?.brand);
+    if(brand!=='xiaomi-family')return hit;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return hit;
+
+    const parsed=parseUsedMachine(row?.name,row?.brand);
+    const sourceKey=xiaomiKey(parsed?.cleanName||row?.name||'');
+    if(!sourceKey)return hit;
+    const needRom=nrCap(parsed?.capacity),needRam=nrCap(parsed?.ram);
+    const isTransfer=row?.importType==='transfer';
+    const needNet=isTransfer&&typeof v51610TransferNet==='function'
+      ?v51610TransferNet(row,parsed)
+      :(parsed?.version?nrVersion(parsed.version):'');
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const pb=typeof v511BrandKey==='function'?v511BrandKey(p?.brand):nrKey(p?.brand);
+      if(pb!=='xiaomi-family')return;
+      if(xiaomiKey(p?.name)!==sourceKey)return;
+      if(needRom&&nrCap(p?.rom)!==needRom)return;
+      if(needRam&&nrCap(p?.ram)!==needRam)return;
+      if(needNet&&nrVersion(p?.network)!==needNet)return;
+      if(parsed?.model&&nrKey(p?.model)!==nrKey(parsed.model))return;
+      list.push({idx,p,parsed,score:220,matchMode:'v549-xiaomi-redmi-identity'});
+    });
+    if(!list.length)return hit;
+    if(typeof v5215SelectSourceLayer==='function')list=v5215SelectSourceLayer(list,row);
+    if(!list.length)return hit;
+    const cat=nrKey(row?.small);
+    if(cat&&typeof v5212FilterIfAny==='function')list=v5212FilterIfAny(list,x=>nrKey(x.p?.category)===cat);
+    if(list.length===1)return list[0];
+    if(typeof v5212SpecSignature==='function'){
+      const sig=new Map();
+      for(const x of list){const k=v5212SpecSignature(x.p);if(!sig.has(k))sig.set(k,x);}
+      if(sig.size===1)return [...sig.values()][0];
+    }
+    return hit;
+  };
+})();
+</script>
 </body>
 </html>
