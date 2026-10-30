@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.52｜中央資料 Ready Gate＋匯入後自動重配 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.53｜中央同型號多變體隔離 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.52</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.52 中央資料 Ready Gate＋匯入後自動重配 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.53</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.53 中央同型號多變體隔離 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -13159,9 +13159,9 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 
 
-<!-- V5.2.52：中央資料 Ready Gate＋匯入後自動重配。 -->
+<!-- V5.2.53：中央資料 Ready Gate＋匯入後自動重配。 -->
 <script id="v552-central-ready-import-gate">
-/* ===== V5.2.52｜中央資料 Ready Gate＋匯入後自動重配 Hotfix =====
+/* ===== V5.2.53｜中央同型號多變體隔離 Hotfix =====
    問題根因：頁面啟動後四份中央 XLSB 以非同步背景流程載入；門市若先匯入二手機 Excel，
    buildUsedCardsFromRows() 會在 PRODUCTS 尚未重建前先把新機型判為 manualSpec。
    中央載入完成後舊流程只 render，不會重跑 matcher，因此會出現「日期／建議售價已出現，
@@ -13245,7 +13245,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
           usedImportState.__v552AutoRematched=true;
           try{toast('中央資料載入完成｜已自動重新配對本次二手機標卡')}catch(_){}
         }
-      }catch(err){console.warn('V5.2.52 auto rematch failed',err)}
+      }catch(err){console.warn('V5.2.53 auto rematch failed',err)}
       return ok;
     };
   }
@@ -13254,5 +13254,99 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 
+
+
+<!-- V5.2.53：中央一般版同一 brand+model+ROM 若存在多個不同變體，禁止 model-key 互相覆蓋。 -->
+<script id="v553-general-model-variant-isolation-hotfix">
+/* ===== V5.2.53｜中央同型號多變體隔離 Hotfix =====
+   Root cause confirmed with real 20261021 general XLSB:
+   - Xperia 10 VIII / XQ-GH74 / 8+128
+   - Xperia 10 VIII x Hello Kitty 限量特仕版 / XQ-GH74 / 8+128
+   舊 v51RebuildProductLayer() 以 brand+model+ROM 當 merge key；第二筆會覆蓋第一筆 name，
+   造成 price/date map 還能命中普通版，但 PRODUCTS 只剩特仕版，NAME HARD GATE 因而 FAIL。
+
+   Fix principles:
+   1) 先掃 general source：若同 brand+model+ROM 下有 >1 個「中央變體 signature」，該 group 視為 ambiguous。
+   2) ambiguous group 禁止使用 model-key merge，只允許 exact name-key merge；否則新增獨立 product。
+   3) 非 ambiguous group 維持舊版 model merge，保留既有 alias / embedded-base 相容性。
+   4) variant signature 包含 name / network / year / MSRP，避免同 model+ROM 的年份、網路、套裝、特仕互蓋。
+   5) special / international / screenBurn 邏輯完全沿用既有規則。
+*/
+(function(){
+  function variantSig(p){
+    const date=String(p?.year||'').trim();
+    const msrp=Number(p?.msrp||0);
+    return [nrKey(p?.name),nrVersion(p?.network),date,Number.isFinite(msrp)&&msrp>0?String(Math.round(msrp)):''].join('|');
+  }
+  function addModel(map,key,p){
+    if(!key)return;
+    if(!map.has(key))map.set(key,[]);
+    map.get(key).push(p);
+  }
+  function exactNameCandidate(map,p){
+    return map.get(v51NameKey(p))||null;
+  }
+
+  v51RebuildProductLayer=function(){
+    PRODUCTS.splice(V51_BASE_PRODUCT_COUNT);
+
+    const baseByName=new Map(),baseByModel=new Map();
+    for(let i=0;i<V51_BASE_PRODUCT_COUNT;i++){
+      const p=PRODUCTS[i];
+      baseByName.set(v51NameKey(p),p);
+      if(p?.model)addModel(baseByModel,v51BaseKey(p),p);
+    }
+
+    /* Pre-detect ambiguous general groups before any merge mutates PRODUCTS. */
+    const groupSigs=new Map();
+    for(const p of (V51_SOURCE_PRODUCTS?.general||[])){
+      if(!p?.model)continue;
+      const k=v51BaseKey(p);
+      if(!groupSigs.has(k))groupSigs.set(k,new Set());
+      groupSigs.get(k).add(variantSig(p));
+    }
+    const ambiguous=new Set([...groupSigs.entries()].filter(([,set])=>set.size>1).map(([k])=>k));
+
+    for(const p of (V51_SOURCE_PRODUCTS?.general||[])){
+      const modelKey=p?.model?v51BaseKey(p):'';
+      let t=exactNameCandidate(baseByName,p);
+
+      /* Safe model merge only when the CURRENT general catalog proves this model+ROM is one variant. */
+      if(!t&&modelKey&&!ambiguous.has(modelKey)){
+        const arr=baseByModel.get(modelKey)||[];
+        if(arr.length===1)t=arr[0];
+      }
+
+      if(t){
+        v51MergeProduct(t,p);
+        /* name may be normalized/updated by merge; refresh exact-name index. */
+        baseByName.set(v51NameKey(t),t);
+      }else{
+        const cp={...p,__v51UsedOnly:false};
+        PRODUCTS.push(cp);
+        baseByName.set(v51NameKey(cp),cp);
+        if(cp?.model)addModel(baseByModel,v51BaseKey(cp),cp);
+      }
+    }
+
+    const seen=new Set(PRODUCTS.map(p=>[p.__v51Source||'base',v51NameKey(p),nrKey(p.model)].join('|')));
+    for(const type of ['special','international','screenBurn']){
+      for(const p of (V51_SOURCE_PRODUCTS?.[type]||[])){
+        const key=[type,v51NameKey(p),nrKey(p.model)].join('|');
+        if(seen.has(key))continue;
+        seen.add(key);
+        PRODUCTS.push({...p,__v51UsedOnly:true});
+      }
+    }
+
+    try{
+      if(usedImportState?.rows)buildUsedCardsFromRows(usedImportState.rows);
+      if(newReportState?.stock&&newReportState?.imei)buildNewCardsFromReports();
+    }catch(e){console.warn('V5.2.53 rebuild render',e)}
+  };
+
+  window.__v553Diagnostics={variantSig};
+})();
+</script>
 </body>
 </html>
