@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.49｜Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.50｜烙印商品精確型號規格 Fallback Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.49</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.49 Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.50</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.50 烙印商品精確型號規格 Fallback Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8130,7 +8130,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.49｜Xiaomi／Redmi 中文品牌前綴 Identity Hotfix</div>
+      <div class="hq31-hero-title">V5.2.50｜烙印商品精確型號規格 Fallback Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -12941,5 +12941,137 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   };
 })();
 </script>
+
+<!-- V5.2.50：烙印中央層不可用時，以同品牌＋精確原廠型號＋RAM/ROM＋網路之一般版補硬體規格。 -->
+<script id="v550-burn-exact-model-general-spec-fallback">
+/* ===== V5.2.50｜精確原廠型號優先＋烙印規格 Fallback Hotfix =====
+   真實回收案例（2026-10-30）：
+   - ASUS Zenfone 11 Ultra / AI2401 / 12+256 / 5G / 中度
+   - Samsung S22 Ultra / SM-S9080 / 12+512 / 5G / 輕度
+   - Samsung S23 Ultra / SM-S9180 / 12+512 / 5G / 輕度
+   - Samsung S24+ / SM-S9260 / 12+256 / 5G / 輕度
+   - Xiaomi 13T Pro / 23078PND5G / 12+512 / 5G / 無烙印
+   - Redmi Note 11 Pro / 2201116TG / 6+128 / LTE / 輕度
+
+   修正原則：
+   1) ASUS / Samsung / Xiaomi-family 來源只要有明確原廠型號，先以 model 作 Hard Gate，
+      不再讓名稱 identity 先把精確型號擋掉。
+   2) RAM/ROM/network 仍必須一致；錯誤 model 不可退回名稱猜測。
+   3) 有烙印狀態時：精確烙印中央列優先；若烙印層未載入，才以 general 同 SKU 補硬體規格。
+   4) Samsung 烙印中央歷史資料偶有 SM-S9080 / S9080、SM-S9260 / S9260 差異，
+      僅 Samsung model key 容許去除開頭 SM-；其餘品牌仍完全相等。
+   5) 烙印狀態、等級、門市實際售價一律保留來源 Excel；general fallback 只補硬體規格。
+   6) Apple 不進本規則，避免 MFCJ4TA/A 等銷售料號與 Axxxx 裝置 Model 混用。
+   7) 國際版／美版／港版／韓版／日版等區域來源維持既有專用路由，不進本 fallback。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+
+  function brandKey(v){
+    return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+  }
+  function isSamsungBrand(v){
+    const k=nrKey(v);
+    return k==='samsung'||k==='三星';
+  }
+  function isScopedBrand(v){
+    const k=brandKey(v);
+    return k==='asus'||k==='samsung'||k==='xiaomi-family';
+  }
+  function modelKey(brand,v){
+    let k=nrKey(v);
+    if(isSamsungBrand(brand))k=k.replace(/^sm/,'');
+    return k;
+  }
+  function sourceType(p){
+    return typeof v5215SourceType==='function'?v5215SourceType(p):(p?.__v51Source||'general');
+  }
+  function routeAllowed(row){
+    if(typeof v5216IntlRoute!=='function')return true;
+    const r=v5216IntlRoute(row);
+    return !r||r.kind==='none'||r.kind==='taiwan';
+  }
+  function sig(p){
+    if(typeof v5212SpecSignature==='function')return v5212SpecSignature(p);
+    return [modelKey(p?.brand,p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),
+      nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery)].join('|');
+  }
+  function uniqueSpec(list){
+    if(!list.length)return null;
+    if(list.length===1)return list[0];
+    const uniq=new Map();
+    for(const x of list){const k=sig(x.p);if(!uniq.has(k))uniq.set(k,x);}
+    if(uniq.size===1)return [...uniq.values()][0];
+    return null;
+  }
+
+  usedMatchProduct=function(row){
+    if(!row||!isScopedBrand(row?.brand)||!routeAllowed(row))return prevMatch(row);
+
+    const parsed=parseUsedMachine(row?.name,row?.brand);
+    const rawModel=String(parsed?.model||'').trim();
+    if(!rawModel)return prevMatch(row);
+
+    const bkey=brandKey(row?.brand),mkey=modelKey(row?.brand,rawModel);
+    const needRam=nrCap(parsed?.ram),needRom=nrCap(parsed?.capacity);
+    const needNet=parsed?.version?nrVersion(parsed.version):'';
+    let list=[];
+
+    PRODUCTS.forEach((p,idx)=>{
+      if(bkey&&brandKey(p?.brand)!==bkey)return;
+      if(!mkey||modelKey(row?.brand,p?.model)!==mkey)return;
+      if(needRam&&nrCap(p?.ram)!==needRam)return;
+      if(needRom&&nrCap(p?.rom)!==needRom)return;
+      if(needNet&&nrVersion(p?.network)!==needNet)return;
+      list.push({idx,p,parsed,score:280,matchMode:'v550-exact-device-model'});
+    });
+
+    /* 這三個品牌的 [] 第一段是實際 device model；有 model 卻中央完全不存在時，
+       寧可補編，也禁止再退回名稱猜測到別的 SKU。 */
+    if(!list.length)return null;
+
+    const burn=typeof v5215BurnNeed==='function'?v5215BurnNeed(row):'';
+    if(burn){
+      const exactBurn=list.filter(x=>sourceType(x.p)==='screenBurn'&&
+        String(x.p?.__v51ScreenBurn||'').trim()===burn);
+      const burnHit=uniqueSpec(exactBurn);
+      if(burnHit){
+        burnHit.matchMode='v550-exact-model-screenburn';
+        return burnHit;
+      }
+
+      /* 烙印層尚未載入或該列缺漏：僅借 general 同 SKU 硬體，不借價格／烙印狀態。 */
+      const general=list.filter(x=>sourceType(x.p)==='general');
+      const genHit=uniqueSpec(general);
+      if(genHit){
+        genHit.matchMode='v550-burn-general-spec-fallback';
+        return genHit;
+      }
+      return null;
+    }
+
+    /* 無烙印商品維持既有 source routing；model 已精確一致。 */
+    if(typeof v5215SelectSourceLayer==='function'){
+      const routed=v5215SelectSourceLayer(list,row);
+      const routedHit=uniqueSpec(routed);
+      if(routedHit){
+        routedHit.matchMode='v550-exact-model-routed';
+        return routedHit;
+      }
+    }
+
+    const general=list.filter(x=>sourceType(x.p)==='general');
+    const genHit=uniqueSpec(general);
+    if(genHit){
+      genHit.matchMode='v550-exact-model-general';
+      return genHit;
+    }
+    return null;
+  };
+
+  window.__v550Diagnostics={brandKey,modelKey,isScopedBrand,routeAllowed};
+})();
+</script>
+
 </body>
 </html>
