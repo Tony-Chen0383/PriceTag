@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.51｜vivo 同型號跨年份精確配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.52｜中央資料 Ready Gate＋匯入後自動重配 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.51</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.51 vivo 同型號跨年份精確配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.52</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.52 中央資料 Ready Gate＋匯入後自動重配 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -13155,6 +13155,102 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     return uniqueSpec(list);
   };
   window.__v551Diagnostics={explicitYear,isVivo};
+})();
+</script>
+
+
+<!-- V5.2.52：中央資料 Ready Gate＋匯入後自動重配。 -->
+<script id="v552-central-ready-import-gate">
+/* ===== V5.2.52｜中央資料 Ready Gate＋匯入後自動重配 Hotfix =====
+   問題根因：頁面啟動後四份中央 XLSB 以非同步背景流程載入；門市若先匯入二手機 Excel，
+   buildUsedCardsFromRows() 會在 PRODUCTS 尚未重建前先把新機型判為 manualSpec。
+   中央載入完成後舊流程只 render，不會重跑 matcher，因此會出現「日期／建議售價已出現，
+   但 CPU／螢幕／相機／電池仍空白」的假性中央未建檔。
+
+   修正原則：
+   1) 二手機單檔／多檔匯入前，若中央資料仍在載入，先等待既有載入完成。
+   2) 若一般版尚未 ready，主動 force refresh 一次；失敗才依現有資料繼續，不鎖死門市作業。
+   3) build 時若中央尚未 ready，標記該批 needsRematch；中央成功載入後自動只重配該批一次。
+   4) 已在中央 ready 狀態下建立的卡片不自動重建，避免覆蓋後續人工補編。
+   5) 不修改任何機型 matcher / Hard Gate / 價格 / 列印規則。 */
+(function(){
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  function generalReady(){
+    return !!(typeof V51_SOURCE_STATE!=='undefined' && V51_SOURCE_STATE?.general?.ready && typeof V51_SOURCE_PRODUCTS!=='undefined' && Array.isArray(V51_SOURCE_PRODUCTS?.general) && V51_SOURCE_PRODUCTS.general.length);
+  }
+  async function waitExistingLoad(maxMs=20000){
+    const start=Date.now();
+    while(typeof V526_LOADING_ALL!=='undefined' && V526_LOADING_ALL && Date.now()-start<maxMs)await sleep(120);
+    return !(typeof V526_LOADING_ALL!=='undefined' && V526_LOADING_ALL);
+  }
+  async function ensureCentralReady(){
+    if(generalReady())return true;
+    if(typeof V526_LOADING_ALL!=='undefined' && V526_LOADING_ALL){
+      try{toast('中央資料載入中，完成後自動產卡…')}catch(_){}
+      await waitExistingLoad();
+      if(generalReady())return true;
+    }
+    try{
+      if(typeof v526LoadCentralData==='function'){
+        const ok=await v526LoadCentralData(true);
+        if(ok||generalReady())return true;
+      }
+    }catch(_){ }
+    try{toast('中央資料尚未完成載入；先依目前資料產卡，可於 HQ 重新檢查後再匯入')}catch(_){}
+    return generalReady();
+  }
+
+  /* 記錄「這批卡建立當下中央是否 ready」。 */
+  const prevBuild=buildUsedCardsFromRows;
+  buildUsedCardsFromRows=function(rows){
+    const wasReady=generalReady();
+    const ret=prevBuild(rows);
+    if(usedImportState&&Array.isArray(usedImportState.rows)){
+      usedImportState.__v552BuiltWithCentralReady=wasReady;
+      usedImportState.__v552NeedsRematch=!wasReady;
+    }
+    return ret;
+  };
+
+  /* 單檔舊入口仍保留 Ready Gate。 */
+  if(typeof usedLoadWorkbook==='function'){
+    const prevSingle=usedLoadWorkbook;
+    usedLoadWorkbook=async function(file){
+      await ensureCentralReady();
+      return prevSingle(file);
+    };
+  }
+
+  /* V5.1.6 多檔入口（目前單檔 input 也走這裡）。 */
+  if(typeof usedLoadWorkbooks==='function'){
+    const prevMulti=usedLoadWorkbooks;
+    usedLoadWorkbooks=async function(fileList){
+      await ensureCentralReady();
+      return prevMulti(fileList);
+    };
+  }
+
+  /* 中央資料在卡片建立後才完成時，只針對那一批自動重配一次。 */
+  if(typeof v526LoadCentralData==='function'){
+    const prevCentralLoad=v526LoadCentralData;
+    v526LoadCentralData=async function(force=false,onlyTypes=null){
+      const ok=await prevCentralLoad(force,onlyTypes);
+      try{
+        const needs=!!usedImportState?.__v552NeedsRematch;
+        const rows=usedImportState?.rows;
+        if((ok||generalReady())&&needs&&Array.isArray(rows)&&rows.length){
+          usedImportState.__v552NeedsRematch=false;
+          prevBuild(rows);
+          usedImportState.__v552BuiltWithCentralReady=true;
+          usedImportState.__v552AutoRematched=true;
+          try{toast('中央資料載入完成｜已自動重新配對本次二手機標卡')}catch(_){}
+        }
+      }catch(err){console.warn('V5.2.52 auto rematch failed',err)}
+      return ok;
+    };
+  }
+
+  window.__v552Diagnostics={generalReady,ensureCentralReady};
 })();
 </script>
 
