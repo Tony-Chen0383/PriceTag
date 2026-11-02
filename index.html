@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.53｜中央同型號多變體隔離 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.54｜中央資料啟動自動復原 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8021,7 +8021,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.53</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.53 中央同型號多變體隔離 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.54</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.54 中央資料啟動自動復原 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -13348,5 +13348,155 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   window.__v553Diagnostics={variantSig};
 })();
 </script>
+
+
+<style id="v554-central-startup-recovery-style">
+/* V5.2.54｜中央資料啟動自動復原 Hotfix */
+.v554-recovery-chip{display:inline-flex;align-items:center;gap:5px;margin-left:7px;padding:3px 7px;border:1px solid #f0c36d;border-radius:999px;background:#fff7e5;color:#8a5a00;font-size:10px;font-weight:900;vertical-align:middle}
+.v554-recovery-chip.ok{border-color:#9bd9b2;background:#edf9f1;color:#187447}
+</style>
+<script id="v554-central-startup-auto-recovery-hotfix">
+/* ===== V5.2.54｜中央資料啟動自動復原 Hotfix =====
+   問題：首次開站時，四份中央來源可能因 GitHub Pages / XLSB 下載 / 瀏覽器解析時序，
+   短暫只完成 1/4、2/4、3/4；手動「重新檢查全部資料」通常即可恢復 4/4。
+
+   修正：
+   1) 首次全來源載入若非 4/4，只重試失敗來源，最多 2 次（總共最多 3 輪）。
+   2) 重試期間顯示「中央資料同步中 x/4」，不把短暫失敗直接視為永久斷線。
+   3) 若重試後仍失敗，嘗試使用 IndexedDB 最近一次成功解析結果作備援；備援有明確黃色警告。
+   4) 任一來源恢復後自動重建 PRODUCTS；既有二手機／新機匯入資料會依既有 rebuild 邏輯重新配對。
+   5) 手動「重新檢查全部資料」仍維持 force=true，不被自動重試層攔截。
+   6) 不修改 matcher / Hard Gate / 價格 / 列印 / 預約發布規則。 */
+(function(){
+  const TYPES=(typeof V513_TYPES!=='undefined'&&Array.isArray(V513_TYPES))?V513_TYPES:['general','special','international','screenBurn'];
+  const LABELS=(typeof V51_SOURCE_LABELS!=='undefined')?V51_SOURCE_LABELS:{general:'一般版',special:'特殊規格',international:'國際版',screenBurn:'烙印版'};
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const retryDelays=[1200,2800];
+  let startupHandled=false;
+  let recoveryActive=false;
+  let recoveryRound=0;
+  let recoveryTypes=[];
+
+  function liveOk(type){
+    const st=V51_SOURCE_STATE?.[type]||{};
+    return !!(st.ready&&!st.error&&Array.isArray(V51_SOURCE_PRODUCTS?.[type])&&V51_SOURCE_PRODUCTS[type].length);
+  }
+  function usable(type){
+    const st=V51_SOURCE_STATE?.[type]||{};
+    return !!(st.ready&&Array.isArray(V51_SOURCE_PRODUCTS?.[type])&&V51_SOURCE_PRODUCTS[type].length);
+  }
+  function failedTypes(){return TYPES.filter(t=>!liveOk(t));}
+  function counts(){return {live:TYPES.filter(liveOk).length,available:TYPES.filter(usable).length,fallback:TYPES.filter(t=>!!V51_SOURCE_STATE?.[t]?.__v554Fallback).length};}
+
+  function markFallback(type,cached){
+    if(!cached?.products?.length)return false;
+    V51_SOURCE_PRODUCTS[type]=cached.products;
+    const st=V51_SOURCE_STATE[type]||(V51_SOURCE_STATE[type]={});
+    Object.assign(st,{
+      ready:true,
+      rows:cached.products.length,
+      date:cached.reportDate||st.date||'',
+      error:'即時來源暫時無法載入；已使用上次成功快取',
+      __v554Fallback:true,
+      __v554FallbackAt:Number(cached.cachedAt||0)
+    });
+    try{v51UpdateSourceUi(type)}catch(_){}
+    return true;
+  }
+  function clearFallbackIfLive(type){
+    const st=V51_SOURCE_STATE?.[type];
+    if(st&&st.ready&&!st.error){delete st.__v554Fallback;delete st.__v554FallbackAt;}
+  }
+
+  function applyRecoveryUi(){
+    try{
+      const c=counts();
+      const val=document.getElementById('v51CatalogOverviewStatus');
+      const meta=document.getElementById('v51CatalogOverviewMeta');
+      const badge=document.getElementById('v51CatalogBadge');
+      const note=document.getElementById('v51CatalogLoadNote');
+      if(recoveryActive){
+        if(val)val.textContent=`同步中 ${c.live}/4`;
+        if(meta)meta.textContent=`正在自動復原：${recoveryTypes.map(t=>LABELS[t]||t).join('、')||'中央來源'}｜第 ${recoveryRound} 輪`;
+        if(badge){badge.textContent=`${c.live}/4 同步中`;badge.classList.add('pending')}
+        if(note)note.textContent=`中央資料啟動自動復原中｜${c.live}/4 即時連線｜正在重試 ${recoveryTypes.map(t=>LABELS[t]||t).join('、')}`;
+      }else if(c.fallback){
+        if(val)val.textContent=`${c.available}/4 可用`;
+        if(meta)meta.textContent=`${c.live}/4 即時連線＋${c.fallback} 份快取備援｜中央來源可繼續使用`;
+        if(badge){badge.textContent=`${c.available}/4 可用`;badge.classList.add('pending')}
+        if(note)note.textContent=`中央資料部分使用上次成功快取：${TYPES.filter(t=>V51_SOURCE_STATE?.[t]?.__v554Fallback).map(t=>LABELS[t]||t).join('、')}｜建議稍後再按「重新檢查全部資料」`;
+      }
+    }catch(_){}
+  }
+
+  const priorOverview=v51UpdateOverview;
+  v51UpdateOverview=function(){
+    priorOverview();
+    applyRecoveryUi();
+  };
+
+  const priorSourceUi=v51UpdateSourceUi;
+  v51UpdateSourceUi=function(type){
+    priorSourceUi(type);
+    const st=V51_SOURCE_STATE?.[type];
+    if(st?.__v554Fallback){
+      const card=document.querySelector(`[data-v51-source="${type}"]`),status=document.getElementById('v51Status-'+type),meta=document.getElementById('v51Meta-'+type);
+      if(card){card.classList.remove('ok','bad');card.classList.add('warn')}
+      if(status)status.textContent=`快取備援・${Number(st.rows||0).toLocaleString()} 筆`;
+      if(meta)meta.textContent=`即時來源暫時無法載入｜沿用上次成功解析資料${st.date?'｜'+st.date:''}`;
+    }
+  };
+
+  const priorLoad=v526LoadCentralData;
+  v526LoadCentralData=async function(force=false,onlyTypes=null){
+    const isAll=!Array.isArray(onlyTypes)||!onlyTypes.length||TYPES.every(t=>onlyTypes.includes(t));
+    const isStartup=!force&&isAll&&!startupHandled;
+
+    const ok=await priorLoad(force,onlyTypes);
+    for(const t of TYPES)clearFallbackIfLive(t);
+
+    if(!isStartup){applyRecoveryUi();return ok;}
+    startupHandled=true;
+
+    let failed=failedTypes();
+    if(!failed.length){applyRecoveryUi();return true;}
+
+    recoveryActive=true;
+    for(let i=0;i<retryDelays.length&&failed.length;i++){
+      recoveryRound=i+1;
+      recoveryTypes=[...failed];
+      applyRecoveryUi();
+      await sleep(retryDelays[i]);
+      try{await priorLoad(true,failed)}catch(err){console.warn('V5.2.54 retry failed',err)}
+      for(const t of TYPES)clearFallbackIfLive(t);
+      failed=failedTypes();
+    }
+
+    /* 最後備援：即時來源仍失敗時，使用最近一次成功 IndexedDB 解析結果。 */
+    if(failed.length&&typeof v526CacheGet==='function'){
+      for(const t of failed){
+        try{const cached=await v526CacheGet(t);markFallback(t,cached)}catch(_){}
+      }
+      try{v51RebuildProductLayer();if(typeof V533_MANIFEST_SNAPSHOT!=='undefined'&&V533_MANIFEST_SNAPSHOT?.price)v526ApplyGeneralPriceMaps(V533_MANIFEST_SNAPSHOT.price)}catch(e){console.warn('V5.2.54 fallback rebuild failed',e)}
+      try{if(usedItems?.length){renderUsedItems();renderUsedPreview()}if(newItems?.length){renderNewItems();renderNewPreview()}}catch(_){}
+    }
+
+    recoveryActive=false;
+    recoveryTypes=[];
+    applyRecoveryUi();
+    const c=counts();
+    if(c.live===4){try{toast('中央資料已自動恢復 4/4，無需手動重新檢查')}catch(_){};return true;}
+    if(c.available===4){try{toast('中央資料已啟用快取備援；可繼續使用，建議稍後重新檢查')}catch(_){};return false;}
+    return false;
+  };
+
+  /* 讓現有按鈕／其他模組都指向最新版 loader。 */
+  loadHqSuggestedPrices=async function(force=false){return v526LoadCentralData(force,['general'])};
+  v51LoadCatalogs=async function(force=false){return v526LoadCentralData(force,TYPES)};
+
+  window.__v554Diagnostics={failedTypes,counts,get active(){return recoveryActive},get round(){return recoveryRound}};
+})();
+</script>
+
 </body>
 </html>
