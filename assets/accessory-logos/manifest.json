@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202610191800",
-  "updatedAt": "2026-10-19",
+  "version": "5.0-202611021420",
+  "updatedAt": "2026-11-02",
   "fallbackMode": "text",
-  "brandCount": 93,
+  "brandCount": 94,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -825,6 +825,14 @@
       "file": "./brands/moto.png",
       "aliases": [
         "moto"
+      ],
+      "scale": 1
+    },
+    "soodatek": {
+      "displayName": "soodatek",
+      "file": "./brands/soodatek.png",
+      "aliases": [
+        "soodatek"
       ],
       "scale": 1
     }
