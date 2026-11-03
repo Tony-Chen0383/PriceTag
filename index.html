@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.56｜Galaxy Note9 規格 Fallback＋新加坡版預覽版型 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.57｜澳版 Apple＋舊型號中央精確配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.56</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.56 Galaxy Note9 規格 Fallback＋新加坡版預覽版型 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.57</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.57 澳版 Apple＋舊型號中央精確配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -13811,5 +13811,94 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 <!-- V5.2.56：Note9 僅中央缺檔時使用官方參考規格；新加坡版來源 Meta 不再擠壓快速預覽卡片。 -->
 
+
+
+<script id="v557-australia-and-general-exact-rescue-hotfix">
+/* ===== V5.2.57｜澳版 Apple＋舊型號中央精確配對 Hotfix =====
+   真實驗收案例：
+   A) Apple iPhone 11(2020新標配版) / 4+128 / LTE / 澳版
+      20261021 國際版中央存在 iPhone 11(2020新標配版) (國際版) / A2221 / 4+128，
+      完整 Apple A13 / IPS TFT 6.1 / 3110mAh / 雙 1200 萬規格。
+      「澳版」屬來源國別顯示，中央沒有澳洲專屬 SKU 時，只允許使用國際版共通硬體；
+      標卡國際版本仍保留「澳版」。
+   B) vivo X60 / 8+128 / 5G / 台版
+      20261021 一般版中央存在 X60 / V2045 / 8+128 完整規格；舊 matcher 落空時，
+      以品牌＋正規化機型＋容量做唯一候選安全救援。
+
+   安全原則：
+   1) Apple 澳版只看 international 的「國際版」共通資料，不會拿日版或台版覆蓋。
+   2) 一般版 rescue 僅限台版/無國際路由，且只看 general/base。
+   3) RAM/ROM/網路若來源有值必須一致；候選硬體 signature 必須唯一。
+   4) 既有 matcher / Watch / S25 / Singapore / screenBurn / special 全部優先或隔離。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  function brandKey(v){
+    const k=typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+    return k==='三星'?'samsung':k;
+  }
+  function canon(v){return typeof v5214CanonUsedModelName==='function'?v5214CanonUsedModelName(v):nrKey(v)}
+  function filled(v){const s=String(v??'').trim();return !!s&&s!=='—'&&s!=='-'}
+  function hwEnough(p){return [p?.processor,p?.display,p?.battery].filter(filled).length>=2}
+  function sourceType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):String(p?.__v51Source||'base')}
+  function hwSig(p){return [nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),nrKey(p?.rearCamera)].join('|')}
+  function uniqueHw(list){
+    if(!list.length)return null;
+    const m=new Map();for(const x of list){const k=hwSig(x.p);if(!m.has(k))m.set(k,x)}
+    return m.size===1?[...m.values()][0]:null;
+  }
+  function isAustralia(row){
+    const s=(String(row?.internationalVersion||'')+' '+String(row?.name||'')).normalize('NFKC');
+    return /(?:澳版|澳洲版|澳大利亞版|\bau(?:版)?\b|australia)/i.test(s);
+  }
+  function spec(row){
+    const parsed=typeof parseUsedMachine==='function'?parseUsedMachine(row?.name,row?.brand):{};
+    return {parsed,name:canon(parsed?.cleanName||row?.name||''),ram:nrCap(parsed?.ram||''),rom:nrCap(parsed?.capacity||''),net:nrVersion(parsed?.version||row?.network||'')};
+  }
+
+  function appleAustralia(row){
+    if(!row||brandKey(row?.brand)!=='apple'||!isAustralia(row))return null;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return null;
+    const {parsed,name,ram,rom,net}=spec(row);if(!name||!rom)return null;
+    const list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(brandKey(p?.brand)!=='apple'||sourceType(p)!=='international')return;
+      if(String(p?.__v51InternationalVersion||'').trim()!=='國際版')return;
+      if(canon(p?.name)!==name||nrCap(p?.rom)!==rom)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(net&&nrVersion(p?.network)!==net)return;
+      if(!hwEnough(p))return;
+      list.push({idx,p,parsed,score:350,matchMode:'v557-apple-australia-international-common'});
+    });
+    return uniqueHw(list);
+  }
+
+  function generalExactRescue(row){
+    if(!row)return null;
+    const route=typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none'};
+    if(route&&route.kind!=='none'&&route.kind!=='taiwan')return null;
+    const {parsed,name,ram,rom,net}=spec(row);const brand=brandKey(row?.brand||'');
+    if(!brand||!name||!rom)return null;
+    const list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const st=sourceType(p);if(!(st==='general'||st==='base')||p?.__v51UsedOnly)return;
+      if(brandKey(p?.brand)!==brand||canon(p?.name)!==name||nrCap(p?.rom)!==rom)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(net&&nrVersion(p?.network)!==net)return;
+      if(!hwEnough(p))return;
+      list.push({idx,p,parsed,score:345,matchMode:'v557-general-exact-rescue'});
+    });
+    return uniqueHw(list);
+  }
+
+  usedMatchProduct=function(row){
+    const au=appleAustralia(row);if(au)return au;
+    const hit=prevMatch(row);if(hit)return hit;
+    return generalExactRescue(row);
+  };
+  window.__v557Diagnostics={appleAustralia,generalExactRescue,isAustralia,canon,spec};
+})();
+</script>
+<!-- V5.2.57：澳版 Apple 安全使用國際版共通硬體；一般版既有完整規格但 matcher 落空時以唯一正規化 SKU 救援。 -->
 </body>
 </html>
