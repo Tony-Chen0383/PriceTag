@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611021420",
-  "updatedAt": "2026-11-02",
+  "version": "5.0-202611031136",
+  "updatedAt": "2026-11-03",
   "fallbackMode": "text",
-  "brandCount": 94,
+  "brandCount": 95,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -833,6 +833,15 @@
       "file": "./brands/soodatek.png",
       "aliases": [
         "soodatek"
+      ],
+      "scale": 1
+    },
+    "yoyoisles": {
+      "displayName": "YOYOISLES",
+      "file": "./brands/yoyoisles.png",
+      "aliases": [
+        "YOYOISLES",
+        "yoyoisles"
       ],
       "scale": 1
     }
