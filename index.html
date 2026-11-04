@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.57｜澳版 Apple＋舊型號中央精確配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.58｜Apple iPad 尺寸／網路 Hard Gate Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.57</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.57 澳版 Apple＋舊型號中央精確配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.58</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.58 Apple iPad 尺寸／網路 Hard Gate Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -13900,5 +13900,92 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 <!-- V5.2.57：澳版 Apple 安全使用國際版共通硬體；一般版既有完整規格但 matcher 落空時以唯一正規化 SKU 救援。 -->
+
+
+<script id="v558-apple-ipad-size-network-hardgate-hotfix">
+/* ===== V5.2.58｜Apple iPad 尺寸／網路 Hard Gate Hotfix =====
+   真實案例：iPad Air M3(2025)13\"_WIFI / 128GB / 台版。
+   中央一般版完整存在 iPad Air M3 13\" / A3268 / 8+128 / WIFI，
+   但共用 v5214 identity 會刻意移除螢幕尺寸，造成 11\" 與 13\" 同時變成 ipadairm3；
+   來源又沒有 RAM / Axxxx Model 時候選不唯一，因此安全 matcher 回傳 null。
+
+   修正原則：
+   1) 僅 Apple iPad 且來源明確帶尺寸時啟用，不影響 iPhone / Watch / Mac。
+   2) family identity 仍沿用既有 canon，但尺寸另外做 HARD GATE，11 與 13 絕不互配。
+   3) ROM、Wi‑Fi/5G 為 HARD GATE；來源 RAM 有值才要求 RAM。
+   4) 來源有年份／建議售價時優先收斂，避免 M2/M3/M4 或跨年版本混淆。
+   5) 僅 general/base 台版主規格；國際版／烙印版／特殊規格維持既有路由。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function sourceType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):String(p?.__v51Source||'base')}
+  function canon(v){return typeof v5214CanonUsedModelName==='function'?v5214CanonUsedModelName(v):nrKey(v)}
+  function explicitSize(v){
+    const s=String(v||'').normalize('NFKC');
+    const m=s.match(/(\d+(?:\.\d+)?)\s*(?:吋|inch(?:es)?|[\"”])/i);
+    if(!m)return '';
+    const n=Number(m[1]);return Number.isFinite(n)?String(n).replace(/\.0$/,''):'';
+  }
+  function explicitYear(v){const m=String(v||'').match(/(?:19|20)\d{2}/);return m?m[0]:''}
+  function netOf(row,parsed){
+    if(typeof v51610TransferNet==='function'){
+      const n=v51610TransferNet(row,parsed);if(n)return n;
+    }
+    const s=[parsed?.version,row?.network,row?.name].filter(Boolean).join(' ');
+    if(/\bwi\s*[-_]?\s*fi\b|\bwifi\b/i.test(s))return 'wifi';
+    if(/\b5g\b/i.test(s))return '5g';
+    if(/\b4g\b|\blte\b/i.test(s))return '4g';
+    return '';
+  }
+  function hwSig(p){return [nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),nrKey(p?.rearCamera)].join('|')}
+  function uniqueHw(list){
+    if(!list.length)return null;
+    const m=new Map();for(const x of list){const k=hwSig(x.p);if(!m.has(k))m.set(k,x)}
+    return m.size===1?[...m.values()][0]:null;
+  }
+  function isTaiwanRoute(row){
+    if(typeof v5216IntlRoute!=='function')return true;
+    const r=v5216IntlRoute(row);return !r||r.kind==='none'||r.kind==='taiwan';
+  }
+  function iPadRescue(row){
+    if(!row||brandKey(row?.brand)!=='apple'||!isTaiwanRoute(row))return null;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return null;
+    const parsed=parseUsedMachine(row?.name,row?.brand);
+    const rawName=String(parsed?.cleanName||row?.name||'');
+    if(!/\bipad\b/i.test(rawName))return null;
+    const family=canon(rawName),size=explicitSize(rawName),rom=nrCap(parsed?.capacity||''),ram=nrCap(parsed?.ram||''),net=netOf(row,parsed),year=explicitYear(rawName);
+    if(!family||!size||!rom||!net)return null;
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const st=sourceType(p);if(!(st==='general'||st==='base')||p?.__v51UsedOnly)return;
+      if(brandKey(p?.brand)!=='apple'||nrKey(p?.category)!==nrKey('平板'))return;
+      if(canon(p?.name)!==family)return;
+      if(explicitSize(p?.name)!==size)return;
+      if(nrCap(p?.rom)!==rom)return;
+      if(nrVersion(p?.network)!==net)return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(year&&String(p?.year||'').slice(0,4)!==year)return;
+      list.push({idx,p,parsed,score:380,matchMode:'v558-apple-ipad-size-network-hardgate'});
+    });
+    if(!list.length)return null;
+    const msrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(msrp>0&&typeof v51610ProductMsrp==='function'){
+      const exact=list.filter(x=>v51610ProductMsrp(x.p)===msrp);if(exact.length)list=exact;
+    }
+    if(list.length>1&&Number(row?.price)>0&&row?.grade&&typeof v521ProductGradePrice==='function'){
+      const sale=Math.round(Number(row.price));const gp=list.filter(x=>v521ProductGradePrice(x.p,row.grade)===sale);if(gp.length)list=gp;
+    }
+    return uniqueHw(list);
+  }
+  usedMatchProduct=function(row){
+    const ipad=iPadRescue(row);if(ipad)return ipad;
+    return prevMatch(row);
+  };
+  window.__v558Diagnostics={iPadRescue,explicitSize,explicitYear,netOf};
+})();
+</script>
+<!-- V5.2.58：Apple iPad 明確尺寸＋網路＋容量作 Hard Gate，修正 11/13 吋被共用 identity 合併造成的補編。 -->
+
 </body>
 </html>
