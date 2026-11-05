@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611031140",
-  "updatedAt": "2026-11-03",
+  "version": "5.0-202611050927",
+  "updatedAt": "2026-11-05",
   "fallbackMode": "text",
-  "brandCount": 95,
+  "brandCount": 96,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -842,6 +842,14 @@
       "aliases": [
         "YOYOISLES",
         "yoyoisles"
+      ],
+      "scale": 1
+    },
+    "訊鋒": {
+      "displayName": "訊鋒",
+      "file": "./brands/訊鋒.png",
+      "aliases": [
+        "訊鋒"
       ],
       "scale": 1
     }
