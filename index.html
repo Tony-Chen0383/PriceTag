@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.59｜Apple 泰版＋iPad Wi-Fi 欄位解析 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.60｜iPad 標卡品名精簡顯示 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.59</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.59 Apple 泰版＋iPad Wi-Fi 欄位解析 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.60</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.60 iPad 標卡品名精簡顯示 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -9447,7 +9447,7 @@ function commitUsedManualInline(i,field,el){
   activeUsedIndex=i;usedInlinePage=Math.floor(i/9);renderUsedItems();updateUsedImportUI();
 }
 function usedManualPhoneHtml(p,r,i){
-  const sale=money(r.price)||'—',displayName=p.name||usedDisplayName(r,p),date=usedDisplayDate(p,r),c=gradePalette(r.grade,'used'),has=!!USED_GRADE_LOGOS[r.grade],mainCamera=usedMainCameraText(p.rearCamera),saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';
+  const sale=money(r.price)||'—',displayName=v5260IpadLabelName(p.name||usedDisplayName(r,p),p),date=usedDisplayDate(p,r),c=gradePalette(r.grade,'used'),has=!!USED_GRADE_LOGOS[r.grade],mainCamera=usedMainCameraText(p.rearCamera),saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';
   const ramrom=`${ramText(p.ram)} / ${cap(p.rom)}`;
   return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade ${has?'has-image':'pending'}" style="--grade:${c[0]};--grade-text:${c[1]}">${usedGradeLogoHtml(r.grade,false)}</div>${usedManualEditableHtml(i,'brand',p.brand,{tag:'div',className:'cr-brand',title:'點擊修改品牌'})}${v531ManualPhoneModelHtml(usedManualEditableHtml(i,'name',displayName,{tag:'div',className:`cr-model ${phoneNameClass(displayName)}`,title:'點擊修改商品名稱'}),displayName)}<div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span><strong class="cr-price" style="${priceStyle}">${h(sale)}</strong></div><div class="cr-meta"><span class="cr-pill">上市日期</span>${usedManualEditableHtml(i,'year',date,{tag:'span',className:'cr-meta-val',title:'點擊修改上市日期'})}<span class="cr-pill">建議售價</span>${usedManualEditableHtml(i,'msrp',formatSuggestedMsrp(p),{tag:'span',className:'cr-meta-val',title:'點擊修改建議售價'})}</div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div>${usedManualEditableHtml(i,'ramrom',ramrom,{tag:'div',className:'spec-value',title:'例如 8GB / 256GB'})}</div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div>${usedManualEditableHtml(i,'processor',p.processor||'—',{tag:'div',className:`spec-value yellow cpu-value ${cpuTextClass(p.processor)}`,title:'點擊修改 CPU / 處理器'})}</div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div>${usedManualEditableHtml(i,'display',p.display||'—',{tag:'div',className:'spec-value',title:'點擊修改螢幕尺寸'})}</div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div>${usedManualEditableHtml(i,'camera',mainCamera,{tag:'div',className:'spec-value yellow',title:'點擊修改相機畫素'})}</div><div class="spec-line double"><div class="spec-label">保固</div><div class="spec-value">${h(usedWarrantyDays(r.warranty))}</div><div class="spec-label">國際<br>版本</div>${usedManualEditableHtml(i,'intl',r.internationalVersion||'—',{tag:'div',className:'spec-value',title:'點擊修改國際版本'})}</div><div class="spec-line double"><div class="spec-label dark">電池</div>${usedManualEditableHtml(i,'battery',formatBatteryCapacityDisplay(p.battery),{tag:'div',className:'spec-value yellow battery-capacity-value',title:'點擊修改電池容量'})}<div class="spec-label dark">電池<br>健康</div>${usedManualEditableHtml(i,'health',r.batteryHealth||'—',{tag:'div',className:'spec-value yellow',title:'點擊修改電池健康'})}</div><div class="spec-line double"><div class="spec-label">通訊<br>網路</div>${usedManualEditableHtml(i,'network',p.network||r.sourceVersion||'—',{tag:'div',className:'spec-value',title:'點擊修改通訊網路'})}<div class="spec-label">螢幕<br>烙印</div>${usedManualEditableHtml(i,'burn',r.screenBurn||'—',{tag:'div',className:'spec-value',title:'點擊修改螢幕烙印'})}</div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`;
 }
@@ -14133,5 +14133,58 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 </script>
 <!-- V5.2.59：Apple 泰版走國際共通硬體；iPad 可辨識 _WIFI 與獨立容量欄位，尺寸/網路/容量仍為 Hard Gate。 -->
 
+
+
+<!-- V5.2.60：iPad 標卡顯示名稱精簡；中央配對 identity / 尺寸 / 網路 Hard Gate 完全不變。 -->
+<script id="v5260-ipad-label-display-name-hotfix">
+/* ===== V5.2.60｜iPad 標卡品名精簡顯示 Hotfix =====
+   Display-only rule:
+   - iPad 11 A16(2025)11\"_WIFI -> iPad 11 A16(2025)
+   - iPad Air M4(2026)11\"_WIFI -> iPad Air M4(2026)
+   - iPad Air M4(2026)13\"_5G   -> iPad Air M4(2026)
+   - iPad Pro M4(2024)13\" WIFI -> iPad Pro M4(2024)
+
+   Important:
+   1) Only changes rendered label text.
+   2) PRODUCTS.name, source name, matcher identity, iPad size/network/capacity/year Hard Gate remain untouched.
+   3) Only Apple iPad products are affected; iPhone / Watch / Mac / accessories and other brands are unchanged.
+*/
+(function(){
+  function isAppleIpad(p,raw){
+    const brand=String(p?.brand||'').trim().toLowerCase();
+    const name=String(raw||p?.name||'').trim();
+    return brand==='apple' && /^ipad\b/i.test(name);
+  }
+  function cleanIpadLabel(raw,p){
+    let s=String(raw||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+    if(!s||!isAppleIpad(p,s))return s||'—';
+
+    /* Remove explicit screen-size tokens only. Bare generation numbers such as "iPad 11 A16" are preserved. */
+    s=s.replace(/(?:^|[\s_\-])\d{1,2}(?:\.\d+)?\s*(?:\"|”|″|吋|英吋)(?=$|[\s_\-])/gi,' ');
+    /* Also handle size immediately after a year parenthesis: ...(2026)11\"_WIFI */
+    s=s.replace(/(?<=[)）])\s*\d{1,2}(?:\.\d+)?\s*(?:\"|”|″|吋|英吋)(?=$|[\s_\-])/gi,' ');
+
+    /* Connectivity is already shown in the dedicated 通訊網路 row. */
+    s=s.replace(/(?:^|[\s_\-])(?:WI\s*[-_]?\s*FI|WIFI|5G|4G|LTE)(?=$|[\s_\-])/gi,' ');
+
+    return s.replace(/[ _\-]+$/g,'').replace(/\s{2,}/g,' ').trim()||String(raw||'').trim()||'—';
+  }
+
+  window.v5260IpadLabelName=cleanIpadLabel;
+
+  const prevUsedDisplayName=usedDisplayName;
+  usedDisplayName=function(r,p){
+    return cleanIpadLabel(prevUsedDisplayName(r,p),p);
+  };
+
+  const prevNewDisplayName=newDisplayName;
+  newDisplayName=function(item,p){
+    p=p||productAt(item);
+    return cleanIpadLabel(prevNewDisplayName(item,p),p);
+  };
+
+  window.__v5260Diagnostics={cleanIpadLabel,isAppleIpad};
+})();
+</script>
 </body>
 </html>
