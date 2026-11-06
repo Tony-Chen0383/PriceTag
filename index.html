@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.60｜iPad 標卡品名精簡顯示 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.61｜Samsung 平板品名精簡＋中央規格配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.60</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.60 iPad 標卡品名精簡顯示 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.61</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.61 Samsung 平板品名精簡＋中央規格配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14184,6 +14184,131 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   };
 
   window.__v5260Diagnostics={cleanIpadLabel,isAppleIpad};
+})();
+</script>
+
+
+<!-- V5.2.61：Samsung 平板顯示名稱精簡＋括號 Model 精確中央配對。 -->
+<script id="v5261-samsung-tablet-display-and-match-hotfix">
+/* ===== V5.2.61｜Samsung 平板品名精簡＋中央規格配對 Hotfix =====
+   真實案例：Galaxy Tab S6 Lite_WIFI(P613) / 4GB+128GB / WIFI / MSRP 13,900。
+   中央一般版已有 Tab S6 Lite (2022) / P613 / 4+128 / WIFI 完整規格，
+   但來源把 P613 放在圓括號，舊 parseUsedMachine() 不會視為 model；調撥單 small 又可能被標成手機，導致 matcher FAIL。
+
+   修正原則：
+   1) 只在 Samsung Galaxy Tab / Tab 平板來源啟用。
+   2) 來源明確出現 (P613)/(X610)/(X716...) 等 Samsung tablet model 時，以 model 作 Hard Gate。
+   3) RAM/ROM/network 若來源有值必須一致；沒有 ROM 時可用 MSRP / 等級售價收斂唯一候選。
+   4) 只使用 general/base 台版中央硬體；國際版/烙印路由不繞過。
+   5) 顯示名稱移除 WIFI/LTE/5G、尺寸、尾端 model code 與中央附帶年份；內部 PRODUCTS.name / model 完全不改。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+  const prevLabel=window.v5260IpadLabelName;
+
+  function bkey(v){
+    const k=typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+    return k==='三星'?'samsung':k;
+  }
+  function sourceType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):(p?.__v51Source||'base')}
+  function isSamsungTablet(p,raw){
+    const brand=bkey(p?.brand);
+    const name=String(raw||p?.name||'').normalize('NFKC').trim();
+    const cat=nrKey(p?.category||'');
+    return brand==='samsung' && (cat===nrKey('平板') || /^(?:galaxy\s+)?tab\b/i.test(name));
+  }
+  function cleanSamsungTabletLabel(raw,p){
+    let s=String(raw||'').normalize('NFKC').replace(/\s+/g,' ').trim();
+    if(!s||!isSamsungTablet(p,s))return s||'—';
+
+    /* Model code is internal matching data, not customer-facing product name. */
+    s=s.replace(/\s*[（(]\s*(?:SM[-_]?|GT[-_]?)?[A-Z]{0,3}\d{3,5}[A-Z0-9\/-]*\s*[）)]\s*$/i,' ');
+    /* Central historical year suffix such as Tab S6 Lite (2022) is omitted from the display label. */
+    s=s.replace(/\s*[（(]\s*(?:19|20)\d{2}\s*[）)]\s*$/,' ');
+    /* Screen size and connectivity already have dedicated rows. */
+    s=s.replace(/(?:^|[\s_\-])\d{1,2}(?:\.\d+)?\s*(?:\"|”|″|吋|英吋)(?=$|[\s_\-])/gi,' ');
+    s=s.replace(/(?:^|[\s_\-])(?:WI\s*[-_]?\s*FI|WIFI|5G|4G|LTE)(?=$|[\s_\-])/gi,' ');
+    s=s.replace(/[ _\-]+$/g,'').replace(/\s{2,}/g,' ').trim();
+    if(/^tab\b/i.test(s))s='Galaxy '+s;
+    return s||String(raw||'').trim()||'—';
+  }
+
+  window.v5260IpadLabelName=function(raw,p){
+    const base=typeof prevLabel==='function'?prevLabel(raw,p):String(raw||'');
+    return cleanSamsungTabletLabel(base,p);
+  };
+
+  function modelFromRow(row){
+    const direct=String(row?.model||row?.manufacturerModel||'').normalize('NFKC').trim().toUpperCase();
+    if(/^(?:SM-)?[A-Z]{1,3}\d{3,5}[A-Z0-9-]*$/.test(direct))return direct.replace(/^SM-/,'');
+    const raw=String(row?.name||'').normalize('NFKC');
+    const ms=[...raw.matchAll(/[（(]\s*((?:SM[-_]?|GT[-_]?)?[A-Z]{1,3}\d{3,5}[A-Z0-9-]*)\s*[）)]/ig)];
+    if(!ms.length)return '';
+    return String(ms[ms.length-1][1]||'').toUpperCase().replace(/_/g,'-').replace(/^SM-/,'');
+  }
+  function modelKey(v){return String(v||'').normalize('NFKC').toUpperCase().replace(/[\s_\-\/]+/g,'')}
+  function robustNet(row,parsed){
+    if(row?.importType==='transfer'&&typeof v51610TransferNet==='function'){
+      const n=v51610TransferNet(row,parsed);if(n)return nrVersion(n);
+    }
+    const s=[parsed?.version,row?.network,row?.net,row?.name].filter(Boolean).join(' ').normalize('NFKC');
+    if(/wi[\s_-]*fi/i.test(s))return 'wifi';
+    if(/5[\s_-]*g/i.test(s))return '5g';
+    if(/4[\s_-]*g|lte/i.test(s))return '4g';
+    return '';
+  }
+  function specs(row,parsed){
+    const raw=String(row?.name||'').normalize('NFKC');
+    let ram=nrCap(parsed?.ram||row?.ram||row?.memory||''),rom=nrCap(parsed?.capacity||row?.capacity||row?.rom||row?.storage||'');
+    if(!ram||!rom){
+      const m=raw.match(/(?:\[|^|[\s\/])(\d+(?:\.\d+)?)\s*(?:GB|G)?\s*\+\s*(\d+(?:\.\d+)?)\s*(TB|GB|G)?/i);
+      if(m){ram=ram||nrCap(m[1]);rom=rom||nrCap(m[2]+(m[3]||'GB'))}
+    }
+    return {ram,rom,net:robustNet(row,parsed)};
+  }
+  function hwSig(p){return [modelKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),nrKey(p?.rearCamera)].join('|')}
+  function unique(list){
+    if(!list.length)return null;
+    const m=new Map();for(const x of list){const k=hwSig(x.p);if(!m.has(k))m.set(k,x)}
+    return m.size===1?[...m.values()][0]:null;
+  }
+  function samsungTabletRescue(row){
+    if(!row||bkey(row?.brand)!=='samsung'||!/(?:galaxy\s+)?tab\b/i.test(String(row?.name||'')))return null;
+    const route=typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none'};
+    if(route&&route.kind!=='none'&&route.kind!=='taiwan')return null;
+    if(typeof v5215BurnNeed==='function'&&v5215BurnNeed(row))return null;
+
+    const parsed=parseUsedMachine(row?.name,row?.brand),mk=modelFromRow(row);
+    if(!mk)return null;
+    const {ram,rom,net}=specs(row,parsed);
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const st=sourceType(p);
+      if(!(st==='general'||st==='base')||p?.__v51UsedOnly)return;
+      if(bkey(p?.brand)!=='samsung'||nrKey(p?.category)!==nrKey('平板'))return;
+      if(modelKey(p?.model)!==modelKey(mk))return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(rom&&nrCap(p?.rom)!==rom)return;
+      if(net&&nrVersion(p?.network)!==net)return;
+      if(!String(p?.processor||'').trim()&&!String(p?.display||'').trim()&&!String(p?.battery||'').trim())return;
+      list.push({idx,p,parsed,score:430,matchMode:'v5261-samsung-tablet-model-hardgate'});
+    });
+    if(!list.length)return null;
+
+    const msrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(msrp>0){const e=list.filter(x=>Math.round(Number(x.p?.msrp)||0)===msrp);if(e.length)list=e;}
+    if(list.length>1&&Number(row?.price)>0&&row?.grade&&typeof v521ProductGradePrice==='function'){
+      const sale=Math.round(Number(row.price));const e=list.filter(x=>v521ProductGradePrice(x.p,row.grade)===sale);if(e.length)list=e;
+    }
+    return unique(list);
+  }
+
+  usedMatchProduct=function(row){
+    const tab=samsungTabletRescue(row);if(tab)return tab;
+    return prevMatch(row);
+  };
+
+  window.__v5261Diagnostics={cleanSamsungTabletLabel,samsungTabletRescue,modelFromRow,specs};
 })();
 </script>
 </body>
