@@ -1,9 +1,9 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.61｜Samsung 平板品名精簡＋中央規格配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.62｜Samsung 平板全路徑品名精簡 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.61</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.61 Samsung 平板品名精簡＋中央規格配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.62</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.62 Samsung 平板全路徑品名精簡 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14309,6 +14309,46 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   };
 
   window.__v5261Diagnostics={cleanSamsungTabletLabel,samsungTabletRescue,modelFromRow,specs};
+})();
+</script>
+
+
+<!-- V5.2.62：Samsung 平板顯示名稱套用至正常卡／快速預覽／批次列印全路徑。 -->
+<script id="v5262-samsung-tablet-all-render-path-display-hotfix">
+/* ===== V5.2.62｜Samsung 平板全路徑品名精簡 Hotfix =====
+   V5.2.61 的 cleanSamsungTabletLabel() 已正確，但正常已配對卡走 usedDisplayName()；
+   V5.2.60 先前把 usedDisplayName() 綁在 cleanIpadLabel() 閉包，因此後續覆寫
+   window.v5260IpadLabelName 並不會影響正常卡。結果：manual card 會精簡，normal card 不會。
+
+   修正原則：
+   1) 不重寫 matcher / PRODUCTS / P613 rescue。
+   2) 僅在最終 display-name 層再次套用 V5.2.61 cleaner。
+   3) 正常卡、快速預覽、批次列印、item header 共用 usedDisplayName()，因此一次收斂。
+   4) iPad V5.2.60 顯示邏輯仍先執行，Samsung cleaner 只處理 Samsung Galaxy Tab。
+*/
+(function(){
+  const prevUsedDisplayName=usedDisplayName;
+  const prevNewDisplayName=typeof newDisplayName==='function'?newDisplayName:null;
+  const cleaner=window.__v5261Diagnostics?.cleanSamsungTabletLabel;
+
+  function samsungLabel(raw,p){
+    if(typeof cleaner==='function')return cleaner(raw,p);
+    return String(raw||'').trim()||'—';
+  }
+
+  usedDisplayName=function(r,p){
+    p=p||productAt(r);
+    return samsungLabel(prevUsedDisplayName(r,p),p);
+  };
+
+  if(prevNewDisplayName){
+    newDisplayName=function(item,p){
+      p=p||productAt(item);
+      return samsungLabel(prevNewDisplayName(item,p),p);
+    };
+  }
+
+  window.__v5262Diagnostics={samsungLabel};
 })();
 </script>
 </body>
