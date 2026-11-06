@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611062123",
+  "version": "5.0-202611062124",
   "updatedAt": "2026-11-06",
   "fallbackMode": "text",
-  "brandCount": 96,
+  "brandCount": 97,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -850,6 +850,14 @@
       "file": "./brands/訊鋒.png",
       "aliases": [
         "訊鋒"
+      ],
+      "scale": 1
+    },
+    "mook": {
+      "displayName": "mook",
+      "file": "./brands/mook.png",
+      "aliases": [
+        "mook"
       ],
       "scale": 1
     }
