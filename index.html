@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.62｜Samsung 平板全路徑品名精簡 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.63｜GitHub 409 SHA 衝突自動復原 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.62</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.62 Samsung 平板全路徑品名精簡 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.63</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.63 GitHub 409 SHA 衝突自動復原 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14351,5 +14351,125 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   window.__v5262Diagnostics={samsungLabel};
 })();
 </script>
+
+
+<!-- V5.2.63：GitHub manifest SHA 409 衝突自動復原。 -->
+<script id="v5263-github-409-sha-conflict-auto-recovery-hotfix">
+/* ===== V5.2.63｜GitHub 409 SHA 衝突自動復原 Hotfix =====
+   Root cause:
+   GitHub Contents API 以檔案 SHA 做 optimistic concurrency control。
+   若 accessory-logos/manifest.json 在讀取與寫入之間被其他發布更新，舊 SHA 會回 409。
+
+   Safety rules:
+   1) Logo binary 仍沿用既有 gh32PutBase64()：每次 PUT 前取得最新 file SHA。
+   2) accessory logo manifest 改成「讀最新 manifest -> merge 本次品牌 -> 帶該次 SHA PUT」。
+   3) 遇到 409，只自動重試一次；重試前重新 GET 最新 manifest 與 SHA。
+   4) 若 409 後發現同一品牌內容也被別的發布改過，停止自動覆蓋，要求重新讀取。
+   5) 若只是其他品牌／brandCount／updatedAt 改動，安全 merge 後自動重試。
+   6) 成功後才更新本頁 local manifest cache / Logo mapping。
+*/
+(function(){
+  function isConflict(err){
+    const m=String(err?.message||err||'');
+    return /GitHub\s*409|does not match|sha.*match|Conflict/i.test(m);
+  }
+  function stableBrand(v){
+    if(!v||typeof v!=='object')return '';
+    const c={displayName:v.displayName||'',file:v.file||'',aliases:Array.isArray(v.aliases)?[...v.aliases].sort():[],scale:Number(v.scale)||1};
+    return JSON.stringify(c);
+  }
+  async function readJsonMeta(filePath){
+    const meta=await gh32GetContentMeta(filePath);
+    if(!meta||!meta.content)throw new Error(`找不到 ${filePath}`);
+    return {meta,json:JSON.parse(gh32Base64ToUtf8(meta.content))};
+  }
+  async function putJsonWithSha(filePath,obj,message,sha){
+    const c=gh32GetCfg();
+    const body={message,content:gh32Utf8ToBase64(JSON.stringify(obj,null,2)+'\n'),branch:c.branch||'main'};
+    if(sha)body.sha=sha;
+    return gh32Api(`/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${gh32EncodePath(filePath)}`,{
+      method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)
+    });
+  }
+  function mergeLogoManifest(latest,key,displayName,ext){
+    const manifest=(latest&&typeof latest==='object')?latest:{};
+    const brands=manifest.brands||(manifest.brands={});
+    const existing=brands[key]||{};
+    const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
+    brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1});
+    manifest.brandCount=Object.keys(brands).length;
+    manifest.updatedAt=gh32DateOnly();
+    manifest.version='5.0-'+gh32NowIso().replace(/[- :]/g,'').slice(0,12);
+    manifest.publishedVia='V5.2.63 web direct publish';
+    return {manifest,brand:brands[key],aliases};
+  }
+  async function updateLogoManifestWithRecovery(key,displayName,ext,progressEl){
+    let firstBrandSnapshot='';
+    let retried=false;
+    for(let attempt=0;attempt<2;attempt++){
+      const {meta,json}=await readJsonMeta(GH32_LOGO_MANIFEST_PATH);
+      const latestBrand=json?.brands?.[key]||{};
+      const currentBrandSnapshot=stableBrand(latestBrand);
+      if(attempt===0)firstBrandSnapshot=currentBrandSnapshot;
+      else if(currentBrandSnapshot!==firstBrandSnapshot){
+        throw new Error(`GitHub 409｜「${displayName}」品牌資料剛被其他發布更新，為避免互相覆蓋已停止自動重試；請重新讀取後再發布`);
+      }
+      const merged=mergeLogoManifest(json,key,displayName,ext);
+      try{
+        await putJsonWithSha(GH32_LOGO_MANIFEST_PATH,merged.manifest,`Accessory logo manifest ${displayName} ${gh32NowIso()}`,meta.sha);
+        return {...merged,retried};
+      }catch(err){
+        if(!isConflict(err)||attempt>=1)throw err;
+        retried=true;
+        if(progressEl)progressEl.textContent='偵測到 GitHub SHA 衝突，正在重新同步最新版並自動重試…';
+        try{toast('GitHub 409 SHA 衝突｜正在自動重新同步並重試')}catch(_){}
+        await new Promise(r=>setTimeout(r,350));
+      }
+    }
+    throw new Error('GitHub 409｜Manifest 自動重試仍失敗');
+  }
+
+  gh32PublishLogo=async function(){
+    if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');
+    if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+    const sel=document.getElementById('gh32LogoBrandSelect'),newName=(document.getElementById('gh32LogoNewBrand')?.value||'').trim(),selectedKey=sel?.value||'';
+    let displayName=newName||((sel&&sel.selectedIndex>=0)?sel.options[sel.selectedIndex].textContent:'');
+    let key=newName?brandKey(newName):selectedKey;
+    if(!key||!displayName||displayName==='請選擇既有品牌')return toast('請選擇既有品牌或輸入新品牌名稱');
+    const btn=document.getElementById('gh32LogoPublishBtn'),p=document.getElementById('gh32LogoProgress');
+    try{
+      if(btn)btn.disabled=true;
+      const ext=gh32LogoExt(GH32_LOGO_PENDING.file),assetPath=`assets/accessory-logos/brands/${key}.${ext}`;
+      if(p){p.className='hq32-progress';p.textContent='正在上傳 Logo…'}
+      const buf=await GH32_LOGO_PENDING.file.arrayBuffer();
+      await gh32PutBase64(assetPath,gh32BytesToBase64(new Uint8Array(buf)),`Accessory logo ${displayName} ${gh32NowIso()}`);
+
+      if(p)p.textContent='Logo 完成，更新 manifest…';
+      const result=await updateLogoManifestWithRecovery(key,displayName,ext,p);
+      const manifest=result.manifest,brands=manifest.brands||{},aliases=result.aliases||[],scale=Number(result.brand?.scale)||1;
+
+      GH32_LOGO_MANIFEST_CACHE=manifest;
+      const liveUrl=GH32_LOGO_PENDING.url;
+      ACC_BRAND_LOGOS[key]=liveUrl;ACC_BRAND_OPTICAL_SCALE[key]=scale;ACC_BRAND_NAME_MAP[key]=displayName;
+      for(const alias of aliases){const ak=brandKey(alias);if(!ak)continue;ACC_BRAND_LOGOS[ak]=liveUrl;ACC_BRAND_OPTICAL_SCALE[ak]=scale;ACC_BRAND_NAME_MAP[ak]=displayName}
+      ACC_BRAND_MANIFEST_READY=true;
+      updateHqLogoDashboard(true,Object.keys(brands).length);
+      gh32RenderLogoOptions(manifest,key);
+      try{renderAccessoryPreview(accCurrent);renderAccResult(accResults);renderAccessory()}catch(_){}
+
+      if(p){p.className='hq32-progress hq32-success';p.textContent=result.retried?'✓ GitHub 409 已自動復原｜發布成功｜本頁已套用新 Logo':'✓ GitHub 發布成功｜本頁已立即套用新 Logo／品牌'}
+      toast(result.retried?`${displayName} Logo 發布成功｜SHA 衝突已自動復原`:`${displayName} Logo 已發布並立即套用`);
+      const nn=document.getElementById('gh32LogoNewBrand');if(nn)nn.value='';
+      setTimeout(()=>loadAccessoryLogoManifest(),30000);
+    }catch(err){
+      if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err.message||err)}
+      toast(isConflict(err)?'Logo 發布遇到 GitHub SHA 衝突，已安全停止':'Logo 發布失敗');
+    }finally{gh32UpdatePublishButtons()}
+  };
+
+  window.__v5263GitHubConflict={isConflict,stableBrand,mergeLogoManifest,updateLogoManifestWithRecovery};
+})();
+</script>
+
 </body>
 </html>
