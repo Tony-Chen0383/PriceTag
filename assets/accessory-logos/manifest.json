@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611062125",
+  "version": "5.0-202611062128",
   "updatedAt": "2026-11-06",
   "fallbackMode": "text",
-  "brandCount": 97,
+  "brandCount": 98,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -858,6 +858,15 @@
       "file": "./brands/mook.png",
       "aliases": [
         "mook"
+      ],
+      "scale": 1
+    },
+    "moresee墨舍": {
+      "displayName": "MoreSee墨舍",
+      "file": "./brands/moresee墨舍.png",
+      "aliases": [
+        "MoreSee墨舍",
+        "moresee墨舍"
       ],
       "scale": 1
     }
