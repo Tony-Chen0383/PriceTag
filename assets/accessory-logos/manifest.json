@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611050928",
-  "updatedAt": "2026-11-05",
+  "version": "5.0-202611062123",
+  "updatedAt": "2026-11-06",
   "fallbackMode": "text",
   "brandCount": 96,
   "brands": {
@@ -592,7 +592,7 @@
     },
     "moresee": {
       "displayName": "MoreSee",
-      "file": "./brands/moresee.jpg",
+      "file": "./brands/moresee.png",
       "aliases": [
         "MoreSee",
         "moresee"
