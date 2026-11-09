@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.66｜有序號周邊新機標卡 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.67｜Logitech K580 品名精簡 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.66</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.66 有序號周邊新機標卡 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.67</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.67 Logitech K580 品名精簡 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14558,7 +14558,15 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
       __v5264NoSerialPeripheral:true
     };
   }
-  function peripheralDisplayName(r,p){return String(r?.sourceName||p?.name||'—').replace(/\s{2,}/g,' ').trim()||'—'}
+  function peripheralDisplayName(r,p){
+    let name=String(r?.sourceName||p?.name||'—').replace(/\s{2,}/g,' ').trim()||'—';
+    const brand=String(p?.brand||'').trim();
+    /* V5.2.67：Logitech K580 僅精簡標卡顯示名稱；原始 sourceName / 商品編碼 / SN / JOIN 全部保留。 */
+    if(/^(?:Logitech|羅技)$/i.test(brand)&&/\bK580\b/i.test(name)){
+      name=name.replace(/^\s*(?:羅技|Logitech)\s*/i,'').replace(/\s*-\s*ED\s*$/i,'').trim();
+    }
+    return name||'—';
+  }
   function peripheralCardHtml(p,r,opt={}){
     const sale=money(r.price)||'—',name=peripheralDisplayName(r,p),cat=String(r.sourceSmall||r.sourceMid||'周邊').trim()||'周邊';
     const mid=String(r.sourceMid||r.sourceCategory||'—').trim()||'—',color=String(r.color||r.sourceColor||'—').trim()||'—';
@@ -14908,5 +14916,7 @@ window.__v5266SerializedPeripheralHotfix=true;
   window.__v5265CentralSnapshot={get state(){return runtimeState},validateSnapshot,resolveRuntimeManifest,buildSourceSet,buildSnapshot,sourceRows};
 })();
 </script>\n
+
+<!-- V5.2.67：Logitech K580 周邊標卡顯示名稱精簡；僅顯示層，不修改原始商品資料與 JOIN。 -->
 </body>
 </html>
