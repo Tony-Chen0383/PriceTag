@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.63｜GitHub 409 SHA 衝突自動復原 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.65｜中央商品資料單一快照架構 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.63</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.63 GitHub 409 SHA 衝突自動復原 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.65</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.65 中央商品資料單一快照架構 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8096,9 +8096,9 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
       </section>
       <section class="page" id="page-new">
         <div class="page-fixed-head">
-        <div class="page-head"><div><h1>新機標價卡</h1><p>匯入「庫存報表＋IMEI報表」後自動產生商品資料；門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
+        <div class="page-head"><div><h1>新機標價卡</h1><p>一般新機匯入「庫存報表＋IMEI報表」後自動產卡；無序號周邊只需庫存報表即可產卡。門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
         <div class="status-grid"><div class="status-card source-drop-card" id="newReportDrop" role="button" tabindex="0" title="點擊或拖曳庫存報表＋IMEI報表 Excel 至此，可一次放入兩份" onclick="document.getElementById('newReportFiles').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('newReportFiles').click()}" ondragenter="newReportDragOver(event)" ondragover="newReportDragOver(event)" ondragleave="newReportDragLeave(event)" ondrop="newReportDrop(event)"><div class="k">商品來源</div><div class="v" id="newImportStatus">點擊匯入</div><div class="s" id="newImportSub">可一次拖曳多份庫存＋IMEI報表</div><input id="newReportFiles" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="newReportFilesSelected(this.files)"></div><div class="status-card"><div class="k">標價卡售價來源</div><div class="v">牌價</div><div class="s">不抓銷售底價／會員價</div></div><div class="status-card"><div class="k">已產生標卡</div><div class="v" id="newItemCount">0 筆</div><div class="s">僅手動調整售價</div></div><div class="status-card"><div class="k">匯入異常</div><div class="v" id="newImportErrorCount">0 筆</div><div class="s">未配對／不可列印資料</div></div></div>
-        <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">庫存報表＋IMEI報表到齊後自動產卡；找不到規格的資料不會硬印。</div></div>
+        <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">一般新機需庫存報表＋IMEI報表；無序號周邊只需庫存報表且同一 SKU 僅產 1 張。找不到必要資料的項目不會硬印。</div></div>
         </div><!-- /page-fixed-head -->
         <div class="grid2">
           <div class="panel"><div class="panel-head"><div><div class="panel-title">本次商品清單</div><div class="panel-sub">匯入後直接顯示正式標價卡；點擊標卡上的售價數字即可修改。</div></div><span class="tag mem">SESSION ONLY</span></div><div class="panel-body" id="newItems"></div></div>
@@ -8253,7 +8253,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
       <div class="v513-batch-box" id="v513BatchBox">
         <div class="v513-batch-head">
-          <div><div class="v513-batch-title">中央資料四檔批次更新</div><div class="v513-batch-sub">一次可選 1～4 份公司 XLSB；系統自動辨識一般版／特殊規格／國際版／烙印版，預檢通過後一次 Commit 發布。</div></div>
+          <div><div class="v513-batch-title">中央資料四檔批次更新</div><div class="v513-batch-sub">操作維持上傳公司 XLSB；系統自動辨識一般版／特殊規格／國際版／烙印版，發布時同步產生單一 JSON 中央快照，門市端不再逐檔解析 XLSB。</div></div>
           <div class="v513-batch-picker">
             <label class="v513-file-btn" for="v513BatchFiles">選擇 1～4 份 XLSB</label>
             <input id="v513BatchFiles" type="file" multiple accept=".xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12" onchange="v513BatchFilesSelected(this.files);this.value=''">
@@ -8283,6 +8283,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
           <span class="v513-batch-progress" id="v513BatchProgress">尚未選擇批次更新檔案。</span>
           <button type="button" class="btn primary" id="v513BatchPublishBtn" onclick="v513PublishBatch()" disabled>一鍵發布已選資料</button>
         </div>
+        <div class="v5265-runtime-status" id="v5265RuntimeStatus">中央快照：等待檢查</div>
       </div>
 
       <div class="v512-catalog-table" role="table" aria-label="中央商品資料來源">
@@ -14355,7 +14356,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 
 <!-- V5.2.63：GitHub manifest SHA 409 衝突自動復原。 -->
 <script id="v5263-github-409-sha-conflict-auto-recovery-hotfix">
-/* ===== V5.2.63｜GitHub 409 SHA 衝突自動復原 Hotfix =====
+/* ===== V5.2.64｜無序號周邊新機標卡支援 Hotfix =====
    Root cause:
    GitHub Contents API 以檔案 SHA 做 optimistic concurrency control。
    若 accessory-logos/manifest.json 在讀取與寫入之間被其他發布更新，舊 SHA 會回 409。
@@ -14471,5 +14472,421 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
 })();
 </script>
 
+
+
+<style id="v5264-noserial-peripheral-newcard-style">
+/* V5.2.64｜無序號周邊新機標卡 */
+.phone-card.new-phone-card.v5264-peripheral-card .cr-brand{font-size:19px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model{font-size:20px!important;line-height:1.04!important;padding:0 8px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-long{font-size:17px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xlong{font-size:15px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .phone-specs{grid-template-rows:repeat(4,minmax(0,1fr)) var(--barcode-zone-h)!important}
+.phone-card.new-phone-card.v5264-peripheral-card .phone-specs>.spec-line{min-height:0!important;height:auto!important}
+.phone-card.new-phone-card.v5264-peripheral-card .spec-line.imei{min-height:78px!important;height:78px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .spec-line.imei .spec-label{height:78px!important;font-size:12px!important;line-height:1.05!important}
+.phone-card.new-phone-card.v5264-peripheral-card .spec-line.imei .spec-value{height:78px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .v5264-code-value{font-size:13px!important;font-weight:850!important;overflow-wrap:anywhere}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model{font-size:18px!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-long{font-size:16px!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xlong{font-size:14px!important}
+}
+</style>
+<script id="v5264-noserial-peripheral-newcard-hotfix">
+/* ===== V5.2.64｜無序號周邊新機標卡支援 Hotfix =====
+   真實驗收案例：
+   - 庫存報表 2026-11-09 08:55:59
+   - Logitech / 羅技 K580 無線鍵盤(福)-ED
+   - 商品編碼 CYAZ0010030000021 / 國際條碼 097855152244
+   - 電腦數位類 > 電腦周邊設備 > 輸入設備
+   - 即時量 5 / 牌價 1290 / 建議售價 1290 / 會員價 960 / 啟用
+
+   原則：
+   1) 只針對「無 IMEI/SN 的周邊類庫存 SKU」啟用；手機/平板/穿戴/遊戲主機既有流程不動。
+   2) 周邊可只匯入庫存報表產卡，不要求 IMEI 報表。
+   3) 同一商品編碼只產 1 張標卡，不依即時量複製。
+   4) 底部識別碼改用國際條碼；沒有條碼則不產卡並列為異常。
+   5) 周邊不硬套 RAM/ROM/CPU/相機/電池，改顯示分類、顏色、商品編碼、保固。
+   6) 若同商品編碼本身存在可銷售 IMEI/SN，仍優先走既有序號新機流程，不重複產卡。
+*/
+(function(){
+  /* 庫存報表增加國際條碼／建議售價欄位；既有欄位保持相容。 */
+  NEW_REPORT_STOCK_HEADERS.barcode=['國際條碼','條碼','商品條碼','barcode','BARCODE','EAN','ean'];
+  NEW_REPORT_STOCK_HEADERS.suggestedPrice=['建議售價','原價','MSRP','msrp'];
+
+  parseNewStockWorkbook=function(wb){
+    const d=newDetectSheet(wb,NEW_REPORT_STOCK_HEADERS,['code','brand','name','price']);
+    if(!d)throw new Error('找不到庫存報表必要欄位：商品編碼／品牌／商品名稱／牌價');
+    const out=[];
+    for(let r=d.headerRow+1;r<d.rows.length;r++){
+      const row=d.rows[r],code=nrText(newCell(row,d.map,'code'));if(!code)continue;
+      out.push({
+        code,store:nrText(newCell(row,d.map,'store')),category:nrText(newCell(row,d.map,'category')),
+        mid:nrText(newCell(row,d.map,'mid')),small:nrText(newCell(row,d.map,'small')),
+        brand:nrText(newCell(row,d.map,'brand')),name:nrText(newCell(row,d.map,'name')),
+        model:nrText(newCell(row,d.map,'model')),barcode:nrText(newCell(row,d.map,'barcode')),
+        capacity:nrText(newCell(row,d.map,'capacity')),color:nrText(newCell(row,d.map,'color')),
+        version:nrText(newCell(row,d.map,'version')),qty:num(newCell(row,d.map,'qty')),
+        floor:num(newCell(row,d.map,'floor')),price:num(newCell(row,d.map,'price')),
+        suggestedPrice:num(newCell(row,d.map,'suggestedPrice')),member:num(newCell(row,d.map,'member')),
+        status:nrText(newCell(row,d.map,'status'))
+      });
+    }
+    if(!out.length)throw new Error('庫存報表沒有可用資料');
+    return out;
+  };
+
+  function peripheralClassText(s){return [s?.category,s?.mid,s?.small,s?.name].filter(Boolean).join(' ')}
+  function isBlockedDeviceClass(s){
+    const t=peripheralClassText(s);
+    return /(手機|智慧型手機|平板|tablet|筆記型電腦|notebook|laptop|桌上型電腦|主機|遊戲機|switch|手錶|watch|穿戴|耳機|airpods)/i.test(t);
+  }
+  function isNoSerialPeripheralStock(s){
+    if(!s||!s.code||isBlockedDeviceClass(s))return false;
+    const t=peripheralClassText(s);
+    const classOk=/(電腦周邊設備|輸入設備|鍵盤|滑鼠|鍵鼠|周邊設備)/i.test(t);
+    return classOk&&!(String(s.model||'').trim()&&String(s.capacity||'').trim());
+  }
+  window.v5264IsNoSerialPeripheralStock=isNoSerialPeripheralStock;
+
+  function peripheralProduct(s){
+    return {
+      category:'周邊',brand:String(s.brand||'').trim()||'—',network:'',name:String(s.name||'').trim()||'—',
+      model:String(s.model||'').trim(),ram:'',rom:'',sim:'',simType:'',microSD:'',year:'',
+      msrp:Number(s.suggestedPrice||s.price||0),newPrice:'',os:'',processor:'',cores:'',display:'',battery:'',fastCharge:'',
+      colors:String(s.color||'').trim(),frontCamera:'',rearCamera:'',biometric:'',accessories:'',ncc:'',
+      __v5264NoSerialPeripheral:true
+    };
+  }
+  function peripheralDisplayName(r,p){return String(r?.sourceName||p?.name||'—').replace(/\s{2,}/g,' ').trim()||'—'}
+  function peripheralCardHtml(p,r,opt={}){
+    const sale=money(r.price)||'—',name=peripheralDisplayName(r,p),cat=String(r.sourceSmall||r.sourceMid||'周邊').trim()||'周邊';
+    const mid=String(r.sourceMid||r.sourceCategory||'—').trim()||'—',color=String(r.color||r.sourceColor||'—').trim()||'—';
+    const code=String(r.sourceCode||'—').trim()||'—',barcode=String(r.barcode||'').trim();
+    const msrp=Number(r.sourceSuggestedPrice||p.msrp||0),msrpText=msrp>0?'$'+Math.round(msrp).toLocaleString('zh-TW'):'—';
+    const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',
+      saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,
+      currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',
+      priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';
+    const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;
+    return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(name)}">${h(name)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta new-phone-meta-fixed"><span class="cr-pill">商品分類</span><span class="cr-meta-val new-date-value">${h(cat)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-value">${h(msrpText)}</span><span class="new-meta-specials-slot"></span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">中分類</div><div class="spec-value">${h(mid)}</div></div><div class="spec-line"><div class="spec-label dark">顏色</div><div class="spec-value yellow">${h(color)}</div></div><div class="spec-line"><div class="spec-label">商品<br>編碼</div><div class="spec-value v5264-code-value">${h(code)}</div></div><div class="spec-line"><div class="spec-label dark">保固</div><div class="spec-value yellow">創宇保固一年</div></div><div class="spec-line imei"><div class="spec-label dark">國際<br>條碼</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(barcode)}</div></div></div>`;
+  }
+
+  const prevNewPhoneHtml=newPhoneHtml;
+  newPhoneHtml=function(p,r,opt={}){
+    if(r?.v5264NoSerialPeripheral||p?.__v5264NoSerialPeripheral)return peripheralCardHtml(p,r,opt);
+    return prevNewPhoneHtml(p,r,opt);
+  };
+
+  const prevNewDisplayName=newDisplayName;
+  newDisplayName=function(item,p){
+    if(item?.v5264NoSerialPeripheral||p?.__v5264NoSerialPeripheral)return peripheralDisplayName(item,p);
+    return prevNewDisplayName(item,p);
+  };
+
+  /* 讓只有庫存報表的無序號周邊也能立即產卡；第二份 IMEI 報表到齊時會合併重建。 */
+  const prevFilesSelected=newReportFilesSelected;
+  newReportFilesSelected=async function(fileList){
+    const beforeStockCount=Array.isArray(newReportState?.stock)?newReportState.stock.length:0;
+    await prevFilesSelected(fileList);
+    if(newReportState?.stock&&!newReportState?.imei){
+      const eligible=newReportState.stock.some(isNoSerialPeripheralStock);
+      if(eligible)buildNewCardsFromReports();
+      else if(beforeStockCount===0)try{toast('庫存報表已載入；一般新機仍需 IMEI 報表')}catch(_){}
+    }
+  };
+
+  buildNewCardsFromReports=function(){
+    const stocks=newReportState.stock,imeis=newReportState.imei||[];
+    if(!stocks){toast('請先載入庫存報表');return}
+    const stockByCode=new Map(),stockByCodeStore=new Map();
+    for(const s of stocks){const ck=nrKey(s.code),sk=ck+'|'+nrKey(s.store);if(!stockByCode.has(ck))stockByCode.set(ck,s);if(!stockByCodeStore.has(sk))stockByCodeStore.set(sk,s)}
+    const sellable=imeis.filter(x=>nrKey(x.status)===nrKey('可銷售')),
+      serializedCodes=new Set(sellable.map(x=>nrKey(x.code)).filter(Boolean)),seenSerial=new Set(),seenPeripheral=new Set(),
+      built=[],errors=[...(newReportState.fileErrors||[])],unmatchedCodes=new Set();
+
+    /* 既有序號商品：完全沿用原本中央規格配對。 */
+    for(const ir of sellable){
+      if(!ir.imei){errors.push(`商品 ${ir.code||'—'}：IMEI/SN 空白`);continue}
+      const ik=nrKey(ir.imei);if(seenSerial.has(ik)){errors.push(`重複 IMEI/SN：${ir.imei}`);continue}seenSerial.add(ik);
+      const ck=nrKey(ir.code),s=stockByCodeStore.get(ck+'|'+nrKey(ir.store))||stockByCode.get(ck);
+      if(!s){errors.push(`IMEI ${ir.imei}：找不到商品編碼 ${ir.code} 的庫存資料`);unmatchedCodes.add(ir.code);continue}
+      if(!(Number(s.price)>0)){errors.push(`${ir.code}｜${s.name}：牌價為 0，禁止產卡`);continue}
+      if(s.status&&nrKey(s.status)!==nrKey('啟用')){errors.push(`${ir.code}｜${s.name}：商品狀態「${s.status}」非啟用`);continue}
+      const m=matchProductFromStock(s);if(!m){errors.push(`${ir.code}｜${s.brand} ${s.name}：中央規格未配對（型號 ${s.model||'—'}／容量 ${s.capacity||'—'}／版本 ${s.version||'—'}）`);unmatchedCodes.add(ir.code);continue}
+      const p=m.p;built.push({productIndex:m.idx,color:normalizeImportedColor(p,s.color),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,imei:ir.imei,warranty:'創宇保固一年',tpl:autoTemplate(p.category,p.name),grade:'A',sourceCode:s.code,sourceStore:ir.store||s.store||'',sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,sourceCapacity:s.capacity,sourceVersion:s.version,sourcePriceType:'牌價'});
+    }
+
+    /* 無序號周邊：一個 SKU 一張，且有序號資料的同 SKU 不重複產卡。 */
+    for(const s of stocks){
+      const ck=nrKey(s.code);if(!ck||serializedCodes.has(ck)||seenPeripheral.has(ck)||!isNoSerialPeripheralStock(s))continue;
+      seenPeripheral.add(ck);
+      if(!(Number(s.price)>0)){errors.push(`${s.code}｜${s.name}：牌價為 0，禁止產卡`);continue}
+      if(s.status&&nrKey(s.status)!==nrKey('啟用')){errors.push(`${s.code}｜${s.name}：商品狀態「${s.status}」非啟用`);continue}
+      if(!String(s.barcode||'').trim()){errors.push(`${s.code}｜${s.name}：國際條碼空白，無序號周邊禁止產卡`);continue}
+      const p=peripheralProduct(s);
+      built.push({productIndex:-1,manualProduct:p,manualSpec:false,v5264NoSerialPeripheral:true,
+        color:String(s.color||'').trim(),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,
+        imei:'',barcode:String(s.barcode||'').trim(),warranty:'創宇保固一年',tpl:'手機',grade:'A',sourceCode:s.code,sourceStore:s.store||'',
+        sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,sourceCapacity:s.capacity,sourceVersion:s.version,
+        sourceSuggestedPrice:Number(s.suggestedPrice||0),sourceMemberPrice:Number(s.member||0),sourceQty:Number(s.qty||0),sourceColor:s.color||'',sourcePriceType:'牌價'});
+    }
+
+    newItems=sortItemsByBrandAZ(built);activeNewIndex=0;newItems.forEach(normalizeItem);
+    const peripheralCount=built.filter(x=>x.v5264NoSerialPeripheral).length;
+    newReportState.errors=errors;newReportState.lastBuild={sellable:sellable.length,peripheral:peripheralCount,built:built.length,errors:errors.length,unmatchedCodes:[...unmatchedCodes]};
+    renderNewItems();updateNewReportUI();
+    const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=errors.length+' 筆';
+    const summary=document.getElementById('newImportSummary');if(summary)summary.innerHTML=`<div class="summary-row"><span><b>可銷售 IMEI：</b>${sellable.length.toLocaleString()} 筆</span><span><b>無序號周邊：</b>${peripheralCount.toLocaleString()} 張</span><span><b>成功產卡：</b>${built.length.toLocaleString()} 張</span><span><b>異常：</b>${errors.length.toLocaleString()} 筆</span><span><b>售價來源：</b>牌價</span></div><div class="summary-note">${errors.length?'異常資料未產卡：'+h(errors.slice(0,3).join('｜'))+(errors.length>3?'…':''):(peripheralCount&&!sellable.length?'✓ 無序號周邊已由庫存報表直接產卡；同一 SKU 僅產 1 張。':'✓ 可列印資料已成功產卡。')}</div>`;
+    toast(`新機標卡產生完成：${built.length} 張${peripheralCount?'｜無序號周邊 '+peripheralCount+' 張':''}${errors.length?'｜異常 '+errors.length+' 筆':''}`);
+  };
+
+  const prevWarnings=newItemWarnings;
+  newItemWarnings=function(){
+    const out=[];
+    newItems.forEach((r,i)=>{const p=productAt(r);if(!r.price)out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入售價`);if(r.v5264NoSerialPeripheral){if(!String(r.barcode||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入國際條碼`)}else if(!String(r.imei||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入 IMEI / SN`)});
+    return out;
+  };
+
+  const prevRenderItems=renderNewItems;
+  renderNewItems=function(){
+    prevRenderItems();
+    const cards=document.querySelectorAll('#newItems .new-preview-card');
+    newItems.forEach((item,i)=>{if(!item?.v5264NoSerialPeripheral)return;const card=cards[i];const tag=card?.querySelector('.tag.auto');if(tag)tag.textContent='無序號周邊';const meta=card?.querySelector('.new-preview-meta .main span');if(meta)meta.textContent=`${item.sourceCode||'—'}｜BARCODE ${item.barcode||'—'}`;const pc=card?.querySelector('.phone-card.new-phone-card');if(pc)pc.classList.add('v5264-peripheral-card')});
+  };
+  const prevRenderPreview=renderNewPreview;
+  renderNewPreview=function(){
+    prevRenderPreview();
+    const r=newItems?.[activeNewIndex];if(!r?.v5264NoSerialPeripheral)return;
+    const phone=document.getElementById('newPhonePreview');phone?.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card');
+    const lab=document.getElementById('newPreviewLabel');if(lab)lab.textContent=`商品 ${activeNewIndex+1}｜新機無序號周邊卡`;
+  };
+
+  const prevOpenBatch=openBatchPreview;
+  openBatchPreview=function(type,showModal=true){
+    prevOpenBatch(type,showModal);if(type!=='new')return;
+    document.querySelectorAll('#batchGrid .batch-preview-item').forEach((node,i)=>{if(newItems[i]?.v5264NoSerialPeripheral)node.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card')});
+  };
+})();
+</script>
+
+\n<style id="v5265-central-snapshot-style">
+/* V5.2.65｜中央商品資料單一快照架構 */
+.v5265-runtime-status{margin-top:8px;padding:8px 10px;border:1px solid #cbd9ea;border-radius:9px;background:#f7fbff;color:#49627f;font-size:11px;font-weight:850;line-height:1.4}
+.v5265-runtime-status.ok{border-color:#9bd9b2;background:#edf9f1;color:#187447}.v5265-runtime-status.warn{border-color:#f0c36d;background:#fff7e5;color:#8a5a00}.v5265-runtime-status.bad{border-color:#efb0b0;background:#fff2f2;color:#a33}
+</style>
+<script id="v5265-central-single-snapshot-hotfix">
+/* ===== V5.2.65｜中央商品資料單一快照架構 Hotfix =====
+   目標：HQ 仍維護一般版／特殊規格／國際版／烙印版 XLSB，但門市 Runtime 不再平行抓 4 份 XLSB。
+   HQ 批次發布時：XLSB 預檢 -> 保留四來源標記 -> 產生單一 versioned JSON snapshot -> 同 Commit 更新 runtime manifest。
+   門市啟動時：runtime manifest -> 1 份 JSON snapshot -> PRODUCTS；失敗時使用 IndexedDB Last Good Snapshot。
+   第一次部署若 runtime manifest 尚不存在，暫時回退 V5.2.64 舊四檔 loader，直到 HQ 完成第一次 V5.2.65 發布。
+*/
+(function(){
+  const TYPES=(typeof V513_TYPES!=='undefined'&&Array.isArray(V513_TYPES))?V513_TYPES:['general','special','international','screenBurn'];
+  const LABELS=(typeof V51_SOURCE_LABELS!=='undefined')?V51_SOURCE_LABELS:{general:'一般版',special:'特殊規格',international:'國際版',screenBurn:'烙印版'};
+  const RUNTIME_MANIFEST_REPO='data/hq/runtime/central-manifest.json';
+  const RUNTIME_MANIFEST_URL='./data/hq/runtime/central-manifest.json';
+  const SNAPSHOT_DIR='data/hq/runtime/snapshots';
+  const SNAPSHOT_SCHEMA='smartmobile-central-products-v1';
+  const CACHE_KEY='runtimeSnapshot';
+  const legacyLoad=v526LoadCentralData;
+  const priorOverview=v51UpdateOverview;
+  let activationTimer=0;
+  let memoryLastGood=null;
+  let runtimeState={mode:'idle',version:'',updatedAt:'',rows:0,fromPending:false,error:'',manifest:null,snapshot:null};
+
+  function esc(v){return String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+  function sourceRows(products,type){return (products||[]).filter(p=>(p?.__v51Source||'general')===type).length}
+  function runtimeStatus(text,kind=''){
+    const el=document.getElementById('v5265RuntimeStatus');if(!el)return;el.className='v5265-runtime-status'+(kind?' '+kind:'');el.textContent=text;
+  }
+  function metaFromState(type){
+    const st=V51_SOURCE_STATE?.[type]||{},arr=V51_SOURCE_PRODUCTS?.[type]||[];
+    return {sourceFileName:st.sourceFileName||'',rows:arr.length,reportDate:st.reportDate||st.date||'',updatedAt:st.updatedAt||'',dataVersion:st.dataVersion||'',file:st.file||''};
+  }
+  function selectedMeta(p,now){return {sourceFileName:p.file?.name||'',rows:p.products?.length||0,reportDate:p.reportDate||'',updatedAt:now,dataVersion:(typeof v533VersionFromFilename==='function'?v533VersionFromFilename(p.file?.name||''):'')||'',file:''}}
+  function effective(p,now=Date.now()){const t=Date.parse(p?.effectiveAt||'');return !!(p?.file&&Number.isFinite(t)&&t<=now)}
+  function future(p,now=Date.now()){const t=Date.parse(p?.effectiveAt||'');return !!(p?.file&&Number.isFinite(t)&&t>now)}
+  function resolveRuntimeManifest(m){
+    if(effective(m?.pending))return {...m.pending,fromPending:true};
+    return {file:m?.currentFile||'',updatedAt:m?.updatedAt||'',sources:m?.sources||{},totalRows:m?.totalRows||0,version:m?.snapshotVersion||m?.version||'',fromPending:false};
+  }
+  function armActivation(m){
+    if(activationTimer){clearTimeout(activationTimer);activationTimer=0}
+    const t=Date.parse(m?.pending?.effectiveAt||'');if(!Number.isFinite(t)||t<=Date.now())return;
+    const wait=Math.max(500,Math.min(2147483000,t-Date.now()+1200));activationTimer=setTimeout(()=>{activationTimer=0;v526LoadCentralData(true)},wait);
+  }
+  function validateSnapshot(snap){
+    if(!snap||snap.schema!==SNAPSHOT_SCHEMA||!Array.isArray(snap.products)||!snap.products.length)throw new Error('中央快照格式不完整');
+    for(const t of TYPES){const n=sourceRows(snap.products,t);if(!n)throw new Error(`${LABELS[t]}快照資料為 0 筆`) }
+    return true;
+  }
+  async function fetchRuntimeManifest(){return await v526FetchJson(RUNTIME_MANIFEST_URL,true)}
+  async function fetchSnapshot(file,version=''){
+    const base=new URL(RUNTIME_MANIFEST_URL,location.href),u=new URL(file,base);u.searchParams.set('v',version||String(Date.now()));
+    const r=await fetch(u,{cache:'no-store'});if(!r.ok)throw new Error(`中央商品快照 HTTP ${r.status}`);return await r.json();
+  }
+  async function saveLastGood(manifest,resolved,snapshot){
+    memoryLastGood={manifest,resolved,snapshot};
+    await v526CachePut(CACHE_KEY,{sig:v526StableSig({file:resolved.file,updatedAt:resolved.updatedAt,version:resolved.version}),manifest,resolved,snapshot,products:snapshot.products,reportDate:snapshot.generatedAt||'',sheet:'JSON Snapshot'});
+  }
+  async function getLastGood(){
+    if(memoryLastGood?.snapshot?.products?.length){try{validateSnapshot(memoryLastGood.snapshot);return memoryLastGood}catch(_){}}
+    const c=await v526CacheGet(CACHE_KEY);if(!c?.snapshot?.products?.length)return null;try{validateSnapshot(c.snapshot);memoryLastGood={manifest:c.manifest||null,resolved:c.resolved||null,snapshot:c.snapshot};return memoryLastGood}catch(_){return null}
+  }
+  function applySnapshot(snapshot,resolved,mode,error=''){
+    validateSnapshot(snapshot);
+    const metaSources=resolved?.sources||snapshot.sources||{};
+    for(const type of TYPES){
+      const arr=snapshot.products.filter(p=>(p?.__v51Source||'general')===type);V51_SOURCE_PRODUCTS[type]=arr;
+      const m=metaSources[type]||snapshot.sources?.[type]||{},st=V51_SOURCE_STATE[type]||(V51_SOURCE_STATE[type]={});
+      Object.assign(st,{ready:true,rows:arr.length,error:'',date:m.reportDate||'',reportDate:m.reportDate||'',sourceFileName:m.sourceFileName||'',dataVersion:m.dataVersion||(typeof v533VersionFromFilename==='function'?v533VersionFromFilename(m.sourceFileName||''):'')||'',updatedAt:m.updatedAt||resolved?.updatedAt||snapshot.generatedAt||'',file:m.file||'',fromPending:!!resolved?.fromPending,__v5265Snapshot:true});
+      delete st.__v554Fallback;delete st.__v554FallbackAt;try{v51UpdateSourceUi(type)}catch(_){}
+    }
+    v51RebuildProductLayer();
+    const gm=metaSources.general||snapshot.sources?.general||{};
+    v526ApplyGeneralPriceMaps({currentFile:gm.file||'./runtime/central-products.json',sourceFileName:gm.sourceFileName||'',updatedAt:gm.updatedAt||resolved?.updatedAt||snapshot.generatedAt||'',lastValidatedRows:gm.rows||V51_SOURCE_PRODUCTS.general.length});
+    runtimeState={mode,version:resolved?.version||snapshot.snapshotVersion||'',updatedAt:resolved?.updatedAt||snapshot.generatedAt||'',rows:snapshot.products.length,fromPending:!!resolved?.fromPending,error,manifest:runtimeState.manifest,snapshot};
+    try{if(usedItems?.length){renderUsedItems();renderUsedPreview()}if(newItems?.length){renderNewItems();renderNewPreview()}}catch(_){}
+  }
+  function renderRuntimeUi(){
+    const val=document.getElementById('v51CatalogOverviewStatus'),meta=document.getElementById('v51CatalogOverviewMeta'),badge=document.getElementById('v51CatalogBadge'),note=document.getElementById('v51CatalogLoadNote');
+    const rows=Number(runtimeState.rows||0).toLocaleString();
+    if(runtimeState.mode==='live'){
+      if(val)val.textContent='中央快照 已連線';if(meta)meta.textContent=`單一 JSON 快照 ${rows} 筆｜四來源驗證完整${runtimeState.fromPending?'｜預約版本已生效':''}`;
+      if(badge){badge.textContent='快照 OK';badge.classList.remove('pending')}
+      if(note)note.textContent=`中央資料已由單一 JSON 快照載入｜${rows} 筆｜不再逐檔下載 4 份 XLSB`;
+      runtimeStatus(`中央快照：已連線｜${rows} 筆${runtimeState.updatedAt?'｜'+String(runtimeState.updatedAt).replace('T',' ').slice(0,16):''}`,'ok');
+    }else if(runtimeState.mode==='cache'){
+      if(val)val.textContent='中央快照 可用';if(meta)meta.textContent=`即時更新暫時失敗｜Last Good Snapshot ${rows} 筆`;
+      if(badge){badge.textContent='快照備援';badge.classList.add('pending')}
+      if(note)note.textContent=`中央快照即時讀取失敗，已安全使用最後成功版本｜${runtimeState.error||'網路異常'}`;
+      runtimeStatus(`中央快照：Last Good 備援中｜${rows} 筆｜${runtimeState.error||'即時來源異常'}`,'warn');
+    }else if(runtimeState.mode==='legacy'){
+      if(val)val.textContent='相容模式';if(meta)meta.textContent='尚未建立 V5.2.65 JSON 快照｜暫時沿用舊 4 XLSB';
+      if(badge){badge.textContent='待建立快照';badge.classList.add('pending')}
+      if(note)note.textContent='目前為 V5.2.65 首次遷移相容模式；請由 HQ 批次發布中央 XLSB，一次建立正式 JSON 快照。';
+      runtimeStatus('中央快照：尚未建立｜目前暫用舊 4 XLSB；HQ 下一次批次發布後自動切換','warn');
+    }else if(runtimeState.mode==='loading'){
+      if(val)val.textContent='中央快照載入中…';if(badge){badge.textContent='同步中';badge.classList.add('pending')};runtimeStatus('中央快照：正在同步…');
+    }else if(runtimeState.mode==='error'){
+      if(val)val.textContent='中央快照載入失敗';if(meta)meta.textContent=runtimeState.error||'無可用快照';if(badge){badge.textContent='快照異常';badge.classList.add('pending')};if(note)note.textContent='中央商品快照無法載入，且本機沒有 Last Good Snapshot。';runtimeStatus('中央快照：載入失敗｜'+(runtimeState.error||'無可用快照'),'bad');
+    }
+  }
+
+  v51UpdateOverview=function(){priorOverview();renderRuntimeUi()};
+
+  v526LoadCentralData=async function(force=false,onlyTypes=null){
+    if(V526_LOADING_ALL&&!force)return false;V526_LOADING_ALL=true;V51_LOADING=true;HQ_PRICE_STATE.loading=true;HQ_PRICE_STATE.error='';V526_LAST_LOAD_ERROR='';
+    const started=performance.now();runtimeState.mode='loading';updateHqPriceStatus();v51UpdateOverview();
+    try{
+      let manifest=null,resolved=null,snapshot=null,networkError='';
+      try{
+        manifest=await fetchRuntimeManifest();armActivation(manifest);resolved=resolveRuntimeManifest(manifest);runtimeState.manifest=manifest;
+        if(!resolved.file)throw new Error('中央快照尚未建立');
+        snapshot=await fetchSnapshot(resolved.file,resolved.version||resolved.updatedAt||'');validateSnapshot(snapshot);applySnapshot(snapshot,resolved,'live','');await saveLastGood(manifest,resolved,snapshot);return true;
+      }catch(err){networkError=String(err?.message||err);console.warn('V5.2.65 runtime snapshot load failed',err)}
+
+      const cached=await getLastGood();
+      if(cached){runtimeState.manifest=cached.manifest||null;applySnapshot(cached.snapshot,cached.resolved||{sources:cached.snapshot.sources||{},updatedAt:cached.snapshot.generatedAt||'',version:cached.snapshot.snapshotVersion||''},'cache',networkError);return false}
+
+      /* 首次遷移：只有 runtime manifest 尚未建立時才允許回到舊 4 XLSB。 */
+      if(/404|尚未建立|Failed to fetch|HTTP 404/i.test(networkError)){
+        const ok=await legacyLoad(force,onlyTypes);runtimeState={mode:'legacy',version:'',updatedAt:'',rows:Object.values(V51_SOURCE_PRODUCTS||{}).reduce((n,a)=>n+(a?.length||0),0),fromPending:false,error:networkError,manifest:null,snapshot:null};return ok;
+      }
+      throw new Error(networkError||'中央快照載入失敗');
+    }catch(err){HQ_PRICE_STATE.ready=false;HQ_PRICE_STATE.error=String(err?.message||err);V526_LAST_LOAD_ERROR=HQ_PRICE_STATE.error;runtimeState.mode='error';runtimeState.error=HQ_PRICE_STATE.error;console.warn('V5.2.65 central snapshot failed',err);return false}
+    finally{V526_LAST_LOAD_MS=performance.now()-started;V51_LOADING=false;HQ_PRICE_STATE.loading=false;V526_LOADING_ALL=false;updateHqPriceStatus();v51UpdateOverview()}
+  };
+  loadHqSuggestedPrices=async function(force=false){return v526LoadCentralData(force)};
+  v51LoadCatalogs=async function(force=false){return v526LoadCentralData(force)};
+
+  function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
+  let snapshotSeq=0;
+  function snapshotPath(){snapshotSeq++;return `${SNAPSHOT_DIR}/central-products-${stamp()}-${snapshotSeq}.json`}
+  function relRuntimeFile(repoPath){return './snapshots/'+repoPath.split('/').pop()}
+  function buildSourceSet(selected,now){
+    const byType=new Map(selected.map(p=>[p.type,p])),products=[],sources={};
+    for(const type of TYPES){
+      const p=byType.get(type),arr=p?.products?.length?p.products:(V51_SOURCE_PRODUCTS?.[type]||[]);if(!arr.length)throw new Error(`${LABELS[type]}目前沒有完整資料，無法建立中央快照`);
+      for(const x of arr)products.push({...x,__v51Source:type});sources[type]=p?selectedMeta(p,now):metaFromState(type);sources[type].rows=arr.length;
+    }
+    return {products,sources};
+  }
+  function buildSnapshot(set,now){return {schema:SNAPSHOT_SCHEMA,snapshotVersion:'5.2.65-'+stamp(),generatedAt:now,sourceCount:4,totalRows:set.products.length,sources:set.sources,products:set.products}}
+  async function readRuntimeRepoManifest(){try{return await gh32ReadJsonFromRepo(RUNTIME_MANIFEST_REPO)}catch(_){return {version:'5.2.65',schema:SNAPSHOT_SCHEMA}}}
+  function runtimeEntry(m){return {path:RUNTIME_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')}}
+  function snapshotEntry(path,snap){return {path,b64:gh32Utf8ToBase64(JSON.stringify(snap))}}
+
+  /* 正式批次發布：4 XLSB 與單一 JSON snapshot 在同一 Git Commit 原子切換。 */
+  v513PublishBatch=async function(){
+    const selected=TYPES.map(t=>V513_BATCH[t]).filter(Boolean),bad=selected.filter(p=>!p.ok);if(!selected.length)return toast('請先選擇要更新的 XLSB');if(bad.length)return toast('仍有檔案未通過預檢');const plan=v533GetPlan();if(!plan.ok)return toast(plan.error);if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+    if(plan.mode==='scheduled'){
+      const foreignPending=TYPES.filter(t=>!V513_BATCH[t]&&future(V51_SOURCE_STATE?.[t]?.pending));if(foreignPending.length)return toast(`已有其他來源預約中：${foreignPending.map(t=>LABELS[t]).join('、')}；單一快照架構請一次選齊或先取消既有預約`);
+    }
+    const btn=document.getElementById('v513BatchPublishBtn'),prog=document.getElementById('v513BatchProgress');try{
+      if(btn)btn.disabled=true;if(prog){prog.className='v513-batch-progress';prog.textContent=plan.mode==='scheduled'?'正在建立預約 XLSB＋JSON 快照 Commit…':'正在建立 XLSB＋JSON 快照單一 Commit…'}
+      const entries=[],now=gh32NowIso(),repoPaths={};
+      for(const p of selected){const path=plan.mode==='scheduled'?v533ScheduledRepoPath(p.type,plan.effectiveAt):(p.type==='general'?GH32_PRICE_PATH:V51_CATALOG_REPO_PATHS[p.type]);repoPaths[p.type]=path;entries.push({path,b64:gh32BytesToBase64(new Uint8Array(p.buffer))})}
+      if(V513_BATCH.general?.ok){let m={};try{m=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH)}catch(_){}m=v533PromoteEffectivePricePending(m);m.currentFile=m.currentFile||'./current/hq-suggested-price.xlsb';if(plan.mode==='scheduled'){m.pending=v533PendingMeta(V513_BATCH.general,repoPaths.general,plan.effectiveAt,now)}else{m.currentFile='./current/hq-suggested-price.xlsb';m.updatedAt=now;m.sourceFileName=V513_BATCH.general.file.name;m.reportDate=V513_BATCH.general.reportDate||'';m.lastValidatedRows=V513_BATCH.general.priceRows;m.lastMatchedProducts=V513_BATCH.general.matched;m.publishedVia='V5.2.65 immediate snapshot publish';delete m.pending}entries.push({path:GH32_PRICE_MANIFEST_PATH,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')})}
+      const aux=selected.filter(p=>p.type!=='general');
+      if(aux.length){
+        let m={version:'5.2.65',updatedAt:now,sources:{}};try{m=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO)}catch(_){}
+        m.version='5.2.65';m.sources=m.sources||{};if(plan.mode==='immediate')m.updatedAt=now;
+        for(const p of aux){
+          const cur=v533PromoteEffectiveCatalogPending(m.sources[p.type]||{file:'./'+V51_CATALOG_REPO_PATHS[p.type].split('/').pop()});
+          if(plan.mode==='scheduled'){cur.pending=v533PendingMeta(p,repoPaths[p.type],plan.effectiveAt,now);m.sources[p.type]=cur}
+          else{m.sources[p.type]={file:'./'+V51_CATALOG_REPO_PATHS[p.type].split('/').pop(),sourceFileName:p.file.name,rows:p.products.length,reportDate:p.reportDate||'',updatedAt:now}}
+        }
+        entries.push({path:V51_CATALOG_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(m,null,2)+'\n')});
+      }
+
+      const set=buildSourceSet(selected,now),snap=buildSnapshot(set,now),sp=snapshotPath();entries.push(snapshotEntry(sp,snap));
+      let rm=await readRuntimeRepoManifest();rm.version='5.2.65';rm.schema=SNAPSHOT_SCHEMA;
+      if(plan.mode==='scheduled'){
+        if(!rm.currentFile){
+          const activeSet=buildSourceSet([],now),activeSnap=buildSnapshot(activeSet,now),ap=snapshotPath();entries.push(snapshotEntry(ap,activeSnap));rm.currentFile=relRuntimeFile(ap);rm.updatedAt=now;rm.sources=activeSet.sources;rm.totalRows=activeSet.products.length;rm.snapshotVersion=activeSnap.snapshotVersion;
+        }
+        rm.pending={file:relRuntimeFile(sp),updatedAt:now,effectiveAt:plan.effectiveAt,sources:set.sources,totalRows:set.products.length,version:snap.snapshotVersion};
+      }else{rm.currentFile=relRuntimeFile(sp);rm.updatedAt=now;rm.sources=set.sources;rm.totalRows=set.products.length;rm.snapshotVersion=snap.snapshotVersion;delete rm.pending}
+      entries.push(runtimeEntry(rm));
+
+      const labels=selected.map(p=>LABELS[p.type]).join(' / '),commit=await v513SingleCommit(entries,`${plan.mode==='scheduled'?'V5.2.65 scheduled':'V5.2.65 immediate'} XLSB + central JSON snapshot｜${labels}｜${now}`);
+      if(plan.mode==='scheduled'){
+        for(const p of selected){const pm=v533PendingMeta(p,repoPaths[p.type],plan.effectiveAt,now),st=V51_SOURCE_STATE[p.type]||{};st.pending=pm;st.pendingVersion=v533VersionFromFilename(pm.sourceFileName);st.pendingEffectiveAt=pm.effectiveAt;v51UpdateSourceUi(p.type)}
+        runtimeStatus(`中央快照：已建立預約版本｜生效 ${v533FormatDateTime(plan.effectiveAt)}｜${set.products.length.toLocaleString()} 筆`,'ok');if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ XLSB＋JSON 快照預約完成｜${selected.length} 份｜${set.products.length.toLocaleString()} 筆｜Commit ${String(commit.sha||'').slice(0,7)}`};toast('中央資料與 JSON 快照已完成預約發布')
+      }else{
+        for(const p of selected){V51_SOURCE_PRODUCTS[p.type]=p.products;Object.assign(V51_SOURCE_STATE[p.type],{ready:true,rows:p.products.length,error:'',date:p.reportDate||'',sourceFileName:p.file.name,dataVersion:v533VersionFromFilename(p.file.name),reportDate:p.reportDate||'',updatedAt:now,pending:null,pendingVersion:'',pendingEffectiveAt:'',fromPending:false});v51UpdateSourceUi(p.type)}
+        runtimeState.manifest=rm;applySnapshot(snap,{file:rm.currentFile,updatedAt:now,sources:set.sources,totalRows:set.products.length,version:snap.snapshotVersion,fromPending:false},'live','');await saveLastGood(rm,{file:rm.currentFile,updatedAt:now,sources:set.sources,totalRows:set.products.length,version:snap.snapshotVersion},snap);v51UpdateOverview();
+        if(prog){prog.className='v513-batch-progress good';prog.textContent=`✓ GitHub 發布成功｜XLSB ${selected.length} 份＋JSON 快照 ${set.products.length.toLocaleString()} 筆｜Commit ${String(commit.sha||'').slice(0,7)}`};toast('中央資料發布成功｜門市端已切換單一 JSON 快照')
+      }
+    }catch(err){if(prog){prog.className='v513-batch-progress bad';prog.textContent='發布失敗：'+String(err?.message||err)}runtimeStatus('中央快照發布失敗：'+String(err?.message||err),'bad');toast('中央資料發布失敗')}finally{const keepText=prog?.textContent||'',keepClass=prog?.className||'';v513RenderBatch();if(prog&&(/✓|發布失敗/.test(keepText))){prog.textContent=keepText;prog.className=keepClass}}
+  };
+
+  /* V5.2.65 正式中央資料由批次快照發布；避免單檔更新 XLSB 後門市 snapshot 未同步。 */
+  function lockLegacySinglePublish(){
+    for(const id of ['gh32PricePublishBtn','v51Publish-special','v51Publish-international','v51Publish-screenBurn']){const b=document.getElementById(id);if(!b)continue;b.disabled=true;b.title='V5.2.65 單一快照架構：請使用上方「中央資料四檔批次更新」，系統會同步建立門市 JSON 快照';if(id!=='gh32PricePublishBtn')b.textContent='請用批次快照發布'}
+  }
+  setTimeout(lockLegacySinglePublish,0);
+  const prevGhButtons=gh32UpdatePublishButtons;gh32UpdatePublishButtons=function(){prevGhButtons();lockLegacySinglePublish();v513RenderBatch()};
+
+  /* 取消預約時，runtime snapshot 與同批 legacy pending 一起取消，避免到點後 JSON 又切回預約資料。 */
+  const legacyCancel=v533CancelPending;
+  v533CancelPending=async function(type,event){
+    try{
+      event?.preventDefault?.();event?.stopPropagation?.();if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+      let rm=await readRuntimeRepoManifest();if(!rm.pending)return legacyCancel(type,event);
+      if(!confirm('V5.2.65 單一快照的預約是整批生效；取消將一併取消本次中央快照預約。確定繼續？'))return;
+      const eff=rm.pending.effectiveAt||'';delete rm.pending;const entries=[runtimeEntry(rm)];
+      try{let pm=await gh32ReadJsonFromRepo(GH32_PRICE_MANIFEST_PATH);if(pm.pending&&(!eff||pm.pending.effectiveAt===eff)){delete pm.pending;entries.push({path:GH32_PRICE_MANIFEST_PATH,b64:gh32Utf8ToBase64(JSON.stringify(pm,null,2)+'\n')})}}catch(_){}
+      try{let cm=await gh32ReadJsonFromRepo(V51_CATALOG_MANIFEST_REPO);let changed=false;for(const t of ['special','international','screenBurn'])if(cm.sources?.[t]?.pending&&(!eff||cm.sources[t].pending.effectiveAt===eff)){delete cm.sources[t].pending;changed=true}if(changed)entries.push({path:V51_CATALOG_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(cm,null,2)+'\n')})}catch(_){}
+      const commit=await v513SingleCommit(entries,`V5.2.65 cancel central snapshot schedule｜${gh32NowIso()}`);for(const t of TYPES){const st=V51_SOURCE_STATE[t];if(st?.pending&&(!eff||st.pending.effectiveAt===eff)){st.pending=null;st.pendingVersion='';st.pendingEffectiveAt='';v51UpdateSourceUi(t)}}runtimeStatus(`中央快照：預約已取消｜Commit ${String(commit.sha||'').slice(0,7)}`,'ok');toast('已取消整批中央快照預約；目前正式資料維持不變')
+    }catch(err){toast('取消預約失敗：'+String(err?.message||err))}
+  };
+
+  window.__v5265CentralSnapshot={get state(){return runtimeState},validateSnapshot,resolveRuntimeManifest,buildSourceSet,buildSnapshot,sourceRows};
+})();
+</script>\n
 </body>
 </html>
