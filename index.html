@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.65｜中央商品資料單一快照架構 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.66｜有序號周邊新機標卡 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.65</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.65 中央商品資料單一快照架構 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.66</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.66 有序號周邊新機標卡 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8096,9 +8096,9 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
       </section>
       <section class="page" id="page-new">
         <div class="page-fixed-head">
-        <div class="page-head"><div><h1>新機標價卡</h1><p>一般新機匯入「庫存報表＋IMEI報表」後自動產卡；無序號周邊只需庫存報表即可產卡。門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
+        <div class="page-head"><div><h1>新機標價卡</h1><p>一般新機匯入「庫存報表＋IMEI報表」後自動產卡；有序號周邊使用庫存＋SN直接產卡，無序號周邊只需庫存報表。門市只需確認資料，必要時手動調整「新機售價」；新機保固固定為創宇保固一年。</p></div><div class="actions"><button class="btn danger" onclick="resetNewItems()">清空本次作業</button><button class="btn primary" onclick="printPage('new')">批次列印</button></div></div>
         <div class="status-grid"><div class="status-card source-drop-card" id="newReportDrop" role="button" tabindex="0" title="點擊或拖曳庫存報表＋IMEI報表 Excel 至此，可一次放入兩份" onclick="document.getElementById('newReportFiles').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('newReportFiles').click()}" ondragenter="newReportDragOver(event)" ondragover="newReportDragOver(event)" ondragleave="newReportDragLeave(event)" ondrop="newReportDrop(event)"><div class="k">商品來源</div><div class="v" id="newImportStatus">點擊匯入</div><div class="s" id="newImportSub">可一次拖曳多份庫存＋IMEI報表</div><input id="newReportFiles" type="file" accept=".xlsx,.xls,.xlsb" multiple hidden onchange="newReportFilesSelected(this.files)"></div><div class="status-card"><div class="k">標價卡售價來源</div><div class="v">牌價</div><div class="s">不抓銷售底價／會員價</div></div><div class="status-card"><div class="k">已產生標卡</div><div class="v" id="newItemCount">0 筆</div><div class="s">僅手動調整售價</div></div><div class="status-card"><div class="k">匯入異常</div><div class="v" id="newImportErrorCount">0 筆</div><div class="s">未配對／不可列印資料</div></div></div>
-        <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">一般新機需庫存報表＋IMEI報表；無序號周邊只需庫存報表且同一 SKU 僅產 1 張。找不到必要資料的項目不會硬印。</div></div>
+        <div class="new-import-summary" id="newImportSummary"><div class="summary-row"><span><b>匯入：</b>左上「商品來源」可一次拖入兩份報表</span><span>商品編碼 JOIN</span><span>規格自動配對</span></div><div class="summary-note">一般新機需庫存報表＋IMEI報表；有序號周邊不要求中央規格，無序號周邊只需庫存報表且同一 SKU 僅產 1 張。找不到必要資料的項目不會硬印。</div></div>
         </div><!-- /page-fixed-head -->
         <div class="grid2">
           <div class="panel"><div class="panel-head"><div><div class="panel-title">本次商品清單</div><div class="panel-sub">匯入後直接顯示正式標價卡；點擊標卡上的售價數字即可修改。</div></div><span class="tag mem">SESSION ONLY</span></div><div class="panel-body" id="newItems"></div></div>
@@ -14562,25 +14562,27 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   function peripheralCardHtml(p,r,opt={}){
     const sale=money(r.price)||'—',name=peripheralDisplayName(r,p),cat=String(r.sourceSmall||r.sourceMid||'周邊').trim()||'周邊';
     const mid=String(r.sourceMid||r.sourceCategory||'—').trim()||'—',color=String(r.color||r.sourceColor||'—').trim()||'—';
-    const code=String(r.sourceCode||'—').trim()||'—',barcode=String(r.barcode||'').trim();
+    const code=String(r.sourceCode||'—').trim()||'—',serialized=!!r.v5266SerializedPeripheral;
+    const identifier=serialized?String(r.imei||'').trim():String(r.barcode||'').trim();
+    const identifierLabel=serialized?'SN':'國際<br>條碼';
     const msrp=Number(r.sourceSuggestedPrice||p.msrp||0),msrpText=msrp>0?'$'+Math.round(msrp).toLocaleString('zh-TW'):'—';
     const saleRowStyle='position:absolute;left:78px;right:10px;top:78px;height:38px;display:grid;grid-template-columns:40px 22px auto;align-items:center;justify-content:center;column-gap:4px;z-index:20;',
       saleBadgeStyle=`width:40px;height:22px;display:flex;align-items:center;justify-content:center;justify-self:end;background:url(${ON_SALE_BADGE_IMAGE}) center/contain no-repeat;`,
       currencyStyle='display:block;color:#153d93;font-size:31px;font-weight:900;line-height:1;text-align:center;justify-self:center;',
       priceStyle='display:block;color:#111;font-size:33px;font-weight:900;line-height:1;letter-spacing:-.02em;white-space:nowrap;text-align:left;justify-self:start;';
     const saleValue=opt.editablePrice?`<strong class="cr-price inline-edit-price" style="${priceStyle}" contenteditable="true" spellcheck="false" title="點擊直接修改售價" oninput="editNewPriceOnCard(${Number(opt.index)||0},this)" onblur="commitNewPriceOnCard(${Number(opt.index)||0},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}">${h(sale)}</strong>`:`<strong class="cr-price" style="${priceStyle}">${h(sale)}</strong>`;
-    return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(name)}">${h(name)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta new-phone-meta-fixed"><span class="cr-pill">商品分類</span><span class="cr-meta-val new-date-value">${h(cat)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-value">${h(msrpText)}</span><span class="new-meta-specials-slot"></span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">中分類</div><div class="spec-value">${h(mid)}</div></div><div class="spec-line"><div class="spec-label dark">顏色</div><div class="spec-value yellow">${h(color)}</div></div><div class="spec-line"><div class="spec-label">商品<br>編碼</div><div class="spec-value v5264-code-value">${h(code)}</div></div><div class="spec-line"><div class="spec-label dark">保固</div><div class="spec-value yellow">創宇保固一年</div></div><div class="spec-line imei"><div class="spec-label dark">國際<br>條碼</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(barcode)}</div></div></div>`;
+    return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade has-image"><img src="${NEW_GRADE_LOGO}" alt="全新品"></div><div class="cr-brand">${h(p.brand)}</div><div class="cr-model ${phoneNameClass(name)}">${h(name)}</div><div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span>${saleValue}</div><div class="cr-meta new-phone-meta-fixed"><span class="cr-pill">商品分類</span><span class="cr-meta-val new-date-value">${h(cat)}</span><span class="cr-pill">建議售價</span><span class="cr-meta-val new-msrp-value">${h(msrpText)}</span><span class="new-meta-specials-slot"></span></div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">中分類</div><div class="spec-value">${h(mid)}</div></div><div class="spec-line"><div class="spec-label dark">顏色</div><div class="spec-value yellow">${h(color)}</div></div><div class="spec-line"><div class="spec-label">商品<br>編碼</div><div class="spec-value v5264-code-value">${h(code)}</div></div><div class="spec-line"><div class="spec-label dark">保固</div><div class="spec-value yellow">創宇保固一年</div></div><div class="spec-line imei"><div class="spec-label dark">${identifierLabel}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(identifier)}</div></div></div>`;
   }
 
   const prevNewPhoneHtml=newPhoneHtml;
   newPhoneHtml=function(p,r,opt={}){
-    if(r?.v5264NoSerialPeripheral||p?.__v5264NoSerialPeripheral)return peripheralCardHtml(p,r,opt);
+    if(r?.v5264NoSerialPeripheral||r?.v5266SerializedPeripheral||p?.__v5264NoSerialPeripheral)return peripheralCardHtml(p,r,opt);
     return prevNewPhoneHtml(p,r,opt);
   };
 
   const prevNewDisplayName=newDisplayName;
   newDisplayName=function(item,p){
-    if(item?.v5264NoSerialPeripheral||p?.__v5264NoSerialPeripheral)return peripheralDisplayName(item,p);
+    if(item?.v5264NoSerialPeripheral||item?.v5266SerializedPeripheral||p?.__v5264NoSerialPeripheral)return peripheralDisplayName(item,p);
     return prevNewDisplayName(item,p);
   };
 
@@ -14613,6 +14615,17 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
       if(!s){errors.push(`IMEI ${ir.imei}：找不到商品編碼 ${ir.code} 的庫存資料`);unmatchedCodes.add(ir.code);continue}
       if(!(Number(s.price)>0)){errors.push(`${ir.code}｜${s.name}：牌價為 0，禁止產卡`);continue}
       if(s.status&&nrKey(s.status)!==nrKey('啟用')){errors.push(`${ir.code}｜${s.name}：商品狀態「${s.status}」非啟用`);continue}
+      /* V5.2.66：有序號周邊不要求中央 PRODUCTS；庫存資料 + 實際 SN 即可產卡。 */
+      if(isNoSerialPeripheralStock(s)){
+        const p=peripheralProduct(s);
+        built.push({productIndex:-1,manualProduct:p,manualSpec:false,v5266SerializedPeripheral:true,
+          color:String(s.color||'').trim(),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,
+          imei:String(ir.imei||'').trim(),barcode:String(s.barcode||'').trim(),warranty:'創宇保固一年',tpl:'手機',grade:'A',sourceCode:s.code,
+          sourceStore:ir.store||s.store||'',sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,
+          sourceCapacity:s.capacity,sourceVersion:s.version,sourceSuggestedPrice:Number(s.suggestedPrice||0),sourceMemberPrice:Number(s.member||0),
+          sourceQty:Number(s.qty||0),sourceColor:s.color||'',sourcePriceType:'牌價'});
+        continue;
+      }
       const m=matchProductFromStock(s);if(!m){errors.push(`${ir.code}｜${s.brand} ${s.name}：中央規格未配對（型號 ${s.model||'—'}／容量 ${s.capacity||'—'}／版本 ${s.version||'—'}）`);unmatchedCodes.add(ir.code);continue}
       const p=m.p;built.push({productIndex:m.idx,color:normalizeImportedColor(p,s.color),price:String(Math.round(Number(s.price))),sourcePrice:String(Math.round(Number(s.price))),priceManuallyChanged:false,imei:ir.imei,warranty:'創宇保固一年',tpl:autoTemplate(p.category,p.name),grade:'A',sourceCode:s.code,sourceStore:ir.store||s.store||'',sourceName:s.name,sourceSmall:s.small,sourceMid:s.mid,sourceCategory:s.category,sourceModel:s.model,sourceCapacity:s.capacity,sourceVersion:s.version,sourcePriceType:'牌價'});
     }
@@ -14633,12 +14646,12 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     }
 
     newItems=sortItemsByBrandAZ(built);activeNewIndex=0;newItems.forEach(normalizeItem);
-    const peripheralCount=built.filter(x=>x.v5264NoSerialPeripheral).length;
-    newReportState.errors=errors;newReportState.lastBuild={sellable:sellable.length,peripheral:peripheralCount,built:built.length,errors:errors.length,unmatchedCodes:[...unmatchedCodes]};
+    const peripheralCount=built.filter(x=>x.v5264NoSerialPeripheral).length,serializedPeripheralCount=built.filter(x=>x.v5266SerializedPeripheral).length;
+    newReportState.errors=errors;newReportState.lastBuild={sellable:sellable.length,peripheral:peripheralCount,serializedPeripheral:serializedPeripheralCount,built:built.length,errors:errors.length,unmatchedCodes:[...unmatchedCodes]};
     renderNewItems();updateNewReportUI();
     const ec=document.getElementById('newImportErrorCount');if(ec)ec.textContent=errors.length+' 筆';
-    const summary=document.getElementById('newImportSummary');if(summary)summary.innerHTML=`<div class="summary-row"><span><b>可銷售 IMEI：</b>${sellable.length.toLocaleString()} 筆</span><span><b>無序號周邊：</b>${peripheralCount.toLocaleString()} 張</span><span><b>成功產卡：</b>${built.length.toLocaleString()} 張</span><span><b>異常：</b>${errors.length.toLocaleString()} 筆</span><span><b>售價來源：</b>牌價</span></div><div class="summary-note">${errors.length?'異常資料未產卡：'+h(errors.slice(0,3).join('｜'))+(errors.length>3?'…':''):(peripheralCount&&!sellable.length?'✓ 無序號周邊已由庫存報表直接產卡；同一 SKU 僅產 1 張。':'✓ 可列印資料已成功產卡。')}</div>`;
-    toast(`新機標卡產生完成：${built.length} 張${peripheralCount?'｜無序號周邊 '+peripheralCount+' 張':''}${errors.length?'｜異常 '+errors.length+' 筆':''}`);
+    const summary=document.getElementById('newImportSummary');if(summary)summary.innerHTML=`<div class="summary-row"><span><b>可銷售 IMEI：</b>${sellable.length.toLocaleString()} 筆</span><span><b>有序號周邊：</b>${serializedPeripheralCount.toLocaleString()} 張</span><span><b>無序號周邊：</b>${peripheralCount.toLocaleString()} 張</span><span><b>成功產卡：</b>${built.length.toLocaleString()} 張</span><span><b>異常：</b>${errors.length.toLocaleString()} 筆</span><span><b>售價來源：</b>牌價</span></div><div class="summary-note">${errors.length?'異常資料未產卡：'+h(errors.slice(0,3).join('｜'))+(errors.length>3?'…':''):(peripheralCount&&!sellable.length?'✓ 無序號周邊已由庫存報表直接產卡；同一 SKU 僅產 1 張。':'✓ 可列印資料已成功產卡。')}</div>`;
+    toast(`新機標卡產生完成：${built.length} 張${serializedPeripheralCount?'｜有序號周邊 '+serializedPeripheralCount+' 張':''}${peripheralCount?'｜無序號周邊 '+peripheralCount+' 張':''}${errors.length?'｜異常 '+errors.length+' 筆':''}`);
   };
 
   const prevWarnings=newItemWarnings;
@@ -14652,24 +14665,31 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   renderNewItems=function(){
     prevRenderItems();
     const cards=document.querySelectorAll('#newItems .new-preview-card');
-    newItems.forEach((item,i)=>{if(!item?.v5264NoSerialPeripheral)return;const card=cards[i];const tag=card?.querySelector('.tag.auto');if(tag)tag.textContent='無序號周邊';const meta=card?.querySelector('.new-preview-meta .main span');if(meta)meta.textContent=`${item.sourceCode||'—'}｜BARCODE ${item.barcode||'—'}`;const pc=card?.querySelector('.phone-card.new-phone-card');if(pc)pc.classList.add('v5264-peripheral-card')});
+    newItems.forEach((item,i)=>{if(!item?.v5264NoSerialPeripheral&&!item?.v5266SerializedPeripheral)return;const card=cards[i];const serialized=!!item.v5266SerializedPeripheral;const tag=card?.querySelector('.tag.auto');if(tag)tag.textContent=serialized?'有序號周邊':'無序號周邊';const meta=card?.querySelector('.new-preview-meta .main span');if(meta)meta.textContent=serialized?`${item.sourceCode||'—'}｜SN ${item.imei||'—'}`:`${item.sourceCode||'—'}｜BARCODE ${item.barcode||'—'}`;const pc=card?.querySelector('.phone-card.new-phone-card');if(pc)pc.classList.add('v5264-peripheral-card')});
   };
   const prevRenderPreview=renderNewPreview;
   renderNewPreview=function(){
     prevRenderPreview();
-    const r=newItems?.[activeNewIndex];if(!r?.v5264NoSerialPeripheral)return;
+    const r=newItems?.[activeNewIndex];if(!r?.v5264NoSerialPeripheral&&!r?.v5266SerializedPeripheral)return;
     const phone=document.getElementById('newPhonePreview');phone?.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card');
-    const lab=document.getElementById('newPreviewLabel');if(lab)lab.textContent=`商品 ${activeNewIndex+1}｜新機無序號周邊卡`;
+    const lab=document.getElementById('newPreviewLabel');if(lab)lab.textContent=`商品 ${activeNewIndex+1}｜${r.v5266SerializedPeripheral?'新機有序號周邊卡':'新機無序號周邊卡'}`;
   };
 
   const prevOpenBatch=openBatchPreview;
   openBatchPreview=function(type,showModal=true){
     prevOpenBatch(type,showModal);if(type!=='new')return;
-    document.querySelectorAll('#batchGrid .batch-preview-item').forEach((node,i)=>{if(newItems[i]?.v5264NoSerialPeripheral)node.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card')});
+    document.querySelectorAll('#batchGrid .batch-preview-item').forEach((node,i)=>{if(newItems[i]?.v5264NoSerialPeripheral||newItems[i]?.v5266SerializedPeripheral)node.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card')});
   };
 })();
 </script>
 
+
+<script id="v5266-serialized-peripheral-note">
+/* V5.2.66｜有序號周邊新機標卡 Hotfix
+   有可銷售 IMEI/SN 的周邊 SKU：以商品編碼 JOIN 庫存，直接使用來源 SN 產周邊卡，不要求中央 PRODUCTS。
+   手機／平板／穿戴／主機等既有中央規格 Hard Gate 不變。 */
+window.__v5266SerializedPeripheralHotfix=true;
+</script>
 \n<style id="v5265-central-snapshot-style">
 /* V5.2.65｜中央商品資料單一快照架構 */
 .v5265-runtime-status{margin-top:8px;padding:8px 10px;border:1px solid #cbd9ea;border-radius:9px;background:#f7fbff;color:#49627f;font-size:11px;font-weight:850;line-height:1.4}
