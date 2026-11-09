@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.70｜Apple Smart Keyboard 周邊顯示精簡 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.71｜Smart Keyboard 品名再精簡 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.70</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.70 Apple Smart Keyboard 周邊顯示精簡 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.71</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.71 Smart Keyboard 品名再精簡 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14565,9 +14565,9 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     if(/^(?:Logitech|羅技)$/i.test(brand)&&/\bK580\b/i.test(name)){
       name=name.replace(/^\s*(?:羅技|Logitech)\s*/i,'').replace(/\s*-\s*ED\s*$/i,'').trim();
     }
-    /* V5.2.70：Apple Smart Keyboard 周邊卡僅精簡顯示名稱；完整原始名稱仍保留供 JOIN / SKU 使用。 */
+    /* V5.2.71：Apple Smart Keyboard 周邊卡品名再精簡；完整原始名稱仍保留供 JOIN / SKU 使用。 */
     if(/^Apple$/i.test(brand)&&/Smart\s*Keyboard\s*iPad\s*聰穎鍵盤/i.test(name)){
-      name='Smart Keyboard iPad 聰穎鍵盤';
+      name='Smart Keyboard 聰穎鍵盤';
     }
     return name||'—';
   }
@@ -14967,6 +14967,6 @@ window.__v5266SerializedPeripheralHotfix=true;
 }
 </style>
 <!-- V5.2.69：周邊品名固定避開左側等級 Logo 安全區，避免首字被遮住。 -->
-<!-- V5.2.70：Apple Smart Keyboard 周邊顯示名稱精簡＋「通訊周邊商品」顯示為「通訊周邊」；僅顯示層。 -->
+<!-- V5.2.71：Apple Smart Keyboard 周邊顯示名稱再精簡；「通訊周邊商品」仍顯示為「通訊周邊」；僅顯示層。 -->
 </body>
 </html>
