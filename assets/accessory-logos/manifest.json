@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611062134",
-  "updatedAt": "2026-11-06",
+  "version": "5.0-202611090859",
+  "updatedAt": "2026-11-09",
   "fallbackMode": "text",
-  "brandCount": 98,
+  "brandCount": 99,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -869,7 +869,16 @@
         "moresee墨舍"
       ],
       "scale": 1
+    },
+    "logitech": {
+      "displayName": "Logitech",
+      "file": "./brands/logitech.png",
+      "aliases": [
+        "Logitech",
+        "logitech"
+      ],
+      "scale": 1
     }
   },
-  "publishedVia": "V5.0 web direct publish"
+  "publishedVia": "V5.2.63 web direct publish"
 }
