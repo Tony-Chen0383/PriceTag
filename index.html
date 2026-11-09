@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.68｜周邊標卡品名對齊微調 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.69｜周邊標卡品名 Logo 安全區 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.68</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.68 周邊標卡品名對齊微調 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.69</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.69 周邊標卡品名 Logo 安全區 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14939,5 +14939,27 @@ window.__v5266SerializedPeripheralHotfix=true;
 }
 </style>
 <!-- V5.2.68：周邊標卡品名視覺中心右移約 8px，預覽／列印一致。 -->
+
+<style id="v5269-peripheral-model-logo-safe-zone-hotfix">
+/* V5.2.69｜周邊標卡品名 Logo 安全區 Hotfix
+   修正 V5.2.68 周邊品名 padding-left=24px 造成品名進入等級 Logo 區域。
+   周邊卡品名改用與成熟手機卡一致的 Logo 安全區：左側保留 100px，右側 6px；
+   品名只在安全文字區置中，長名稱交由既有自動縮字，資料、價格、SN、條碼與 matcher 不動。 */
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model{
+  padding-left:100px!important;
+  padding-right:6px!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model{
+    padding-left:100px!important;
+    padding-right:6px!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+}
+</style>
+<!-- V5.2.69：周邊品名固定避開左側等級 Logo 安全區，避免首字被遮住。 -->
 </body>
 </html>
