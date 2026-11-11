@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.72｜Samsung Galaxy Watch BT 中央規格配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.73｜中央快照正式切換＋HQ 狀態修正版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.72</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.72 Samsung Galaxy Watch BT 中央規格配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.73</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.73 中央快照正式切換＋HQ 狀態修正版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.51｜vivo 同型號跨年份精確配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.73｜中央快照正式切換＋HQ 狀態修正版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,8 +8155,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2</div>
-      <div class="meta">正式驗收鎖定版</div>
+      <div class="value">V5.2.73</div>
+      <div class="meta">中央快照正式切換版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -8284,6 +8284,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
           <button type="button" class="btn primary" id="v513BatchPublishBtn" onclick="v513PublishBatch()" disabled>一鍵發布已選資料</button>
         </div>
         <div class="v5265-runtime-status" id="v5265RuntimeStatus">中央快照：等待檢查</div>
+        <div class="v5273-runtime-actions"><button type="button" class="btn ghost" id="v5273BootstrapSnapshotBtn" onclick="v5273BootstrapSnapshot(false)">建立／修復中央 JSON 快照</button><span id="v5273BootstrapSnapshotNote" class="v5273-runtime-note">若尚未建立快照，可直接使用 GitHub 現有 4 份 XLSB 建立，不需重新選檔。</span></div>
       </div>
 
       <div class="v512-catalog-table" role="table" aria-label="中央商品資料來源">
@@ -14969,6 +14970,169 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.69：周邊品名固定避開左側等級 Logo 安全區，避免首字被遮住。 -->
 <!-- V5.2.71：Apple Smart Keyboard 周邊顯示名稱再精簡；「通訊周邊商品」仍顯示為「通訊周邊」；僅顯示層。 -->
 
+
+
+<style id="v5273-central-snapshot-hq-fix-style">
+/* V5.2.73｜中央快照正式切換＋HQ 狀態修正版 */
+.v5273-runtime-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.v5273-runtime-note{font-size:11px;line-height:1.45;color:#6b7890;font-weight:700}
+#v5273BootstrapSnapshotBtn[disabled]{opacity:.55;cursor:not-allowed}
+</style>
+<script id="v5273-central-snapshot-hq-fix">
+/* ===== V5.2.73｜中央快照正式切換＋HQ 狀態修正版 =====
+   1) HQ 版本與中央商品 Overview 正式改由 snapshot runtime 狀態接管。
+   2) 啟動後明確再跑一次 snapshot loader，避免舊 4-XLSB loader 初始化順序覆蓋狀態。
+   3) runtime manifest 尚未建立時：先用既有 4 XLSB 相容載入；若 4/4 均為即時成功且 GitHub 已授權，
+      自動把目前 GitHub 4 份 XLSB 解析結果建立成單一 JSON snapshot + central-manifest.json。
+   4) 不允許使用 IndexedDB fallback 資料建立正式 snapshot，避免把舊快取發布回 GitHub。
+*/
+(function(){
+  const TYPES=['general','special','international','screenBurn'];
+  const LABELS=(typeof V51_SOURCE_LABELS!=='undefined')?V51_SOURCE_LABELS:{general:'一般版',special:'特殊規格',international:'國際版',screenBurn:'烙印版'};
+  const RUNTIME_MANIFEST_REPO='data/hq/runtime/central-manifest.json';
+  const SNAPSHOT_DIR='data/hq/runtime/snapshots';
+  const SNAPSHOT_SCHEMA='smartmobile-central-products-v1';
+  let bootstrapping=false,autoAttempted=false;
+
+  function setVersionUi(){
+    try{
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.73｜中央快照正式切換＋HQ 狀態修正版';
+      const cards=[...document.querySelectorAll('.hq31-status')];
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.73';if(m)m.textContent='中央快照正式切換版'}}
+    }catch(_){ }
+  }
+  function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
+  function allFourLive(){
+    return TYPES.every(t=>{
+      const st=V51_SOURCE_STATE?.[t],arr=V51_SOURCE_PRODUCTS?.[t];
+      return !!(st?.ready&&!st?.error&&!st?.__v554Fallback&&Array.isArray(arr)&&arr.length);
+    });
+  }
+  function failedLiveTypes(){
+    return TYPES.filter(t=>{
+      const st=V51_SOURCE_STATE?.[t],arr=V51_SOURCE_PRODUCTS?.[t];
+      return !(st?.ready&&!st?.error&&!st?.__v554Fallback&&Array.isArray(arr)&&arr.length);
+    });
+  }
+  async function recoverLegacySourcesForBootstrap(){
+    /* runtime manifest 尚未建立時，snapshot loader 會進 legacy；針對失敗來源再逐輪重抓，
+       不使用 IndexedDB fallback 建正式快照。 */
+    let failed=failedLiveTypes();
+    const waits=[180,450,900];
+    for(let i=0;i<waits.length&&failed.length;i++){
+      await new Promise(r=>setTimeout(r,waits[i]));
+      try{await v526LoadCentralData(true,failed)}catch(_){ }
+      failed=failedLiveTypes();
+    }
+    return failed;
+  }
+  function stateText(){
+    const api=window.__v5265CentralSnapshot,s=api?.state||{};
+    return {mode:s.mode||'',rows:Number(s.rows||0),updatedAt:s.updatedAt||'',error:s.error||''};
+  }
+  function renderFinalSnapshotOverview(){
+    const {mode,rows,updatedAt,error}=stateText();
+    const card=document.getElementById('v51CatalogOverviewCard'),val=document.getElementById('v51CatalogOverviewStatus'),meta=document.getElementById('v51CatalogOverviewMeta'),badge=document.getElementById('v51CatalogBadge'),note=document.getElementById('v51CatalogLoadNote');
+    if(card){card.classList.remove('warn','muted');if(mode==='legacy'||mode==='cache'||mode==='error')card.classList.add('warn')}
+    if(mode==='live'){
+      if(val)val.textContent='中央快照 已連線';
+      if(meta)meta.textContent=`單一 JSON 快照 ${rows.toLocaleString()} 筆｜4 來源驗證完整`;
+      if(badge){badge.textContent='JSON 快照 OK';badge.classList.remove('pending')}
+      if(note)note.textContent=`中央商品已由單一 JSON 快照載入｜${rows.toLocaleString()} 筆${updatedAt?'｜'+String(updatedAt).replace('T',' ').slice(0,16):''}`;
+    }else if(mode==='cache'){
+      if(val)val.textContent='中央快照 備援中';
+      if(meta)meta.textContent=`Last Good Snapshot ${rows.toLocaleString()} 筆｜即時 JSON 暫時不可用`;
+      if(badge){badge.textContent='JSON 快照備援';badge.classList.add('pending')}
+    }else if(mode==='legacy'){
+      const live=TYPES.filter(t=>V51_SOURCE_STATE?.[t]?.ready&&!V51_SOURCE_STATE?.[t]?.error&&!V51_SOURCE_STATE?.[t]?.__v554Fallback).length;
+      if(val)val.textContent='待建立 JSON 快照';
+      if(meta)meta.textContent=`目前相容載入 ${live}/4 即時來源｜快照尚未正式建立`;
+      if(badge){badge.textContent='待切換 JSON';badge.classList.add('pending')}
+      if(note)note.textContent='目前仍在首次遷移相容模式；JSON 快照建立完成後，門市端將不再逐檔讀取 4 份 XLSB。';
+    }else if(mode==='loading'){
+      if(val)val.textContent='中央快照載入中…';
+      if(meta)meta.textContent='正在檢查 central-manifest.json 與單一 JSON snapshot';
+      if(badge){badge.textContent='JSON 同步中';badge.classList.add('pending')}
+    }else if(mode==='error'){
+      if(val)val.textContent='中央快照載入失敗';
+      if(meta)meta.textContent=error||'無可用快照';
+      if(badge){badge.textContent='JSON 快照異常';badge.classList.add('pending')}
+    }
+  }
+
+  const prevOverview=v51UpdateOverview;
+  v51UpdateOverview=function(){
+    try{prevOverview()}catch(_){ }
+    setVersionUi();
+    /* 最後一道顯示接管：不論舊 4-XLSB recovery UI 先寫了什麼，最終都以 snapshot runtime 為準。 */
+    try{renderFinalSnapshotOverview()}catch(_){ }
+  };
+
+  async function publishBootstrapSnapshot(){
+    const api=window.__v5265CentralSnapshot;if(!api)throw new Error('V5.2.65 snapshot 模組尚未載入');
+    if(!allFourLive())throw new Error('目前 4 份中央 XLSB 尚未全部即時連線；不可用快取建立正式 JSON 快照');
+    const now=(typeof gh32NowIso==='function'?gh32NowIso():new Date().toISOString());
+    const set=api.buildSourceSet([],now),snap=api.buildSnapshot(set,now),file=`central-products-${stamp()}.json`,repoPath=`${SNAPSHOT_DIR}/${file}`;
+    const rm={version:'5.2.73',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
+    const entries=[
+      {path:repoPath,b64:gh32Utf8ToBase64(JSON.stringify(snap))},
+      {path:RUNTIME_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(rm,null,2)+'\n')}
+    ];
+    const commit=await v513SingleCommit(entries,`V5.2.73 bootstrap central JSON snapshot｜${now}`);
+    return {commit,rows:set.products.length};
+  }
+
+  window.v5273BootstrapSnapshot=async function(auto=false){
+    if(bootstrapping)return false;bootstrapping=true;
+    const btn=document.getElementById('v5273BootstrapSnapshotBtn'),msg=document.getElementById('v5273BootstrapSnapshotNote');
+    try{
+      if(btn){btn.disabled=true;btn.textContent='正在建立中央 JSON…'}
+      if(msg)msg.textContent='正在重新檢查 GitHub 4 份 XLSB，確認全部即時來源後建立快照…';
+      if(!GH32_CONNECTED&&!await gh32TestConnection(false))throw new Error('請先完成 GitHub 授權');
+      await v526LoadCentralData(true);
+      let s=stateText();
+      if(s.mode==='live'){
+        if(msg)msg.textContent=`中央 JSON 已存在並成功連線｜${s.rows.toLocaleString()} 筆`;
+        return true;
+      }
+      if(!allFourLive()){
+        const failed=await recoverLegacySourcesForBootstrap();
+        s=stateText();
+        if(s.mode==='live'){if(msg)msg.textContent=`中央 JSON 已存在並成功連線｜${s.rows.toLocaleString()} 筆`;return true}
+        if(failed.length)throw new Error(`仍有即時來源無法載入：${failed.map(t=>LABELS[t]||t).join('、')}；未使用快取建立正式快照`);
+      }
+      const out=await publishBootstrapSnapshot();
+      if(msg)msg.textContent=`✓ 中央 JSON 快照已建立｜${out.rows.toLocaleString()} 筆｜Commit ${String(out.commit?.sha||'').slice(0,7)}`;
+      try{toast('中央 JSON 快照已建立，正在切換 Runtime')}catch(_){ }
+      await new Promise(r=>setTimeout(r,1200));
+      await v526LoadCentralData(true);
+      renderFinalSnapshotOverview();
+      return true;
+    }catch(err){
+      if(msg)msg.textContent='建立快照失敗：'+String(err?.message||err);
+      if(!auto)try{toast('中央 JSON 快照建立失敗：'+String(err?.message||err))}catch(_){ }
+      return false;
+    }finally{
+      bootstrapping=false;if(btn){btn.disabled=false;btn.textContent='建立／修復中央 JSON 快照'}
+    }
+  };
+
+  async function startup(){
+    setVersionUi();
+    try{await v526LoadCentralData(true)}catch(_){ }
+    renderFinalSnapshotOverview();
+    const s=stateText();
+    if(!autoAttempted&&s.mode==='legacy'&&GH32_CONNECTED){
+      /* HQ 已授權時直接嘗試一次 migration repair；若仍非 4/4 只顯示原因，不發布半套資料。 */
+      autoAttempted=true;setTimeout(()=>window.v5273BootstrapSnapshot(true),400);
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(startup,80),{once:true});else setTimeout(startup,80);
+  setTimeout(setVersionUi,0);
+  window.__v5273SnapshotHq={allFourLive,stateText,renderFinalSnapshotOverview,publishBootstrapSnapshot};
+})();
+</script>
+<!-- V5.2.73：HQ 版本同步、snapshot runtime 最終接管 Overview、首次 JSON 快照自動 bootstrap/手動修復。 -->
 
 <!-- V5.2.72：Samsung Galaxy Watch BT 調撥格式中央規格精確配對。 -->
 <script id="v5272-samsung-galaxy-watch-bt-match-hotfix">
