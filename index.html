@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.71｜Smart Keyboard 品名再精簡 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.72｜Samsung Galaxy Watch BT 中央規格配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.71</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.71 Smart Keyboard 品名再精簡 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.72</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.72 Samsung Galaxy Watch BT 中央規格配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -14968,5 +14968,105 @@ window.__v5266SerializedPeripheralHotfix=true;
 </style>
 <!-- V5.2.69：周邊品名固定避開左側等級 Logo 安全區，避免首字被遮住。 -->
 <!-- V5.2.71：Apple Smart Keyboard 周邊顯示名稱再精簡；「通訊周邊商品」仍顯示為「通訊周邊」；僅顯示層。 -->
+
+
+<!-- V5.2.72：Samsung Galaxy Watch BT 調撥格式中央規格精確配對。 -->
+<script id="v5272-samsung-galaxy-watch-bt-match-hotfix">
+/* ===== V5.2.72｜Samsung Galaxy Watch BT 中央規格配對 Hotfix =====
+   真實案例：Samsung Galaxy Watch7 BT 40mm[星光白/WIFI] / S級 / MSRP 9,990。
+   Root cause：調撥單只有一組 [顏色/WIFI]，舊 parseUsedMachine() 會把整段誤判為 model；
+   後續 Samsung exact-model Hard Gate 因 model="星光白/WIFI" 找不到中央型號而回傳 null，
+   最後落入 manualSpec，造成 300mAh 等中央規格遺失。
+
+   安全原則：
+   1) 僅 Samsung Galaxy Watch / Watch 系列、二手機調撥單、來源明確含 BT/WIFI 或 LTE 才啟用。
+   2) family 名稱 + 尺寸(mm) + 連線型態作 Hard Gate；MSRP 有值時再收斂。
+   3) BT/WIFI 只可命中中央 BT/GPS 非 LTE SKU；LTE/4G/5G 只可命中 LTE SKU。
+   4) 只使用 general/base 主規格；Watch Ultra 2024/2025 既有專屬 Gate 不受影響。
+   5) 電池健康度是單機來源欄位；來源空白時仍顯示「—」，不以中央資料臆測。
+*/
+(function(){
+  const prevMatch=usedMatchProduct;
+
+  function brandKey(v){
+    const k=typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+    return k==='三星'?'samsung':k;
+  }
+  function sourceType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):String(p?.__v51Source||'base')}
+  function cleanRaw(v){return String(v||'').normalize('NFKC').replace(/\[[^\]]*\]/g,' ').replace(/\s+/g,' ').trim()}
+  function watchCanon(v){
+    let s=cleanRaw(v).toLowerCase();
+    s=s.replace(/\bsamsung\b|三星/ig,' ').replace(/\bgalaxy\b/ig,' ');
+    return s.replace(/[^a-z0-9]+/g,'');
+  }
+  function mmOf(v){const m=cleanRaw(v).match(/\b(3[8-9]|4[0-9])\s*mm\b/i);return m?m[1]:''}
+  function sourceMode(row){
+    const s=String(row?.name||'').normalize('NFKC');
+    if(/\b(?:LTE|4G|5G)\b/i.test(s))return 'cellular';
+    if(/\bBT\b/i.test(s)||/\bWI\s*[-_]?\s*FI\b|\bWIFI\b/i.test(s))return 'bt';
+    return '';
+  }
+  function productMode(p){
+    const s=[p?.name,p?.network].filter(Boolean).join(' ').normalize('NFKC');
+    if(/\b(?:LTE|4G|5G)\b/i.test(s))return 'cellular';
+    if(/\bBT\b/i.test(s)||/\bGPS\b/i.test(String(p?.network||''))||/\bWI\s*[-_]?\s*FI\b|\bWIFI\b/i.test(s))return 'bt';
+    return '';
+  }
+  function specSig(p){return [nrKey(p?.model),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),String(p?.year||''),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),Math.round(Number(p?.msrp)||0)].join('|')}
+  function uniqueSpec(list){
+    if(!list.length)return null;
+    const m=new Map();for(const x of list){const k=specSig(x.p);if(!m.has(k))m.set(k,x)}
+    return m.size===1?[...m.values()][0]:null;
+  }
+  function watchRescue(row){
+    if(!row||row?.importType!=='transfer'||brandKey(row?.brand)!=='samsung')return null;
+    const raw=String(row?.name||'').normalize('NFKC');
+    if(!/\b(?:galaxy\s*)?watch(?:\s|\d)/i.test(raw))return null;
+    /* Watch Ultra 已有 2024/2025 專屬 Gate，避免交叉干擾。 */
+    if(/watch\s*ultra/i.test(raw))return null;
+    const mode=sourceMode(row),size=mmOf(raw),id=watchCanon(raw);
+    if(!mode||!size||!id)return null;
+    const route=typeof v5216IntlRoute==='function'?v5216IntlRoute(row):{kind:'none'};
+    if(route&&route.kind!=='none'&&route.kind!=='taiwan')return null;
+
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const st=sourceType(p);
+      if(!(st==='general'||st==='base')||p?.__v51UsedOnly)return;
+      if(brandKey(p?.brand)!=='samsung'||nrKey(p?.category)!==nrKey('手錶'))return;
+      if(watchCanon(p?.name)!==id)return;
+      if(mmOf(p?.name)!==size)return;
+      if(productMode(p)!==mode)return;
+      if(!String(p?.battery||'').trim()&&!String(p?.display||'').trim()&&!String(p?.processor||'').trim())return;
+      list.push({idx,p,parsed:{cleanName:cleanRaw(raw).replace(/^Samsung\s+/i,'').trim(),model:'',ram:'',capacity:'',color:(raw.match(/\[([^\]/]+)\//)||[])[1]||'',version:mode==='cellular'?'LTE':'WIFI'},score:460,matchMode:'v5272-samsung-watch-bt-hardgate'});
+    });
+    if(!list.length)return null;
+
+    const msrp=Math.round(Number(row?.suggestedPrice)||0);
+    if(msrp>0){const exact=list.filter(x=>Math.round(Number(x.p?.msrp)||0)===msrp);if(exact.length)list=exact;}
+    return uniqueSpec(list);
+  }
+
+  usedMatchProduct=function(row){
+    const hit=watchRescue(row);if(hit)return hit;
+    return prevMatch(row);
+  };
+
+  /* Samsung Watch BT 的中央 network 欄以 GPS 分類，但來源調撥單明確是 BT/WIFI。
+     卡面通訊網路沿用來源語意顯示「藍牙」；硬體規格仍取中央完整商品。 */
+  const prevUsedWearHtml=usedWearHtml;
+  usedWearHtml=function(p,r){
+    const raw=String(r?.sourceName||r?.name||'').normalize('NFKC');
+    if(brandKey(p?.brand)==='samsung'&&/\b(?:galaxy\s*)?watch(?:\s|\d)/i.test(raw)&&!(/watch\s*ultra/i.test(raw))&&sourceMode({name:raw})==='bt'){
+      p={...p,network:'藍牙'};
+    }
+    return prevUsedWearHtml(p,r);
+  };
+
+  window.__v5272Diagnostics={watchRescue,watchCanon,mmOf,sourceMode,productMode};
+})();
+</script>
+<!-- V5.2.72：Samsung Galaxy Watch BT / LTE 以 family＋尺寸＋連線型態安全命中中央完整規格。 -->
+
 </body>
 </html>
