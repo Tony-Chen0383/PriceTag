@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.73｜中央快照正式切換＋HQ 狀態修正版</title>
+<title>創宇標籤／標價卡列印工具 V5.2.74｜標卡品名字級與粗體優化 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.73</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.73 中央快照正式切換＋HQ 狀態修正版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.74</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.74 標卡品名字級與粗體優化 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.73｜中央快照正式切換＋HQ 狀態修正版</div>
+      <div class="hq31-hero-title">V5.2.74｜標卡品名字級與粗體優化 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.73</div>
+      <div class="value">V5.2.74</div>
       <div class="meta">中央快照正式切換版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -14973,13 +14973,13 @@ window.__v5266SerializedPeripheralHotfix=true;
 
 
 <style id="v5273-central-snapshot-hq-fix-style">
-/* V5.2.73｜中央快照正式切換＋HQ 狀態修正版 */
+/* V5.2.74｜標卡品名字級與粗體優化 Hotfix */
 .v5273-runtime-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
 .v5273-runtime-note{font-size:11px;line-height:1.45;color:#6b7890;font-weight:700}
 #v5273BootstrapSnapshotBtn[disabled]{opacity:.55;cursor:not-allowed}
 </style>
 <script id="v5273-central-snapshot-hq-fix">
-/* ===== V5.2.73｜中央快照正式切換＋HQ 狀態修正版 =====
+/* ===== V5.2.74｜標卡品名字級與粗體優化 Hotfix =====
    1) HQ 版本與中央商品 Overview 正式改由 snapshot runtime 狀態接管。
    2) 啟動後明確再跑一次 snapshot loader，避免舊 4-XLSB loader 初始化順序覆蓋狀態。
    3) runtime manifest 尚未建立時：先用既有 4 XLSB 相容載入；若 4/4 均為即時成功且 GitHub 已授權，
@@ -14996,9 +14996,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.73｜中央快照正式切換＋HQ 狀態修正版';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.74｜標卡品名字級與粗體優化 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.73';if(m)m.textContent='中央快照正式切換版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.74';if(m)m.textContent='品名字級與粗體優化版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15073,12 +15073,12 @@ window.__v5266SerializedPeripheralHotfix=true;
     if(!allFourLive())throw new Error('目前 4 份中央 XLSB 尚未全部即時連線；不可用快取建立正式 JSON 快照');
     const now=(typeof gh32NowIso==='function'?gh32NowIso():new Date().toISOString());
     const set=api.buildSourceSet([],now),snap=api.buildSnapshot(set,now),file=`central-products-${stamp()}.json`,repoPath=`${SNAPSHOT_DIR}/${file}`;
-    const rm={version:'5.2.73',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
+    const rm={version:'5.2.74',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
     const entries=[
       {path:repoPath,b64:gh32Utf8ToBase64(JSON.stringify(snap))},
       {path:RUNTIME_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(rm,null,2)+'\n')}
     ];
-    const commit=await v513SingleCommit(entries,`V5.2.73 bootstrap central JSON snapshot｜${now}`);
+    const commit=await v513SingleCommit(entries,`V5.2.74 bootstrap central JSON snapshot｜${now}`);
     return {commit,rows:set.products.length};
   }
 
@@ -15231,6 +15231,56 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.72：Samsung Galaxy Watch BT / LTE 以 family＋尺寸＋連線型態安全命中中央完整規格。 -->
+
+
+<style id="v5274-product-name-typography-hotfix">
+/* ===== V5.2.74｜標卡品名字級與粗體優化 Hotfix =====
+   目標：恢復早期版本較醒目的商品名稱層級，同時保留左側等級 Logo 安全區。
+   - 一般手機／平板新機與二手機：品名字重 950。
+   - 字級由 v5274PhoneModelStyle 依實際文字寬度動態放大；正常品名上限 25px。
+   - 周邊 v5264-peripheral-card 維持既有專屬版型，不受本版影響。
+*/
+.phone-card:not(.v5264-peripheral-card) .cr-model{
+  font-weight:950 !important;
+  text-rendering:geometricPrecision;
+}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card:not(.v5264-peripheral-card) .cr-model{
+    font-weight:950 !important;
+  }
+}
+</style>
+<script id="v5274-product-name-typography-hotfix-script">
+(function(){
+  /* 既有 V5.2.31 將安全文字寬度固定為 160px，導致 iPhone 16 Pro Max 等正常品名過度縮字。
+     實際卡寬約 318px，扣除 100px Logo 安全區與右側留白後仍有約 200px 可用；
+     本版採 190px 安全上限，保留至少約 18~20px 緩衝。 */
+  function v5274PhoneModelStyle(name){
+    const title=String(name||'').replace(/\s+/g,' ').trim();
+    const cls=phoneNameClass(title);
+    const normalSize=cls==='phone-name-xxlong'?13.5:cls==='phone-name-xlong'?16:cls==='phone-name-long'?20:25;
+    const minSize=cls==='phone-name-xxlong'?11.5:cls==='phone-name-xlong'?12.5:cls==='phone-name-long'?14.5:16;
+    const maxTextWidth=190;
+    let chosen=normalSize;
+    try{
+      const cv=v5274PhoneModelStyle._cv||(v5274PhoneModelStyle._cv=document.createElement('canvas'));
+      const ctx=cv.getContext('2d');
+      if(ctx){
+        for(let n=normalSize;n>=minSize;n-=.25){
+          ctx.font='950 '+n+'px "Microsoft JhengHei", "微軟正黑體", "Noto Sans TC", sans-serif';
+          if(ctx.measureText(title).width<=maxTextWidth){chosen=n;break}
+          chosen=Math.max(minSize,n-.25);
+        }
+      }
+    }catch(_){/* canvas 不可用時沿用 class 上限 */}
+    return 'style="font-size:'+chosen.toFixed(2)+'px!important;font-weight:950!important"';
+  }
+  /* 原本 used/new/manual 三條手機卡路徑都會呼叫此函式；直接替換顯示層，不碰 matcher / data。 */
+  v531PhoneModelStyle=v5274PhoneModelStyle;
+  window.__v5274PhoneNameTypography={style:v5274PhoneModelStyle,maxTextWidth:190};
+})();
+</script>
+<!-- V5.2.74：一般手機／平板標卡品名字級放大＋950 粗體；保留 Logo 安全區與長品名動態縮字。 -->
 
 </body>
 </html>
