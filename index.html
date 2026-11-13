@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.74｜標卡品名字級與粗體優化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.75｜Logo 原子發布＋即時同步 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.74</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.74 標卡品名字級與粗體優化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.75</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.75 Logo 原子發布＋即時同步 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.74｜標卡品名字級與粗體優化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.75｜Logo 原子發布＋即時同步 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.74</div>
+      <div class="value">V5.2.75</div>
       <div class="meta">中央快照正式切換版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -14431,6 +14431,9 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     throw new Error('GitHub 409｜Manifest 自動重試仍失敗');
   }
 
+  /* HQ 品牌下拉也走同一條最新 manifest 路徑，不再另外讀可能尚未部署的 Pages 舊清單。 */
+  gh32LoadLogoOptions=async function(){return loadAccessoryLogoManifest();};
+
   gh32PublishLogo=async function(){
     if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');
     if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
@@ -14996,9 +14999,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.74｜標卡品名字級與粗體優化 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.75｜Logo 原子發布＋即時同步 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.74';if(m)m.textContent='品名字級與粗體優化版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.75';if(m)m.textContent='Logo 原子發布＋即時同步版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15073,12 +15076,12 @@ window.__v5266SerializedPeripheralHotfix=true;
     if(!allFourLive())throw new Error('目前 4 份中央 XLSB 尚未全部即時連線；不可用快取建立正式 JSON 快照');
     const now=(typeof gh32NowIso==='function'?gh32NowIso():new Date().toISOString());
     const set=api.buildSourceSet([],now),snap=api.buildSnapshot(set,now),file=`central-products-${stamp()}.json`,repoPath=`${SNAPSHOT_DIR}/${file}`;
-    const rm={version:'5.2.74',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
+    const rm={version:'5.2.75',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
     const entries=[
       {path:repoPath,b64:gh32Utf8ToBase64(JSON.stringify(snap))},
       {path:RUNTIME_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(rm,null,2)+'\n')}
     ];
-    const commit=await v513SingleCommit(entries,`V5.2.74 bootstrap central JSON snapshot｜${now}`);
+    const commit=await v513SingleCommit(entries,`V5.2.75 bootstrap central JSON snapshot｜${now}`);
     return {commit,rows:set.products.length};
   }
 
@@ -15281,6 +15284,236 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.74：一般手機／平板標卡品名字級放大＋950 粗體；保留 Logo 安全區與長品名動態縮字。 -->
+
+\n\n<!-- V5.2.75：Logo 圖檔＋manifest 原子 Commit；內容雜湊 cache-bust；HQ API 即時同步。 -->
+<script id="v5275-logo-atomic-publish-realtime-sync-hotfix">
+(function(){
+  const RECENT_KEY='smartmobile:accessory-logo-recent:v5275';
+  const MAX_RECENT_BYTES=768*1024;
+  let lastObjectUrl='';
+
+  function bytesToHex(buf){return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+  async function fileRev(file){
+    const ab=await file.arrayBuffer();
+    const dg=await crypto.subtle.digest('SHA-256',ab);
+    return {rev:bytesToHex(dg).slice(0,20),buffer:ab};
+  }
+  function isRefConflict(err){
+    const m=String(err?.message||err||'');
+    return /GitHub\s*(409|422)|not fast forward|fast-forward|Reference update failed|Conflict/i.test(m);
+  }
+  function stableBrand(v){
+    if(!v||typeof v!=='object')return '';
+    return JSON.stringify({displayName:v.displayName||'',file:v.file||'',rev:v.rev||'',aliases:Array.isArray(v.aliases)?[...v.aliases].sort():[],scale:Number(v.scale)||1});
+  }
+  function cfg(){const c=gh32GetCfg();if(!c?.owner||!c?.repo)throw new Error('GitHub Repository 尚未設定');return c}
+  function repoBase(){const c=cfg();return `/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}`}
+  function branchPath(branch){return String(branch||'main').split('/').filter(Boolean).map(encodeURIComponent).join('/')}
+  async function getHead(){
+    const c=cfg(),branch=c.branch||'main';
+    const ref=await gh32Api(`${repoBase()}/git/ref/heads/${branchPath(branch)}`);
+    const sha=ref?.object?.sha;if(!sha)throw new Error('無法取得 GitHub branch HEAD');
+    return {branch,sha};
+  }
+  async function getCommit(sha){return gh32Api(`${repoBase()}/git/commits/${encodeURIComponent(sha)}`)}
+  async function getContentAt(filePath,refSha){
+    try{return await gh32Api(`${repoBase()}/contents/${gh32EncodePath(filePath)}?ref=${encodeURIComponent(refSha)}`)}
+    catch(err){if(/GitHub\s*404/.test(String(err?.message||err)))return null;throw err}
+  }
+  async function readManifestAt(refSha){
+    const m=await getContentAt(GH32_LOGO_MANIFEST_PATH,refSha);
+    if(!m?.content)return {brands:{},brandCount:0};
+    return JSON.parse(gh32Base64ToUtf8(m.content));
+  }
+  async function createBlobBase64(b64){
+    return gh32Api(`${repoBase()}/git/blobs`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:b64,encoding:'base64'})});
+  }
+  async function createTree(baseTreeSha,entries){
+    return gh32Api(`${repoBase()}/git/trees`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({base_tree:baseTreeSha,tree:entries})});
+  }
+  async function createCommit(treeSha,parentSha,message){
+    return gh32Api(`${repoBase()}/git/commits`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,tree:treeSha,parents:[parentSha]})});
+  }
+  async function updateRef(branch,sha){
+    return gh32Api(`${repoBase()}/git/refs/heads/${branchPath(branch)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({sha,force:false})});
+  }
+  function mergeManifest(latest,key,displayName,ext,rev,publishId,assetPath){
+    const manifest=(latest&&typeof latest==='object')?JSON.parse(JSON.stringify(latest)):{brands:{}};
+    const brands=manifest.brands||(manifest.brands={});
+    const existing=brands[key]||{};
+    const aliases=Array.from(new Set([...(Array.isArray(existing.aliases)?existing.aliases:[]),displayName,key].filter(Boolean)));
+    brands[key]=Object.assign({},existing,{displayName,file:`./brands/${key}.${ext}`,aliases,scale:Number(existing.scale)||1,rev,publishedAt:new Date().toISOString()});
+    manifest.brandCount=Object.keys(brands).length;
+    manifest.updatedAt=gh32DateOnly();
+    manifest.version=publishId;
+    manifest.publishedVia='V5.2.75 atomic git commit';
+    manifest.lastPublishedLogo={key,displayName,rev,path:assetPath,publishedAt:new Date().toISOString()};
+    return {manifest,brand:brands[key],aliases};
+  }
+  async function atomicLogoCommit({key,displayName,ext,rev,imageB64,assetPath,publishId,progressEl}){
+    const imageBlob=await createBlobBase64(imageB64);
+    if(!imageBlob?.sha)throw new Error('GitHub Logo blob 建立失敗');
+    let firstBrandSnapshot=null;
+    for(let attempt=0;attempt<3;attempt++){
+      const head=await getHead();
+      const commit=await getCommit(head.sha);
+      const baseTree=commit?.tree?.sha;if(!baseTree)throw new Error('無法取得 GitHub base tree');
+      const latest=await readManifestAt(head.sha);
+      const currentSnapshot=stableBrand(latest?.brands?.[key]||{});
+      if(attempt===0)firstBrandSnapshot=currentSnapshot;
+      else if(currentSnapshot!==firstBrandSnapshot){
+        throw new Error(`GitHub 衝突｜「${displayName}」同一品牌剛被其他發布更新，為避免覆蓋已停止；請重新讀取 Logo 後再發布`);
+      }
+      const merged=mergeManifest(latest,key,displayName,ext,rev,publishId,assetPath);
+      const manifestBlob=await createBlobBase64(gh32Utf8ToBase64(JSON.stringify(merged.manifest,null,2)+'\n'));
+      const tree=await createTree(baseTree,[
+        {path:assetPath,mode:'100644',type:'blob',sha:imageBlob.sha},
+        {path:GH32_LOGO_MANIFEST_PATH,mode:'100644',type:'blob',sha:manifestBlob.sha}
+      ]);
+      const newCommit=await createCommit(tree.sha,head.sha,`Accessory logo atomic publish ${displayName} ${gh32NowIso()}`);
+      try{
+        await updateRef(head.branch,newCommit.sha);
+        return {...merged,commitSha:newCommit.sha,retried:attempt>0};
+      }catch(err){
+        if(!isRefConflict(err)||attempt>=2)throw err;
+        if(progressEl)progressEl.textContent='GitHub branch 剛有新提交，正在重新合併並自動重試…';
+        await new Promise(r=>setTimeout(r,300));
+      }
+    }
+    throw new Error('GitHub 原子發布重試仍失敗');
+  }
+
+  function mimeForExt(ext){return ext==='png'?'image/png':ext==='webp'?'image/webp':'image/jpeg'}
+  function saveRecentLogo(key,rev,dataUrl,publishId){
+    try{localStorage.setItem(RECENT_KEY,JSON.stringify({key,rev,dataUrl,publishId,ts:Date.now()}))}catch(_){ }
+  }
+  function getRecentLogo(){
+    try{const o=JSON.parse(localStorage.getItem(RECENT_KEY)||'null');if(!o||Date.now()-Number(o.ts||0)>24*3600e3)return null;return o}catch(_){return null}
+  }
+  function clearRecentLogo(){try{localStorage.removeItem(RECENT_KEY)}catch(_){}}
+  function applyRecentIfMatching(data){
+    const r=getRecentLogo();if(!r?.key||!r?.dataUrl)return false;
+    const e=data?.brands?.[r.key];if(!e||String(e.rev||'')!==String(r.rev||''))return false;
+    ACC_BRAND_LOGOS[r.key]=r.dataUrl;
+    const aliases=Array.isArray(e.aliases)?e.aliases:[];
+    for(const alias of aliases){const ak=brandKey(alias);if(ak)ACC_BRAND_LOGOS[ak]=r.dataUrl}
+    try{renderAccessoryPreview(accCurrent);renderAccResult(accResults);renderAccessory()}catch(_){ }
+    return true;
+  }
+
+  const prevApply=applyAccessoryLogoManifest;
+  applyAccessoryLogoManifest=function(data,opts={}){
+    const count=prevApply(data,opts);
+    /* V5.2.75：有 rev 的品牌改用內容雜湊做 cache key；舊品牌仍沿用 manifest version。 */
+    try{
+      const baseUrl=new URL('./assets/accessory-logos/',location.href);
+      for(const [rawKey,entryRaw] of Object.entries(data?.brands||{})){
+        const entry=typeof entryRaw==='string'?{file:entryRaw}:entryRaw||{};
+        if(!entry.file||!entry.rev)continue;
+        const key=brandKey(rawKey),u=new URL(entry.file,baseUrl);u.searchParams.set('v',String(entry.rev));
+        ACC_BRAND_LOGOS[key]=u.href;
+        for(const alias of (Array.isArray(entry.aliases)?entry.aliases:[])){const ak=brandKey(alias);if(ak)ACC_BRAND_LOGOS[ak]=u.href}
+      }
+    }catch(_){ }
+    applyRecentIfMatching(data);
+    return count;
+  };
+
+  async function pagesManifestFresh(){
+    const u=new URL(ACC_BRAND_MANIFEST_PATH,location.href);u.searchParams.set('_v5275',Date.now());
+    const r=await fetch(u,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!r.ok)throw new Error(`manifest HTTP ${r.status}`);return r.json();
+  }
+
+  loadAccessoryLogoManifest=async function(){
+    /* HQ 有 GitHub Token 時直接讀 Repository 最新 manifest，避免 Pages 部署延遲。 */
+    try{
+      const c=gh32GetCfg?.();
+      if(gh32GetToken?.()&&c?.owner&&c?.repo){
+        const m=await gh32GetContentMeta(GH32_LOGO_MANIFEST_PATH);
+        if(m?.content){
+          const data=JSON.parse(gh32Base64ToUtf8(m.content));
+          GH32_LOGO_MANIFEST_CACHE=data;
+          applyAccessoryLogoManifest(data,{fromCache:false});
+          try{gh32RenderLogoOptions(data,document.getElementById('gh32LogoBrandSelect')?.value||'')}catch(_){ }
+          try{localStorage.setItem(ACC_BRAND_MANIFEST_CACHE_KEY,JSON.stringify(data))}catch(_){ }
+          return true;
+        }
+      }
+    }catch(err){console.warn('V5.2.75 GitHub API logo manifest read fallback:',err)}
+    try{
+      const data=await pagesManifestFresh();
+      GH32_LOGO_MANIFEST_CACHE=data;
+      applyAccessoryLogoManifest(data,{fromCache:false});
+      try{gh32RenderLogoOptions(data,document.getElementById('gh32LogoBrandSelect')?.value||'')}catch(_){ }
+      try{localStorage.setItem(ACC_BRAND_MANIFEST_CACHE_KEY,JSON.stringify(data))}catch(_){ }
+      return true;
+    }catch(err){
+      if(ACC_BRAND_MANIFEST_READY)return true;
+      ACC_BRAND_MANIFEST_READY=false;updateHqLogoDashboard(false,0,String(err?.message||err));return false;
+    }
+  };
+
+  async function pollPagesPublish(publishId,progressEl){
+    for(let i=0;i<20;i++){
+      try{
+        const data=await pagesManifestFresh();
+        if(String(data?.version||'')===String(publishId)){
+          clearRecentLogo();
+          applyAccessoryLogoManifest(data,{fromCache:false});
+          try{localStorage.setItem(ACC_BRAND_MANIFEST_CACHE_KEY,JSON.stringify(data))}catch(_){ }
+          if(progressEl){progressEl.className='hq32-progress hq32-success';progressEl.textContent='✓ GitHub＋Pages 已同步｜新 Logo 已正式生效'}
+          return true;
+        }
+      }catch(_){ }
+      await new Promise(r=>setTimeout(r,3000));
+    }
+    if(progressEl){progressEl.className='hq32-progress hq32-success';progressEl.textContent='✓ GitHub 已提交｜本頁已套用新 Logo｜Pages 仍在部署中'}
+    return false;
+  }
+
+  gh32PublishLogo=async function(){
+    if(!GH32_LOGO_PENDING?.ok)return toast('請先選擇 Logo 圖片');
+    if(!GH32_CONNECTED&&!await gh32TestConnection(false))return toast('請先完成 GitHub 授權');
+    const sel=document.getElementById('gh32LogoBrandSelect'),newName=(document.getElementById('gh32LogoNewBrand')?.value||'').trim(),selectedKey=sel?.value||'';
+    const displayName=newName||((sel&&sel.selectedIndex>=0)?sel.options[sel.selectedIndex].textContent:'');
+    const key=newName?brandKey(newName):selectedKey;
+    if(!key||!displayName||displayName==='請選擇既有品牌')return toast('請選擇既有品牌或輸入新品牌名稱');
+    const btn=document.getElementById('gh32LogoPublishBtn'),p=document.getElementById('gh32LogoProgress');
+    try{
+      if(btn)btn.disabled=true;if(p){p.className='hq32-progress';p.textContent='計算 Logo 版本並建立原子 Commit…'}
+      const ext=gh32LogoExt(GH32_LOGO_PENDING.file),assetPath=`assets/accessory-logos/brands/${key}.${ext}`;
+      const fr=await fileRev(GH32_LOGO_PENDING.file),rev=fr.rev,publishId=`5.2.75-${Date.now()}-${rev.slice(0,8)}`;
+      const imageB64=gh32BytesToBase64(new Uint8Array(fr.buffer));
+      const result=await atomicLogoCommit({key,displayName,ext,rev,imageB64,assetPath,publishId,progressEl:p});
+      const manifest=result.manifest,brands=manifest.brands||{},aliases=result.aliases||[],scale=Number(result.brand?.scale)||1;
+
+      GH32_LOGO_MANIFEST_CACHE=manifest;
+      try{localStorage.setItem(ACC_BRAND_MANIFEST_CACHE_KEY,JSON.stringify(manifest))}catch(_){ }
+      const liveUrl=GH32_LOGO_PENDING.url;
+      ACC_BRAND_LOGOS[key]=liveUrl;ACC_BRAND_OPTICAL_SCALE[key]=scale;ACC_BRAND_NAME_MAP[key]=displayName;
+      for(const alias of aliases){const ak=brandKey(alias);if(!ak)continue;ACC_BRAND_LOGOS[ak]=liveUrl;ACC_BRAND_OPTICAL_SCALE[ak]=scale;ACC_BRAND_NAME_MAP[ak]=displayName}
+      ACC_BRAND_MANIFEST_READY=true;updateHqLogoDashboard(true,Object.keys(brands).length);gh32RenderLogoOptions(manifest,key);
+      try{renderAccessoryPreview(accCurrent);renderAccResult(accResults);renderAccessory()}catch(_){ }
+
+      if(GH32_LOGO_PENDING.file.size<=MAX_RECENT_BYTES){
+        saveRecentLogo(key,rev,`data:${GH32_LOGO_PENDING.file.type||mimeForExt(ext)};base64,${imageB64}`,publishId);
+      }
+      if(p){p.className='hq32-progress hq32-success';p.textContent=result.retried?'✓ GitHub 原子發布成功｜Branch 衝突已自動重試｜Pages 同步中…':'✓ GitHub 原子發布成功｜本頁已即時套用｜Pages 同步中…'}
+      toast(`${displayName} Logo 已原子發布`);
+      const nn=document.getElementById('gh32LogoNewBrand');if(nn)nn.value='';
+      pollPagesPublish(publishId,p); /* 不阻塞操作；Pages 到位後自動切正式資源。 */
+    }catch(err){
+      if(p){p.className='hq32-progress hq32-error';p.textContent='發布失敗：'+String(err?.message||err)}
+      toast('Logo 發布失敗');
+    }finally{gh32UpdatePublishButtons()}
+  };
+
+  /* 讓「重新讀取 Logo」與重新整理頁面都優先拿 Repository 最新狀態。 */
+  setTimeout(()=>loadAccessoryLogoManifest(),0);
+  window.__v5275LogoAtomic={fileRev,isRefConflict,mergeManifest,atomicLogoCommit,pagesManifestFresh,pollPagesPublish};
+})();
+</script>
+<!-- V5.2.75：Logo 發布改為單一 Git Commit；每張圖片以 SHA-256 rev cache-bust；HQ 可即時讀 Repository 最新 manifest。 -->
 
 </body>
 </html>
