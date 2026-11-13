@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "5.0-202611090901",
-  "updatedAt": "2026-11-09",
+  "version": "5.0-202611131707",
+  "updatedAt": "2026-11-13",
   "fallbackMode": "text",
-  "brandCount": 99,
+  "brandCount": 100,
   "brands": {
     "switcheasy": {
       "displayName": "SwitchEasy",
@@ -876,6 +876,15 @@
       "aliases": [
         "Logitech",
         "logitech"
+      ],
+      "scale": 1
+    },
+    "tech21": {
+      "displayName": "Tech21",
+      "file": "./brands/tech21.png",
+      "aliases": [
+        "Tech21",
+        "tech21"
       ],
       "scale": 1
     }
