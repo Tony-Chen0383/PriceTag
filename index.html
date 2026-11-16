@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.77｜新機／周邊標卡品名字級放大 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.78｜版本顯示全域同步 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.76</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.76 Apple AirPods 4 美版新機配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.78</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.78 版本顯示全域同步 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.78｜版本顯示全域同步 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -15698,5 +15698,73 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.77：一般新機短品名最大 28px；周邊短品名最大 23px；二手機維持 V5.2.74。 -->
+
+
+<!-- V5.2.78｜版本顯示全域同步 Hotfix -->
+<script id="v5278-global-version-display-sync-hotfix">
+(function(){
+  const VERSION='V5.2.78';
+  const LABEL='版本顯示全域同步 Hotfix';
+  const META='版本顯示全域同步版';
+
+  function syncVersionUi(){
+    try{
+      document.title=`創宇標籤／標價卡列印工具 ${VERSION}｜${LABEL}`;
+
+      const topVersion=document.querySelector('.logo-title span');
+      if(topVersion) topVersion.textContent=VERSION;
+      const topSub=document.querySelector('.logo-sub');
+      if(topSub) topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
+
+      const hero=document.querySelector('.hq31-hero-title');
+      if(hero) hero.textContent=`${VERSION}｜${LABEL}`;
+
+      document.querySelectorAll('.hq31-status').forEach(card=>{
+        if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const v=card.querySelector('.value');
+          const m=card.querySelector('.meta');
+          if(v) v.textContent=VERSION;
+          if(m) m.textContent=META;
+        }
+      });
+
+      // 兼容舊版 status-card 結構（若未來局部畫面仍保留舊 class）。
+      document.querySelectorAll('.status-card').forEach(card=>{
+        if(card.querySelector('.k')?.textContent.trim()==='工具版本'){
+          const v=card.querySelector('.v');
+          const m=card.querySelector('.s');
+          if(v) v.textContent=VERSION;
+          if(m) m.textContent=META;
+        }
+      });
+    }catch(_){ }
+  }
+
+  // V5.2.73 每次刷新中央 Overview 會重新寫入舊版文字；最終層統一接管。
+  try{
+    if(typeof window.v51UpdateOverview==='function' && !window.v51UpdateOverview.__v5278Wrapped){
+      const prev=window.v51UpdateOverview;
+      const wrapped=function(){
+        const r=prev.apply(this,arguments);
+        Promise.resolve().then(syncVersionUi);
+        setTimeout(syncVersionUi,0);
+        return r;
+      };
+      wrapped.__v5278Wrapped=true;
+      window.v51UpdateOverview=wrapped;
+    }
+  }catch(_){ }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',syncVersionUi,{once:true});
+  }else{
+    syncVersionUi();
+  }
+  [0,150,800,2000].forEach(ms=>setTimeout(syncVersionUi,ms));
+  window.__v5278VersionDisplay={version:VERSION,label:LABEL,sync:syncVersionUi};
+})();
+</script>
+<!-- V5.2.78：頁籤、左上品牌列、HQ Hero、工具版本卡統一由單一版本來源接管。 -->
+
 </body>
 </html>
