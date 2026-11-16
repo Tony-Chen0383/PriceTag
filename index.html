@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.75｜Logo 原子發布＋即時同步 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.75</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.75 Logo 原子發布＋即時同步 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.76</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.76 Apple AirPods 4 美版新機配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.75｜Logo 原子發布＋即時同步 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.75</div>
+      <div class="value">V5.2.76</div>
       <div class="meta">中央快照正式切換版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -14999,9 +14999,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.75｜Logo 原子發布＋即時同步 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.75';if(m)m.textContent='Logo 原子發布＋即時同步版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.76';if(m)m.textContent='Apple AirPods 4 美版新機配對版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15076,12 +15076,12 @@ window.__v5266SerializedPeripheralHotfix=true;
     if(!allFourLive())throw new Error('目前 4 份中央 XLSB 尚未全部即時連線；不可用快取建立正式 JSON 快照');
     const now=(typeof gh32NowIso==='function'?gh32NowIso():new Date().toISOString());
     const set=api.buildSourceSet([],now),snap=api.buildSnapshot(set,now),file=`central-products-${stamp()}.json`,repoPath=`${SNAPSHOT_DIR}/${file}`;
-    const rm={version:'5.2.75',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
+    const rm={version:'5.2.76',schema:SNAPSHOT_SCHEMA,currentFile:`./snapshots/${file}`,updatedAt:now,sources:set.sources,totalRows:set.products.length,snapshotVersion:snap.snapshotVersion};
     const entries=[
       {path:repoPath,b64:gh32Utf8ToBase64(JSON.stringify(snap))},
       {path:RUNTIME_MANIFEST_REPO,b64:gh32Utf8ToBase64(JSON.stringify(rm,null,2)+'\n')}
     ];
-    const commit=await v513SingleCommit(entries,`V5.2.75 bootstrap central JSON snapshot｜${now}`);
+    const commit=await v513SingleCommit(entries,`V5.2.76 bootstrap central JSON snapshot｜${now}`);
     return {commit,rows:set.products.length};
   }
 
@@ -15514,6 +15514,110 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.75：Logo 發布改為單一 Git Commit；每張圖片以 SHA-256 rev cache-bust；HQ 可即時讀 Repository 最新 manifest。 -->
+
+
+
+<!-- V5.2.76：Apple AirPods 4 美版新機料號區域尾碼安全配對。 -->
+<script id="v5276-apple-airpods4-us-new-stock-hotfix">
+/* ===== V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix =====
+   真實案例：
+   - 庫存：Apple / AirPods 4 搭配 USB-C 充電盒 (美) / MXP63LL/A / $3,590 / MSRP $4,490
+   - IMEI/SN：SF41CMC7K39 / 可銷售
+   - 中央一般版：AirPods 4 / MXP63TA/A / MSRP $4,490
+
+   原則：
+   1) 既有 matcher 優先；只有既有配對失敗才進本 fallback。
+   2) 僅限 Apple + AirPods 4 非 ANC + MXP63 系列；MXP93 主動降噪款不可跨配。
+   3) 美版 LL/A 與中央 TA/A 僅忽略 Apple 銷售料號的「區域尾碼」，主料號根碼 MXP63 必須完全相同。
+   4) 若中央已有 MXP63LL/A 精確 SKU，精確 SKU 優先；否則才借同根碼共通硬體。
+   5) 中央候選若硬體規格互相衝突則拒絕，不猜測。
+   6) 卡面第二行使用來源實際料號 MXP63LL/A，不顯示中央台版 MXP63TA/A。
+*/
+(function(){
+  const previousMatchProductFromStock=matchProductFromStock;
+  const previousWearSecondLine=wearSecondLine;
+
+  function brandKey(v){return typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v)}
+  function appleSalesPart(v){
+    return String(v||'').normalize('NFKC').trim().toUpperCase().replace(/\s+/g,'');
+  }
+  function applePartRoot(v){
+    const s=appleSalesPart(v),m=s.match(/^([A-Z0-9]{4,})([A-Z]{2})\/A$/);
+    return m?m[1]:'';
+  }
+  function airPods4BaseName(v){
+    let s=String(v||'').normalize('NFKC')
+      .replace(/[（(]\s*(?:美版|美|美國版|US版|USA)\s*[）)]/gi,' ')
+      .replace(/搭配\s*USB\s*[-–—]?\s*C\s*充電盒/gi,' ')
+      .replace(/配備\s*USB\s*[-–—]?\s*C\s*充電盒/gi,' ')
+      .replace(/USB\s*[-–—]?\s*C\s*充電盒/gi,' ')
+      .replace(/\s+/g,' ').trim();
+    return nrKey(s);
+  }
+  function isAnc(v){return /(主動式?降噪|主動降噪|降噪款|\bANC\b)/i.test(String(v||''))}
+  function isUsAirPods4Stock(s){
+    if(!s||brandKey(s.brand)!=='apple')return false;
+    const model=appleSalesPart(s.model),root=applePartRoot(model),name=String(s.name||'');
+    if(root!=='MXP63'||!/^MXP63LL\/A$/.test(model))return false;
+    if(isAnc(name)||airPods4BaseName(name)!=='airpods4')return false;
+    const cls=[s.category,s.mid,s.small].filter(Boolean).join(' ');
+    if(cls&&!/(耳機|藍牙|配件)/i.test(cls))return false;
+    const msrp=Math.round(Number(s.suggestedPrice)||0);
+    if(msrp>0&&msrp!==4490)return false;
+    return true;
+  }
+  function candidateHardwareSignature(p){
+    return [nrKey(p?.name),applePartRoot(p?.model),nrKey(p?.processor),nrKey(p?.battery),nrVersion(p?.network),Math.round(Number(p?.msrp)||0)].join('|');
+  }
+  function usAirPods4Match(s){
+    if(!isUsAirPods4Stock(s))return null;
+    const sourceModel=appleSalesPart(s.model),sourceMsrp=Math.round(Number(s.suggestedPrice)||0);
+    let exact=[],shared=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(p?.__v51UsedOnly||brandKey(p?.brand)!=='apple')return;
+      if(isAnc(p?.name)||nrKey(p?.name)!=='airpods4')return;
+      const pm=appleSalesPart(p?.model),root=applePartRoot(pm);
+      if(root!=='MXP63')return;
+      if(sourceMsrp>0&&Number(p?.msrp)>0&&Math.round(Number(p.msrp))!==sourceMsrp)return;
+      const row={idx,p,score:560,matchMode:'v5276-airpods4-us-shared-hardware'};
+      if(pm===sourceModel)exact.push({...row,score:620,matchMode:'v5276-airpods4-us-exact'});
+      shared.push(row);
+    });
+    if(exact.length===1)return exact[0];
+    if(exact.length>1){
+      const sigs=new Set(exact.map(x=>candidateHardwareSignature(x.p)));
+      if(sigs.size===1)return exact[0];
+      return null;
+    }
+    if(!shared.length)return null;
+    const sigs=new Set(shared.map(x=>candidateHardwareSignature(x.p)));
+    if(sigs.size!==1)return null;
+    shared.sort((a,b)=>{
+      const sa=String(a.p?.__v51Source||'base'),sb=String(b.p?.__v51Source||'base');
+      const rank=x=>x==='international'?3:x==='general'?2:x==='base'?1:0;
+      return rank(sb)-rank(sa);
+    });
+    return shared[0];
+  }
+
+  matchProductFromStock=function(s){
+    const old=previousMatchProductFromStock(s);if(old)return old;
+    return usAirPods4Match(s);
+  };
+
+  wearSecondLine=function(p,r){
+    if(r&&brandKey(p?.brand)==='apple'&&applePartRoot(r?.sourceModel)==='MXP63'&&/^MXP63LL\/A$/.test(appleSalesPart(r?.sourceModel))&&nrKey(p?.name)==='airpods4'){
+      const bits=[];
+      const color=String(r.color||r.sourceColor||'').trim();if(color&&color!=='—')bits.push(color);
+      bits.push(appleSalesPart(r.sourceModel));
+      return bits.join(' ');
+    }
+    return previousWearSecondLine(p,r);
+  };
+
+  window.__v5276Diagnostics={applePartRoot,airPods4BaseName,isUsAirPods4Stock,usAirPods4Match};
+})();
+</script>
 
 </body>
 </html>
