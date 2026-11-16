@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.78｜版本顯示全域同步 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.79｜穿戴／耳機品名字級最終修正 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.78</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.78 版本顯示全域同步 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.79</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.79 穿戴／耳機品名字級最終修正 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.78｜版本顯示全域同步 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.79｜穿戴／耳機品名字級最終修正 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,8 +8155,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.76</div>
-      <div class="meta">中央快照正式切換版</div>
+      <div class="value">V5.2.79</div>
+      <div class="meta">穿戴／耳機品名字級最終修正版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -15700,12 +15700,102 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.77：一般新機短品名最大 28px；周邊短品名最大 23px；二手機維持 V5.2.74。 -->
 
 
+
+<!-- V5.2.79｜穿戴／耳機品名字級最終修正 Hotfix -->
+<style id="v5279-new-wear-name-final-hotfix">
+/*
+  V5.2.79
+  - 只接管「新機」穿戴／耳機模板的品名視覺；二手機穿戴維持原版。
+  - 遊戲主機卡 game-console-card 不套用，避免 Switch 版型被改動。
+  - 最終字級由 JS 依實際名稱區高度自動縮放；短品名可到約 24px。
+*/
+.wear-card.new-tone:not(.game-console-card) .wear-name-main{
+  font-weight:950!important;
+  line-height:1.02!important;
+  text-rendering:geometricPrecision;
+}
+</style>
+<script id="v5279-new-wear-name-final-hotfix-script">
+(function(){
+  const MAX=24, MIN=12, STEP=.5;
+
+  function cleanName(el){
+    const card=el.closest('.wear-card');
+    if(!card)return;
+    const brand=(card.querySelector('.wear-top-brand')?.textContent||'').trim();
+    let name=(el.textContent||'').trim();
+    if(!name)return;
+    if(brand){
+      const esc=brand.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      name=name.replace(new RegExp('^\\s*'+esc+'(?:\\s+|(?=[A-Z0-9（(]))','i'),'').trim();
+    }
+    name=name.replace(/_/g,' ').replace(/\)\s*(?=\d)/g,') ').replace(/(\d)mm(?=[A-Za-z])/gi,'$1mm ').replace(/\s{2,}/g,' ').trim();
+    if(name && el.textContent!==name)el.textContent=name;
+  }
+
+  function fitOne(el){
+    const card=el.closest('.wear-card');
+    if(!card || !card.classList.contains('new-tone') || card.classList.contains('game-console-card'))return;
+    const band=el.closest('.wear-name-band');
+    if(!band)return;
+    cleanName(el);
+    el.style.setProperty('display','block','important');
+    el.style.setProperty('width','100%','important');
+    el.style.setProperty('font-weight','950','important');
+    el.style.setProperty('line-height','1.02','important');
+    el.style.setProperty('word-break','normal','important');
+    el.style.setProperty('overflow-wrap','break-word','important');
+    el.style.setProperty('white-space','normal','important');
+
+    const cs=getComputedStyle(band);
+    const avail=Math.max(1,band.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0));
+    let size=MAX;
+    el.style.setProperty('font-size',size+'px','important');
+    while(size>MIN && el.scrollHeight>avail+0.5){
+      size=Math.max(MIN,size-STEP);
+      el.style.setProperty('font-size',size+'px','important');
+    }
+    if(el.scrollHeight>avail+0.5){
+      el.style.setProperty('overflow-wrap','anywhere','important');
+      while(size>10.5 && el.scrollHeight>avail+0.5){
+        size=Math.max(10.5,size-STEP);
+        el.style.setProperty('font-size',size+'px','important');
+      }
+    }
+    el.dataset.v5279FitSize=String(size);
+  }
+
+  function fitAll(root=document){
+    root.querySelectorAll?.('.wear-card.new-tone:not(.game-console-card) .wear-name-main').forEach(fitOne);
+  }
+  function schedule(){requestAnimationFrame(()=>requestAnimationFrame(()=>fitAll()));}
+
+  ['renderNewItems','renderNewPreview'].forEach(k=>{
+    const fn=window[k];
+    if(typeof fn==='function' && !fn.__v5279Wrapped){
+      const wrapped=function(){const r=fn.apply(this,arguments);schedule();return r;};
+      wrapped.__v5279Wrapped=true;
+      window[k]=wrapped;
+    }
+  });
+
+  addEventListener('beforeprint',()=>fitAll());
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
+  const mo=new MutationObserver(muts=>{
+    if(muts.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.wear-card,.wear-name-main')||n.querySelector?.('.wear-name-main')))))schedule();
+  });
+  document.addEventListener('DOMContentLoaded',()=>mo.observe(document.body,{childList:true,subtree:true}),{once:true});
+  window.__v5279WearNameTypography={fit:fitAll,max:MAX,min:MIN};
+})();
+</script>
+<!-- V5.2.79：AirPods 4 等短品名可到約 24px；長品名依實際名稱區高度自動縮字。 -->
+
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.78';
-  const LABEL='版本顯示全域同步 Hotfix';
-  const META='版本顯示全域同步版';
+  const VERSION='V5.2.79';
+  const LABEL='穿戴／耳機品名字級最終修正 Hotfix';
+  const META='穿戴／耳機品名字級最終修正版';
 
   function syncVersionUi(){
     try{
