@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.77｜新機／周邊標卡品名字級放大 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -15619,5 +15619,84 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 
+
+
+<!-- V5.2.77｜新機／周邊標卡品名字級放大 Hotfix -->
+<style id="v5277-new-peripheral-name-size-hotfix">
+/*
+  V5.2.77
+  1) 一般新機卡：由 JS 動態放大，短品名上限 28px；Logo 安全寬度仍為 190px。
+  2) 周邊專屬卡：只放大品名，不變動品牌、價格、規格與 100px Logo 安全區。
+  3) 二手機維持 V5.2.74，不在本版再次放大。
+*/
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model{
+  font-weight:950!important;
+  text-rendering:geometricPrecision;
+}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-normal{font-size:23px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-long{font-size:19px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xlong{font-size:16px!important}
+.phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xxlong{font-size:14px!important}
+@media print{
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model{font-weight:950!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-normal{font-size:21px!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-long{font-size:18px!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xlong{font-size:15.5px!important}
+  body.batch-print-mode .a4-cell .phone-card.new-phone-card.v5264-peripheral-card .cr-model.phone-name-xxlong{font-size:13.5px!important}
+}
+</style>
+<script id="v5277-new-peripheral-name-size-hotfix-script">
+(function(){
+  function v5277NewModelStyle(name){
+    const title=String(name||'').replace(/\s+/g,' ').trim();
+    const cls=phoneNameClass(title);
+    const normalSize=cls==='phone-name-xxlong'?14.5:cls==='phone-name-xlong'?17.5:cls==='phone-name-long'?22:28;
+    const minSize=cls==='phone-name-xxlong'?11.5:cls==='phone-name-xlong'?12.5:cls==='phone-name-long'?15:17;
+    const maxTextWidth=190;
+    let chosen=normalSize;
+    try{
+      const cv=v5277NewModelStyle._cv||(v5277NewModelStyle._cv=document.createElement('canvas'));
+      const ctx=cv.getContext('2d');
+      if(ctx){
+        for(let n=normalSize;n>=minSize;n-=.25){
+          ctx.font='950 '+n+'px "Microsoft JhengHei", "微軟正黑體", "Noto Sans TC", sans-serif';
+          if(ctx.measureText(title).width<=maxTextWidth){chosen=n;break}
+          chosen=Math.max(minSize,n-.25);
+        }
+      }
+    }catch(_){ }
+    return 'style="font-size:'+chosen.toFixed(2)+'px!important;font-weight:950!important"';
+  }
+
+  const prevNewPhoneHtmlV5277=newPhoneHtml;
+  newPhoneHtml=function(p,r,opt={}){
+    let markup=prevNewPhoneHtmlV5277(p,r,opt);
+    if(r?.v5264NoSerialPeripheral||r?.v5266SerializedPeripheral||p?.__v5264NoSerialPeripheral)return markup;
+    const name=newDisplayName(r,p);
+    const style=v5277NewModelStyle(name);
+    markup=markup.replace(/(<div\s+class="cr-model[^"]*"\s+)style="[^"]*"/, '$1'+style);
+    return markup;
+  };
+
+  function updateVersionUi(){
+    try{
+      const hero=document.querySelector('.hq31-hero-title');
+      if(hero)hero.textContent='V5.2.77｜新機／周邊標卡品名字級放大 Hotfix';
+      document.querySelectorAll('.status-card').forEach(c=>{
+        if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
+          const v=c.querySelector('.v'),m=c.querySelector('.s');
+          if(v)v.textContent='V5.2.77';
+          if(m)m.textContent='新機／周邊品名字級放大版';
+        }
+      });
+    }catch(_){ }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',updateVersionUi,{once:true});
+  else updateVersionUi();
+  setTimeout(updateVersionUi,700);
+  window.__v5277NameTypography={newStyle:v5277NewModelStyle,maxTextWidth:190};
+})();
+</script>
+<!-- V5.2.77：一般新機短品名最大 28px；周邊短品名最大 23px；二手機維持 V5.2.74。 -->
 </body>
 </html>
