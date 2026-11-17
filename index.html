@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.80｜Apple 印度版路由＋中央缺檔防誤配 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.82｜二手機中央規格精確配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.80</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.80 Apple 印度版路由＋中央缺檔防誤配 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.82</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.82 二手機中央規格精確配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.80｜Apple 印度版路由＋中央缺檔防誤配 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.82｜二手機中央規格精確配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.80</div>
+      <div class="value">V5.2.82</div>
       <div class="meta">穿戴／耳機品名字級最終修正版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -14999,9 +14999,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.76｜Apple AirPods 4 美版新機配對 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.82｜二手機中央規格精確配對 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.76';if(m)m.textContent='Apple AirPods 4 美版新機配對版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.82';if(m)m.textContent='二手機中央規格精確配對版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15681,12 +15681,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.2.80｜Apple 印度版路由＋中央缺檔防誤配 Hotfix';
+      if(hero)hero.textContent='V5.2.82｜二手機中央規格精確配對 Hotfix';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.2.80';
-          if(m)m.textContent='Apple 印度版路由＋中央缺檔防誤配版';
+          if(v)v.textContent='V5.2.82';
+          if(m)m.textContent='二手機中央規格精確配對版';
         }
       });
     }catch(_){ }
@@ -15958,9 +15958,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.80';
-  const LABEL='Apple 印度版路由＋中央缺檔防誤配 Hotfix';
-  const META='Apple 印度版路由＋中央缺檔防誤配版';
+  const VERSION='V5.2.82';
+  const LABEL='二手機中央規格精確配對 Hotfix';
+  const META='二手機中央規格精確配對版';
 
   function syncVersionUi(){
     try{
@@ -16026,8 +16026,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.2.81';
-  const LABEL='中央快照新舊版本同步＋realme 16T 精確配對 Hotfix';
+  const VERSION='V5.2.82';
+  const LABEL='二手機中央規格精確配對 Hotfix';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16156,7 +16156,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='中央快照同步＋realme 16T 精確配對版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='二手機中央規格精確配對版'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16169,5 +16169,120 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.81：realme 16T 允許中央型號空白，以 identity＋8/256＋5G 安全命中；若 JSON 快照過舊，自動重讀國際版 XLSB 並在 HQ 重建快照。 -->
+
+<!-- V5.2.82｜二手機中央規格精確配對 Hotfix：使用現有中央資料，嚴格 Model／容量／網路 Gate -->
+<script id="v5282-used-exact-model-hotfix">
+/* 創宇標籤／標價卡列印工具 V5.2.82｜二手機中央規格 Model Hard Gate 精確補強
+ * Scope: Apple iPhone 7(2019) A1778/128GB and Lenovo Tab M8 LTE(3rd Gen) TB-8506X/3+32GB.
+ * Hardware specifications are read only from PRODUCTS. Source resale price / grade / IMEI remain unchanged.
+ */
+(function(){
+  'use strict';
+  if(typeof usedMatchProduct!=='function'||typeof parseUsedMachine!=='function'||!Array.isArray(PRODUCTS)){
+    console.error('V5.2.82: central matcher is unavailable; hotfix disabled.');return;
+  }
+  const oldMatch=usedMatchProduct;
+  function nk(v){return typeof nrKey==='function'?nrKey(v):String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'')}
+  function cap(v){return typeof nrCap==='function'?nrCap(v):String(v||'').toUpperCase().replace(/GB|\s/g,'')}
+  function net(v){return typeof nrVersion==='function'?nrVersion(v):nk(v).replace(/^lte$/,'4g')}
+  function brand(v){const k=typeof v511BrandKey==='function'?v511BrandKey(v):nk(v);return k==='蘋果'?'apple':k}
+  function sourceLayer(p){const t=(typeof v5215SourceType==='function'?v5215SourceType(p):p?.__v51Source)||'base';return t}
+  function core(v){return String(v||'').normalize('NFKC').replace(/\s+/g,' ').trim().toLowerCase()}
+  function lenovoKey(v){return core(v).replace(/^lenovo\s+/,'').replace(/[_\s-]*(?:lte|4g)(?=\b|\()/g,' ').replace(/[^a-z0-9]+/g,'')}
+  function modelKey(v){return nk(v)}
+  function hasSpecs(p){return !!p && [p.processor,p.display,p.battery,p.rearCamera].every(v=>String(v||'').trim() && !['—','-','N/A'].includes(String(v).trim()))}
+  function isTaiwan(row){const v=core(row?.internationalVersion);return !v || /^(?:台版|台灣版|台灣|tw)$/.test(v)}
+  function noBurn(row){return !row?.screenBurn || /^(?:無烙印|無|否|none|no)$/.test(core(row.screenBurn))}
+  function family(row,parsed){
+    if(!row||row.importType==='transfer'||!isTaiwan(row)||!noBurn(row))return '';
+    const name=core(parsed?.cleanName||row.name),m=modelKey(parsed?.model);
+    if(brand(row.brand)==='apple' && /^iphone\s*7\s*\(?2019\)?$/.test(name))return 'iphone7-2019';
+    if(brand(row.brand)==='lenovo' && (lenovoKey(name)==='tabm83rdgen' || (m==='tb8506x' && /^tab\s*m8.*(?:3rd\s*gen)/.test(name))))return 'lenovo-tabm8-3';
+    return '';
+  }
+  function scope(row,parsed){
+    const group=family(row,parsed),m=modelKey(parsed?.model);
+    if(group==='iphone7-2019' && m==='a1778' && cap(parsed?.capacity)==='128' && net(parsed?.version)==='4g')return group;
+    if(group==='lenovo-tabm8-3' && m==='tb8506x' && cap(parsed?.capacity)==='32' && cap(parsed?.ram)==='3' && net(parsed?.version)==='4g')return group;
+    return '';
+  }
+  function candidate(scopeKey,row,parsed){
+    if(!scopeKey)return null;
+    const matches=[];
+    PRODUCTS.forEach((p,idx)=>{
+      const layer=sourceLayer(p);
+      if(layer!=='general'&&layer!=='base')return;
+      if(brand(p.brand)!==brand(row.brand))return;
+      if(!hasSpecs(p))return;
+      if(modelKey(p.model)!==modelKey(parsed.model))return;
+      if(cap(p.rom)!==cap(parsed.capacity))return;
+      if(parsed.ram&&cap(p.ram)!==cap(parsed.ram))return;
+      if(net(p.network)!==net(parsed.version))return;
+      if(scopeKey==='iphone7-2019'){
+        if(core(p.name).replace(/[^a-z0-9]+/g,'')!=='iphone7')return;
+        if(cap(p.ram)!=='2')return;
+      }else if(scopeKey==='lenovo-tabm8-3'){
+        if(lenovoKey(p.name)!=='tabm83rdgen')return;
+      }else return;
+      // The recovery-record '設定售價' is the store sale price, not a central grade-price gate.
+      // Model, generation, RAM, ROM, and network are the mandatory hardware gates.
+      if(!(Math.round(Number(row.price)||0)>0))return;
+      matches.push({idx,p,parsed,score:900,matchMode:'v5282-confirmed-device-model-ram-rom-network-grade-sale'});
+    });
+    if(!matches.length)return null;
+    const live=matches.filter(x=>sourceLayer(x.p)==='general');
+    const preferred=live.length?live:matches;
+    const sig=x=>[modelKey(x.p.model),cap(x.p.ram),cap(x.p.rom),net(x.p.network),nk(x.p.processor),nk(x.p.display),nk(x.p.battery),nk(x.p.rearCamera),Math.round(Number(x.p.msrp)||0)].join('|');
+    const uniq=new Map();for(const m of preferred){const k=sig(m);if(!uniq.has(k))uniq.set(k,m)}
+    return uniq.size===1?[...uniq.values()][0]:null;
+  }
+  usedMatchProduct=function(row){
+    const parsed=parseUsedMachine(row?.name,row?.brand),group=family(row,parsed);
+    if(!group)return oldMatch.apply(this,arguments);
+    // Model/capacity/network mismatch in these known families MUST NOT fall through to an older approximate matcher.
+    const key=scope(row,parsed),hit=key?candidate(key,row,parsed):null;
+    if(!hit)console.warn('V5.2.82 exact gate blocked unsafe fallback', {key:group,model:parsed.model,rom:parsed.capacity,ram:parsed.ram,source:row?.name});
+    return hit;
+  };
+  const previousUsedDisplayDate=usedDisplayDate;
+  usedDisplayDate=function(p,r){
+    const src=core(r?.sourceName||r?.sourceCleanName||'');
+    if(brand(p?.brand)==='apple' && core(p?.name)==='iphone 7' && modelKey(p?.model)==='a1778' && /iphone\s*7\s*\(?2019\)?/.test(src)){
+      const hqDate=typeof hqProductDateRaw==='function'?hqProductDateRaw(p):'';
+      if(hqDate)return hqDate;
+      const centralYear=String(p?.year||'').trim();
+      if(/^2016[-/.]\d{1,2}[-/.]\d{1,2}$/.test(centralYear))return wearDisplayDate(centralYear);
+      if(centralYear==='2016')return '2016-09-16';
+    }
+    return previousUsedDisplayDate.apply(this,arguments);
+  };
+  window.__v5282MatchDiagnostics={family,scope,candidate,check(row){const parsed=parseUsedMachine(row?.name,row?.brand),key=scope(row,parsed),hit=candidate(key,row,parsed);return {target:key||'not-scoped',status:hit?'MATCH':'NO_SAFE_MATCH',model:parsed?.model,rom:parsed?.capacity,ram:parsed?.ram,centralSource:hit?sourceLayer(hit.p):null,matchMode:hit?.matchMode||'',matchedProduct:hit?{name:hit.p.name,model:hit.p.model,processor:hit.p.processor,display:hit.p.display,battery:hit.p.battery,msrp:hit.p.msrp}:null}}};
+  // Keep all existing central snapshot, pricing, printing, logo and region logic untouched.
+  console.info('PriceTag V5.2.82 exact-model specs fallback installed.');
+})();
+
+(function(){
+  const V='V5.2.82', LABEL='二手機中央規格精確配對 Hotfix';
+  function sync(){
+    try{
+      document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
+      const top=document.querySelector('.logo-title span');if(top)top.textContent=V;
+      const sub=document.querySelector('.logo-sub');if(sub)sub.textContent=`配件 × 二手機 × 新機｜${V} ${LABEL}`;
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${V}｜${LABEL}`;
+      for(const card of document.querySelectorAll('.hq31-status')){
+        if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const v=card.querySelector('.value'),m=card.querySelector('.meta');
+          if(v)v.textContent=V;if(m)m.textContent='二手機中央規格精確配對版';
+        }
+      }
+    }catch(err){console.warn('V5.2.82 version sync:',err)}
+  }
+  const prev=v51UpdateOverview;
+  if(typeof prev==='function')v51UpdateOverview=function(){const r=prev.apply(this,arguments);Promise.resolve().then(sync);return r};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});else sync();
+  [50,600,1400,2600,5300,6000].forEach(ms=>setTimeout(sync,ms));
+})();
+
+</script>
 </body>
 </html>
