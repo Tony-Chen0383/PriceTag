@@ -1,42 +1,42 @@
 {
   "version": "5.2.65",
   "schema": "smartmobile-central-products-v1",
-  "currentFile": "./snapshots/central-products-20261117-150718-38725-1.json",
-  "updatedAt": "2026-11-17 15:07",
+  "currentFile": "./snapshots/central-products-20261117-173314-94459-1.json",
+  "updatedAt": "2026-11-17 17:33",
   "sources": {
     "general": {
-      "sourceFileName": "20261112-標價卡與售價表(一般版).xlsb",
-      "rows": 2701,
-      "reportDate": "2026.11.12",
-      "updatedAt": "2026-11-17 15:07",
-      "dataVersion": "2026.11.12",
+      "sourceFileName": "20261117-標價卡與售價表(一般版).xlsb",
+      "rows": 2711,
+      "reportDate": "2026.11.17",
+      "updatedAt": "2026-11-17 17:33",
+      "dataVersion": "2026.11.17",
       "file": ""
     },
     "special": {
       "sourceFileName": "20260917-標價卡與售價表(特殊規格).xlsb",
       "rows": 25,
       "reportDate": "2026.09.17",
-      "updatedAt": "2026-11-17 15:07",
+      "updatedAt": "2026-11-17 17:33",
       "dataVersion": "2026.09.17",
       "file": ""
     },
     "international": {
-      "sourceFileName": "20261112-標價卡與售價表(國際版).xlsb",
-      "rows": 589,
-      "reportDate": "2026.11.12",
-      "updatedAt": "2026-11-17 15:07",
-      "dataVersion": "2026.11.12",
+      "sourceFileName": "20261117-標價卡與售價表(國際版).xlsb",
+      "rows": 592,
+      "reportDate": "2026.11.17",
+      "updatedAt": "2026-11-17 17:33",
+      "dataVersion": "2026.11.17",
       "file": ""
     },
     "screenBurn": {
-      "sourceFileName": "20261112-標價卡與售價表(烙印版).xlsb",
-      "rows": 829,
-      "reportDate": "2026.11.12",
-      "updatedAt": "2026-11-17 15:07",
-      "dataVersion": "2026.11.12",
+      "sourceFileName": "20261117-標價卡與售價表(烙印版).xlsb",
+      "rows": 835,
+      "reportDate": "2026.11.17",
+      "updatedAt": "2026-11-17 17:33",
+      "dataVersion": "2026.11.17",
       "file": ""
     }
   },
-  "totalRows": 4144,
-  "snapshotVersion": "5.2.65-20261117-150718-38725"
+  "totalRows": 4163,
+  "snapshotVersion": "5.2.65-20261117-173314-94458"
 }
