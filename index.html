@@ -16021,5 +16021,153 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.78：頁籤、左上品牌列、HQ Hero、工具版本卡統一由單一版本來源接管。 -->
 
+
+
+<!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
+<script id="v5281-realme16t-snapshot-sync-hotfix">
+(function(){
+  const VERSION='V5.2.81';
+  const LABEL='中央快照新舊版本同步＋realme 16T 精確配對 Hotfix';
+  const prevUsedMatch=usedMatchProduct;
+  const prevNewMatch=matchProductFromStock;
+  let refreshingIntl=false;
+  let intlRefreshTried=false;
+
+  function brandKey(v){
+    const k=typeof v511BrandKey==='function'?v511BrandKey(v):nrKey(v);
+    return String(k||'').toLowerCase();
+  }
+  function id(v){
+    return String(v||'').normalize('NFKC').toLowerCase()
+      .replace(/\brealme\b/ig,' ')
+      .replace(/[（(]\s*(?:創|國際版|台版|印度版|印度|india)\s*[）)]/gi,' ')
+      .replace(/\b(?:5\s*[-_]?\s*g|4\s*[-_]?\s*g|lte|wi\s*[-_]?\s*fi|wifi)\b/ig,' ')
+      .replace(/[^a-z0-9]+/g,'');
+  }
+  function isSource16T(row){return brandKey(row?.brand)==='realme'&&id(row?.name)==='16t'}
+  function isProduct16T(p){return brandKey(p?.brand)==='realme'&&id(p?.name)==='16t'}
+  function sourceType(p){return typeof v5215SourceType==='function'?v5215SourceType(p):String(p?.__v51Source||'base')}
+  function filled(v){const x=String(v??'').trim();return !!x&&x!=='—'&&x!=='-'}
+  function specSig(p){return [nrKey(p?.name),nrCap(p?.ram),nrCap(p?.rom),nrVersion(p?.network),nrKey(p?.processor),nrKey(p?.display),nrKey(p?.battery),nrKey(p?.rearCamera)].join('|')}
+  function uniq(list){
+    if(!list.length)return null;
+    const m=new Map();for(const x of list){const k=specSig(x.p);if(!m.has(k))m.set(k,x)}
+    return m.size===1?[...m.values()][0]:null;
+  }
+  function net(v){
+    const s=String(v||'').normalize('NFKC');
+    if(/5\s*[-_]?\s*g/i.test(s))return '5g';
+    if(/4\s*[-_]?\s*g|\blte\b/i.test(s))return '4g';
+    if(/wi\s*[-_]?\s*fi|wifi/i.test(s))return 'wifi';
+    return '';
+  }
+  function used16TMatch(row){
+    if(!isSource16T(row))return null;
+    const parsed=parseUsedMachine(row?.name,row?.brand);
+    const ram=nrCap(parsed?.ram||row?.ram||''),rom=nrCap(parsed?.capacity||row?.capacity||row?.rom||''),wantNet=net(parsed?.version||row?.network||row?.version||row?.name);
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!isProduct16T(p))return;
+      const st=sourceType(p);if(st!=='international')return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(rom&&nrCap(p?.rom)!==rom)return;
+      if(wantNet&&nrVersion(p?.network)!==wantNet)return;
+      if(!filled(p?.processor)&&!filled(p?.display)&&!filled(p?.battery))return;
+      list.push({idx,p,parsed:{...parsed,model:'',cleanName:'16T',version:wantNet||parsed?.version||''},score:520,matchMode:'v5281-realme16t-international-no-model'});
+    });
+    if(!list.length)return null;
+    const sale=Math.round(Number(row?.price)||0),grade=String(row?.grade||'').trim().toUpperCase();
+    if(sale>0&&grade&&typeof v521ProductGradePrice==='function'){
+      const exact=list.filter(x=>v521ProductGradePrice(x.p,grade)===sale);if(exact.length)list=exact;
+    }
+    return uniq(list);
+  }
+  function new16TMatch(s){
+    if(!isSource16T(s))return null;
+    const mem=typeof v522ParseStockMemory==='function'?v522ParseStockMemory(s?.capacity):{ram:'',rom:nrCap(s?.capacity)};
+    const ram=nrCap(mem?.ram||s?.ram||''),rom=nrCap(mem?.rom||s?.rom||''),wantNet=net(s?.version||s?.network||s?.name);
+    let list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!isProduct16T(p)||sourceType(p)!=='international')return;
+      if(ram&&nrCap(p?.ram)!==ram)return;
+      if(rom&&nrCap(p?.rom)!==rom)return;
+      if(wantNet&&nrVersion(p?.network)!==wantNet)return;
+      if(!filled(p?.processor)&&!filled(p?.display)&&!filled(p?.battery))return;
+      list.push({idx,p,score:520,matchMode:'v5281-realme16t-international-no-model'});
+    });
+    return uniq(list);
+  }
+
+  usedMatchProduct=function(row){
+    const direct=used16TMatch(row);if(direct)return direct;
+    return prevUsedMatch(row);
+  };
+  matchProductFromStock=function(s){
+    const direct=new16TMatch(s);if(direct)return direct;
+    return prevNewMatch(s);
+  };
+
+  async function refreshInternationalOnce(reason=''){
+    if(refreshingIntl||intlRefreshTried)return false;
+    intlRefreshTried=true;refreshingIntl=true;
+    try{
+      if(typeof XLSX==='undefined'||typeof v51FetchSource!=='function')return false;
+      const ok=await v51FetchSource('international');
+      if(!ok)return false;
+      v51RebuildProductLayer();
+      try{v51UpdateOverview()}catch(_){}
+      const has=PRODUCTS.some(isProduct16T);
+      if(!has)return false;
+      /* HQ 有授權時，把剛讀到的最新 XLSB 來源重新封成 JSON snapshot。 */
+      if(typeof GH32_CONNECTED!=='undefined'&&GH32_CONNECTED&&window.__v5273SnapshotHq?.publishBootstrapSnapshot){
+        try{
+          const out=await window.__v5273SnapshotHq.publishBootstrapSnapshot();
+          const note=document.getElementById('v5273BootstrapSnapshotNote');
+          if(note)note.textContent=`✓ 偵測國際版 XLSB 比 JSON 快照新，已重建中央快照｜${Number(out?.rows||0).toLocaleString()} 筆`;
+        }catch(e){console.warn('V5.2.81 snapshot republish skipped',e)}
+      }
+      return true;
+    }catch(e){console.warn('V5.2.81 international refresh failed',reason,e);return false}
+    finally{refreshingIntl=false}
+  }
+
+  /* 若匯入後 realme 16T 仍落入補編，代表 Runtime snapshot 尚未含最新國際版；
+     自動抓一次最新 international.xlsb，成功後重新建索引與重跑原匯入。 */
+  const prevBuildUsed=buildUsedCardsFromRows;
+  buildUsedCardsFromRows=function(rows){
+    const ret=prevBuildUsed(rows);
+    try{
+      const need=(usedItems||[]).some(r=>r?.manualSpec&&isSource16T(r)) || (rows||[]).some(r=>isSource16T(r)&&!PRODUCTS.some(isProduct16T));
+      if(need&&!intlRefreshTried){
+        Promise.resolve().then(async()=>{
+          if(await refreshInternationalOnce('realme16t-unmatched')){
+            prevBuildUsed(rows);
+            try{renderUsedItems();renderUsedPreview();updateUsedImportUI()}catch(_){}
+          }
+        });
+      }
+    }catch(_){}
+    return ret;
+  };
+
+  function syncVersion(){
+    try{
+      document.title=`創宇標籤／標價卡列印工具 ${VERSION}｜${LABEL}`;
+      const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
+      const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='中央快照同步＋realme 16T 精確配對版'}});
+    }catch(_){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
+  [0,300,1200,2500,5000].forEach(ms=>setTimeout(syncVersion,ms));
+  try{
+    const prevOverview81=v51UpdateOverview;
+    v51UpdateOverview=function(){const r=prevOverview81.apply(this,arguments);Promise.resolve().then(syncVersion);setTimeout(syncVersion,0);return r};
+  }catch(_){ }
+  window.__v5281Diagnostics={id,isSource16T,isProduct16T,used16TMatch,new16TMatch,refreshInternationalOnce};
+})();
+</script>
+<!-- V5.2.81：realme 16T 允許中央型號空白，以 identity＋8/256＋5G 安全命中；若 JSON 快照過舊，自動重讀國際版 XLSB 並在 HQ 重建快照。 -->
 </body>
 </html>
