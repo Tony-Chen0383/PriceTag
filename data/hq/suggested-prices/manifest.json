@@ -23,5 +23,16 @@
   "lastValidatedRows": 2036,
   "lastMatchedProducts": 3038,
   "publishedVia": "V5.2.65 immediate snapshot publish",
-  "reportDate": "2026.11.17"
+  "reportDate": "2026.11.17",
+  "pending": {
+    "file": "./scheduled/general-20261120-0000-247634.xlsb",
+    "sourceFileName": "20261120-標價卡與售價表(一般版).xlsb",
+    "rows": 2713,
+    "reportDate": "2026.11.18",
+    "updatedAt": "2026-11-19 17:57",
+    "effectiveAt": "2026-11-19T16:00:00.000Z",
+    "scheduledAt": "2026-11-19 17:57",
+    "lastValidatedRows": 2037,
+    "lastMatchedProducts": 3029
+  }
 }
