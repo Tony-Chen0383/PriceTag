@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.92｜Samsung Galaxy Watch 標卡顯示統一 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.91</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.92</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.92｜Samsung Galaxy Watch 標卡顯示統一 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.92｜Samsung Galaxy Watch 標卡顯示統一 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.91</div>
+      <div class="value">V5.2.92</div>
       <div class="meta">Apple Watch 商品名稱放大版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -12035,7 +12035,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     if(name && el.textContent!==name) el.textContent=name;
   }
   function fitOne(el){
-    // V5.2.91: Watch has its own name fitting system; never reset Watch to legacy 17.5px.
+    // V5.2.92: Watch has its own name fitting system; never reset Watch to legacy 17.5px.
     if(el.closest('.wear-card.v5286-apple-watch'))return;
     const band=el.closest('.wear-name-band');
     if(!band)return;
@@ -15001,9 +15001,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.92｜Samsung Galaxy Watch 標卡顯示統一 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.91';if(m)m.textContent='Apple Watch 名稱放大與版本同步版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.92';if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15683,12 +15683,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+      if(hero)hero.textContent='V5.2.92｜Samsung Galaxy Watch 標卡顯示統一 Hotfix';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.2.91';
-          if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
+          if(v)v.textContent='V5.2.92';
+          if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
         }
       });
     }catch(_){ }
@@ -15960,8 +15960,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.91';
-  const LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const VERSION='V5.2.92';
+  const LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   const META='Apple Watch 商品名稱放大版';
 
   function syncVersionUi(){
@@ -16028,8 +16028,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.2.91';
-  const LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const VERSION='V5.2.92';
+  const LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16158,7 +16158,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch 名稱放大與版本同步版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16264,7 +16264,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const V='V5.2.92', LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16274,7 +16274,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=V;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
+          if(v)v.textContent=V;if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
         }
       }
     }catch(err){console.warn('V5.2.82 version sync:',err)}
@@ -16294,7 +16294,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix',VER='V5.2.91';
+  const TITLE='Samsung Galaxy Watch 標卡顯示統一 Hotfix',VER='V5.2.92';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16372,7 +16372,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VER+' '+TITLE;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VER+'｜'+TITLE;
       document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
-        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
+        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
       }});
     }catch(_){ }
   }
@@ -16390,7 +16390,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5284-apple-watch-model-series-size-gps-hard-gate">
 (function(){
   'use strict';
-  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const VERSION='V5.2.92', LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   const priorMatch=usedMatchProduct;
   const norm=v=>String(v??'').normalize('NFKC').trim();
   const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16525,7 +16525,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
         }
       }
     }catch(_){ }
@@ -16567,7 +16567,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const VERSION='V5.2.92', LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16710,7 +16710,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='Apple Watch 名稱放大與版本同步版';
+          if(meta)meta.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
         }
       }
     }catch(_){ }
@@ -16812,7 +16812,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5286-apple-watch-size-material-render-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+  const VERSION='V5.2.92', LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
   const prevWearCardHtml=wearCardHtml;
   const normal=x=>String(x??'').normalize('NFKC').trim();
   const esc=x=>h(String(x??''));
@@ -16877,7 +16877,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const c of document.querySelectorAll('.hq31-status')){
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.value'),meta=c.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(meta)meta.textContent='Apple Watch 名稱放大與版本同步版';
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
         }
       }
     }catch(_){ }
@@ -17065,7 +17065,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 }
 </style>
 
-<!-- V5.2.91｜Apple Watch 黃底商品名稱確實放大＋版本唯一更新源 Hotfix -->
+<!-- V5.2.92｜Apple Watch 黃底商品名稱確實放大＋版本唯一更新源 Hotfix -->
 <style id="v5291-watch-yellow-name-final-style">
 /* The default 17.5px legacy fitter must not be the final Watch font. The final JS fits actual visible width. */
 .wear-card.v5286-apple-watch .wear-name-main{
@@ -17095,7 +17095,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5291-watch-visible-name-fit-and-version-lock">
 (function(){
  'use strict';
- const VERSION='V5.2.91',LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+ const VERSION='V5.2.92',LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
  const fitted=new WeakMap();
  function fit(el){
    const card=el?.closest('.wear-card.v5286-apple-watch'),band=el?.closest('.wear-name-band');
@@ -17162,10 +17162,10 @@ window.__v5266SerializedPeripheralHotfix=true;
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='Apple Watch 名稱放大與版本同步版')meta.textContent='Apple Watch 名稱放大與版本同步版';
+          if(meta&&meta.textContent!=='Samsung Galaxy Watch 同步 Apple Watch 版型')meta.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
        }else if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.v'),meta=c.querySelector('.s');if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='Apple Watch 名稱放大與版本同步版')meta.textContent='Apple Watch 名稱放大與版本同步版';
+          if(meta&&meta.textContent!=='Samsung Galaxy Watch 同步 Apple Watch 版型')meta.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
        }
    });
  }
@@ -17186,5 +17186,142 @@ window.__v5266SerializedPeripheralHotfix=true;
  window.__v5291WatchName={fit,scan,syncVersion};
 })();
 </script>
+
+
+<!-- V5.2.92｜Samsung Galaxy Watch 品名／尺寸／材質／連線／55×65mm 同 Apple Watch Hotfix -->
+<script id="v5292-samsung-galaxy-watch-display-only">
+(function(){
+ 'use strict';
+ const VERSION='V5.2.92', LABEL='Samsung Galaxy Watch 標卡顯示統一 Hotfix';
+ const previousWearCardHtml=wearCardHtml;
+ const tidy=v=>String(v??'').normalize('NFKC').replace(/\s+/g,' ').trim();
+ const front=v=>tidy(v).split('[')[0].trim();
+ const safe=v=>h(String(v??''));
+ function isSamsungWear(p,r){
+    if(!/^(?:SAMSUNG|三星)$/i.test(tidy(p?.brand||r?.brand)))return false;
+    if(!/手錶|智慧錶|智能錶|smart\s*watch/i.test(tidy(p?.category||r?.small||'')))return false;
+    const n=[p?.name,r?.sourceName,r?.sourceCleanName,r?.name].filter(Boolean).join(' ');
+    if(!/\b(?:galaxy\s*)?watch(?:\s|\d|[-_]|ultra|classic|active|fe|$)/i.test(n))return false;
+    // Exclude watch band/case accessories. Avoid touching Galaxy Fit, earbuds, or Samsung phones.
+    if(/(?:錶帶|錶環|保護殼|watch\s*(?:band|strap|case))/.test(tidy(p?.name||'').toLowerCase()))return false;
+    return true;
+ }
+ function nameAndFamily(p,r){
+   const name=front(p?.name||'')||front(r?.sourceName||r?.name||'');
+   const raw=front(r?.sourceName||r?.name||'');
+   let m;
+   if((m=name.match(/\b(?:galaxy\s*)?watch\s*ultra\s*(?:[（(]\s*(20\d{2})\s*[）)])?/i))){
+      return {label:'Galaxy Watch Ultra'+(m[1]?' ('+m[1]+')':''),family:'ultra'};
+   }
+   if((m=name.match(/\b(?:galaxy\s*)?watch\s*(\d{1,2})\s*(classic|pro)?\b/i))){
+     return {label:'Galaxy Watch'+Number(m[1])+(m[2]?' '+(m[2].toLowerCase()==='classic'?'Classic':'Pro'):''),family:'watch'+Number(m[1])+(m[2]?m[2].toLowerCase():'')};
+   }
+   if((m=name.match(/\b(?:galaxy\s*)?watch\s*active\s*(\d{1,2})?\b/i))){
+     return {label:'Galaxy Watch Active'+(m[1]?Number(m[1]):''),family:'active'+(m[1]||'')};
+   }
+   if(/\b(?:galaxy\s*)?watch\s*fe\b/i.test(name))return {label:'Galaxy Watch FE',family:'fe'};
+   // Older Galaxy Watch models have only "Watch 42mm/46mm" as the name.
+   if(/\b(?:galaxy\s*)?watch\b/i.test(name)||/\bgalaxy\s*watch\b/i.test(raw))return {label:'Galaxy Watch',family:'legacy'};
+   return null;
+ }
+ function sizeFor(p,r,family){
+   const src=front(r?.sourceName||r?.name||'');
+   const central=front(p?.name||'');
+   const sm=src.match(/\b(3[8-9]|4\d|5\d)\s*mm\b/i);
+   const pm=central.match(/\b(3[8-9]|4\d|5\d)\s*mm\b/i);
+   if(sm&&pm&&sm[1]!==pm[1])return '—'; // conflicting sources: never guess a size
+   if(sm)return sm[1]+'mm';
+   if(pm)return pm[1]+'mm';
+   // Verified Samsung Galaxy Watch Ultra SM-L705F 47mm; no other implicit size inference.
+   if(family==='ultra'&&/^(?:SM-)?L705F$/i.test(tidy(p?.model)))return '47mm';
+   return '—';
+ }
+ function materialToken(v){
+   if(/鈦金屬|鈦殼|titanium/i.test(v))return '鈦金屬';
+   if(/不鏽鋼|不銹鋼|stainless\s*steel/i.test(v))return '不鏽鋼';
+   if(/鋁金屬|鋁殼|鋁製|alumin(?:um|ium)/i.test(v))return '鋁金屬';
+   if(/陶瓷|ceramic/i.test(v))return '陶瓷';
+   return '';
+ }
+ function materialFor(p,r,family){
+   // Only the WATCH CASE material counts. A Milanese bracelet must never be interpreted as watch housing.
+   for(const raw of [r?.sourceName,r?.name,r?.sourceCleanName,p?.name].filter(Boolean)){
+      const blocks=[...tidy(raw).matchAll(/\[([^\]]+)\]/g)];
+      for(const block of blocks){
+        const casePart=block[1].split(/[+＋／/]/)[0];
+        if(/(?:錶殼|表殼|watch\s*case)/i.test(casePart)){
+           return materialToken(casePart)||'—';
+        }
+      }
+      const main=front(raw);
+      const direct=main.match(/鈦金屬款?|鈦殼|不鏽鋼款?|不銹鋼款?|鋁金屬款?|鋁製|陶瓷錶殼|ceramic\s*case|alumin(?:um|ium)\s*case|stainless\s*steel\s*case|titanium\s*case/i);
+      if(direct){const v=materialToken(direct[0]);if(v)return v}
+   }
+   // Samsung's published model-family specifications, only for unambiguous generations.
+   const known={ultra:'鈦金屬',watch8classic:'不鏽鋼',watch8:'鋁金屬',watch7:'鋁金屬',
+       watch6classic:'不鏽鋼',watch6:'鋁金屬',watch5pro:'鈦金屬',watch5:'鋁金屬',
+       watch4classic:'不鏽鋼',watch4:'鋁金屬',fe:'鋁金屬'};
+   return known[family]||'—';
+ }
+ function networkFor(p,r){
+   const base=front(r?.sourceName||r?.name||'');
+   const central=front(p?.name||'');
+   const mode=s=>{
+      if(/\b(?:LTE|4G|5G|CELLULAR|E-SIM|ESIM)\b|行動網路/i.test(s))return 'LTE';
+      if(/\b(?:BT|BLUETOOTH|WIFI|WI-FI|GPS)\b|藍牙/i.test(s))return '藍牙';
+      return '';
+   };
+   // Explicit source main product name comes first; then its [color/network], then central name/network.
+   const bracket=tidy(r?.sourceName||r?.name||'').match(/\[([^\]]+)\]/)?.[1]||'';
+   return mode(base)||mode(bracket)||mode(central)||mode(tidy(p?.network))||'—';
+ }
+ function displayFields(p,r){
+    if(!isSamsungWear(p,r))return null;
+    const parsed=nameAndFamily(p,r);
+    if(!parsed)return null;
+    return {...parsed,size:sizeFor(p,r,parsed.family),material:materialFor(p,r,parsed.family),network:networkFor(p,r)};
+ }
+ wearCardHtml=function(p,r,opt={}){
+    const fields=displayFields(p,r);
+    if(!fields)return previousWearCardHtml.apply(this,arguments);
+    const v={...p,name:fields.label,network:fields.network};
+    let html=previousWearCardHtml.call(this,v,r,opt);
+    if(!html.includes('<div class="wear-specs">')||!html.includes('class="wear-card '))return html;
+    html=html.replace('class="wear-card ','class="wear-card v5285-apple-watch v5286-apple-watch v5292-samsung-watch ');
+    const pos=html.indexOf('<div class="wear-specs">');
+    const first=html.indexOf('<div class="wear-spec-row',pos),second=html.indexOf('<div class="wear-spec-row',first+1);
+    if(first<0||second<0)return previousWearCardHtml.call(this,p,r,opt);
+    const row='<div class="wear-spec-row v5286-size-material">'+
+       '<div class="wear-spec-label dark">尺寸</div><div class="wear-spec-value">'+safe(fields.size)+'</div>'+
+       '<div class="wear-spec-label">材質</div><div class="wear-spec-value v5286-material-value">'+safe(fields.material)+'</div></div>';
+    html=html.slice(0,second)+row+html.slice(second);
+    html=html.replace(/(<div class="wear-spec-label(?: dark)?">通訊<br>網路<\/div>\s*<div class=")wear-spec-value("[^>]*>)/,
+       '$1wear-spec-value v5285-watch-network$2');
+    return html;
+ };
+ // Reuse the existing Apple visible-page autofitter, A4 65mm geometry, barcode guard and three-row color scheme.
+ // No database / JSON / SKU matching changes. Font fitting works for Samsung because it carries the same view classes.
+ function versionUI(){
+    const title=`創宇標籤／標價卡列印工具 ${VERSION}｜${LABEL}`;
+    if(document.title!==title)document.title=title;
+    const top=document.querySelector('.logo-title span');if(top&&top.textContent!==VERSION)top.textContent=VERSION;
+    const sub=document.querySelector('.logo-sub');if(sub)sub.textContent=`配件 × 二手機 × 新機｜${VERSION}｜${LABEL}`;
+    const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
+    for(const c of document.querySelectorAll('.hq31-status,.status-card')){
+       if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+         const v=c.querySelector('.value'),m=c.querySelector('.meta');
+         if(v)v.textContent=VERSION;if(m)m.textContent='Samsung Galaxy Watch 同步 Apple Watch 版型';
+       }
+    }
+ }
+ const prevOverview=v51UpdateOverview;
+ if(typeof prevOverview==='function')v51UpdateOverview=function(){const ret=prevOverview.apply(this,arguments);Promise.resolve().then(versionUI);return ret};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',versionUI,{once:true});else versionUI();
+ window.addEventListener('beforeprint',versionUI);
+ [100,800,3000,9500,11500].forEach(t=>setTimeout(versionUI,t));
+ window.__v5292SamsungWatch={displayFields,nameAndFamily,sizeFor,materialFor,networkFor};
+})();
+</script>
+<!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 </body>
 </html>
