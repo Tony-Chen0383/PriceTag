@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.90｜Apple Watch 黃色商品名稱放大 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.90</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.90｜Apple Watch 黃色商品名稱放大 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.91</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.90｜Apple Watch 黃色商品名稱放大 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.90</div>
+      <div class="value">V5.2.91</div>
       <div class="meta">Apple Watch 商品名稱放大版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -12035,6 +12035,8 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     if(name && el.textContent!==name) el.textContent=name;
   }
   function fitOne(el){
+    // V5.2.91: Watch has its own name fitting system; never reset Watch to legacy 17.5px.
+    if(el.closest('.wear-card.v5286-apple-watch'))return;
     const band=el.closest('.wear-name-band');
     if(!band)return;
     cleanDisplayName(el);
@@ -14999,9 +15001,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.83｜Apple Watch SE／Series 規格精確配對 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.84';if(m)m.textContent='中央規格回填穩定化版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.91';if(m)m.textContent='Apple Watch 名稱放大與版本同步版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15681,12 +15683,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.2.83｜Apple Watch SE／Series 規格精確配對 Hotfix';
+      if(hero)hero.textContent='V5.2.91｜Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.2.84';
-          if(m)m.textContent='中央規格回填穩定化版';
+          if(v)v.textContent='V5.2.91';
+          if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
         }
       });
     }catch(_){ }
@@ -15958,8 +15960,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.90';
-  const LABEL='Apple Watch 黃色商品名稱放大 Hotfix';
+  const VERSION='V5.2.91';
+  const LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   const META='Apple Watch 商品名稱放大版';
 
   function syncVersionUi(){
@@ -16026,8 +16028,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.2.90';
-  const LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
+  const VERSION='V5.2.91';
+  const LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16156,7 +16158,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='中央規格回填穩定化版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch 名稱放大與版本同步版'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16262,7 +16264,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.2.84', LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
+  const V='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16272,7 +16274,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=V;if(m)m.textContent='中央規格回填穩定化版';
+          if(v)v.textContent=V;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
         }
       }
     }catch(err){console.warn('V5.2.82 version sync:',err)}
@@ -16292,7 +16294,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='Apple Watch 黃色商品名稱放大 Hotfix',VER='V5.2.90';
+  const TITLE='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix',VER='V5.2.91';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16370,7 +16372,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VER+' '+TITLE;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VER+'｜'+TITLE;
       document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
-        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='中央規格回填穩定化版';
+        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
       }});
     }catch(_){ }
   }
@@ -16388,7 +16390,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5284-apple-watch-model-series-size-gps-hard-gate">
 (function(){
   'use strict';
-  const VERSION='V5.2.90', LABEL='Apple Watch 黃色商品名稱放大 Hotfix';
+  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   const priorMatch=usedMatchProduct;
   const norm=v=>String(v??'').normalize('NFKC').trim();
   const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16523,7 +16525,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch SE／Series 精確配對版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch 名稱放大與版本同步版';
         }
       }
     }catch(_){ }
@@ -16565,7 +16567,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.90', LABEL='Apple Watch 黃色商品名稱放大 Hotfix';
+  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16643,6 +16645,9 @@ window.__v5266SerializedPeripheralHotfix=true;
   function fitName(el){
     const card=el.closest('.wear-card');
     if(!card?.classList.contains('v5286-apple-watch'))return;
+    if(typeof window.__v5291FitWatchName==='function'){
+      window.__v5291FitWatchName(el);return;
+    }
     const band=el.closest('.wear-name-band'); if(!band)return;
     const style=getComputedStyle(band);
     const availH=band.clientHeight-(parseFloat(style.paddingTop)||0)-(parseFloat(style.paddingBottom)||0);
@@ -16705,7 +16710,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='Apple Watch 商品名稱放大版';
+          if(meta)meta.textContent='Apple Watch 名稱放大與版本同步版';
         }
       }
     }catch(_){ }
@@ -16807,7 +16812,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5286-apple-watch-size-material-render-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.90', LABEL='Apple Watch 黃色商品名稱放大 Hotfix';
+  const VERSION='V5.2.91', LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
   const prevWearCardHtml=wearCardHtml;
   const normal=x=>String(x??'').normalize('NFKC').trim();
   const esc=x=>h(String(x??''));
@@ -16872,7 +16877,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const c of document.querySelectorAll('.hq31-status')){
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.value'),meta=c.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(meta)meta.textContent='Apple Watch 商品名稱放大版';
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='Apple Watch 名稱放大與版本同步版';
         }
       }
     }catch(_){ }
@@ -17059,5 +17064,127 @@ window.__v5266SerializedPeripheralHotfix=true;
   }
 }
 </style>
+
+<!-- V5.2.91｜Apple Watch 黃底商品名稱確實放大＋版本唯一更新源 Hotfix -->
+<style id="v5291-watch-yellow-name-final-style">
+/* The default 17.5px legacy fitter must not be the final Watch font. The final JS fits actual visible width. */
+.wear-card.v5286-apple-watch .wear-name-main{
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.04!important;
+  letter-spacing:-.6px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  -webkit-line-clamp:unset!important;
+}
+.wear-card.v5286-apple-watch .wear-name-main .v5291-year{
+  font-size:.66em!important;
+  letter-spacing:-.3px!important;
+  font-weight:900!important;
+  vertical-align:baseline!important;
+  white-space:nowrap!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-name-main{
+    font-size:30px!important;font-weight:950!important;letter-spacing:-.6px!important;white-space:nowrap!important;
+  }
+}
+</style>
+<script id="v5291-watch-visible-name-fit-and-version-lock">
+(function(){
+ 'use strict';
+ const VERSION='V5.2.91',LABEL='Apple Watch 商品名稱實際放大＋版本顯示統一 Hotfix';
+ const fitted=new WeakMap();
+ function fit(el){
+   const card=el?.closest('.wear-card.v5286-apple-watch'),band=el?.closest('.wear-name-band');
+   if(!card||!band||!el.isConnected)return;
+   // Don't measure a tab that is hidden by a parent page/display:none.
+   const rect=band.getBoundingClientRect();
+   const style=getComputedStyle(band);
+   const w=band.clientWidth-(parseFloat(style.paddingLeft)||0)-(parseFloat(style.paddingRight)||0);
+   const h=band.clientHeight-(parseFloat(style.paddingTop)||0)-(parseFloat(style.paddingBottom)||0);
+   if(!(rect.width>20&&rect.height>10&&w>60&&h>10))return;
+   const name=(el.textContent||'').trim();if(!name)return;
+   // Retain full text; the SE year is shown in a smaller span so the actual product model is larger.
+   const yearMatch=name.match(/^(Watch\s+SE\s+\d+)\s*\((20\d{2})\)$/i);
+   if(yearMatch&&!el.querySelector('.v5291-year')){
+     el.replaceChildren(document.createTextNode(yearMatch[1]+' '));
+     const span=document.createElement('span');span.className='v5291-year';span.textContent='('+yearMatch[2]+')';el.appendChild(span);
+   }
+   el.style.setProperty('display','block','important');
+   el.style.setProperty('width','100%','important');
+   el.style.setProperty('font-weight','950','important');
+   el.style.setProperty('line-height','1.04','important');
+   el.style.setProperty('letter-spacing','-.6px','important');
+   el.style.setProperty('white-space','nowrap','important');
+   el.style.setProperty('overflow-wrap','normal','important');
+   el.style.setProperty('word-break','normal','important');
+   let size=34;
+   const setFont=n=>el.style.setProperty('font-size',n+'px','important');
+   setFont(size);
+   while(size>17 && (el.scrollWidth>el.clientWidth+.3||el.scrollHeight>h+.5)){
+      size=Math.max(17,size-.5);setFont(size);
+   }
+   if(el.scrollWidth>el.clientWidth+.3 || el.scrollHeight>h+.5){
+      el.style.setProperty('white-space','normal','important');
+      el.style.setProperty('overflow-wrap','break-word','important');
+      size=27;setFont(size);
+      while(size>14&&(el.scrollHeight>h+.5||el.scrollWidth>el.clientWidth+.3)){
+         size=Math.max(14,size-.5);setFont(size);
+      }
+   }
+   el.dataset.v5291FitSize=String(size);
+   fitted.set(el,{w,h,name});
+ }
+ window.__v5291FitWatchName=fit;
+ let queued=false;
+ const observed=new WeakSet();
+ const ro=('ResizeObserver' in window)?new ResizeObserver(items=>{
+   if(items.some(entry=>entry.target.getBoundingClientRect().width>0))schedule();
+ }):null;
+ function scan(root=document){
+   root.querySelectorAll?.('.wear-card.v5286-apple-watch .wear-name-band').forEach(b=>{
+      if(ro&&!observed.has(b)){observed.add(b);ro.observe(b)}
+      const el=b.querySelector('.wear-name-main');if(el)fit(el);
+   });
+ }
+ function schedule(){if(queued)return;queued=true;requestAnimationFrame(()=>requestAnimationFrame(()=>{queued=false;scan();syncVersion()}));}
+ function syncVersion(){
+   document.title='創宇標籤／標價卡列印工具 '+VERSION+'｜'+LABEL;
+   const top=document.querySelector('.logo-title span');if(top&&top.textContent!==VERSION)top.textContent=VERSION;
+   const sub=document.querySelector('.logo-sub'),subText='配件 × 二手機 × 新機｜'+VERSION+'｜'+LABEL;
+   if(sub&&sub.textContent!==subText)sub.textContent=subText;
+   const hero=document.querySelector('.hq31-hero-title'),heroText=VERSION+'｜'+LABEL;
+   if(hero&&hero.textContent!==heroText)hero.textContent=heroText;
+   document.querySelectorAll('.hq31-status,.status-card').forEach(c=>{
+       if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const val=c.querySelector('.value'),meta=c.querySelector('.meta');
+          if(val&&val.textContent!==VERSION)val.textContent=VERSION;
+          if(meta&&meta.textContent!=='Apple Watch 名稱放大與版本同步版')meta.textContent='Apple Watch 名稱放大與版本同步版';
+       }else if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
+          const val=c.querySelector('.v'),meta=c.querySelector('.s');if(val&&val.textContent!==VERSION)val.textContent=VERSION;
+          if(meta&&meta.textContent!=='Apple Watch 名稱放大與版本同步版')meta.textContent='Apple Watch 名稱放大與版本同步版';
+       }
+   });
+ }
+ function ready(){
+   const mo=new MutationObserver(muts=>{
+      if(muts.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.wear-card,.wear-name-main')||n.querySelector?.('.wear-card')))||
+         (m.type==='attributes'&&((m.target.classList?.contains('page'))||m.target.classList?.contains('navbtn')))))schedule();
+   });
+   mo.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+   document.querySelectorAll('.navbtn').forEach(btn=>btn.addEventListener('click',schedule));
+   window.addEventListener('beforeprint',()=>{scan();syncVersion()});
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedule()});
+   window.addEventListener('focus',schedule);
+   schedule();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();
+ [150,800,2500,8000,11000].forEach(t=>setTimeout(()=>{scan();syncVersion()},t));
+ window.__v5291WatchName={fit,scan,syncVersion};
+})();
+</script>
 </body>
 </html>
