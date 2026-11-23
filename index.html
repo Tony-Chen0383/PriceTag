@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.84｜Apple Watch SE／Series 規格精確配對 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.84</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.84 Apple Watch SE／Series 規格精確配對 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.85</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.84｜Apple Watch SE／Series 規格精確配對 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.84</div>
+      <div class="value">V5.2.85</div>
       <div class="meta">穿戴／耳機品名字級最終修正版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -16536,6 +16536,168 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.84：Watch SE2 A2723／Series10 A2999 共通硬體精確配對；錶帶不參與錶殼材質 Gate。 -->
+
+
+<!-- V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix -->
+<style id="v5285-watch-label-view-only">
+/* Only Apple Watch card output; no changes to matching, pricing, inventory, grade, barcode or base card dimensions. */
+.wear-card.v5285-apple-watch .wear-name-main{
+  font-weight:950!important;
+  line-height:1.045!important;
+  text-align:center!important;
+  text-rendering:geometricPrecision;
+}
+.wear-card.v5285-apple-watch .v5285-watch-network{
+  font-weight:900!important;
+  font-size:12.5px!important;
+  white-space:nowrap!important;
+  padding-left:1px!important;
+  padding-right:1px!important;
+  letter-spacing:-.2px!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .wear-card.v5285-apple-watch .v5285-watch-network{
+    font-size:12px!important;
+    white-space:nowrap!important;
+  }
+}
+</style>
+<script id="v5285-apple-watch-name-network-hotfix">
+(function(){
+  'use strict';
+  const VERSION='V5.2.85', LABEL='Apple Watch 品名精簡＋通訊網路分流 Hotfix';
+  const oldWearCardHtml=wearCardHtml;
+  const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
+  const upper=x=>clean(x).toUpperCase();
+  function isAppleWatch(p,r){
+    if(!/^apple$/i.test(clean(p?.brand||r?.brand)))return false;
+    const category=clean(p?.category||r?.small||'');
+    if(!/手錶|智慧錶|智能錶|smart\s*watch/i.test(category))return false;
+    const combined=[r?.sourceName,r?.sourceCleanName,r?.name,p?.name].filter(Boolean).join(' ');
+    if(/錶帶|錶環|錶殼配件|watch\s*(?:band|strap|case)\b/i.test(clean(p?.name||'')))return false;
+    return /\bwatch\b/i.test(combined);
+  }
+  function rawWatchName(p,r){
+    // Source name is authoritative for network mode and size. Product name is fallback only.
+    return clean(r?.sourceName||r?.sourceCleanName||r?.name||p?.name);
+  }
+  function presentationName(p,r){
+    const src=rawWatchName(p,r).split('[')[0];
+    const central=clean(p?.name||'');
+    const canonical=/\bwatch\b/i.test(src)?src:central;
+    const sizeMatch=canonical.match(/\b(3[8-9]|4\d|5\d)\s*mm\b/i) || central.match(/\b(3[8-9]|4\d|5\d)\s*mm\b/i);
+    // Do not guess the size. Unknown models retain their original product display name.
+    if(!sizeMatch)return null;
+    const size=sizeMatch[1]+'mm';
+    let main='';
+    let m=canonical.match(/\bwatch\s*se\s*([1-9])\b/i) || central.match(/\bwatch\s*se\s*([1-9])\b/i);
+    if(m){
+      const year=canonical.match(/\bwatch\s*se\s*[1-9]\s*[（(]\s*(20\d{2})\s*[）)]/i);
+      main='Watch SE '+m[1]+(year?' ('+year[1]+')':'');
+    }
+    if(!main){
+      m=canonical.match(/\bwatch\s*(?:series\s*|s\s*)(\d{1,2})\b/i) || central.match(/\bwatch\s*(?:series\s*|s\s*)(\d{1,2})\b/i);
+      if(m)main='Watch Series '+Number(m[1]);
+    }
+    if(!main){
+      m=canonical.match(/\bwatch\s*ultra\s*(\d{1,2})?\b/i) || central.match(/\bwatch\s*ultra\s*(\d{1,2})?\b/i);
+      if(m)main='Watch Ultra'+(m[1]?' '+Number(m[1]):'');
+    }
+    // Unexpected series naming: don't mangle unsupported generations into another SKU.
+    if(!main)return null;
+    return main+' '+size;
+  }
+  function presentationNetwork(p,r){
+    const source=rawWatchName(p,r);
+    // Source can contain GPS+4G / GPS+LTE and strap descriptions in square brackets.
+    // Only explicit watch network markers are considered, never infer LTE from a central price.
+    if(/\b(?:lte|4g|5g|cellular|esim)\b|蜂窩|行動網路/i.test(source))return 'GPS+LTE';
+    if(/\bgps\b/i.test(source))return 'GPS';
+    const fallback=upper(p?.network);
+    if(/\b(?:LTE|4G|5G|CELLULAR)\b/.test(fallback))return 'GPS+LTE';
+    if(/\bGPS\b/.test(fallback))return 'GPS';
+    return ''; // Unknown: leave current network unchanged; never guess GPS/LTE.
+  }
+  wearCardHtml=function(p,r,opt={}){
+    if(!isAppleWatch(p,r))return oldWearCardHtml.apply(this,arguments);
+    const shortName=presentationName(p,r);
+    const displayNet=presentationNetwork(p,r);
+    if(!shortName&&!displayNet)return oldWearCardHtml.apply(this,arguments);
+    const view={...p};
+    if(shortName)view.name=shortName;
+    if(displayNet)view.network=displayNet;
+    let markup=oldWearCardHtml.call(this,view,r,opt);
+    markup=markup.replace('class="wear-card ','class="wear-card v5285-apple-watch ');
+    // Only the value paired with 通訊網路; avoid affecting battery health, model or price cells.
+    if(displayNet){
+      markup=markup.replace(/(<div class="wear-spec-label(?: dark)?">通訊<br>網路<\/div>\s*<div class=")wear-spec-value("[^>]*>)/,
+        '$1wear-spec-value v5285-watch-network$2');
+    }
+    return markup;
+  };
+
+  // Legacy V5.2.41 caps wearable names at 17.5px through inline !important.
+  // The final fitter runs after that logic so short Watch names really grow on screen and in print.
+  function fitName(el){
+    const band=el.closest('.wear-name-band'); if(!band)return;
+    const style=getComputedStyle(band);
+    const avail=band.clientHeight-(parseFloat(style.paddingTop)||0)-(parseFloat(style.paddingBottom)||0);
+    let size=21;
+    el.style.setProperty('font-weight','950','important');
+    el.style.setProperty('line-height','1.045','important');
+    el.style.setProperty('white-space','normal','important');
+    el.style.setProperty('overflow-wrap','break-word','important');
+    el.style.setProperty('font-size',size+'px','important');
+    while(size>12 && el.scrollHeight>avail+.5){
+      size=Math.max(12,size-.5);
+      el.style.setProperty('font-size',size+'px','important');
+    }
+    el.dataset.v5285FitSize=String(size);
+  }
+  let pending=false;
+  function fitAll(root=document){
+    root.querySelectorAll?.('.wear-card.v5285-apple-watch .wear-name-main').forEach(fitName);
+  }
+  function schedule(){
+    if(pending)return;
+    pending=true;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{pending=false;fitAll()}));
+  }
+  for(const k of ['renderUsedItems','renderNewItems','renderUsedPreview','renderNewPreview']){
+    const original=window[k];
+    if(typeof original==='function')window[k]=function(){const result=original.apply(this,arguments);schedule();return result;};
+  }
+  addEventListener('beforeprint',()=>fitAll());
+  const watchObserver=new MutationObserver(muts=>{
+    if(muts.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.wear-card')||n.querySelector?.('.wear-card')))))schedule();
+  });
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',()=>{schedule();watchObserver.observe(document.body,{childList:true,subtree:true})},{once:true});
+  }else{schedule();if(document.body)watchObserver.observe(document.body,{childList:true,subtree:true});}
+
+  function syncVersion(){
+    try{
+      document.title=`創宇標籤／標價卡列印工具 ${VERSION}｜${LABEL}`;
+      const top=document.querySelector('.logo-title span');if(top)top.textContent=VERSION;
+      const sub=document.querySelector('.logo-sub');if(sub)sub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
+      for(const c of document.querySelectorAll('.hq31-status')){
+        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const val=c.querySelector('.value'),meta=c.querySelector('.meta');
+          if(val)val.textContent=VERSION;
+          if(meta)meta.textContent='Apple Watch 品名／通訊網路分流版';
+        }
+      }
+    }catch(_){ }
+  }
+  const oldOverview=v51UpdateOverview;
+  if(typeof oldOverview==='function')v51UpdateOverview=function(){const ret=oldOverview.apply(this,arguments);Promise.resolve().then(syncVersion);return ret};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
+  [0,200,1000,3000,7500,9500].forEach(ms=>setTimeout(syncVersion,ms));
+  window.__v5285WatchLabel={presentationName,presentationNetwork,isAppleWatch,fitAll};
+})();
+</script>
+<!-- V5.2.85：Apple Watch 保留世代與尺寸，GPS／LTE 只顯示於通訊網路；匹配使用原始資料，非 Watch 標卡不變。 -->
 
 </body>
 </html>
