@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.83｜中央規格回填穩定化 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.84｜Apple Watch SE／Series 規格精確配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.83</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.83｜中央規格回填穩定化 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.84</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.84 Apple Watch SE／Series 規格精確配對 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.83｜中央規格回填穩定化 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.84｜Apple Watch SE／Series 規格精確配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.83</div>
+      <div class="value">V5.2.84</div>
       <div class="meta">穿戴／耳機品名字級最終修正版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -14999,9 +14999,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.83｜中央規格回填穩定化 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.83｜Apple Watch SE／Series 規格精確配對 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.83';if(m)m.textContent='中央規格回填穩定化版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.84';if(m)m.textContent='中央規格回填穩定化版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15681,11 +15681,11 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.2.83｜中央規格回填穩定化 Hotfix';
+      if(hero)hero.textContent='V5.2.83｜Apple Watch SE／Series 規格精確配對 Hotfix';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.2.83';
+          if(v)v.textContent='V5.2.84';
           if(m)m.textContent='中央規格回填穩定化版';
         }
       });
@@ -15958,8 +15958,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.83';
-  const LABEL='中央規格回填穩定化 Hotfix';
+  const VERSION='V5.2.84';
+  const LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
   const META='中央規格回填穩定化版';
 
   function syncVersionUi(){
@@ -16026,8 +16026,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.2.83';
-  const LABEL='中央規格回填穩定化 Hotfix';
+  const VERSION='V5.2.84';
+  const LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16262,7 +16262,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.2.83', LABEL='中央規格回填穩定化 Hotfix';
+  const V='V5.2.84', LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16292,7 +16292,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='中央規格回填穩定化 Hotfix',VER='V5.2.83';
+  const TITLE='中央規格回填穩定化 Hotfix',VER='V5.2.84';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16381,6 +16381,161 @@ window.__v5266SerializedPeripheralHotfix=true;
   window.__v5283Diagnostic={appleRow,realmeRow,verifiedIphone,verifiedRealme,hasSavedIphone:!!savedIphone,hasVerifiedRealme:!!realmeVerified};
 })();
 </script>
+
+
+
+<!-- V5.2.84｜Apple Watch SE／Series 規格精確配對；錶帶描述不可充當錶殼材質。 -->
+<script id="v5284-apple-watch-model-series-size-gps-hard-gate">
+(function(){
+  'use strict';
+  const VERSION='V5.2.84', LABEL='Apple Watch SE／Series 規格精確配對 Hotfix';
+  const priorMatch=usedMatchProduct;
+  const norm=v=>String(v??'').normalize('NFKC').trim();
+  const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+  const model=v=>{const m=norm(v).toUpperCase().match(/^A\d{4}$/);return m?m[0]:''};
+  const fullHardware=p=>!!p&&[p.processor,p.display,p.battery].every(v=>!!norm(v)&&!['—','-','n/a'].includes(norm(v).toLowerCase()));
+
+  // The verified, already embedded central records are captured before asynchronous JSON replacement.
+  // They are used only when the same safe SKU is missing/incomplete in the live central snapshot.
+  const trustedEmbedded=new Map();
+  for(const p of PRODUCTS){
+    const m=model(p?.model);
+    if(['A2723','A2999'].includes(m)&&key(p?.brand)==='apple'&&key(p?.category)==='手錶'){
+      trustedEmbedded.set(m,{...p,__v5284LocalCentralBackup:true});
+    }
+  }
+
+  function generation(v){
+    const s=norm(v).replace(/\s+/g,' ');
+    let m=s.match(/\bwatch\s*se\s*([2-9])\b/i);
+    if(m)return 'SE'+m[1];
+    m=s.match(/\bwatch\s*(?:series\s*|s\s*)(\d{1,2})\b/i);
+    if(m)return 'S'+m[1];
+    return '';
+  }
+  function mm(v){const m=norm(v).match(/\b(3[8-9]|4[0-9])\s*mm\b/i);return m?Number(m[1]):0}
+  function net(v,version=''){
+    const s=norm(v);
+    if(/\b(?:lte|4g|5g)\b|gps\s*\+\s*(?:lte|4g|5g)/i.test(s))return '4g';
+    if(/\bgps\b|\b(?:bt|wifi|wi-fi)\b/i.test(s))return 'gps';
+    if(version)return net(version);
+    return '';
+  }
+  function material(v){
+    const s=norm(v);
+    if(/herm[eè]s|愛馬仕/i.test(s))return 'hermes';
+    if(/鈦金屬|鈦殼|titanium/i.test(s))return 'titanium';
+    if(/不鏽鋼|不銹鋼|stainless/i.test(s))return 'steel';
+    if(/鋁金屬|鋁殼|aluminum|aluminium/i.test(s))return 'aluminum';
+    return '';
+  }
+  function mainName(v){return norm(v).split('[')[0].trim()}
+  function sku(row){
+    if(!row||key(row.brand)!=='apple'||!/(?:^|\s)watch\b/i.test(norm(row.name)))return null;
+    const main=mainName(row.name),gen=generation(main),size=mm(main);
+    let parsed;try{parsed=parseUsedMachine(row.name,row.brand)}catch(_){return null}
+    const actualModel=model(parsed.model),mode=net(main,parsed.version);
+    const region=norm(row.internationalVersion||'台版');
+    if(!['','台版','台灣版','台灣','TW'].includes(region))return null;
+    const targets={
+      'A2723':{gen:'SE2',size:44,mode:'gps',rom:'32'},
+      'A2999':{gen:'S10',size:46,mode:'gps',rom:'64',material:'aluminum'}
+    };
+    const expected=Object.entries(targets).find(([_,t])=>t.gen===gen&&t.size===size&&t.mode===mode)?.[0]||'';
+    if(expected&&actualModel!==expected)return {guarded:true,reason:'來源 Model 與此世代／尺寸／GPS 的原廠型號不一致'};
+    const target=targets[actualModel];
+    if(!target)return null;
+    const confirmed=target.gen===gen&&target.size===size&&target.mode===mode;
+    if(!confirmed)return {guarded:true,reason:'來源 Model 與世代／尺寸／GPS 不一致'};
+    const mat=material(main); // IMPORTANT: do not read strap material from [color/band/WIFI]
+    if(target.material&&mat&&mat!==target.material)return {guarded:true,reason:'錶殼材質不符'};
+    if(/watch\s*ultra/i.test(main))return {guarded:true,reason:'Ultra 非本次 SKU'};
+    return {guarded:true,actualModel,gen,size,mode,target,parsed,main};
+  }
+  function validProduct(p,src){
+    if(!p||key(p.brand)!=='apple'||key(p.category)!=='手錶')return false;
+    if(model(p.model)!==src.actualModel)return false;
+    if(generation(p.name)!==src.gen||mm(p.name)!==src.size)return false;
+    if(net(p.network)!==src.mode)return false;
+    if(nrCap(p.rom)!==src.target.rom)return false;
+    if(/herm[eè]s|愛馬仕|鈦金屬|不鏽鋼|不銹鋼|titanium|stainless/i.test(String(p.name||'')))return false;
+    if(src.gen==='S10'&&/米蘭/i.test(String(p.name||'')))return false;
+    if(src.gen==='SE2'&&/\bse\s*3\b/i.test(String(p.name||'')))return false;
+    return fullHardware(p);
+  }
+  function signature(p){
+    return [model(p.model),nrCap(p.ram),nrCap(p.rom),net(p.network),key(p.processor),key(p.display),key(p.battery),Number(p.msrp)||0].join('|');
+  }
+  function findMatch(row){
+    const src=sku(row);if(!src)return {targeted:false};
+    if(!src.actualModel)return {targeted:true,hit:null,reason:src.reason||'來源型號有衝突'};
+    const list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(!validProduct(p,src))return;
+      const layer=String(p.__v51Source||'base');
+      if(!['general','base',''].includes(layer))return;
+      list.push({idx,p});
+    });
+    if(list.length){
+      if(new Set(list.map(x=>signature(x.p))).size!==1)return {targeted:true,hit:null,reason:'中央同 Model 規格互相衝突，拒絕猜測'};
+      const selected=list.find(x=>String(x.p.__v51Source||'')==='general')||list[0];
+      return {targeted:true,hit:{...selected,parsed:src.parsed,score:990,matchMode:'v5284-apple-watch-model-hardgate-live'},mode:'live'};
+    }
+    const backup=trustedEmbedded.get(src.actualModel);
+    if(backup&&validProduct(backup,src)){
+      // Keep the backup in PRODUCTS so productAt(item) can resolve it in every preview/print path.
+      let idx=PRODUCTS.findIndex(p=>p?.__v5284LocalCentralBackup&&model(p.model)===src.actualModel);
+      if(idx<0){idx=PRODUCTS.length;PRODUCTS.push({...backup})}
+      return {targeted:true,hit:{idx,p:PRODUCTS[idx],parsed:src.parsed,score:970,matchMode:'v5284-apple-watch-embedded-central-backup'},mode:'backup'};
+    }
+    return {targeted:true,hit:null,reason:'中央與本機基準都缺少精確 Model 規格'};
+  }
+  usedMatchProduct=function(row){
+    const checked=findMatch(row);
+    if(checked.targeted)return checked.hit||null;
+    return priorMatch.apply(this,arguments);
+  };
+
+  // Display stays consistent with existing GPS-only watch cards: Bluetooth, not a cellular claim.
+  const prevUsedWearHtml=usedWearHtml;
+  usedWearHtml=function(p,r){
+    const id=model(r?.sourceModel),src=r?.sourceName||'';
+    if(['A2723','A2999'].includes(id)&&/\bwatch\b/i.test(src)&&net(mainName(src))==='gps'&&net(p?.network)==='gps'){
+      const shown={...p,network:'藍牙'};
+      // Central SE2 entry only carries 2023, while the source identifies the 2022 generation.
+      // Do not display a fabricated January 1 as an exact launch date when HQ has no exact date.
+      const exactHqDate=typeof hqProductDateRaw==='function'?hqProductDateRaw(p):'';
+      if(!exactHqDate){
+        if(id==='A2723'&&/\(2022\)/.test(src))shown.year='2022年';
+        else if(/^\d{4}$/.test(String(p.year||'')))shown.year=String(p.year)+'年';
+      }
+      return prevUsedWearHtml(shown,r);
+    }
+    return prevUsedWearHtml.apply(this,arguments);
+  };
+
+  function syncVersion(){
+    try{
+      document.title=`創宇標籤／標價卡列印工具 ${VERSION}｜${LABEL}`;
+      const top=document.querySelector('.logo-title span');if(top)top.textContent=VERSION;
+      const sub=document.querySelector('.logo-sub');if(sub)sub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
+      for(const card of document.querySelectorAll('.hq31-status')){
+        if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const v=card.querySelector('.value'),m=card.querySelector('.meta');
+          if(v)v.textContent=VERSION;if(m)m.textContent='Apple Watch SE／Series 精確配對版';
+        }
+      }
+    }catch(_){ }
+  }
+  const prevOverview=v51UpdateOverview;
+  if(typeof prevOverview==='function')v51UpdateOverview=function(){const r=prevOverview.apply(this,arguments);Promise.resolve().then(syncVersion);return r};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
+  [0,100,800,2000,5500,7000].forEach(ms=>setTimeout(syncVersion,ms));
+  window.__v5284Watch={sku,findMatch,generation,mm,net,material,hasBackupA2723:trustedEmbedded.has('A2723'),hasBackupA2999:trustedEmbedded.has('A2999')};
+})();
+</script>
+<!-- V5.2.84：Watch SE2 A2723／Series10 A2999 共通硬體精確配對；錶帶不參與錶殼材質 Gate。 -->
 
 </body>
 </html>
