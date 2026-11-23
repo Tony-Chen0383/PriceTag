@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.86｜Apple Watch 尺寸／材質獨立欄位 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.85</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.86</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.86｜Apple Watch 尺寸／材質獨立欄位 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.85｜Apple Watch 品名精簡＋通訊網路分流 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.86｜Apple Watch 尺寸／材質獨立欄位 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,8 +8155,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.85</div>
-      <div class="meta">穿戴／耳機品名字級最終修正版</div>
+      <div class="value">V5.2.86</div>
+      <div class="meta">Apple Watch 尺寸／材質獨立欄位版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -16565,7 +16565,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.85', LABEL='Apple Watch 品名精簡＋通訊網路分流 Hotfix';
+  const VERSION='V5.2.86', LABEL='Apple Watch 尺寸／材質獨立欄位 Hotfix';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16685,7 +16685,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='Apple Watch 品名／通訊網路分流版';
+          if(meta)meta.textContent='Apple Watch 尺寸／材質獨立欄位版';
         }
       }
     }catch(_){ }
@@ -16698,6 +16698,175 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 <!-- V5.2.85：Apple Watch 保留世代與尺寸，GPS／LTE 只顯示於通訊網路；匹配使用原始資料，非 Watch 標卡不變。 -->
+
+
+
+<!-- V5.2.86｜Apple Watch 尺寸／材質獨立欄位 Hotfix -->
+<style id="v5286-apple-watch-size-material-row">
+/* Keep the 55×60mm watch card and the existing 19mm (114px) SN barcode zone.  
+   Reclaim 9px from price/date lines, and distribute 3 info rows over the remaining height. */
+.wear-card.v5286-apple-watch{
+  grid-template-rows:36px 60px 39px 28px minmax(0,1fr)!important;
+  height:360px!important;
+  min-height:360px!important;
+}
+.wear-card.v5286-apple-watch .wear-sale-row{
+  min-height:39px!important;height:39px!important;
+}
+.wear-card.v5286-apple-watch .wear-meta-row{
+  min-height:28px!important;height:28px!important;
+}
+.wear-card.v5286-apple-watch .wear-specs{
+  display:grid!important;
+  grid-template-rows:repeat(3,minmax(0,1fr)) var(--v4113-wear-id-row-h,114px)!important;
+  min-height:0!important;height:100%!important;max-height:none!important;
+  row-gap:0!important;overflow:hidden!important;
+}
+.wear-card.v5286-apple-watch .wear-spec-row:not(:last-child){
+  height:auto!important;min-height:0!important;max-height:none!important;
+}
+.wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-label,
+.wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-value{
+  min-height:0!important;max-height:none!important;height:100%!important;
+  padding-top:0!important;padding-bottom:0!important;
+  box-sizing:border-box!important;
+}
+.wear-card.v5286-apple-watch .wear-spec-label{
+  font-size:11.3px!important;line-height:1.01!important;
+}
+.wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-value{
+  font-size:15px!important;line-height:1.02!important;
+  padding-left:2px!important;padding-right:2px!important;
+  white-space:nowrap!important;
+}
+.wear-card.v5286-apple-watch .v5286-size-material .wear-spec-value{
+  font-size:14px!important;font-weight:850!important;
+}
+.wear-card.v5286-apple-watch .v5286-size-material .v5286-material-value{
+  font-size:13.5px!important;letter-spacing:-.2px!important;
+}
+.wear-card.v5286-apple-watch .v5285-watch-network{
+  font-size:13px!important;
+}
+/* Barcode retains the existing physical height; never compress it to make room. */
+.wear-card.v5286-apple-watch .wear-spec-row:last-child,
+.wear-card.v5286-apple-watch .wear-spec-row:last-child > .wear-spec-label,
+.wear-card.v5286-apple-watch .wear-spec-row:last-child > .wear-spec-value{
+  height:var(--v4113-wear-id-row-h,114px)!important;
+  min-height:var(--v4113-wear-id-row-h,114px)!important;
+  max-height:var(--v4113-wear-id-row-h,114px)!important;
+}
+@media print{
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch{
+    width:330px!important;height:360px!important;min-height:360px!important;
+    grid-template-rows:36px 60px 39px 28px minmax(0,1fr)!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-sale-row{
+    height:39px!important;min-height:39px!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-meta-row{
+    height:28px!important;min-height:28px!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-specs{
+    grid-template-rows:repeat(3,minmax(0,1fr)) var(--v4113-wear-id-row-h,114px)!important;
+    height:100%!important;min-height:0!important;max-height:none!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-spec-row:not(:last-child){
+    height:auto!important;min-height:0!important;max-height:none!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-label,
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-value{
+    height:100%!important;min-height:0!important;max-height:none!important;
+  }
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-spec-label{font-size:11.3px!important;line-height:1.01!important}
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .wear-spec-row:not(:last-child) > .wear-spec-value{font-size:15px!important}
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .v5286-size-material .wear-spec-value{font-size:14px!important}
+  body.batch-print-mode .a4-cell .wear-card.v5286-apple-watch .v5286-size-material .v5286-material-value{font-size:13.5px!important}
+}
+</style>
+<script id="v5286-apple-watch-size-material-render-hotfix">
+(function(){
+  'use strict';
+  const VERSION='V5.2.86', LABEL='Apple Watch 尺寸／材質獨立欄位 Hotfix';
+  const prevWearCardHtml=wearCardHtml;
+  const normal=x=>String(x??'').normalize('NFKC').trim();
+  const esc=x=>h(String(x??''));
+  const api=window.__v5285WatchLabel;
+  function caseMaterial(p,r){
+    // Only inspect the WATCH CASE, not bracelet/strap text after '+'.
+    const sources=[r?.sourceName,r?.name,r?.sourceCleanName,p?.name].filter(Boolean).map(normal);
+    for(const raw of sources){
+      const blocks=[...raw.matchAll(/\[([^\]]+)\]/g)].map(m=>m[1]);
+      for(const part of blocks){
+        const caseText=part.split(/[+＋／/]/)[0].trim();
+        if(!/(?:錶殼|表殼|watch\s*case)/i.test(caseText))continue;
+        const mat=extract(caseText);
+        return mat||'—'; // An explicitly described case with unknown material stays unknown.
+      }
+      const main=raw.split('[')[0];
+      const fromMain=main.match(/(?:鋁金屬款|鈦金屬款|不鏽鋼款|不銹鋼款|陶瓷錶殼|陶瓷表殼|aluminum\s*case|titanium\s*case|stainless\s*steel\s*case)/i);
+      if(fromMain){const mat=extract(fromMain[0]);if(mat)return mat}
+    }
+    return '—';
+  }
+  function extract(s){
+    if(/鈦金屬|鈦殼|titanium/i.test(s))return '鈦金屬';
+    if(/不鏽鋼|不銹鋼|stainless\s*steel/i.test(s))return '不鏽鋼';
+    if(/鋁金屬|鋁殼|alumin(?:um|ium)/i.test(s))return '鋁金屬';
+    if(/陶瓷|ceramic/i.test(s))return '陶瓷';
+    return '';
+  }
+  function displayFields(p,r){
+    if(!api?.isAppleWatch?.(p,r))return null;
+    const withSize=api.presentationName?.(p,r);
+    if(!withSize)return null;
+    const m=withSize.match(/\s(3[8-9]|4\d|5\d)mm$/i);
+    if(!m)return null; // Never guess a size or strip an unrecognized model.
+    return {name:withSize.slice(0,m.index).trim(),size:m[1]+'mm',material:caseMaterial(p,r)};
+  }
+  wearCardHtml=function(p,r,opt={}){
+    const fields=displayFields(p,r);
+    if(!fields)return prevWearCardHtml.apply(this,arguments);
+    let markup=prevWearCardHtml.apply(this,arguments);
+    if(!markup.includes('v5285-apple-watch')||!markup.includes('<div class="wear-specs">'))return markup;
+    // Modify the generated card only. Inventory records, central lookup and matchers stay untouched.
+    markup=markup.replace('class="wear-card v5285-apple-watch ',
+      'class="wear-card v5285-apple-watch v5286-apple-watch ');
+    markup=markup.replace(/(<div class="wear-name-main">)[\s\S]*?(<\/div>)/,
+      (_,start,end)=>start+esc(fields.name)+end);
+    const specs=markup.indexOf('<div class="wear-specs">');
+    const first=markup.indexOf('<div class="wear-spec-row',specs);
+    const second=markup.indexOf('<div class="wear-spec-row',first+1);
+    if(first<0||second<0)return prevWearCardHtml.apply(this,arguments);
+    const row='<div class="wear-spec-row v5286-size-material">'+
+      '<div class="wear-spec-label dark">尺寸</div><div class="wear-spec-value">'+esc(fields.size)+'</div>'+
+      '<div class="wear-spec-label">材質</div><div class="wear-spec-value v5286-material-value">'+esc(fields.material)+'</div></div>';
+    return markup.slice(0,second)+row+markup.slice(second);
+  };
+  function versionUI(){
+    try{
+      document.title='創宇標籤／標價卡列印工具 '+VERSION+'｜'+LABEL;
+      const span=document.querySelector('.logo-title span');if(span)span.textContent=VERSION;
+      const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VERSION+' '+LABEL;
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VERSION+'｜'+LABEL;
+      for(const c of document.querySelectorAll('.hq31-status')){
+        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
+          const v=c.querySelector('.value'),meta=c.querySelector('.meta');
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='Apple Watch 尺寸／材質獨立欄位版';
+        }
+      }
+    }catch(_){ }
+  }
+  const priorOverview=v51UpdateOverview;
+  if(typeof priorOverview==='function')v51UpdateOverview=function(){
+    const result=priorOverview.apply(this,arguments);Promise.resolve().then(versionUI);return result;
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',versionUI,{once:true});else versionUI();
+  [0,250,1200,3500,8500,10100].forEach(t=>setTimeout(versionUI,t));
+  window.__v5286WatchLayout={displayFields,caseMaterial};
+})();
+</script>
+<!-- V5.2.86: only Apple Watch. New 3rd detail row, 55x60mm fixed, SN 19mm fixed. -->
 
 </body>
 </html>
