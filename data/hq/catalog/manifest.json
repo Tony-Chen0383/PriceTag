@@ -1,6 +1,6 @@
 {
   "version": "5.2.65",
-  "updatedAt": "2026-11-17 17:33",
+  "updatedAt": "2026-11-23 09:21",
   "sources": {
     "general": {
       "file": "../suggested-prices/current/hq-suggested-price.xlsb",
@@ -11,48 +11,21 @@
       "sourceFileName": "20260917-標價卡與售價表(特殊規格).xlsb",
       "rows": 25,
       "reportDate": "2026.09.17",
-      "updatedAt": "2026-11-17 17:33",
-      "pending": {
-        "file": "./scheduled/special-20261120-0000-247720.xlsb",
-        "sourceFileName": "20260917-標價卡與售價表(特殊規格).xlsb",
-        "rows": 25,
-        "reportDate": "2026.09.17",
-        "updatedAt": "2026-11-19 17:57",
-        "effectiveAt": "2026-11-19T16:00:00.000Z",
-        "scheduledAt": "2026-11-19 17:57"
-      }
+      "updatedAt": "2026-11-23 09:21"
     },
     "international": {
       "file": "./international.xlsb",
-      "sourceFileName": "20261117-標價卡與售價表(國際版).xlsb",
-      "rows": 592,
-      "reportDate": "2026.11.17",
-      "updatedAt": "2026-11-17 17:33",
-      "pending": {
-        "file": "./scheduled/international-20261120-0000-247725.xlsb",
-        "sourceFileName": "20261120-標價卡與售價表(國際版).xlsb",
-        "rows": 592,
-        "reportDate": "2026.11.17",
-        "updatedAt": "2026-11-19 17:57",
-        "effectiveAt": "2026-11-19T16:00:00.000Z",
-        "scheduledAt": "2026-11-19 17:57"
-      }
+      "sourceFileName": "20261120-標價卡與售價表(國際版)V1.xlsb",
+      "rows": 595,
+      "reportDate": "2026.11.20",
+      "updatedAt": "2026-11-23 09:21"
     },
     "screenBurn": {
       "file": "./screen-burn.xlsb",
-      "sourceFileName": "20261117-標價卡與售價表(烙印版).xlsb",
-      "rows": 835,
-      "reportDate": "2026.11.17",
-      "updatedAt": "2026-11-17 17:33",
-      "pending": {
-        "file": "./scheduled/screenBurn-20261120-0000-247733.xlsb",
-        "sourceFileName": "20261120-標價卡與售價表(烙印版).xlsb",
-        "rows": 837,
-        "reportDate": "2026.11.18",
-        "updatedAt": "2026-11-19 17:57",
-        "effectiveAt": "2026-11-19T16:00:00.000Z",
-        "scheduledAt": "2026-11-19 17:57"
-      }
+      "sourceFileName": "20261120-標價卡與售價表(烙印版).xlsb",
+      "rows": 837,
+      "reportDate": "2026.11.18",
+      "updatedAt": "2026-11-23 09:21"
     }
   }
 }
