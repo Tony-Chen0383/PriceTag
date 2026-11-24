@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.2.93｜Watch 預覽／列印一致性 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.2.94｜Watch 預覽／列印配色一致性 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.93</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.93｜Watch 預覽／列印一致性 Hotfix</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.2.94</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.2.94｜Watch 預覽／列印配色一致性 Hotfix</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.2.93｜Watch 預覽／列印一致性 Hotfix</div>
+      <div class="hq31-hero-title">V5.2.94｜Watch 預覽／列印配色一致性 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,7 +8155,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.2.93</div>
+      <div class="value">V5.2.94</div>
       <div class="meta">Apple Watch 商品名稱放大版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -15003,9 +15003,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.93｜Watch 預覽／列印一致性 Hotfix';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.2.94｜Watch 預覽／列印配色一致性 Hotfix';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.93';if(m)m.textContent='Watch 預覽／列印一致性版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.2.94';if(m)m.textContent='Watch 預覽／列印配色一致性版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15685,12 +15685,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.2.93｜Watch 預覽／列印一致性 Hotfix';
+      if(hero)hero.textContent='V5.2.94｜Watch 預覽／列印配色一致性 Hotfix';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.2.93';
-          if(m)m.textContent='Watch 預覽／列印一致性版';
+          if(v)v.textContent='V5.2.94';
+          if(m)m.textContent='Watch 預覽／列印配色一致性版';
         }
       });
     }catch(_){ }
@@ -15962,8 +15962,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.2.93';
-  const LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94';
+  const LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const META='Apple Watch 商品名稱放大版';
 
   function syncVersionUi(){
@@ -16030,8 +16030,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.2.93';
-  const LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94';
+  const LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16160,7 +16160,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印一致性版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印配色一致性版'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16266,7 +16266,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.2.93', LABEL='Watch 預覽／列印一致性 Hotfix';
+  const V='V5.2.94', LABEL='Watch 預覽／列印配色一致性 Hotfix';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16276,7 +16276,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=V;if(m)m.textContent='Watch 預覽／列印一致性版';
+          if(v)v.textContent=V;if(m)m.textContent='Watch 預覽／列印配色一致性版';
         }
       }
     }catch(err){console.warn('V5.2.82 version sync:',err)}
@@ -16296,7 +16296,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='Watch 預覽／列印一致性 Hotfix',VER='V5.2.93';
+  const TITLE='Watch 預覽／列印配色一致性 Hotfix',VER='V5.2.94';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16374,7 +16374,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VER+' '+TITLE;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VER+'｜'+TITLE;
       document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
-        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='Watch 預覽／列印一致性版';
+        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='Watch 預覽／列印配色一致性版';
       }});
     }catch(_){ }
   }
@@ -16392,7 +16392,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5284-apple-watch-model-series-size-gps-hard-gate">
 (function(){
   'use strict';
-  const VERSION='V5.2.93', LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94', LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const priorMatch=usedMatchProduct;
   const norm=v=>String(v??'').normalize('NFKC').trim();
   const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16527,7 +16527,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印一致性版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印配色一致性版';
         }
       }
     }catch(_){ }
@@ -16569,7 +16569,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.93', LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94', LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16712,7 +16712,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='Watch 預覽／列印一致性版';
+          if(meta)meta.textContent='Watch 預覽／列印配色一致性版';
         }
       }
     }catch(_){ }
@@ -16814,7 +16814,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5286-apple-watch-size-material-render-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.93', LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94', LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const prevWearCardHtml=wearCardHtml;
   const normal=x=>String(x??'').normalize('NFKC').trim();
   const esc=x=>h(String(x??''));
@@ -16879,7 +16879,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const c of document.querySelectorAll('.hq31-status')){
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.value'),meta=c.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(meta)meta.textContent='Watch 預覽／列印一致性版';
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='Watch 預覽／列印配色一致性版';
         }
       }
     }catch(_){ }
@@ -16911,33 +16911,7 @@ window.__v5266SerializedPeripheralHotfix=true;
   grid-template-rows:repeat(3,minmax(0,1fr)) 114px!important;
   row-gap:0!important;
 }
-/* Row 1: blue label same as row 3, white value. */
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(1) > .wear-spec-label:nth-child(1),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(1) > .wear-spec-label:nth-child(3){
-  background:#116eaf!important;background-color:#116eaf!important;
-}
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(1) > .wear-spec-value:nth-child(2),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(1) > .wear-spec-value:nth-child(4){
-  background:#ffffff!important;background-color:#ffffff!important;
-}
-/* Row 2: navy label, pale yellow value (same as SN). */
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(2) > .wear-spec-label:nth-child(1),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(2) > .wear-spec-label:nth-child(3){
-  background:#24365f!important;background-color:#24365f!important;
-}
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(2) > .wear-spec-value:nth-child(2),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(2) > .wear-spec-value:nth-child(4){
-  background:#fffbd5!important;background-color:#fffbd5!important;
-}
-/* Row 3: blue label same as row 1, white value. */
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(3) > .wear-spec-label:nth-child(1),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(3) > .wear-spec-label:nth-child(3){
-  background:#116eaf!important;background-color:#116eaf!important;
-}
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(3) > .wear-spec-value:nth-child(2),
-.wear-card.v5286-apple-watch .wear-spec-row:nth-child(3) > .wear-spec-value:nth-child(4){
-  background:#ffffff!important;background-color:#ffffff!important;
-}
+/* V5.2.94: palette centralized in v5294-watch-palette-shared below. */
 /* A4 3×4: only a wear page containing an Apple Watch gets 65mm cells.
    Other wearable pages retain their original 55×60mm template. */
 .a4-page.wear-page:has(.v5286-apple-watch){
@@ -17097,7 +17071,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5291-watch-visible-name-fit-and-version-lock">
 (function(){
  'use strict';
- const VERSION='V5.2.93',LABEL='Watch 預覽／列印一致性 Hotfix';
+ const VERSION='V5.2.94',LABEL='Watch 預覽／列印配色一致性 Hotfix';
  const fitted=new WeakMap();
  function fit(el){
    if(typeof window.__v5293FitWatchName==='function')return window.__v5293FitWatchName(el);
@@ -17165,10 +17139,10 @@ window.__v5266SerializedPeripheralHotfix=true;
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='Watch 預覽／列印一致性版')meta.textContent='Watch 預覽／列印一致性版';
+          if(meta&&meta.textContent!=='Watch 預覽／列印配色一致性版')meta.textContent='Watch 預覽／列印配色一致性版';
        }else if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.v'),meta=c.querySelector('.s');if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='Watch 預覽／列印一致性版')meta.textContent='Watch 預覽／列印一致性版';
+          if(meta&&meta.textContent!=='Watch 預覽／列印配色一致性版')meta.textContent='Watch 預覽／列印配色一致性版';
        }
    });
  }
@@ -17195,7 +17169,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5292-samsung-galaxy-watch-display-only">
 (function(){
  'use strict';
- const VERSION='V5.2.93', LABEL='Watch 預覽／列印一致性 Hotfix';
+ const VERSION='V5.2.94', LABEL='Watch 預覽／列印配色一致性 Hotfix';
  const previousWearCardHtml=wearCardHtml;
  const tidy=v=>String(v??'').normalize('NFKC').replace(/\s+/g,' ').trim();
  const front=v=>tidy(v).split('[')[0].trim();
@@ -17313,7 +17287,7 @@ window.__v5266SerializedPeripheralHotfix=true;
     for(const c of document.querySelectorAll('.hq31-status,.status-card')){
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
          const v=c.querySelector('.value'),m=c.querySelector('.meta');
-         if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印一致性版';
+         if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印配色一致性版';
        }
     }
  }
@@ -17327,7 +17301,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.2.93｜Watch 預覽／列印一致性 Hotfix。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.2.94｜Watch 預覽／列印配色一致性 Hotfix。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -17361,7 +17335,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5293-watch-print-sync-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.2.93',LABEL='Watch 預覽／列印一致性 Hotfix';
+  const VERSION='V5.2.94',LABEL='Watch 預覽／列印配色一致性 Hotfix';
   const query='.wear-card.v5286-apple-watch .wear-name-main';
   const defaultSizeFor=name=>name.length>=16?19:24;
   const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
@@ -17483,7 +17457,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status,.status-card')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印一致性版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='Watch 預覽／列印配色一致性版';
         }
       }
     }catch(_){ }
@@ -17503,5 +17477,47 @@ window.__v5266SerializedPeripheralHotfix=true;
   window.__v5293Watch={fit,fitAll,syncVersion};
 })();
 </script>
+
+<!-- V5.2.94: one palette for screen, batch preview and native print. The :is() anchor
+     intentionally has ID specificity, so legacy !important print selectors cannot override it.
+     Scope is the existing Apple/Samsung 65mm view class, not generic wearable cards. -->
+<style id="v5294-watch-palette-shared">
+:is(body,#batchGrid) .wear-card.v5286-apple-watch {
+  --watch-label-blue:#116eaf;
+  --watch-label-navy:#24365f;
+  --watch-id-navy:#23345f;
+  --watch-value-white:#ffffff;
+  --watch-value-yellow:#fffbd5;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row > :is(.wear-spec-label,.wear-spec-value) {
+  background:var(--watch-cell-bg)!important;
+  background-color:var(--watch-cell-bg)!important;
+  background-image:none!important;
+  background-clip:border-box!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:is(:nth-child(1),:nth-child(3)) > .wear-spec-label {
+  --watch-cell-bg:var(--watch-label-blue);
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:is(:nth-child(1),:nth-child(3)) > .wear-spec-value {
+  --watch-cell-bg:var(--watch-value-white);
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:nth-child(2) > .wear-spec-label {
+  --watch-cell-bg:var(--watch-label-navy);
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:nth-child(2) > .wear-spec-value {
+  --watch-cell-bg:var(--watch-value-yellow);
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:last-child > .wear-spec-label {
+  --watch-cell-bg:var(--watch-id-navy);
+}
+:is(body,#batchGrid) .wear-card.v5286-apple-watch .wear-specs > .wear-spec-row:last-child > .wear-spec-value {
+  --watch-cell-bg:var(--watch-value-yellow);
+}
+</style>
+
 </body>
 </html>
