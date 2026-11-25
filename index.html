@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.0｜UI Preview 測試版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.1｜門市操作效率優化版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.0</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.0｜UI Preview 測試版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.1｜門市操作效率優化版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.0｜UI Preview 測試版</div>
+      <div class="hq31-hero-title">V5.3.1｜門市操作效率優化版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,8 +8155,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.0</div>
-      <div class="meta">UI Preview 測試版</div>
+      <div class="value">V5.3.1</div>
+      <div class="meta">門市操作效率優化版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -15003,9 +15003,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.3.0｜UI Preview 測試版';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.3.1｜門市操作效率優化版';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.3.0';if(m)m.textContent='UI Preview 測試版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.3.1';if(m)m.textContent='門市操作效率優化版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15685,12 +15685,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.3.0｜UI Preview 測試版';
+      if(hero)hero.textContent='V5.3.1｜門市操作效率優化版';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.3.0';
-          if(m)m.textContent='UI Preview 測試版';
+          if(v)v.textContent='V5.3.1';
+          if(m)m.textContent='門市操作效率優化版';
         }
       });
     }catch(_){ }
@@ -15962,9 +15962,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.3.0';
-  const LABEL='UI Preview 測試版';
-  const META='UI Preview 測試版';
+  const VERSION='V5.3.1';
+  const LABEL='門市操作效率優化版';
+  const META='門市操作效率優化版';
 
   function syncVersionUi(){
     try{
@@ -16030,8 +16030,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.3.0';
-  const LABEL='UI Preview 測試版';
+  const VERSION='V5.3.1';
+  const LABEL='門市操作效率優化版';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16160,7 +16160,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='UI Preview 測試版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16266,7 +16266,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.3.0', LABEL='UI Preview 測試版';
+  const V='V5.3.1', LABEL='門市操作效率優化版';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16276,7 +16276,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=V;if(m)m.textContent='UI Preview 測試版';
+          if(v)v.textContent=V;if(m)m.textContent='門市操作效率優化版';
         }
       }
     }catch(err){console.warn('V5.2.82 version sync:',err)}
@@ -16296,7 +16296,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='UI Preview 測試版',VER='V5.3.0';
+  const TITLE='門市操作效率優化版',VER='V5.3.1';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16374,7 +16374,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VER+' '+TITLE;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VER+'｜'+TITLE;
       document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
-        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='UI Preview 測試版';
+        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='門市操作效率優化版';
       }});
     }catch(_){ }
   }
@@ -16392,7 +16392,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5284-apple-watch-model-series-size-gps-hard-gate">
 (function(){
   'use strict';
-  const VERSION='V5.3.0', LABEL='UI Preview 測試版';
+  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
   const priorMatch=usedMatchProduct;
   const norm=v=>String(v??'').normalize('NFKC').trim();
   const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16527,7 +16527,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='UI Preview 測試版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
         }
       }
     }catch(_){ }
@@ -16569,7 +16569,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.0', LABEL='UI Preview 測試版';
+  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16712,7 +16712,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='UI Preview 測試版';
+          if(meta)meta.textContent='門市操作效率優化版';
         }
       }
     }catch(_){ }
@@ -16814,7 +16814,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5286-apple-watch-size-material-render-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.0', LABEL='UI Preview 測試版';
+  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
   const prevWearCardHtml=wearCardHtml;
   const normal=x=>String(x??'').normalize('NFKC').trim();
   const esc=x=>h(String(x??''));
@@ -16879,7 +16879,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const c of document.querySelectorAll('.hq31-status')){
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.value'),meta=c.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(meta)meta.textContent='UI Preview 測試版';
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='門市操作效率優化版';
         }
       }
     }catch(_){ }
@@ -16911,7 +16911,7 @@ window.__v5266SerializedPeripheralHotfix=true;
   grid-template-rows:repeat(3,minmax(0,1fr)) 114px!important;
   row-gap:0!important;
 }
-/* V5.3.0: palette centralized in v5294-watch-palette-shared below. */
+/* V5.3.1: palette centralized in v5294-watch-palette-shared below. */
 /* A4 3×4: only a wear page containing an Apple Watch gets 65mm cells.
    Other wearable pages retain their original 55×60mm template. */
 .a4-page.wear-page:has(.v5286-apple-watch){
@@ -17071,7 +17071,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5291-watch-visible-name-fit-and-version-lock">
 (function(){
  'use strict';
- const VERSION='V5.3.0',LABEL='UI Preview 測試版';
+ const VERSION='V5.3.1',LABEL='門市操作效率優化版';
  const fitted=new WeakMap();
  function fit(el){
    if(typeof window.__v5293FitWatchName==='function')return window.__v5293FitWatchName(el);
@@ -17139,10 +17139,10 @@ window.__v5266SerializedPeripheralHotfix=true;
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='UI Preview 測試版')meta.textContent='UI Preview 測試版';
+          if(meta&&meta.textContent!=='門市操作效率優化版')meta.textContent='門市操作效率優化版';
        }else if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.v'),meta=c.querySelector('.s');if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='UI Preview 測試版')meta.textContent='UI Preview 測試版';
+          if(meta&&meta.textContent!=='門市操作效率優化版')meta.textContent='門市操作效率優化版';
        }
    });
  }
@@ -17169,7 +17169,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5292-samsung-galaxy-watch-display-only">
 (function(){
  'use strict';
- const VERSION='V5.3.0', LABEL='UI Preview 測試版';
+ const VERSION='V5.3.1', LABEL='門市操作效率優化版';
  const previousWearCardHtml=wearCardHtml;
  const tidy=v=>String(v??'').normalize('NFKC').replace(/\s+/g,' ').trim();
  const front=v=>tidy(v).split('[')[0].trim();
@@ -17287,7 +17287,7 @@ window.__v5266SerializedPeripheralHotfix=true;
     for(const c of document.querySelectorAll('.hq31-status,.status-card')){
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
          const v=c.querySelector('.value'),m=c.querySelector('.meta');
-         if(v)v.textContent=VERSION;if(m)m.textContent='UI Preview 測試版';
+         if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
        }
     }
  }
@@ -17301,7 +17301,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.3.0｜UI Preview 測試版。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.3.1｜門市操作效率優化版。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -17335,7 +17335,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5293-watch-print-sync-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.0',LABEL='UI Preview 測試版';
+  const VERSION='V5.3.1',LABEL='門市操作效率優化版';
   const query='.wear-card.v5286-apple-watch .wear-name-main';
   const defaultSizeFor=name=>name.length>=16?19:24;
   const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
@@ -17457,7 +17457,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status,.status-card')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='UI Preview 測試版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
         }
       }
     }catch(_){ }
@@ -17478,7 +17478,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 
-<!-- V5.3.0: one palette for screen, batch preview and native print. The :is() anchor
+<!-- V5.3.1: one palette for screen, batch preview and native print. The :is() anchor
      intentionally has ID specificity, so legacy !important print selectors cannot override it.
      Scope is the existing Apple/Samsung 65mm view class, not generic wearable cards. -->
 <style id="v5294-watch-palette-shared">
@@ -17552,6 +17552,15 @@ body{min-width:760px!important}
 @media print{.v530-footer,.v530-filterbar,.v530-sidebar-head,.v530-drop-icon,.v530-filter-empty{display:none!important}}
 </style>
 
+<style id="v531-workflow-ui">
+@media screen {
+.v531-workflow{background:#fff;border:1px solid #dfe6ef;border-radius:12px;margin:10px 0 15px;padding:12px 15px;min-width:0}
+.v531-work-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}.v531-steps{display:flex;align-items:center;gap:0;flex:1;min-width:430px}.v531-step{display:flex;align-items:center;gap:6px;white-space:nowrap;color:#7d899b;font-size:12px;font-weight:700;flex:1}.v531-step:not(:last-child)::after{content:'';height:1px;background:#dfe6ef;flex:1;margin:0 9px;min-width:10px}.v531-step-num{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;background:#eef2f7;color:#77869a;font-size:11px;flex-shrink:0}.v531-step[data-state=done]{color:#257353}.v531-step[data-state=done] .v531-step-num{background:#e3f3eb;color:#257353}.v531-step[data-state=done]::after{background:#a9d3bd}.v531-step[data-state=current]{color:#1b4d88}.v531-step[data-state=current] .v531-step-num{background:#245a97;color:white}.v531-work-note{font-size:11px;color:#68798d;margin:0;line-height:1.5}.v531-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.v531-stat{text-align:left;position:relative;display:flex;flex-direction:column;gap:3px;background:#f7f9fc;border:1px solid #e3e9f1;border-radius:8px;padding:8px 10px;min-width:0;color:#263b55;font:inherit;cursor:pointer}.v531-stat:disabled{opacity:1;cursor:default}.v531-stat small{font-size:11px;color:#6f7e91}.v531-stat strong{font-size:18px;font-weight:850;font-variant-numeric:tabular-nums;white-space:nowrap}.v531-stat[data-tone=good] strong{color:#257353}.v531-stat[data-tone=warn] strong{color:#a76b12}.v531-stat[data-tone=bad] strong{color:#b23c35}.v531-stat-link{position:absolute;right:8px;bottom:9px;font-size:10px;color:#285d9d}.v531-stat:disabled .v531-stat-link{display:none}.v531-stat:not(:disabled):hover{border-color:#94b4d8;background:#edf4fc}.v531-detail{font-size:11px;color:#6e7c8f;margin-top:7px;line-height:1.5}.v531-errors{margin-top:8px;border:1px solid #ead7ba;border-radius:8px;padding:8px 10px;background:#fffaf2;font-size:12px;color:#805719}.v531-errors[hidden]{display:none!important}.v531-errors summary{cursor:pointer;font-weight:750}.v531-errors ul{max-height:200px;overflow:auto;margin:7px 0 0;padding-left:22px;overflow-wrap:anywhere;line-height:1.6}.v531-search{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:12px 16px 8px;background:#fff}.v531-search label{font-size:12px;font-weight:800;color:#304661}.v531-search-field{display:flex;gap:6px;flex:1;min-width:240px;max-width:650px}.v531-search-field input{min-width:0;font-size:13px}.v531-search-field .btn{font-size:12px;white-space:nowrap;padding:7px 11px}.v531-search-count{color:#254f80;font-size:12px;font-weight:800;white-space:nowrap}.v531-search small{font-size:11px;color:#75849a}.v531-search input:focus-visible,.v531-stat:focus-visible{outline:2px solid #2864ab;outline-offset:2px}
+@media(max-width:1100px){.v531-work-top{gap:6px}.v531-stat strong{font-size:16px}.v531-steps{min-width:0;flex-basis:100%}.v531-stat-link{position:static}.v531-search small{flex-basis:100%}}
+@media(max-width:650px){.v531-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.v531-step{font-size:10px;gap:3px}.v531-step:not(:last-child)::after{margin:0 3px}.v531-step-num{width:18px;height:18px}.v531-search-field{min-width:120px}}
+}
+@media print{.v531-workflow,.v531-search{display:none!important}}
+</style>
 <script id="v530-ui-preview-controller">
 (function(){
 'use strict';
@@ -17561,7 +17570,11 @@ const svg=k=>'<svg class="v530-icon" viewBox="0 0 24 24" aria-hidden="true">'+ic
 const shell=q('.app > .shell'),side=shell.querySelector('.sidebar');
 const active=()=>q('.sidebar .navbtn.active')?.dataset.page||'accessory';
 const data=k=>k==='used'?usedItems:k==='new'?newItems:k==='accessory'?accessoryRows:[];
-const states={used:{filter:'all',page:0},new:{filter:'all',page:0}};
+const states={used:{filter:'all',page:0,query:''},new:{filter:'all',page:0,query:''}};
+const norm=v=>String(v??'').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'');
+function matches(r,query){const p=productAt(r)||{},terms=String(query||'').trim().split(/\s+/).map(norm).filter(Boolean);const fields=[p.brand,p.name,p.model,r.sourceName,r.sourceCleanName,r.sourceCode,r.imei,r.barcode,r.sourceModel,r.sourceCapacity,r.sourceVersion,r.sourceSmall,r.sourceOrderNo].map(norm);return terms.every(t=>fields.some(v=>v.includes(t))||norm([p.brand,p.name,r.sourceCapacity,r.sourceName].join(' ')).includes(t));}
+const visible=(r,k)=>allowed(r,states[k].filter)&&matches(r,states[k].query);
+const text=(el,value)=>{if(el&&el.textContent!==String(value))el.textContent=String(value)};
 const labels={all:'全部',phone:'手機',tablet:'平板',watch:'手錶',audio:'耳機／音訊',other:'其他',manual:'待補編'};
 function category(r){const p=productAt(r)||{},c=String(p.category||'')+' '+String(r.small||'');if(/平板|tablet|ipad/i.test(c))return 'tablet';if(/手錶|手環|watch|穿戴/i.test(c)&&! /耳機|耳麥|音訊|喇叭/i.test(c))return 'watch';if(/耳機|耳麥|音訊|喇叭|headphone|earphone/i.test(c))return 'audio';if(/手機|smartphone/i.test(c))return 'phone';return 'other'}
 const allowed=(r,f)=>f==='all'||(f==='manual'?!!r.manualSpec:category(r)===f);
@@ -17570,21 +17583,79 @@ function refresh(){
  const k=active(),n=count(k),f=$('v530Footer');f.hidden=k==='templates';$('v530Count').textContent='本次作業 '+n+' 張';$('v530FootNote').textContent=k==='accessory'?'沿用原配件列印清單':'篩選僅供檢視，批次列印仍包含全部商品';$('v530Print').disabled=n===0;$('v530Preview').disabled=n===0;
  for(const [key,id] of Object.entries({accessory:'accDropZone',used:'usedDrop',new:'newReportDrop'})){const z=$(id);z.dataset.loaded=String(data(key).length>0||!!z.querySelector('input')?.files?.length);}
  const status=$('v51CatalogOverviewStatus')?.textContent.trim()||'檢查中';const c=$('v530Central');const txt='中央資料 '+status;if(c.textContent!==txt)c.textContent=txt;c.dataset.state=/4\/4/.test(status)?'ready':/\d\/4|失敗|缺|異常/.test(status)?'partial':'loading';c.title=$('v51CatalogOverviewMeta')?.textContent||'查看 HQ 中央資料來源';
- for(const k of ['used','new']){const bar=$('v530Filter-'+k),rows=data(k),f=states[k].filter;bar.querySelectorAll('button[data-filter]').forEach(b=>{const key=b.dataset.filter,v=labels[key]+' '+rows.filter(r=>allowed(r,key)).length;if(b.textContent!==v)b.textContent=v;b.setAttribute('aria-pressed',String(key===f));});}
+ for(const k of ['used','new']){const bar=$('v530Filter-'+k),rows=data(k),f=states[k].filter;bar.querySelectorAll('button[data-filter]').forEach(b=>{const key=b.dataset.filter,v=labels[key]+' '+rows.filter(r=>allowed(r,key)&&matches(r,states[k].query)).length;if(b.textContent!==v)b.textContent=v;if(b.getAttribute('aria-pressed')!==String(key===f))b.setAttribute('aria-pressed',String(key===f));});text($('v531SearchCount-'+k),'顯示 '+rows.filter(r=>visible(r,k)).length+' / '+rows.length+' 張');}
+ refreshWorkflow();
 }
 const head=document.createElement('div');head.className='v530-sidebar-head';head.innerHTML='<span>WORKSPACE</span><button type="button" class="v530-icon-button" title="收合／展開導覽" aria-label="收合或展開導覽" aria-expanded="true">'+svg('panel')+'</button>';side.prepend(head);head.querySelector('button').onclick=function(){const collapsed=shell.classList.toggle('v530-collapsed');this.setAttribute('aria-expanded',String(!collapsed));};
-side.querySelectorAll('.navbtn').forEach(b=>{const k=b.dataset.page;b.querySelector('.nav-icon').innerHTML=svg(k);b.title=b.textContent.trim();b.addEventListener('click',e=>{const current=active();if(current!==k&&current!=='templates'&&data(current).length&&!confirm('切換作業頁會清空目前的匯入資料，確定繼續？')){e.stopImmediatePropagation();e.preventDefault();}},true);b.addEventListener('click',()=>{shell.querySelector('main').scrollTop=0;for(const key of ['used','new']){if(!data(key).length){states[key].filter='all';states[key].page=0;}}refresh();});});
+side.querySelectorAll('.navbtn').forEach(b=>{const k=b.dataset.page;b.querySelector('.nav-icon').innerHTML=svg(k);b.title=b.textContent.trim();b.addEventListener('click',e=>{const current=active();if(current!==k&&current!=='templates'&&data(current).length&&!confirm('切換作業頁會清空目前的匯入資料，確定繼續？')){e.stopImmediatePropagation();e.preventDefault();}},true);b.addEventListener('click',()=>{shell.querySelector('main').scrollTop=0;for(const key of ['used','new']){if(!data(key).length){states[key].filter='all';states[key].page=0;states[key].query='';const inp=$('v531Search-'+key);if(inp)inp.value='';}}refresh();});});
 const central=document.createElement('button');central.type='button';central.id='v530Central';central.className='pill v530-central';central.textContent='中央資料 檢查中';central.onclick=()=>side.querySelector('[data-page="templates"]').click();q('.top-info').prepend(central);
 for(const id of ['accDropZone','usedDrop','newReportDrop']){const z=$(id),ic=document.createElement('span');ic.className='v530-drop-icon';ic.innerHTML=svg('upload');z.prepend(ic);z.querySelector('.k').textContent='拖曳 Excel 至此，或點擊選擇檔案';}
 const footer=document.createElement('div');footer.id='v530Footer';footer.className='v530-footer';footer.innerHTML='<div class="v530-foot-copy"><strong id="v530Count">本次作業 0 張</strong><small id="v530FootNote">依原清單列印</small></div><div class="v530-foot-actions"><button id="v530Preview" type="button" class="btn ghost">A4 列印預覽</button><button id="v530Print" type="button" class="btn primary">'+svg('print')+'列印全部</button></div>';shell.append(footer);$('v530Print').onclick=()=>printPage(active());$('v530Preview').onclick=()=>openBatchPreview(active(),true);
-for(const k of ['used','new']){const box=$(k==='used'?'usedItems':'newItems');const panel=box.closest('.panel');const bar=document.createElement('div');bar.className='v530-filterbar';bar.id='v530Filter-'+k;bar.innerHTML=Object.keys(labels).filter(x=>k==='used'||x!=='manual').map(f=>'<button type="button" data-filter="'+f+'" aria-pressed="'+(f==='all')+'">'+labels[f]+' 0</button>').join('')+'<span class="v530-filter-note">僅篩選預覽</span>';panel.querySelector('.panel-head').after(bar);bar.addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;states[k].filter=b.dataset.filter;states[k].page=0;if(k==='used'){if(b.dataset.filter==='all')usedInlinePage=0;renderUsedItems();}else applyNewFilter();refresh();});}
-function filteredUsed(){const st=states.used,box=$('usedItems');if(st.filter==='all'||!usedItems.length)return;const ids=usedItems.map((r,i)=>allowed(r,st.filter)?i:-1).filter(i=>i>=0);const pages=Math.max(1,Math.ceil(ids.length/9));st.page=Math.max(0,Math.min(st.page,pages-1));if(!ids.length){box.innerHTML='<div class="v530-filter-empty">目前沒有符合此分類的標卡</div>';return;}box.innerHTML='<div class="used-inline-wrap"><div class="used-inline-head"><strong>'+labels[st.filter]+'｜'+ids.length+' 張</strong><span>僅預覽篩選；列印清單不變</span></div><div class="batch-preview-grid fast-used-preview">'+ids.slice(st.page*9,st.page*9+9).map(i=>usedInlineCardHtml(usedItems[i],i)).join('')+'</div><div class="batch-pager"><button class="btn ghost" data-ui-step="-1" '+(st.page===0?'disabled':'')+'>上一頁</button><span class="pager-info">第 '+(st.page+1)+' / '+pages+' 頁｜共 '+ids.length+' 張</span><button class="btn ghost" data-ui-step="1" '+(st.page>=pages-1?'disabled':'')+'>下一頁</button></div></div>';}
+for(const k of ['used','new']){const box=$(k==='used'?'usedItems':'newItems');const panel=box.closest('.panel');const bar=document.createElement('div');bar.className='v530-filterbar';bar.id='v530Filter-'+k;bar.innerHTML=Object.keys(labels).filter(x=>k==='used'||x!=='manual').map(f=>'<button type="button" data-filter="'+f+'" aria-pressed="'+(f==='all')+'">'+labels[f]+' 0</button>').join('')+'<span class="v530-filter-note">僅篩選預覽</span>';panel.querySelector('.panel-head').after(bar);bar.addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;states[k].filter=b.dataset.filter;states[k].page=0;if(k==='used'){usedInlinePage=0;renderUsedItems();}else applyNewFilter();refresh();});}
+function filteredUsed(){const st=states.used,box=$('usedItems');if((st.filter==='all'&&!st.query)||!usedItems.length)return;const ids=usedItems.map((r,i)=>visible(r,'used')?i:-1).filter(i=>i>=0);const pages=Math.max(1,Math.ceil(ids.length/9));st.page=Math.max(0,Math.min(st.page,pages-1));if(!ids.length){box.innerHTML='<div class="v530-filter-empty">目前沒有符合搜尋／分類條件的標卡</div>';return;}box.innerHTML='<div class="used-inline-wrap"><div class="used-inline-head"><strong>'+(st.query?'搜尋結果':labels[st.filter])+'｜'+ids.length+' 張</strong><span>僅預覽篩選；列印清單不變</span></div><div class="batch-preview-grid fast-used-preview">'+ids.slice(st.page*9,st.page*9+9).map(i=>usedInlineCardHtml(usedItems[i],i)).join('')+'</div><div class="batch-pager"><button class="btn ghost" data-ui-step="-1" '+(st.page===0?'disabled':'')+'>上一頁</button><span class="pager-info">第 '+(st.page+1)+' / '+pages+' 頁｜共 '+ids.length+' 張</span><button class="btn ghost" data-ui-step="1" '+(st.page>=pages-1?'disabled':'')+'>下一頁</button></div></div>';}
 $('usedItems').addEventListener('click',e=>{const b=e.target.closest('[data-ui-step]');if(!b)return;states.used.page+=Number(b.dataset.uiStep);renderUsedItems();});
-function applyNewFilter(){const box=$('newItems'),f=states.new.filter,cards=[...box.querySelectorAll('.new-preview-card')];if(cards.length!==newItems.length)return;let shown=0;cards.forEach((card,i)=>{const ok=allowed(newItems[i],f);card.classList.toggle('v530-filter-hidden',!ok);if(ok)shown++;});box.querySelector('.v530-filter-empty')?.remove();if(cards.length&&!shown){const msg=document.createElement('div');msg.className='v530-filter-empty';msg.textContent='目前沒有符合此分類的標卡';box.append(msg);}}
+function applyNewFilter(){const box=$('newItems'),f=states.new.filter,cards=[...box.querySelectorAll('.new-preview-card')];if(cards.length!==newItems.length)return;let shown=0;cards.forEach((card,i)=>{const ok=visible(newItems[i],'new');card.classList.toggle('v530-filter-hidden',!ok);if(ok)shown++;});box.querySelector('.v530-filter-empty')?.remove();if(cards.length&&!shown){const msg=document.createElement('div');msg.className='v530-filter-empty';msg.textContent='目前沒有符合搜尋／分類條件的標卡';box.append(msg);}}
+
+// V5.3.1: read-only workflow projection. No changes to source arrays, card templates or print selection.
+const work={};
+const number=n=>Number(n||0).toLocaleString('zh-TW');
+const rawErrors=x=>Array.isArray(x)?x.map(e=>String(e?.message||e||'')).filter(Boolean):[];
+function snapshot(k){
+ const rows=data(k),n=rows.length;
+ if(k==='used'){
+  const manual=rows.filter(r=>r.manualSpec).length,errors=rawErrors(usedImportState.errors);
+  return {source:usedImportState.rows,ready:!!usedImportState.rows,processed:!!usedImportState.rows,stats:[['原始報表',usedImportState.rows?number(usedImportState.rows.length)+' 筆':'—','不含未載入資料'],['中央已配對',number(n-manual)+' 張','good'],['中央未建檔',number(manual)+' 張','warn','manual'],['匯入異常',number(errors.length)+' 筆','bad','errors']],errors,manual,n,warning:manual>0||errors.length>0,detail:'中央未建檔商品已有示意卡；匯入異常為原引擎記錄，不包含依狀態略過的資料。'};
+ }
+ if(k==='new'){
+  const st=newReportState,loaded=Number(!!st.stock)+Number(!!st.imei),per=rows.filter(r=>r.v5264NoSerialPeripheral||r.v5266SerializedPeripheral).length;
+  const errors=[...new Set([...rawErrors(st.fileErrors),...rawErrors(st.errors)])];
+  const stockOnly=!!st.stock&&!st.imei&&!!st.lastBuild; 
+  const warnings=rows.flatMap((r,i)=>{const out=[];if(!(Number(r.price)>0))out.push('商品 '+(i+1)+'｜'+(r.sourceName||productAt(r)?.name||'')+'：售價空白或為 0');if(r.v5264NoSerialPeripheral?!String(r.barcode||'').trim():!String(r.imei||'').trim())out.push('商品 '+(i+1)+'｜'+(r.sourceName||productAt(r)?.name||'')+'：缺少識別碼');return out;});
+  return {source:st.lastBuild||st.stock||st.imei,ready:loaded===2||stockOnly,processed:!!st.lastBuild,stats:[['報表到齊',loaded+'/2 份',loaded===2?'good':'neutral'],['中央規格產卡',number(n-per)+' 張','good'],['周邊直接產卡',number(per)+' 張','neutral'],['異常／提醒',number(errors.length+warnings.length)+' 則','bad','errors']],errors:[...errors,...warnings],manual:0,n,warning:errors.length>0||warnings.length>0,detail:(stockOnly?'無序號周邊已依庫存報表處理；一般新機仍需 IMEI 報表。':loaded<2&&n?'目前標卡為先前保留的清單。':'有序號／無序號周邊依原規則產卡，不列為中央配對失敗。')+(errors.length||warnings.length?' 匯入異常 '+errors.length+' 筆；目前標卡提醒 '+warnings.length+' 則。':'')};
+ }
+ const errors=rows.filter(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0)).map(r=>'控價商品｜'+(r.name||r.code||r.brand)+'：缺少會員價（原規則禁止列印）');
+ return {source:accProducts,ready:accProducts.length>0,processed:accProducts.length>0,stats:[['匯入商品',number(accProducts.length)+' 筆','neutral'],['列印商品',number(n)+' 筆','good'],['待列印',number(rows.reduce((a,r)=>a+(Number(r.qty)||1),0))+' 張','good'],['控價異常',number(errors.length)+' 筆','bad','errors']],errors,manual:0,n,warning:errors.length>0,detail:'配件不需手機中央規格配對；原控價列印防呆及全部列印範圍不變。'};
+}
+function refreshWorkflow(){
+ for(const k of ['accessory','used','new']){
+  const w=work[k];if(!w)continue;const d=snapshot(k);
+  if(w.source!==d.source||w.rows!==data(k)||w.n!==d.n){w.printOpened=false;w.source=d.source;w.rows=data(k);w.n=d.n;}
+  const step=!d.ready?0:!d.processed||!d.n?1:w.printOpened?3:2;
+  w.steps.forEach((e,i)=>{e.dataset.state=i<step?'done':i===step?'current':'waiting';e.setAttribute('aria-current',i===step?'step':'false');});
+  text(w.note,w.printOpened?'已開啟列印視窗；是否實際印出由門市確認。':!d.ready?(d.errors.length?'報表尚未到齊或匯入有異常，請查看明細。':k==='new'?'一般新機需庫存與 IMEI 報表；無序號周邊僅需庫存。':'請先匯入 Excel。'):!d.n?'目前沒有標卡；請查看匯入結果。':d.warning?'請先檢查異常或示意卡，再依原流程列印。':'已產生標卡，請檢查內容後列印。');
+  d.stats.forEach(([label,value,tone,action],i)=>{const e=w.stats[i];text(e.querySelector('small'),label);text(e.querySelector('strong'),value);e.dataset.tone=tone==='good'?'good':(tone==='bad'||tone==='warn')&&parseInt(value)>0?tone:'neutral';e.disabled=!(action==='manual'&&d.manual>0||action==='errors'&&d.errors.length>0);e.dataset.action=action||'';});
+  text(w.detail,d.detail);w.errors.hidden=!d.errors.length;const sig=JSON.stringify(d.errors);if(w.errorSig!==sig){w.errorSig=sig;w.list.replaceChildren(...d.errors.map(v=>{const li=document.createElement('li');li.textContent=v;return li}));if(!d.errors.length)w.errors.open=false;}text(w.errors.querySelector('summary'),'查看異常明細（'+d.errors.length+' 則）');
+ }
+}
+for(const k of ['accessory','used','new']){
+ const head=$('page-'+k).querySelector('.page-fixed-head'),section=document.createElement('section');section.className='v531-workflow';section.setAttribute('aria-label','作業進度與產卡結果');
+ section.innerHTML='<div class="v531-work-top"><div class="v531-steps">'+['匯入報表',k==='accessory'?'整理商品':'資料配對','確認標卡','開啟列印'].map((v,i)=>'<div class="v531-step"><span class="v531-step-num">'+(i+1)+'</span><span>'+v+'</span></div>').join('')+'</div><p class="v531-work-note" role="status"></p></div><div class="v531-stats">'+Array.from({length:4},()=>'<button type="button" class="v531-stat" disabled><small></small><strong></strong><span class="v531-stat-link">查看 ›</span></button>').join('')+'</div><div class="v531-detail"></div><details class="v531-errors" hidden><summary></summary><ul></ul></details>';
+ head.append(section);const w=work[k]={steps:[...section.querySelectorAll('.v531-step')],stats:[...section.querySelectorAll('.v531-stat')],note:section.querySelector('.v531-work-note'),detail:section.querySelector('.v531-detail'),errors:section.querySelector('details'),list:section.querySelector('ul'),printOpened:false};
+ section.addEventListener('click',e=>{const b=e.target.closest('.v531-stat');if(!b||b.disabled)return;if(b.dataset.action==='errors'){w.errors.open=true;w.errors.scrollIntoView({block:'nearest'});}if(b.dataset.action==='manual'){states.used.query='';$('v531Search-used').value='';$('v530Filter-used').querySelector('[data-filter="manual"]').click();$('v530Filter-used').scrollIntoView({block:'nearest'});}});
+}
+for(const k of ['used','new']){
+ const bar=$('v530Filter-'+k),wrap=document.createElement('div');wrap.className='v531-search';wrap.innerHTML='<label for="v531Search-'+k+'">快速搜尋</label><div class="v531-search-field"><input class="control" type="search" id="v531Search-'+k+'" placeholder="品牌、品名、型號、IMEI／SN 後六碼'+(k==='new'?'、商品編碼':'')+'" autocomplete="off"><button class="btn ghost" type="button">清除</button></div><span id="v531SearchCount-'+k+'" class="v531-search-count" role="status"></span><small>搜尋及分類只影響預覽，不影響全部列印</small>';bar.before(wrap);
+ const input=wrap.querySelector('input');const run=()=>{states[k].query=input.value.trim();states[k].page=0;if(k==='used'){usedInlinePage=0;renderUsedItems();}else{applyNewFilter();refresh();}};
+ input.addEventListener('input',e=>{if(!e.isComposing)run()});input.addEventListener('compositionend',run);wrap.querySelector('button').onclick=()=>{input.value='';run();input.focus()};
+}
+// Keep the original accessory search and print queue semantics; use its existing code/barcode/name filter.
+const accInput=$('accSearch');accInput.placeholder='條碼、商品編碼、商品名稱（品牌可用右側選單）';
+// A browser print dialog cannot prove physical printing. Track only the actual beforeprint event.
+window.addEventListener('beforeprint',()=>{if(!document.body.classList.contains('batch-print-mode'))return;const k=currentBatchType;if(work[k]&&data(k).length){work[k].printOpened=true;refreshWorkflow();}});
+// Inline price edits do not rebuild the gallery; update read-only warnings on input.
+$('newItems').addEventListener('input',()=>refreshWorkflow());
+
 const priorUsed=renderUsedItems;renderUsedItems=function(){const r=priorUsed.apply(this,arguments);filteredUsed();refresh();return r;};
 const priorNew=renderNewItems;renderNewItems=function(){const r=priorNew.apply(this,arguments);applyNewFilter();refresh();return r;};
 // Observe existing counters and HQ status only; never modify underlying data or call publishing functions.
-let pending=false;const obs=new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;refresh();});});for(const id of ['accCount','usedItemCount','newItemCount','v51CatalogOverviewStatus','v51CatalogOverviewMeta','accSourceStatus','usedImportStatus','newImportStatus']){const x=$(id);if(x)obs.observe(x,{childList:true,subtree:true,characterData:true});}
+let pending=false;const obs=new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;refresh();});});for(const id of ['accCount','usedItemCount','newItemCount','v51CatalogOverviewStatus','v51CatalogOverviewMeta','accSourceStatus','usedImportStatus','newImportStatus','usedImportSummary','newImportSummary','newImportErrorCount','accResult','accDetectHint']){const x=$(id);if(x)obs.observe(x,{childList:true,subtree:true,characterData:true});}
+
+function resetSearch(k){const st=states[k];if(!st)return;st.filter='all';st.page=0;st.query='';const input=$('v531Search-'+k);if(input)input.value='';}
+const oldResetUsed=resetUsedItems;resetUsedItems=function(){resetSearch('used');return oldResetUsed.apply(this,arguments)};
+const oldResetNew=resetNewItems;resetNewItems=function(){resetSearch('new');return oldResetNew.apply(this,arguments)};
+const oldBuildUsed=buildUsedCardsFromRows;buildUsedCardsFromRows=function(){resetSearch('used');return oldBuildUsed.apply(this,arguments)};
+const oldBuildNew=buildNewCardsFromReports;buildNewCardsFromReports=function(){resetSearch('new');return oldBuildNew.apply(this,arguments)};
+
 refresh();window.__v530Ui={refresh,category,states};
 })();
 </script>
