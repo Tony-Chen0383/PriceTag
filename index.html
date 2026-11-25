@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.3｜Clean Core 程式碼整併版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.4｜系統效能優化版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,7 +7271,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.3</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.3｜Clean Core 程式碼整併版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.4</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.4｜系統效能優化版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -7380,7 +7380,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.3｜Clean Core 程式碼整併版</div>
+      <div class="hq31-hero-title">V5.3.4｜系統效能優化版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7413,8 +7413,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.3</div>
-      <div class="meta">Clean Core 程式碼整併版</div>
+      <div class="value">V5.3.4</div>
+      <div class="meta">系統效能優化版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -7696,8 +7696,26 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 </div>
 <div class="toast" id="toast"></div>
 <script>
-/* V5.3.3 Clean Core: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.3',label:'Clean Core 程式碼整併版'});
+/* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.4',label:'系統效能優化版'});
+/* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
+const V534_METRICS=new Map();
+function v534Record(label,ms,error=false){
+ if(!Number.isFinite(ms))return;
+ let a=V534_METRICS.get(label);if(!a){a={count:0,total:0,max:0,last:0,errors:0};V534_METRICS.set(label,a)}
+ a.count++;a.total+=ms;a.max=Math.max(a.max,ms);a.last=ms;if(error)a.errors++;
+}
+function v534Timed(fn,label){
+ if(typeof fn!=='function')return fn;
+ return function(){const start=performance.now();let result;
+  try{result=fn.apply(this,arguments)}catch(e){v534Record(label,performance.now()-start,true);throw e}
+  if(result&&typeof result.then==='function'){result.then(()=>v534Record(label,performance.now()-start),()=>v534Record(label,performance.now()-start,true));}
+  else v534Record(label,performance.now()-start);
+  return result;
+ };
+}
+if(typeof XLSX!=='undefined'&&typeof XLSX.read==='function')XLSX.read=v534Timed(XLSX.read,'Excel 解析（SheetJS）');
+
 function priceTagSyncVersionUI(){
   const {version,label}=PRICE_TAG_RELEASE;
   const set=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value};
@@ -8190,7 +8208,16 @@ const NEW_REPORT_STOCK_HEADERS={store:['門市名稱'],category:['大分類名�
 const NEW_REPORT_IMEI_HEADERS={imei:['IMEI號碼','IMEI/SN','序號'],code:['商品編碼'],small:['小類'],brand:['品牌'],name:['商品名稱'],store:['所在門市'],status:['狀態']};
 let newReportState={stock:null,imei:null,stockFile:'',imeiFile:'',errors:[],lastBuild:null};
 function nrText(v){return String(v??'').trim()}
-function nrKey(v){return nrText(v).toLowerCase().normalize('NFKC').replace(/[^a-z0-9\u4e00-\u9fff]+/g,'')}
+const V534_NRKEY_CACHE=new Map(),V534_NRKEY_LIMIT=8192;
+let v534NrHits=0,v534NrMisses=0;
+function nrKey(v){
+  const raw=nrText(v);
+  if(raw.length<=256&&V534_NRKEY_CACHE.has(raw)){v534NrHits++;return V534_NRKEY_CACHE.get(raw)}
+  v534NrMisses++;
+  const result=raw.toLowerCase().normalize('NFKC').replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
+  if(raw.length<=256){if(V534_NRKEY_CACHE.size>=V534_NRKEY_LIMIT)V534_NRKEY_CACHE.delete(V534_NRKEY_CACHE.keys().next().value);V534_NRKEY_CACHE.set(raw,result)}
+  return result;
+}
 function nrCap(v){let s=nrText(v).toUpperCase().replace(/\s+/g,'').replace(/GB$/,'').replace(/TB$/,'T');if(/^\d+$/.test(s))return s;if(/^\d+T$/.test(s))return s;return s}
 function nrVersion(v){const s=nrKey(v);if(/wifi|wi-fi/.test(s))return 'wifi';if(/5g/.test(s))return '5g';if(/4g|lte/.test(s))return '4g';return s}
 
@@ -16358,7 +16385,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.3.3｜Clean Core 程式碼整併版。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.3.4｜系統效能優化版。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -16659,19 +16686,30 @@ const states={used:{filter:'all',page:0,query:''},new:{filter:'all',page:0,query
 const selection={accessory:new Set(),used:new Set(),new:new Set()};
 
 const norm=v=>String(v??'').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'');
-function matches(r,query){const p=productAt(r)||{},terms=String(query||'').trim().split(/\s+/).map(norm).filter(Boolean);const fields=[p.brand,p.name,p.model,r.sourceName,r.sourceCleanName,r.sourceCode,r.imei,r.barcode,r.sourceModel,r.sourceCapacity,r.sourceVersion,r.sourceSmall,r.sourceOrderNo].map(norm);return terms.every(t=>fields.some(v=>v.includes(t))||norm([p.brand,p.name,r.sourceCapacity,r.sourceName].join(' ')).includes(t));}
-const visible=(r,k)=>allowed(r,states[k].filter)&&matches(r,states[k].query);
+const searchTerms=query=>String(query||'').trim().split(/\s+/).map(norm).filter(Boolean);
+function matches(r,query,terms=searchTerms(query)){
+ if(!terms.length)return true;
+ const p=productAt(r)||{},fields=[p.brand,p.name,p.model,r.sourceName,r.sourceCleanName,r.sourceCode,r.imei,r.barcode,r.sourceModel,r.sourceCapacity,r.sourceVersion,r.sourceSmall,r.sourceOrderNo].map(norm);
+ let combined;return terms.every(t=>fields.some(v=>v.includes(t))||(combined??=norm([p.brand,p.name,r.sourceCapacity,r.sourceName].join(' '))).includes(t));
+}
+const visible=(r,k,terms=searchTerms(states[k].query))=>allowed(r,states[k].filter)&&matches(r,states[k].query,terms);
 const text=(el,value)=>{if(el&&el.textContent!==String(value))el.textContent=String(value)};
 const labels={all:'全部',phone:'手機',tablet:'平板',watch:'手錶',audio:'耳機／音訊',other:'其他',manual:'待補編'};
 function category(r){const p=productAt(r)||{},c=String(p.category||'')+' '+String(r.small||'');if(/平板|tablet|ipad/i.test(c))return 'tablet';if(/手錶|手環|watch|穿戴/i.test(c)&&! /耳機|耳麥|音訊|喇叭/i.test(c))return 'watch';if(/耳機|耳麥|音訊|喇叭|headphone|earphone/i.test(c))return 'audio';if(/手機|smartphone/i.test(c))return 'phone';return 'other'}
 const allowed=(r,f)=>f==='all'||(f==='manual'?!!r.manualSpec:category(r)===f);
 function count(k){const rows=data(k);return k==='accessory'?(Number(($('accCount')?.textContent||'').replace(/[^0-9]/g,''))||0):rows.length;}
 function refresh(){
+ const started=performance.now();
  const k=active(),n=count(k),f=$('v530Footer');f.hidden=k==='templates';$('v530Count').textContent='本次作業 '+n+' 張';$('v530FootNote').textContent=k==='accessory'?'沿用原配件列印清單':'篩選僅供檢視，批次列印仍包含全部商品';$('v530Print').disabled=n===0;$('v530Preview').disabled=n===0;
  for(const [key,id] of Object.entries({accessory:'accDropZone',used:'usedDrop',new:'newReportDrop'})){const z=$(id);z.dataset.loaded=String(data(key).length>0||!!z.querySelector('input')?.files?.length);}
  const status=$('v51CatalogOverviewStatus')?.textContent.trim()||'檢查中';const c=$('v530Central');const txt='中央資料 '+status;if(c.textContent!==txt)c.textContent=txt;c.dataset.state=/4\/4/.test(status)?'ready':/\d\/4|失敗|缺|異常/.test(status)?'partial':'loading';c.title=$('v51CatalogOverviewMeta')?.textContent||'查看 HQ 中央資料來源';
- for(const k of ['used','new']){const bar=$('v530Filter-'+k),rows=data(k),f=states[k].filter;bar.querySelectorAll('button[data-filter]').forEach(b=>{const key=b.dataset.filter,v=labels[key]+' '+rows.filter(r=>allowed(r,key)&&matches(r,states[k].query)).length;if(b.textContent!==v)b.textContent=v;if(b.getAttribute('aria-pressed')!==String(key===f))b.setAttribute('aria-pressed',String(key===f));});text($('v531SearchCount-'+k),'顯示 '+rows.filter(r=>visible(r,k)).length+' / '+rows.length+' 張');}
- refreshWorkflow();refreshSelection();
+ for(const k of ['used','new']){
+  const bar=$('v530Filter-'+k),rows=data(k),f=states[k].filter,terms=searchTerms(states[k].query),counts={all:0,phone:0,tablet:0,watch:0,audio:0,other:0,manual:0};
+  for(const r of rows){if(!matches(r,states[k].query,terms))continue;counts.all++;counts[category(r)]++;if(r.manualSpec)counts.manual++;}
+  bar.querySelectorAll('button[data-filter]').forEach(b=>{const key=b.dataset.filter,v=labels[key]+' '+counts[key];if(b.textContent!==v)b.textContent=v;if(b.getAttribute('aria-pressed')!==String(key===f))b.setAttribute('aria-pressed',String(key===f));});
+  text($('v531SearchCount-'+k),'顯示 '+(counts[f]||0)+' / '+rows.length+' 張');
+ }
+ refreshWorkflow();refreshSelection();v534Record('工作區統計與勾選更新',performance.now()-started);
 }
 const head=document.createElement('div');head.className='v530-sidebar-head';head.innerHTML='<span>WORKSPACE</span><button type="button" class="v530-icon-button" title="收合／展開導覽" aria-label="收合或展開導覽" aria-expanded="true">'+svg('panel')+'</button>';side.prepend(head);head.querySelector('button').onclick=function(){const collapsed=shell.classList.toggle('v530-collapsed');this.setAttribute('aria-expanded',String(!collapsed));};
 side.querySelectorAll('.navbtn').forEach(b=>{const k=b.dataset.page;b.querySelector('.nav-icon').innerHTML=svg(k);b.title=b.textContent.trim();b.addEventListener('click',e=>{const current=active();if(current!==k&&current!=='templates'&&data(current).length&&!confirm('切換作業頁會清空目前的匯入資料，確定繼續？')){e.stopImmediatePropagation();e.preventDefault();}},true);b.addEventListener('click',()=>{shell.querySelector('main').scrollTop=0;for(const key of ['used','new']){if(!data(key).length){states[key].filter='all';states[key].page=0;states[key].query='';const inp=$('v531Search-'+key);if(inp)inp.value='';}}refresh();});});
@@ -16679,9 +16717,9 @@ const central=document.createElement('button');central.type='button';central.id=
 for(const id of ['accDropZone','usedDrop','newReportDrop']){const z=$(id),ic=document.createElement('span');ic.className='v530-drop-icon';ic.innerHTML=svg('upload');z.prepend(ic);z.querySelector('.k').textContent='拖曳 Excel 至此，或點擊選擇檔案';}
 const footer=document.createElement('div');footer.id='v530Footer';footer.className='v530-footer';footer.innerHTML='<div class="v530-foot-copy"><strong id="v530Count">本次作業 0 張</strong><small id="v530FootNote">依原清單列印</small></div><div class="v530-foot-actions"><button id="v530Preview" type="button" class="btn ghost">A4 列印預覽</button><button id="v530Print" type="button" class="btn primary">'+svg('print')+'列印全部</button></div>';shell.append(footer);$('v530Print').onclick=()=>printPage(active());$('v530Preview').onclick=()=>openBatchPreview(active(),true);
 for(const k of ['used','new']){const box=$(k==='used'?'usedItems':'newItems');const panel=box.closest('.panel');const bar=document.createElement('div');bar.className='v530-filterbar';bar.id='v530Filter-'+k;bar.innerHTML=Object.keys(labels).filter(x=>k==='used'||x!=='manual').map(f=>'<button type="button" data-filter="'+f+'" aria-pressed="'+(f==='all')+'">'+labels[f]+' 0</button>').join('')+'<span class="v530-filter-note">僅篩選預覽</span>';panel.querySelector('.panel-head').after(bar);bar.addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;states[k].filter=b.dataset.filter;states[k].page=0;if(k==='used'){usedInlinePage=0;renderUsedItems();}else applyNewFilter();refresh();});}
-function filteredUsed(){const st=states.used,box=$('usedItems');if((st.filter==='all'&&!st.query)||!usedItems.length)return;const ids=usedItems.map((r,i)=>visible(r,'used')?i:-1).filter(i=>i>=0);const pages=Math.max(1,Math.ceil(ids.length/9));st.page=Math.max(0,Math.min(st.page,pages-1));if(!ids.length){box.innerHTML='<div class="v530-filter-empty">目前沒有符合搜尋／分類條件的標卡</div>';return;}box.innerHTML='<div class="used-inline-wrap"><div class="used-inline-head"><strong>'+(st.query?'搜尋結果':labels[st.filter])+'｜'+ids.length+' 張</strong><span>僅預覽篩選；列印清單不變</span></div><div class="batch-preview-grid fast-used-preview">'+ids.slice(st.page*9,st.page*9+9).map(i=>usedInlineCardHtml(usedItems[i],i)).join('')+'</div><div class="batch-pager"><button class="btn ghost" data-ui-step="-1" '+(st.page===0?'disabled':'')+'>上一頁</button><span class="pager-info">第 '+(st.page+1)+' / '+pages+' 頁｜共 '+ids.length+' 張</span><button class="btn ghost" data-ui-step="1" '+(st.page>=pages-1?'disabled':'')+'>下一頁</button></div></div>';}
+function filteredUsed(){const st=states.used,box=$('usedItems');if((st.filter==='all'&&!st.query)||!usedItems.length)return;const terms=searchTerms(st.query),ids=usedItems.map((r,i)=>visible(r,'used',terms)?i:-1).filter(i=>i>=0);const pages=Math.max(1,Math.ceil(ids.length/9));st.page=Math.max(0,Math.min(st.page,pages-1));if(!ids.length){box.innerHTML='<div class="v530-filter-empty">目前沒有符合搜尋／分類條件的標卡</div>';return;}box.innerHTML='<div class="used-inline-wrap"><div class="used-inline-head"><strong>'+(st.query?'搜尋結果':labels[st.filter])+'｜'+ids.length+' 張</strong><span>僅預覽篩選；列印清單不變</span></div><div class="batch-preview-grid fast-used-preview">'+ids.slice(st.page*9,st.page*9+9).map(i=>usedInlineCardHtml(usedItems[i],i)).join('')+'</div><div class="batch-pager"><button class="btn ghost" data-ui-step="-1" '+(st.page===0?'disabled':'')+'>上一頁</button><span class="pager-info">第 '+(st.page+1)+' / '+pages+' 頁｜共 '+ids.length+' 張</span><button class="btn ghost" data-ui-step="1" '+(st.page>=pages-1?'disabled':'')+'>下一頁</button></div></div>';}
 $('usedItems').addEventListener('click',e=>{const b=e.target.closest('[data-ui-step]');if(!b)return;states.used.page+=Number(b.dataset.uiStep);renderUsedItems();});
-function applyNewFilter(){const box=$('newItems'),f=states.new.filter,cards=[...box.querySelectorAll('.new-preview-card')];if(cards.length!==newItems.length)return;let shown=0;cards.forEach((card,i)=>{const ok=visible(newItems[i],'new');card.classList.toggle('v530-filter-hidden',!ok);if(ok)shown++;});box.querySelector('.v530-filter-empty')?.remove();if(cards.length&&!shown){const msg=document.createElement('div');msg.className='v530-filter-empty';msg.textContent='目前沒有符合搜尋／分類條件的標卡';box.append(msg);}}
+function applyNewFilter(){const box=$('newItems'),f=states.new.filter,cards=[...box.querySelectorAll('.new-preview-card')];if(cards.length!==newItems.length)return;const terms=searchTerms(states.new.query);let shown=0;cards.forEach((card,i)=>{const ok=visible(newItems[i],'new',terms);card.classList.toggle('v530-filter-hidden',!ok);if(ok)shown++;});box.querySelector('.v530-filter-empty')?.remove();if(cards.length&&!shown){const msg=document.createElement('div');msg.className='v530-filter-empty';msg.textContent='目前沒有符合搜尋／分類條件的標卡';box.append(msg);}}
 
 // V5.3.1: read-only workflow projection. No changes to source arrays, card templates or print selection.
 const work={};
@@ -16745,17 +16783,17 @@ const oldBuildNew=buildNewCardsFromReports;buildNewCardsFromReports=function(){r
 
 
 const selectionBars={};
-function selectedRows(k){const set=selection[k],rows=data(k);for(const r of set)if(!rows.includes(r))set.delete(r);return rows.filter(r=>set.has(r));}
-function filteredRows(k){if(k==='accessory'){const ids=new Set(accResults.map(r=>r._accId));return data(k).filter(r=>ids.has(r._accId));}return data(k).filter(r=>visible(r,k));}
+function selectedRows(k){const set=selection[k],rows=data(k);if(!set.size)return [];const live=new Set(rows);for(const r of set)if(!live.has(r))set.delete(r);return rows.filter(r=>set.has(r));}
+function filteredRows(k){if(k==='accessory'){const ids=new Set(accResults.map(r=>r._accId));return data(k).filter(r=>ids.has(r._accId));}const terms=searchTerms(states[k].query);return data(k).filter(r=>visible(r,k,terms));}
 function syncSelection(k){
- const set=selection[k];selectedRows(k);const host=$(k==='accessory'?'accResult':k==='new'?'newItems':'usedItems');
+ const set=selection[k],rows=data(k),selected=selectedRows(k),accById=new Map();if(k==='accessory')for(const r of rows){const id=String(r._accId);if(!accById.has(id))accById.set(id,r)}const host=$(k==='accessory'?'accResult':k==='new'?'newItems':'usedItems');
  const cards=[...host.querySelectorAll(k==='accessory'?'.acc-preview-card':k==='new'?'.new-preview-card':'.batch-preview-item')];
- cards.forEach((card,i)=>{let r;if(k==='accessory'){const id=card.querySelector('[data-acc-card-name-id]')?.getAttribute('data-acc-card-name-id')||card.querySelector('.remove-mini')?.getAttribute('onclick')?.match(/\((\d+)\)/)?.[1];r=data(k).find(x=>String(x._accId)===String(id));}else if(k==='new'){r=data(k)[i];}else{const idx=card.getAttribute('onclick')?.match(/selectUsedItem\((\d+)\)/)?.[1];r=idx===undefined?null:data(k)[Number(idx)];}
+ cards.forEach((card,i)=>{let r;if(k==='accessory'){const id=card.querySelector('[data-acc-card-name-id]')?.getAttribute('data-acc-card-name-id')||card.querySelector('.remove-mini')?.getAttribute('onclick')?.match(/\((\d+)\)/)?.[1];r=accById.get(String(id));}else if(k==='new'){r=rows[i];}else{const idx=card.getAttribute('onclick')?.match(/selectUsedItem\((\d+)\)/)?.[1];r=idx===undefined?null:rows[Number(idx)];}
   let label=card.querySelector(':scope > .v532-select');if(!r){label?.remove();return;}
   if(!label){label=document.createElement('label');label.className='v532-select';label.innerHTML='<input type="checkbox"><span>選取列印</span>';card.prepend(label);label.addEventListener('click',e=>e.stopPropagation());}
   const input=label.querySelector('input');input.checked=set.has(r);input.onchange=()=>{if(input.checked)set.add(r);else set.delete(r);refresh()};label.classList.toggle('is-selected',input.checked);
  });
- const bar=selectionBars[k];if(bar){const n=selectedRows(k).length;const rows=filteredRows(k);bar.querySelector('[data-action=filter]').disabled=!rows.length;bar.querySelector('[data-action=all]').disabled=!data(k).length;bar.querySelector('[data-action=clear]').disabled=!n;text(bar.querySelector('.v532-selected'),n+' / '+data(k).length+' 項商品已選取');}
+ const bar=selectionBars[k];if(bar){const n=selected.length;const rows=filteredRows(k);bar.querySelector('[data-action=filter]').disabled=!rows.length;bar.querySelector('[data-action=all]').disabled=!data(k).length;bar.querySelector('[data-action=clear]').disabled=!n;text(bar.querySelector('.v532-selected'),n+' / '+data(k).length+' 項商品已選取');}
 }
 for(const k of ['accessory','used','new']){
  const host=$(k==='accessory'?'accResult':k==='new'?'newItems':'usedItems'),bar=document.createElement('div');bar.className='v532-selectbar';bar.innerHTML='<button type="button" class="btn ghost" data-action="filter">選取篩選結果</button><button type="button" class="btn ghost" data-action="all">全選全部</button><button type="button" class="btn ghost" data-action="clear">取消全選</button><span class="v532-selected" role="status"></span>';host.before(bar);selectionBars[k]=bar;bar.onclick=e=>{const a=e.target.closest('[data-action]')?.dataset.action;if(!a)return;if(a==='clear')selection[k].clear();else (a==='all'?data(k):filteredRows(k)).forEach(r=>selection[k].add(r));refresh();};
@@ -16775,6 +16813,42 @@ refresh();window.__v530Ui={refresh,category,states};
   window.addEventListener('beforeprint',priceTagSyncVersionUI);
   window.addEventListener('focus',priceTagSyncVersionUI);
 })();
+/* Performance instruments the final effective entry points, preserving result identity and errors. */
+(function(){
+ 'use strict';
+ usedMatchProduct=v534Timed(usedMatchProduct,'二手機中央配對（單次）');
+ matchProductFromStock=v534Timed(matchProductFromStock,'新機中央配對（單次）');
+ buildUsedCardsFromRows=v534Timed(buildUsedCardsFromRows,'二手機整批產卡');
+ buildNewCardsFromReports=v534Timed(buildNewCardsFromReports,'新機整批產卡');
+ renderUsedItems=v534Timed(renderUsedItems,'二手機預覽渲染');
+ renderNewItems=v534Timed(renderNewItems,'新機預覽渲染');
+ renderAccessory=v534Timed(renderAccessory,'配件預覽渲染');
+ accessoryLoadFiles=v534Timed(accessoryLoadFiles,'配件報表匯入');
+ usedLoadWorkbooks=v534Timed(usedLoadWorkbooks,'二手機報表匯入');
+ newReportFilesSelected=v534Timed(newReportFilesSelected,'新機報表匯入');
+ v526LoadCentralData=v534Timed(v526LoadCentralData,'中央資料同步（含等待）');
+ openBatchPreview=v534Timed(openBatchPreview,'全部 A4 預覽');
+ v532OpenSelected=v534Timed(v532OpenSelected,'選取 A4 預覽');
+ if(typeof v5214WaitBatchPrintAssets==='function')v5214WaitBatchPrintAssets=v534Timed(v5214WaitBatchPrintAssets,'列印圖片準備（含等待）');
+ const h=document.querySelector('.hq31-hero');if(!h)return;
+ const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
+ const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.4 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
+ function report(){
+  const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
+  const a=[`PriceTag ${PRICE_TAG_RELEASE.version}｜效能診斷`,`頁面開啟至今：${ms(performance.now())}`,`DOM 完成：${n?.domContentLoadedEventEnd?ms(n.domContentLoadedEventEnd):'未完成'}｜Load：${n?.loadEventEnd?ms(n.loadEventEnd):'未完成'}`,`瀏覽器已記錄資源：${resources.length} 筆（受瀏覽器緩衝及權限限制）`,`文字快取：${V534_NRKEY_CACHE.size}/${V534_NRKEY_LIMIT}｜命中 ${v534NrHits}｜未命中 ${v534NrMisses}`];
+  if(performance.memory&&Number.isFinite(performance.memory.usedJSHeapSize))a.push('JS Heap 約 '+(performance.memory.usedJSHeapSize/1048576).toFixed(1)+' MiB（瀏覽器估計值）');
+  a.push('---');for(const [name,m] of V534_METRICS)a.push(`${name}｜最新 ${ms(m.last)}｜平均 ${ms(m.total/m.count)}｜最慢 ${ms(m.max)}｜${m.count} 次${m.errors?'｜拋出錯誤 '+m.errors+' 次':''}`);
+  return a.join('\n');
+ }
+ const show=()=>{pre.textContent=report();status.textContent=''};
+ btn.onclick=()=>{d.open=true;show();d.scrollIntoView({block:'nearest'})};d.addEventListener('toggle',()=>{if(d.open)show()});
+ d.querySelector('[data-action=refresh]').onclick=show;
+ d.querySelector('[data-action=copy]').onclick=async()=>{show();try{await navigator.clipboard.writeText(pre.textContent);status.textContent='已複製'}catch(_){const range=document.createRange();range.selectNodeContents(pre);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);status.textContent='請按 Ctrl/Cmd+C 複製選取文字'}};
+ window.__v534Performance={report};
+})();
+
 </script>
 
 
