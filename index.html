@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.1｜門市操作效率優化版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.2｜智慧列印管理版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -8013,7 +8013,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.1</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.1｜門市操作效率優化版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.2</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.2｜智慧列印管理版</div></div></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
@@ -8122,7 +8122,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.1｜門市操作效率優化版</div>
+      <div class="hq31-hero-title">V5.3.2｜智慧列印管理版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -8155,8 +8155,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.1</div>
-      <div class="meta">門市操作效率優化版</div>
+      <div class="value">V5.3.2</div>
+      <div class="meta">智慧列印管理版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -8429,7 +8429,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
 <div class="batch-modal" id="batchModal" onclick="batchBackdrop(event)">
   <div class="batch-sheet">
-    <div class="batch-toolbar"><div><h2 id="batchTitle">批次預覽</h2><div class="sub" id="batchSub">A4 3×3｜本次待列印資料</div></div><div class="batch-actions"><button class="btn primary" onclick="printBatchPreview()">全部列印</button><button class="batch-close" onclick="closeBatchPreview()">×</button></div></div>
+    <div class="batch-toolbar"><div><h2 id="batchTitle">批次預覽</h2><div class="sub" id="batchSub">A4 3×3｜本次待列印資料</div></div><div class="batch-actions"><button id="v532ModalPrint" class="btn primary" onclick="printBatchPreview()">全部列印</button><button class="batch-close" onclick="closeBatchPreview()">×</button></div></div>
     <div class="batch-summary" id="batchSummary"></div>
     <div class="batch-pager" id="batchPager" style="display:none"></div>
     <ul class="batch-warning-list" id="batchWarnings" style="display:none"></ul>
@@ -8751,7 +8751,7 @@ function clearAccessory(silent=false){
 
 const USED_REPORT_HEADERS={source:['回收來源'],small:['商品小類','小類'],brand:['品牌','廠牌'],name:['回收機款','機款','商品名稱'],imei:['IMEI','IMEI/SN','序號'],grade:['等級'],store:['所在門市','門市'],price:['設定售價','售價'],actualPrice:['實際售價'],orderNo:['進貨單號','單號'],status:['機款狀態','狀態'],batteryHealth:['電池健康度','電池健康'],internationalVersion:['國際版本','版本'],screenBurn:['螢幕烙印','烙印']};
 let usedItems=[];
-let currentBatchType="";let usedBatchPage=0;let usedInlinePage=0;
+let currentBatchType="";let v532PrintScope=null;let v532PrintBusy=false;let usedBatchPage=0;let usedInlinePage=0;
 let activeUsedIndex=0;
 let usedImportState={rows:null,file:'',errors:[]};
 function usedFileLoaded(el){const f=el.files&&el.files[0];if(!f)return;usedLoadWorkbook(f);el.value=''}
@@ -9193,7 +9193,7 @@ function newWearHtml(p,r,opt={}){r.warranty='創宇保固一年';const pp={...p,
 function renderNewPreview(){const phone=document.getElementById('newPhonePreview'),wear=document.getElementById('newWearPreview'),lab=document.getElementById('newPreviewLabel');if(!newItems.length){phone.style.display='block';wear.style.display='none';phone.innerHTML='<div class="empty" style="padding:80px 20px">尚未新增商品</div>';lab.textContent='等待商品';return}const r=newItems[activeNewIndex]||newItems[0],p=productAt(r);normalizeItem(r);phone.innerHTML=newPhoneHtml(p,r);wear.innerHTML=newWearHtml(p,r);const isWear=r.tpl==='穿戴';phone.style.display=isWear?'none':'block';wear.style.display=isWear?'grid':'none';lab.textContent=`商品 ${activeNewIndex+1}｜${isWear?'新機穿戴卡':'新機手機卡'}`;document.querySelectorAll('#page-new .seg').forEach((b,idx)=>b.classList.toggle('active',(isWear&&idx===1)||(!isWear&&idx===0)))}
 function setNewPreview(v,el){if(!newItems.length)return;newItems[activeNewIndex].tpl=v==='wear'?'穿戴':'手機';document.querySelectorAll('#page-new .seg').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderNewItems()}
 
-function closeBatchPreview(){document.getElementById('batchModal').classList.remove('open');document.body.classList.remove('batch-print-mode')}
+function closeBatchPreview(){if(v532PrintBusy)return;v532PrintScope=null;document.getElementById('v532ModalPrint').textContent='全部列印';document.getElementById('batchModal').classList.remove('open');document.body.classList.remove('batch-print-mode')}
 function batchBackdrop(e){if(e.target&&e.target.id==='batchModal')closeBatchPreview()}
 function batchChip(t,w=false){return `<span class="batch-chip${w?' warn':''}">${h(t)}</span>`}
 function setBatchMeta(title,sub,chips,warns=[]){document.getElementById('batchTitle').textContent=title;document.getElementById('batchSub').textContent=sub;document.getElementById('batchSummary').innerHTML=chips.map(x=>batchChip(x[0],x[1])).join('');const ul=document.getElementById('batchWarnings');ul.style.display=warns.length?'block':'none';ul.innerHTML=warns.map(x=>`<li>${h(x)}</li>`).join('')}
@@ -9215,8 +9215,10 @@ function applyA4BatchLayout(type){
 
 function usedBatchCardHtml(r,i){const p=productAt(r);return `<div class="batch-preview-item"><div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(usedDisplayName(r,p))}｜${h(r.grade)}級</span></div>${r.tpl==='穿戴'?usedWearHtml(p,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(p,r)}</div>`}</div>`}
 function renderUsedBatchPage(page=0){const grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');const pages=Math.max(1,Math.ceil(usedItems.length/9));usedBatchPage=Math.max(0,Math.min(page,pages-1));grid.className='batch-preview-grid fast-used-preview';if(!usedItems.length){grid.innerHTML='<div class="batch-empty">尚未匯入二手機資料</div>';pager.style.display='none';return}const start=usedBatchPage*9,end=Math.min(start+9,usedItems.length);let html='';for(let i=start;i<end;i++)html+=usedBatchCardHtml(usedItems[i],i);grid.innerHTML=html;pager.style.display='flex';pager.innerHTML=`<button class="btn ghost" ${usedBatchPage<=0?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage-1})">上一頁</button><span class="pager-info">第 ${usedBatchPage+1} / ${pages} 頁</span><button class="btn ghost" ${usedBatchPage>=pages-1?'disabled':''} onclick="renderUsedBatchPage(${usedBatchPage+1})">下一頁</button>`}
-function buildUsedPrintPagesFast(){const grid=document.getElementById('batchGrid'),phones=usedItems.filter(r=>r.tpl!=='穿戴'),wears=usedItems.filter(r=>r.tpl==='穿戴'),cells=[];cells.push('<div class="a4-preview-stack">');const add=(arr,per,wear)=>{const pages=Math.ceil(arr.length/per);for(let pg=0;pg<pages;pg++){cells.push(`<div class="a4-page${wear?' wear-page':''}">`);for(let c=0;c<per;c++){const r=arr[pg*per+c];cells.push('<div class="a4-cell">');if(r){const pp=productAt(r);cells.push('<div class="batch-preview-item">');cells.push(wear?usedWearHtml(pp,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(pp,r)}</div>`);cells.push('</div>')}cells.push('</div>')}cells.push(`<div class="a4-page-badge">A4｜${wear?'穿戴 3×4':'手機 3×3'}｜第 ${pg+1} / ${pages} 頁</div></div>`)}};add(phones,9,false);add(wears,12,true);cells.push('</div>');grid.className='batch-preview-grid a4-layout';grid.innerHTML=cells.join('')}
-function openBatchPreview(type,showModal=true){currentBatchType=type;const modal=document.getElementById('batchModal'),grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');grid.innerHTML='';grid.className='batch-preview-grid';pager.style.display='none';if(type==='new'){const warns=newItemWarnings(),phoneCount=newItems.filter(x=>x.tpl!=='穿戴').length,wearCount=newItems.length-phoneCount;setBatchMeta('新機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${newItems.length} 張`,false],[`A4 ${Math.ceil(newItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴／耳機 ${wearCount}`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!newItems.length)grid.innerHTML='<div class="batch-empty">尚未新增商品</div>';newItems.forEach((r,i)=>{normalizeItem(r);const p=productAt(r),item=document.createElement('div');item.className='batch-preview-item';item.innerHTML=`<div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(newDisplayName(r,p))}</span></div>${r.tpl==='穿戴'?newWearHtml(p,r):`<div class="phone-card new-phone-card">${newPhoneHtml(p,r)}</div>`}`;grid.appendChild(item)});applyA4BatchLayout(type)}else if(type==='accessory'){grid.classList.add('accessory');const total=accessoryRows.reduce((s,r)=>s+(r.qty||1),0),warns=[];accessoryRows.forEach((r,i)=>{if(!accessoryPrintName(r))warns.push(`配件 ${i+1}：缺少商品名稱`);if(!r.list)warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：缺少牌價`);if(isControlledBrand(r.brand)&&!(Number(r.member)>0))warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：控價商品缺少會員價，禁止列印`)});const ctlTotal=accessoryRows.reduce((s,r)=>s+(isControlledBrand(r.brand)?(r.qty||1):0),0);setBatchMeta('配件｜批次預覽','配件標卡尺寸 65×40 mm；A4 橫式每排 4 張自動排版',[[`共 ${total} 張`,false],[`商品 ${accessoryRows.length} 項`,false],[`控價 ${ctlTotal} 張`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!accessoryRows.length)grid.innerHTML='<div class="batch-empty">尚未加入待列印商品</div>';accessoryRows.forEach((r,i)=>{for(let q=0;q<(r.qty||1);q++){const item=document.createElement('div');item.className='batch-preview-item';const ctl=isControlledBrand(r.brand);item.innerHTML=`<div class="item-head"><b>${h(r.code||r.barcode||'配件')}</b><span>${h(r.brand||'')} ${ctl?'<span class="tag lock">🔒 控價</span>':''}</span></div>`;item.appendChild(accessoryCloneFor(r));grid.appendChild(item)}})}else{const phoneCount=usedItems.filter(x=>x.tpl!=='穿戴').length,wearCount=usedItems.length-phoneCount;setBatchMeta('二手機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${usedItems.length} 張`,false],[`A4 ${Math.ceil(usedItems.length/9)||0} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴 / 耳機 ${wearCount}`,false]],[]);usedBatchPage=0;renderUsedBatchPage(0)}if(showModal)modal.classList.add('open')}
+function buildUsedPrintPagesFast(rows=usedItems){const grid=document.getElementById('batchGrid'),phones=rows.filter(r=>r.tpl!=='穿戴'),wears=rows.filter(r=>r.tpl==='穿戴'),cells=[];cells.push('<div class="a4-preview-stack">');const add=(arr,per,wear)=>{const pages=Math.ceil(arr.length/per);for(let pg=0;pg<pages;pg++){cells.push(`<div class="a4-page${wear?' wear-page':''}">`);for(let c=0;c<per;c++){const r=arr[pg*per+c];cells.push('<div class="a4-cell">');if(r){const pp=productAt(r);cells.push('<div class="batch-preview-item">');cells.push(wear?usedWearHtml(pp,r):`<div class="phone-card used-phone-card">${usedPhoneHtml(pp,r)}</div>`);cells.push('</div>')}cells.push('</div>')}cells.push(`<div class="a4-page-badge">A4｜${wear?'穿戴 3×4':'手機 3×3'}｜第 ${pg+1} / ${pages} 頁</div></div>`)}};add(phones,9,false);add(wears,12,true);cells.push('</div>');grid.className='batch-preview-grid a4-layout';grid.innerHTML=cells.join('')}
+function v532RenderNewBatchRows(rows,grid){rows.forEach((r,i)=>{normalizeItem(r);const p=productAt(r),item=document.createElement('div');item.className='batch-preview-item';item.innerHTML=`<div class="item-head"><b>商品 ${i+1}</b><span>${h(p.brand)}｜${h(newDisplayName(r,p))}</span></div>${r.tpl==='穿戴'?newWearHtml(p,r):`<div class="phone-card new-phone-card">${newPhoneHtml(p,r)}</div>`}`;if(r.v5264NoSerialPeripheral||r.v5266SerializedPeripheral)item.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card');grid.appendChild(item)})}
+function v532RenderAccessoryBatchRows(rows,grid){rows.forEach((r,i)=>{for(let q=0;q<(r.qty||1);q++){const item=document.createElement('div');item.className='batch-preview-item';const ctl=isControlledBrand(r.brand);item.innerHTML=`<div class="item-head"><b>${h(r.code||r.barcode||'配件')}</b><span>${h(r.brand||'')} ${ctl?'<span class="tag lock">🔒 控價</span>':''}</span></div>`;item.appendChild(accessoryCloneFor(r));grid.appendChild(item)}})}
+function openBatchPreview(type,showModal=true){if(v532PrintBusy)return;v532PrintScope=null;document.getElementById('v532ModalPrint').textContent='全部列印';currentBatchType=type;const modal=document.getElementById('batchModal'),grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');grid.innerHTML='';grid.className='batch-preview-grid';pager.style.display='none';if(type==='new'){const warns=newItemWarnings(),phoneCount=newItems.filter(x=>x.tpl!=='穿戴').length,wearCount=newItems.length-phoneCount;setBatchMeta('新機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${newItems.length} 張`,false],[`A4 ${Math.ceil(phoneCount/9)+Math.ceil(wearCount/12)} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴／耳機 ${wearCount}`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!newItems.length)grid.innerHTML='<div class="batch-empty">尚未新增商品</div>';v532RenderNewBatchRows(newItems,grid);applyA4BatchLayout(type)}else if(type==='accessory'){grid.classList.add('accessory');const total=accessoryRows.reduce((s,r)=>s+(r.qty||1),0),warns=[];accessoryRows.forEach((r,i)=>{if(!accessoryPrintName(r))warns.push(`配件 ${i+1}：缺少商品名稱`);if(!r.list)warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：缺少牌價`);if(isControlledBrand(r.brand)&&!(Number(r.member)>0))warns.push(`配件 ${i+1}｜${accessoryPrintName(r)||r.code}：控價商品缺少會員價，禁止列印`)});const ctlTotal=accessoryRows.reduce((s,r)=>s+(isControlledBrand(r.brand)?(r.qty||1):0),0);setBatchMeta('配件｜批次預覽','配件標卡尺寸 65×40 mm；A4 橫式每排 4 張自動排版',[[`共 ${total} 張`,false],[`商品 ${accessoryRows.length} 項`,false],[`控價 ${ctlTotal} 張`,false],[`異常 ${warns.length}`,!!warns.length]],warns);if(!accessoryRows.length)grid.innerHTML='<div class="batch-empty">尚未加入待列印商品</div>';v532RenderAccessoryBatchRows(accessoryRows,grid);v532PaginateAccessories(grid)}else{const phoneCount=usedItems.filter(x=>x.tpl!=='穿戴').length,wearCount=usedItems.length-phoneCount;setBatchMeta('二手機｜列印排版','手機 A4 3×3；穿戴／耳機 A4 3×4，每頁最多 12 張',[[`共 ${usedItems.length} 張`,false],[`A4 ${Math.ceil(phoneCount/9)+Math.ceil(wearCount/12)} 頁`,false],[`手機 ${phoneCount}`,false],[`穿戴 / 耳機 ${wearCount}`,false]],[]);usedBatchPage=0;renderUsedBatchPage(0)}if(showModal)modal.classList.add('open')}
 function setAccessoryLandscapePrint(on){
   document.body.classList.toggle('accessory-print-mode',!!on);
   let st=document.getElementById('accessoryLandscapePrintStyle');
@@ -9232,7 +9234,7 @@ function setAccessoryLandscapePrint(on){
   }
 }
 function printBatchPreview(){const title=document.getElementById('batchTitle')?.textContent||'',pager=document.getElementById('batchPager');if(currentBatchType==='used'){if(!usedItems.length){toast('目前沒有可列印的標價卡');return}const keepPage=usedBatchPage;buildUsedPrintPagesFast();pager.style.display='none';setAccessoryLandscapePrint(false);document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');renderUsedBatchPage(keepPage)},40)}));return}if(title.startsWith('配件')){const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}setAccessoryLandscapePrint(true)}else{setAccessoryLandscapePrint(false);if(!document.querySelector('#batchGrid .a4-page')){toast('目前沒有可列印的標價卡');return}}document.body.classList.add('batch-print-mode');requestAnimationFrame(()=>{window.print();setTimeout(()=>{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false)},120)})}
-function printPage(p){if(p==='new'||p==='used'||p==='accessory'){if(p==='accessory'){if(!accessoryRows.length){toast('目前沒有可列印的配件標籤');return}const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}}else if(p==='new'&&!newItems.length){toast('目前沒有可列印的新機標價卡');return}else if(p==='used'&&!usedItems.length){toast('目前沒有可列印的二手機標價卡');return}openBatchPreview(p,false);requestAnimationFrame(()=>requestAnimationFrame(()=>printBatchPreview()));return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));document.getElementById('page-'+p).classList.add('printing');requestAnimationFrame(()=>{window.print();setTimeout(()=>document.getElementById('page-'+p).classList.remove('printing'),120)})}
+function printPage(p){if(v532PrintBusy)return;if(p==='new'||p==='used'||p==='accessory'){if(p==='accessory'){if(!accessoryRows.length){toast('目前沒有可列印的配件標籤');return}const bad=accessoryRows.find(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0));if(bad){toast('控價商品「'+(bad.name||bad.code||bad.brand)+'」缺少會員價，已禁止列印');return}}else if(p==='new'&&!newItems.length){toast('目前沒有可列印的新機標價卡');return}else if(p==='used'&&!usedItems.length){toast('目前沒有可列印的二手機標價卡');return}openBatchPreview(p,false);requestAnimationFrame(()=>requestAnimationFrame(()=>printBatchPreview()));return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('printing'));document.getElementById('page-'+p).classList.add('printing');requestAnimationFrame(()=>{window.print();setTimeout(()=>document.getElementById('page-'+p).classList.remove('printing'),120)})}
 window.addEventListener('dragover',e=>{try{if(e.dataTransfer&&Array.from(e.dataTransfer.types||[]).includes('Files'))e.preventDefault()}catch(_){}});
 window.addEventListener('drop',e=>{try{if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)e.preventDefault()}catch(_){}});
 clearAccessory(true);updateUsedImportUI();renderUsedItems();renderNewItems();
@@ -10799,6 +10801,8 @@ setTimeout(v5214PrimePrintAssets,0);
 
 /* 原函式會在 buildUsedPrintPagesFast() 後立刻 print；改成等圖片 ready 再呼叫。 */
 printBatchPreview=async function(){
+  if(v532PrintBusy)return;
+  if(v532PrintScope)return v532PrintSelectedScope();
   const title=document.getElementById('batchTitle')?.textContent||'',pager=document.getElementById('batchPager');
   if(currentBatchType==='used'){
     if(!usedItems.length){toast('目前沒有可列印的標價卡');return}
@@ -14677,9 +14681,9 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
   };
 
   const prevWarnings=newItemWarnings;
-  newItemWarnings=function(){
+  newItemWarnings=function(rows=newItems){
     const out=[];
-    newItems.forEach((r,i)=>{const p=productAt(r);if(!r.price)out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入售價`);if(r.v5264NoSerialPeripheral){if(!String(r.barcode||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入國際條碼`)}else if(!String(r.imei||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入 IMEI / SN`)});
+    rows.forEach((r,i)=>{const p=productAt(r);if(!r.price)out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入售價`);if(r.v5264NoSerialPeripheral){if(!String(r.barcode||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入國際條碼`)}else if(!String(r.imei||'').trim())out.push(`商品 ${i+1}｜${p.brand} ${p.name}：尚未輸入 IMEI / SN`)});
     return out;
   };
 
@@ -14697,11 +14701,7 @@ v533SyncTableHeader();v533PublishModeChanged();setTimeout(()=>{for(const t of V5
     const lab=document.getElementById('newPreviewLabel');if(lab)lab.textContent=`商品 ${activeNewIndex+1}｜${r.v5266SerializedPeripheral?'新機有序號周邊卡':'新機無序號周邊卡'}`;
   };
 
-  const prevOpenBatch=openBatchPreview;
-  openBatchPreview=function(type,showModal=true){
-    prevOpenBatch(type,showModal);if(type!=='new')return;
-    document.querySelectorAll('#batchGrid .batch-preview-item').forEach((node,i)=>{if(newItems[i]?.v5264NoSerialPeripheral||newItems[i]?.v5266SerializedPeripheral)node.querySelector('.phone-card.new-phone-card')?.classList.add('v5264-peripheral-card')});
-  };
+  // V5.3.2: peripheral class applied by shared row renderer before A4 grouping.
 })();
 </script>
 
@@ -15003,9 +15003,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 
   function setVersionUi(){
     try{
-      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.3.1｜門市操作效率優化版';
+      const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent='V5.3.2｜智慧列印管理版';
       const cards=[...document.querySelectorAll('.hq31-status')];
-      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.3.1';if(m)m.textContent='門市操作效率優化版'}}
+      for(const c of cards){if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent='V5.3.2';if(m)m.textContent='智慧列印管理版'}}
     }catch(_){ }
   }
   function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${String(Date.now()).slice(-5)}`}
@@ -15685,12 +15685,12 @@ window.__v5266SerializedPeripheralHotfix=true;
   function updateVersionUi(){
     try{
       const hero=document.querySelector('.hq31-hero-title');
-      if(hero)hero.textContent='V5.3.1｜門市操作效率優化版';
+      if(hero)hero.textContent='V5.3.2｜智慧列印管理版';
       document.querySelectorAll('.status-card').forEach(c=>{
         if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.v'),m=c.querySelector('.s');
-          if(v)v.textContent='V5.3.1';
-          if(m)m.textContent='門市操作效率優化版';
+          if(v)v.textContent='V5.3.2';
+          if(m)m.textContent='智慧列印管理版';
         }
       });
     }catch(_){ }
@@ -15962,9 +15962,9 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.78｜版本顯示全域同步 Hotfix -->
 <script id="v5278-global-version-display-sync-hotfix">
 (function(){
-  const VERSION='V5.3.1';
-  const LABEL='門市操作效率優化版';
-  const META='門市操作效率優化版';
+  const VERSION='V5.3.2';
+  const LABEL='智慧列印管理版';
+  const META='智慧列印管理版';
 
   function syncVersionUi(){
     try{
@@ -16030,8 +16030,8 @@ window.__v5266SerializedPeripheralHotfix=true;
 <!-- V5.2.81｜中央快照新舊版本同步＋realme 16T 精確配對 Hotfix -->
 <script id="v5281-realme16t-snapshot-sync-hotfix">
 (function(){
-  const VERSION='V5.3.1';
-  const LABEL='門市操作效率優化版';
+  const VERSION='V5.3.2';
+  const LABEL='智慧列印管理版';
   const prevUsedMatch=usedMatchProduct;
   const prevNewMatch=matchProductFromStock;
   let refreshingIntl=false;
@@ -16160,7 +16160,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const topVersion=document.querySelector('.logo-title span');if(topVersion)topVersion.textContent=VERSION;
       const topSub=document.querySelector('.logo-sub');if(topSub)topSub.textContent=`配件 × 二手機 × 新機｜${VERSION} ${LABEL}`;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=`${VERSION}｜${LABEL}`;
-      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版'}});
+      document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VERSION;if(m)m.textContent='智慧列印管理版'}});
     }catch(_){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncVersion,{once:true});else syncVersion();
@@ -16266,7 +16266,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 
 (function(){
-  const V='V5.3.1', LABEL='門市操作效率優化版';
+  const V='V5.3.2', LABEL='智慧列印管理版';
   function sync(){
     try{
       document.title=`創宇標籤／標價卡列印工具 ${V}｜${LABEL}`;
@@ -16276,7 +16276,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=V;if(m)m.textContent='門市操作效率優化版';
+          if(v)v.textContent=V;if(m)m.textContent='智慧列印管理版';
         }
       }
     }catch(err){console.warn('V5.2.82 version sync:',err)}
@@ -16296,7 +16296,7 @@ window.__v5266SerializedPeripheralHotfix=true;
    prefer it. Source grade/sale price/IMEI remain unchanged. */
 (function(){
   'use strict';
-  const TITLE='門市操作效率優化版',VER='V5.3.1';
+  const TITLE='智慧列印管理版',VER='V5.3.2';
   const realmeVerified={"category":"手機","brand":"Realme","network":"5G","name":"16T (創)","model":"","ram":"8","rom":"256","sim":"雙","simType":"nanoSIM、eSIM","microSD":"","year":"2026-05-22","msrp":"","newPrice":"","priceS":5500,"priceA":5000,"priceB":4500,"priceC":4000,"os":"realme UI 7.0","processor":"MediaTek Dimensity 6300","cores":"八核心處理器","display":"LCD、6.8 吋","battery":"8,000mAh","fastCharge":"45W","colors":"極光綠、星光黑、星光紅","frontCamera":"1,600萬像素","rearCamera":"5,000萬像素 / 200萬像素","biometric":"側面電源鍵指紋","accessories":"","ncc":"","__v51Source":"international","__v51BaseName":"16T (創)","__v51UsedOnly":true,"__v529MsrpForeign":true,"__v529MsrpCurrency":"INR","__v529MsrpRaw":"印度盧比₹29999","__v51InternationalVersion":"國際版","__v5283VerifiedFallback":"20261112-international-xlsb-realme-16t"};
   const norm=v=>String(v||'').normalize('NFKC').trim().toLowerCase();
   const nk=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16374,7 +16374,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       const sub=document.querySelector('.logo-sub');if(sub)sub.textContent='配件 × 二手機 × 新機｜'+VER+' '+TITLE;
       const hero=document.querySelector('.hq31-hero-title');if(hero)hero.textContent=VER+'｜'+TITLE;
       document.querySelectorAll('.hq31-status').forEach(c=>{if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
-        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='門市操作效率優化版';
+        const v=c.querySelector('.value'),m=c.querySelector('.meta');if(v)v.textContent=VER;if(m)m.textContent='智慧列印管理版';
       }});
     }catch(_){ }
   }
@@ -16392,7 +16392,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5284-apple-watch-model-series-size-gps-hard-gate">
 (function(){
   'use strict';
-  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
+  const VERSION='V5.3.2', LABEL='智慧列印管理版';
   const priorMatch=usedMatchProduct;
   const norm=v=>String(v??'').normalize('NFKC').trim();
   const key=v=>norm(v).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g,'');
@@ -16527,7 +16527,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='智慧列印管理版';
         }
       }
     }catch(_){ }
@@ -16569,7 +16569,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5285-apple-watch-name-network-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
+  const VERSION='V5.3.2', LABEL='智慧列印管理版';
   const oldWearCardHtml=wearCardHtml;
   const clean=x=>String(x??'').normalize('NFKC').replace(/\s+/g,' ').trim();
   const upper=x=>clean(x).toUpperCase();
@@ -16712,7 +16712,7 @@ window.__v5266SerializedPeripheralHotfix=true;
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val)val.textContent=VERSION;
-          if(meta)meta.textContent='門市操作效率優化版';
+          if(meta)meta.textContent='智慧列印管理版';
         }
       }
     }catch(_){ }
@@ -16814,7 +16814,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5286-apple-watch-size-material-render-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.1', LABEL='門市操作效率優化版';
+  const VERSION='V5.3.2', LABEL='智慧列印管理版';
   const prevWearCardHtml=wearCardHtml;
   const normal=x=>String(x??'').normalize('NFKC').trim();
   const esc=x=>h(String(x??''));
@@ -16879,7 +16879,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const c of document.querySelectorAll('.hq31-status')){
         if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=c.querySelector('.value'),meta=c.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(meta)meta.textContent='門市操作效率優化版';
+          if(v)v.textContent=VERSION;if(meta)meta.textContent='智慧列印管理版';
         }
       }
     }catch(_){ }
@@ -16911,7 +16911,7 @@ window.__v5266SerializedPeripheralHotfix=true;
   grid-template-rows:repeat(3,minmax(0,1fr)) 114px!important;
   row-gap:0!important;
 }
-/* V5.3.1: palette centralized in v5294-watch-palette-shared below. */
+/* V5.3.2: palette centralized in v5294-watch-palette-shared below. */
 /* A4 3×4: only a wear page containing an Apple Watch gets 65mm cells.
    Other wearable pages retain their original 55×60mm template. */
 .a4-page.wear-page:has(.v5286-apple-watch){
@@ -17071,7 +17071,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5291-watch-visible-name-fit-and-version-lock">
 (function(){
  'use strict';
- const VERSION='V5.3.1',LABEL='門市操作效率優化版';
+ const VERSION='V5.3.2',LABEL='智慧列印管理版';
  const fitted=new WeakMap();
  function fit(el){
    if(typeof window.__v5293FitWatchName==='function')return window.__v5293FitWatchName(el);
@@ -17139,10 +17139,10 @@ window.__v5266SerializedPeripheralHotfix=true;
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.value'),meta=c.querySelector('.meta');
           if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='門市操作效率優化版')meta.textContent='門市操作效率優化版';
+          if(meta&&meta.textContent!=='智慧列印管理版')meta.textContent='智慧列印管理版';
        }else if(c.querySelector('.k')?.textContent.trim()==='工具版本'){
           const val=c.querySelector('.v'),meta=c.querySelector('.s');if(val&&val.textContent!==VERSION)val.textContent=VERSION;
-          if(meta&&meta.textContent!=='門市操作效率優化版')meta.textContent='門市操作效率優化版';
+          if(meta&&meta.textContent!=='智慧列印管理版')meta.textContent='智慧列印管理版';
        }
    });
  }
@@ -17169,7 +17169,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5292-samsung-galaxy-watch-display-only">
 (function(){
  'use strict';
- const VERSION='V5.3.1', LABEL='門市操作效率優化版';
+ const VERSION='V5.3.2', LABEL='智慧列印管理版';
  const previousWearCardHtml=wearCardHtml;
  const tidy=v=>String(v??'').normalize('NFKC').replace(/\s+/g,' ').trim();
  const front=v=>tidy(v).split('[')[0].trim();
@@ -17287,7 +17287,7 @@ window.__v5266SerializedPeripheralHotfix=true;
     for(const c of document.querySelectorAll('.hq31-status,.status-card')){
        if(c.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
          const v=c.querySelector('.value'),m=c.querySelector('.meta');
-         if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
+         if(v)v.textContent=VERSION;if(m)m.textContent='智慧列印管理版';
        }
     }
  }
@@ -17301,7 +17301,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.3.1｜門市操作效率優化版。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.3.2｜智慧列印管理版。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -17335,7 +17335,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 <script id="v5293-watch-print-sync-hotfix">
 (function(){
   'use strict';
-  const VERSION='V5.3.1',LABEL='門市操作效率優化版';
+  const VERSION='V5.3.2',LABEL='智慧列印管理版';
   const query='.wear-card.v5286-apple-watch .wear-name-main';
   const defaultSizeFor=name=>name.length>=16?19:24;
   const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
@@ -17457,7 +17457,7 @@ window.__v5266SerializedPeripheralHotfix=true;
       for(const card of document.querySelectorAll('.hq31-status,.status-card')){
         if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
           const v=card.querySelector('.value'),m=card.querySelector('.meta');
-          if(v)v.textContent=VERSION;if(m)m.textContent='門市操作效率優化版';
+          if(v)v.textContent=VERSION;if(m)m.textContent='智慧列印管理版';
         }
       }
     }catch(_){ }
@@ -17478,7 +17478,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 })();
 </script>
 
-<!-- V5.3.1: one palette for screen, batch preview and native print. The :is() anchor
+<!-- V5.3.2: one palette for screen, batch preview and native print. The :is() anchor
      intentionally has ID specificity, so legacy !important print selectors cannot override it.
      Scope is the existing Apple/Samsung 65mm view class, not generic wearable cards. -->
 <style id="v5294-watch-palette-shared">
@@ -17561,7 +17561,49 @@ body{min-width:760px!important}
 }
 @media print{.v531-workflow,.v531-search{display:none!important}}
 </style>
+<style id="v532-selection-ui">
+@media screen{.v532-selectbar{display:flex;align-items:center;flex-wrap:wrap;gap:7px;padding:9px 16px;background:#f7f9fc;border-top:1px solid #e5ebf3;border-bottom:1px solid #e5ebf3}.v532-selectbar .btn{font-size:12px;padding:7px 11px}.v532-selected{margin-left:auto;color:#365474;font-size:12px;font-weight:800}.v532-select{display:flex;align-items:center;justify-content:flex-start;gap:8px;font-size:12px;font-weight:750;color:#45556c;padding:7px 9px;margin:0 0 9px;border:1px solid #dce5ef;border-radius:8px;background:#fff;cursor:pointer;align-self:stretch}.v532-select input{width:17px;height:17px;accent-color:#2265b5;cursor:pointer;margin:0}.v532-select.is-selected{background:#eaf3ff;border-color:#8eadd4;color:#194f91}#usedItems .batch-preview-grid.fast-used-preview .batch-preview-item{flex-direction:column;align-items:stretch}.app .v530-footer .v530-foot-actions{flex-wrap:wrap;justify-content:flex-end}.app .v530-footer .v530-foot-copy{flex-shrink:0}@media(max-width:1100px){.app .v530-footer .btn{font-size:11px!important;padding:8px 9px}.v532-selected{margin-left:0}}}
+@media screen{#batchGrid.v532-accessory-pages{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:none}#batchGrid .v532-acc-page{position:relative;display:grid;grid-template-columns:repeat(4,65mm);gap:0;justify-content:center;align-content:start;background:#fff;border:1px solid #dce4ee;padding:12mm 5mm 8mm;min-width:280mm;min-height:195mm;box-shadow:0 5px 18px rgba(27,48,78,.08)}#batchGrid .v532-acc-page .batch-preview-item{padding:0;border:0;box-shadow:none;overflow:visible;border-radius:0}#batchGrid .v532-acc-page .item-head{display:none}#batchGrid .v532-acc-page .acc-label{zoom:1!important;margin:0!important}#batchGrid .v532-acc-page::before{content:attr(data-page-label);position:absolute;top:3mm;left:5mm;font-size:11px;font-weight:750;color:#728097}}
+@media print{.v532-selectbar,.v532-select{display:none!important}
+body.batch-print-mode.accessory-print-mode:has(#batchGrid.v532-accessory-pages) .batch-preview-body{width:296mm!important;max-width:296mm!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0 auto!important;overflow:visible!important}
+body.batch-print-mode.accessory-print-mode #batchGrid.v532-accessory-pages{display:block!important;width:296mm!important;max-width:296mm!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important}
+body.batch-print-mode.accessory-print-mode #batchGrid.v532-accessory-pages .v532-acc-page{display:grid!important;grid-template-columns:repeat(4,65mm)!important;grid-auto-rows:40mm!important;gap:0!important;justify-content:center!important;align-content:start!important;box-sizing:border-box!important;width:296mm!important;height:185mm!important;min-height:0!important;padding:10mm 0 0!important;margin:0!important;border:0!important;box-shadow:none!important;break-inside:avoid!important;page-break-inside:avoid!important;break-after:page!important;page-break-after:always!important;overflow:visible!important}
+body.batch-print-mode.accessory-print-mode #batchGrid.v532-accessory-pages .v532-acc-page:last-child{break-after:auto!important;page-break-after:auto!important}
+}
+</style>
 <script id="v530-ui-preview-controller">
+
+function v532Rows(type){return type==='used'?usedItems:type==='new'?newItems:accessoryRows}
+function v532Counts(type,rows){const n=type==='accessory'?rows.reduce((a,r)=>a+(Number(r.qty)||1),0):rows.length;if(type==='accessory')return {n,pages:Math.ceil(n/16)};const wear=rows.filter(r=>r.tpl==='穿戴').length;return {n,pages:Math.ceil((n-wear)/9)+Math.ceil(wear/12)}}
+function v532PaginateAccessories(grid){const items=[...grid.children].filter(el=>el.classList.contains('batch-preview-item'));if(!items.length)return;const pages=Math.ceil(items.length/16);grid.classList.add('v532-accessory-pages');for(let i=0;i<items.length;i+=16){const page=document.createElement('div');page.className='v532-acc-page';page.dataset.pageLabel='A4 橫式｜第 '+(Math.floor(i/16)+1)+' / '+pages+' 頁';page.append(...items.slice(i,i+16));grid.append(page);}}
+function v532OpenSelected(type,rows){
+ if(v532PrintBusy||!rows.length)return;
+ const live=v532Rows(type);if(!rows.every(r=>live.includes(r))){toast('清單已變動，請重新選取');return;}
+ const grid=document.getElementById('batchGrid'),pager=document.getElementById('batchPager');
+ currentBatchType=type;v532PrintScope={type,rows:rows.slice(),signature:JSON.stringify(rows)};
+ const c=v532Counts(type,rows),warns=[];
+ grid.replaceChildren();grid.className='batch-preview-grid';pager.style.display='none';
+ if(type==='used'){buildUsedPrintPagesFast(rows);}
+ if(type==='new'){
+  warns.push(...newItemWarnings(rows));v532RenderNewBatchRows(rows,grid);applyA4BatchLayout(type);
+ }
+ if(type==='accessory'){
+  grid.classList.add('accessory');rows.forEach((r,i)=>{if(!accessoryPrintName(r))warns.push(`配件 ${i+1}：缺少商品名稱`);if(!r.list)warns.push(`配件 ${i+1}：缺少牌價`);if(isControlledBrand(r.brand)&&!(Number(r.member)>0))warns.push(`配件 ${i+1}：控價商品缺少會員價，禁止列印`)});v532RenderAccessoryBatchRows(rows,grid);
+  v532PaginateAccessories(grid);
+ }
+ const name={used:'二手機',new:'新機',accessory:'配件'}[type];setBatchMeta(name+'｜選取商品 A4 預覽',type==='accessory'?'只列印已選商品；沿用配件 A4 橫式每排 4 張':'只列印已選商品；手機 3×3、穿戴 3×4',[[`選取 ${c.n} 張`,false],[`預計 ${c.pages} 頁`,false],[`異常 ${warns.length}`,!!warns.length]],warns);
+ v532PrintScope.signature=JSON.stringify(rows);document.getElementById('v532ModalPrint').textContent='列印選取（'+c.n+' 張）';document.getElementById('batchModal').classList.add('open');return true;
+}
+async function v532PrintSelectedScope(){
+ const scope=v532PrintScope;if(!scope||v532PrintBusy)return;
+ const btn=document.getElementById('v532ModalPrint');const valid=()=>v532PrintScope===scope&&scope.rows.every(r=>v532Rows(scope.type).includes(r))&&scope.signature===JSON.stringify(scope.rows);
+ if(!valid()){toast('商品內容已變動，請關閉並重新預覽');return;}
+ if(scope.type==='accessory'&&scope.rows.some(r=>isControlledBrand(r.brand)&&!(Number(r.member)>0))){toast('選取的控價商品缺少會員價，已禁止列印');return;}
+ if(!document.querySelector('#batchGrid .batch-preview-item'))return;
+ v532PrintBusy=true;btn.disabled=true;
+ try{setAccessoryLandscapePrint(scope.type==='accessory');document.body.classList.add('batch-print-mode');await v5214WaitBatchPrintAssets();if(typeof window.__v5293PrepareWatchPrint==='function')await window.__v5293PrepareWatchPrint();if(!valid()){toast('清單已變動，已取消列印');return;}window.print();}
+ catch(e){toast('列印準備失敗，請重新預覽');console.error(e)}finally{document.body.classList.remove('batch-print-mode');setAccessoryLandscapePrint(false);v532PrintBusy=false;btn.disabled=false;}
+}
 (function(){
 'use strict';
 const $=id=>document.getElementById(id), q=s=>document.querySelector(s);
@@ -17571,6 +17613,8 @@ const shell=q('.app > .shell'),side=shell.querySelector('.sidebar');
 const active=()=>q('.sidebar .navbtn.active')?.dataset.page||'accessory';
 const data=k=>k==='used'?usedItems:k==='new'?newItems:k==='accessory'?accessoryRows:[];
 const states={used:{filter:'all',page:0,query:''},new:{filter:'all',page:0,query:''}};
+const selection={accessory:new Set(),used:new Set(),new:new Set()};
+
 const norm=v=>String(v??'').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'');
 function matches(r,query){const p=productAt(r)||{},terms=String(query||'').trim().split(/\s+/).map(norm).filter(Boolean);const fields=[p.brand,p.name,p.model,r.sourceName,r.sourceCleanName,r.sourceCode,r.imei,r.barcode,r.sourceModel,r.sourceCapacity,r.sourceVersion,r.sourceSmall,r.sourceOrderNo].map(norm);return terms.every(t=>fields.some(v=>v.includes(t))||norm([p.brand,p.name,r.sourceCapacity,r.sourceName].join(' ')).includes(t));}
 const visible=(r,k)=>allowed(r,states[k].filter)&&matches(r,states[k].query);
@@ -17584,7 +17628,7 @@ function refresh(){
  for(const [key,id] of Object.entries({accessory:'accDropZone',used:'usedDrop',new:'newReportDrop'})){const z=$(id);z.dataset.loaded=String(data(key).length>0||!!z.querySelector('input')?.files?.length);}
  const status=$('v51CatalogOverviewStatus')?.textContent.trim()||'檢查中';const c=$('v530Central');const txt='中央資料 '+status;if(c.textContent!==txt)c.textContent=txt;c.dataset.state=/4\/4/.test(status)?'ready':/\d\/4|失敗|缺|異常/.test(status)?'partial':'loading';c.title=$('v51CatalogOverviewMeta')?.textContent||'查看 HQ 中央資料來源';
  for(const k of ['used','new']){const bar=$('v530Filter-'+k),rows=data(k),f=states[k].filter;bar.querySelectorAll('button[data-filter]').forEach(b=>{const key=b.dataset.filter,v=labels[key]+' '+rows.filter(r=>allowed(r,key)&&matches(r,states[k].query)).length;if(b.textContent!==v)b.textContent=v;if(b.getAttribute('aria-pressed')!==String(key===f))b.setAttribute('aria-pressed',String(key===f));});text($('v531SearchCount-'+k),'顯示 '+rows.filter(r=>visible(r,k)).length+' / '+rows.length+' 張');}
- refreshWorkflow();
+ refreshWorkflow();refreshSelection();
 }
 const head=document.createElement('div');head.className='v530-sidebar-head';head.innerHTML='<span>WORKSPACE</span><button type="button" class="v530-icon-button" title="收合／展開導覽" aria-label="收合或展開導覽" aria-expanded="true">'+svg('panel')+'</button>';side.prepend(head);head.querySelector('button').onclick=function(){const collapsed=shell.classList.toggle('v530-collapsed');this.setAttribute('aria-expanded',String(!collapsed));};
 side.querySelectorAll('.navbtn').forEach(b=>{const k=b.dataset.page;b.querySelector('.nav-icon').innerHTML=svg(k);b.title=b.textContent.trim();b.addEventListener('click',e=>{const current=active();if(current!==k&&current!=='templates'&&data(current).length&&!confirm('切換作業頁會清空目前的匯入資料，確定繼續？')){e.stopImmediatePropagation();e.preventDefault();}},true);b.addEventListener('click',()=>{shell.querySelector('main').scrollTop=0;for(const key of ['used','new']){if(!data(key).length){states[key].filter='all';states[key].page=0;states[key].query='';const inp=$('v531Search-'+key);if(inp)inp.value='';}}refresh();});});
@@ -17650,11 +17694,32 @@ const priorNew=renderNewItems;renderNewItems=function(){const r=priorNew.apply(t
 // Observe existing counters and HQ status only; never modify underlying data or call publishing functions.
 let pending=false;const obs=new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;refresh();});});for(const id of ['accCount','usedItemCount','newItemCount','v51CatalogOverviewStatus','v51CatalogOverviewMeta','accSourceStatus','usedImportStatus','newImportStatus','usedImportSummary','newImportSummary','newImportErrorCount','accResult','accDetectHint']){const x=$(id);if(x)obs.observe(x,{childList:true,subtree:true,characterData:true});}
 
-function resetSearch(k){const st=states[k];if(!st)return;st.filter='all';st.page=0;st.query='';const input=$('v531Search-'+k);if(input)input.value='';}
+function resetSearch(k){selection[k]?.clear();const st=states[k];if(!st)return;st.filter='all';st.page=0;st.query='';const input=$('v531Search-'+k);if(input)input.value='';}
 const oldResetUsed=resetUsedItems;resetUsedItems=function(){resetSearch('used');return oldResetUsed.apply(this,arguments)};
 const oldResetNew=resetNewItems;resetNewItems=function(){resetSearch('new');return oldResetNew.apply(this,arguments)};
 const oldBuildUsed=buildUsedCardsFromRows;buildUsedCardsFromRows=function(){resetSearch('used');return oldBuildUsed.apply(this,arguments)};
 const oldBuildNew=buildNewCardsFromReports;buildNewCardsFromReports=function(){resetSearch('new');return oldBuildNew.apply(this,arguments)};
+
+
+const selectionBars={};
+function selectedRows(k){const set=selection[k],rows=data(k);for(const r of set)if(!rows.includes(r))set.delete(r);return rows.filter(r=>set.has(r));}
+function filteredRows(k){if(k==='accessory'){const ids=new Set(accResults.map(r=>r._accId));return data(k).filter(r=>ids.has(r._accId));}return data(k).filter(r=>visible(r,k));}
+function syncSelection(k){
+ const set=selection[k];selectedRows(k);const host=$(k==='accessory'?'accResult':k==='new'?'newItems':'usedItems');
+ const cards=[...host.querySelectorAll(k==='accessory'?'.acc-preview-card':k==='new'?'.new-preview-card':'.batch-preview-item')];
+ cards.forEach((card,i)=>{let r;if(k==='accessory'){const id=card.querySelector('[data-acc-card-name-id]')?.getAttribute('data-acc-card-name-id')||card.querySelector('.remove-mini')?.getAttribute('onclick')?.match(/\((\d+)\)/)?.[1];r=data(k).find(x=>String(x._accId)===String(id));}else if(k==='new'){r=data(k)[i];}else{const idx=card.getAttribute('onclick')?.match(/selectUsedItem\((\d+)\)/)?.[1];r=idx===undefined?null:data(k)[Number(idx)];}
+  let label=card.querySelector(':scope > .v532-select');if(!r){label?.remove();return;}
+  if(!label){label=document.createElement('label');label.className='v532-select';label.innerHTML='<input type="checkbox"><span>選取列印</span>';card.prepend(label);label.addEventListener('click',e=>e.stopPropagation());}
+  const input=label.querySelector('input');input.checked=set.has(r);input.onchange=()=>{if(input.checked)set.add(r);else set.delete(r);refresh()};label.classList.toggle('is-selected',input.checked);
+ });
+ const bar=selectionBars[k];if(bar){const n=selectedRows(k).length;const rows=filteredRows(k);bar.querySelector('[data-action=filter]').disabled=!rows.length;bar.querySelector('[data-action=all]').disabled=!data(k).length;bar.querySelector('[data-action=clear]').disabled=!n;text(bar.querySelector('.v532-selected'),n+' / '+data(k).length+' 項商品已選取');}
+}
+for(const k of ['accessory','used','new']){
+ const host=$(k==='accessory'?'accResult':k==='new'?'newItems':'usedItems'),bar=document.createElement('div');bar.className='v532-selectbar';bar.innerHTML='<button type="button" class="btn ghost" data-action="filter">選取篩選結果</button><button type="button" class="btn ghost" data-action="all">全選全部</button><button type="button" class="btn ghost" data-action="clear">取消全選</button><span class="v532-selected" role="status"></span>';host.before(bar);selectionBars[k]=bar;bar.onclick=e=>{const a=e.target.closest('[data-action]')?.dataset.action;if(!a)return;if(a==='clear')selection[k].clear();else (a==='all'?data(k):filteredRows(k)).forEach(r=>selection[k].add(r));refresh();};
+}
+const footActions=footer.querySelector('.v530-foot-actions');const selectedPreview=document.createElement('button');selectedPreview.id='v532Preview';selectedPreview.className='btn ghost';selectedPreview.type='button';selectedPreview.textContent='選取預覽';const selectedPrint=document.createElement('button');selectedPrint.id='v532Print';selectedPrint.className='btn blue';selectedPrint.type='button';selectedPrint.textContent='列印選取';footActions.prepend(selectedPreview,selectedPrint);
+selectedPreview.onclick=()=>{const k=active();v532OpenSelected(k,selectedRows(k))};selectedPrint.onclick=()=>{const k=active();if(v532OpenSelected(k,selectedRows(k)))printBatchPreview();};
+function refreshSelection(){for(const k of ['accessory','used','new'])syncSelection(k);const k=active(),rows=k==='templates'?[]:selectedRows(k),c=k==='templates'?{n:0,pages:0}:v532Counts(k,rows);selectedPreview.disabled=selectedPrint.disabled=!c.n;text(selectedPrint,'列印選取（'+c.n+'）');text(selectedPreview,'選取 A4 預覽');if(k!=='templates'){const all=v532Counts(k,data(k));text($('v530Count'),'本次 '+all.n+' 張｜已選 '+c.n+' 張');text($('v530FootNote'),'選取預計 '+c.pages+' 頁｜全部預計 '+all.pages+' 頁'+(k==='accessory'?'（橫式，依印表機設定）':''));}}
 
 refresh();window.__v530Ui={refresh,category,states};
 })();
