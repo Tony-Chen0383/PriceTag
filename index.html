@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.7｜Header 整合優化版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.8｜選取列印整合卡框版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,7 +7271,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.7</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.8</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
     <div id="v537Workspace" class="v537-workspace" hidden><span class="v537-workspace-caption">目前工作區</span><strong id="v537WorkspaceName" aria-live="polite">配件標籤</strong></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
@@ -7382,7 +7382,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.7｜Header 整合優化版</div>
+      <div class="hq31-hero-title">V5.3.8｜選取列印整合卡框版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7415,8 +7415,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.7</div>
-      <div class="meta">Header 整合優化版</div>
+      <div class="value">V5.3.8</div>
+      <div class="meta">選取列印整合卡框版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -7699,7 +7699,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <div class="toast" id="toast"></div>
 <script>
 /* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.7',label:'Header 整合優化版'});
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.8',label:'選取列印整合卡框版'});
 /* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
 const V534_METRICS=new Map();
 function v534Record(label,ms,error=false){
@@ -16387,7 +16387,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.3.7｜Header 整合優化版。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.3.8｜選取列印整合卡框版。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -16684,7 +16684,19 @@ body{min-width:760px!important}
 @media print{.v531-workflow,.v531-search{display:none!important}}
 </style>
 <style id="v532-selection-ui">
-@media screen{.v532-selectbar{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:0;background:transparent;border:0}.v532-selectbar .btn{font-size:11px;padding:4px 7px}.v532-selected{margin-left:auto;color:#365474;font-size:11px;font-weight:800;white-space:nowrap}.v532-select{display:flex;align-items:center;justify-content:flex-start;gap:6px;font-size:11px;font-weight:750;color:#45556c;padding:3px 6px;margin:0 0 4px;border:1px solid #dce5ef;border-radius:8px;background:#fff;cursor:pointer;align-self:stretch}.v532-select input{width:16px;height:16px;accent-color:#2265b5;cursor:pointer;margin:0}.v532-select.is-selected{background:#eaf3ff;border-color:#8eadd4;color:#194f91}#usedItems .batch-preview-grid.fast-used-preview .batch-preview-item{flex-direction:column;align-items:stretch}.app .v530-footer .v530-foot-actions{flex-wrap:wrap;justify-content:flex-end}.app .v530-footer .v530-foot-copy{flex-shrink:0}@media(max-width:1100px){.app .v530-footer .btn{font-size:11px!important;padding:8px 9px}.v532-selected{margin-left:0}}}
+@media screen{.v532-selectbar{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:0;background:transparent;border:0}.v532-selectbar .btn{font-size:11px;padding:4px 7px}.v532-selected{margin-left:auto;color:#365474;font-size:11px;font-weight:800;white-space:nowrap}/* V5.3.8: screen-only dashed preview shell; actual label is a separate, unchanged print node. */
+:is(#usedItems,#newItems,#accResult) :is(.batch-preview-item,.new-preview-card,.acc-preview-card):has(> .v532-select){border:1px dashed #a9bbd0!important;border-radius:12px!important;box-shadow:none;min-width:0}
+.v532-select{display:flex;align-items:center;justify-content:flex-start;gap:7px;font-size:11px;font-weight:750;color:#45556c;padding:3px 6px;margin:0 0 5px;border:0;border-bottom:1px dashed #cbd7e5;border-radius:0;background:transparent;cursor:pointer;align-self:stretch;min-height:25px;box-sizing:border-box;user-select:none}
+.v532-select input{width:16px;height:16px;accent-color:#2265b5;cursor:pointer;margin:0;flex:0 0 auto}
+.v532-select:hover{background:#eef4fc;color:#194f91}.v532-select:focus-within{outline:2px solid #2f68b2;outline-offset:-2px;border-radius:5px}
+.v532-select.is-selected{background:#eaf3ff;border-bottom-color:#8eadd4;color:#194f91}
+:is(#usedItems,#newItems,#accResult) :is(.batch-preview-item,.new-preview-card,.acc-preview-card):has(> .v532-select.is-selected){border-color:#2265b5!important;box-shadow:inset 0 0 0 1px #2265b5!important;background:#f4f8ff}
+#usedItems .batch-preview-grid.fast-used-preview .batch-preview-item{flex-direction:column;align-items:stretch;transform:none!important}
+#usedItems .batch-preview-item.active:has(> .v532-select){outline:none!important;border-color:#8fa8c8!important}
+#usedItems .batch-preview-item.active:has(> .v532-select.is-selected){border-color:#2265b5!important}
+/* Inset state styling and a small scroll gutter avoid clipping at the viewport edge. */
+#usedItems,#newItems,.acc-preview-host{padding-top:4px!important;scroll-padding-top:4px}
+.app .v530-footer .v530-foot-actions{flex-wrap:wrap;justify-content:flex-end}.app .v530-footer .v530-foot-copy{flex-shrink:0}@media(max-width:1100px){.app .v530-footer .btn{font-size:11px!important;padding:8px 9px}.v532-selected{margin-left:0}}}
 @media screen{#batchGrid.v532-accessory-pages{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:none}#batchGrid .v532-acc-page{position:relative;display:grid;grid-template-columns:repeat(4,65mm);gap:0;justify-content:center;align-content:start;background:#fff;border:1px solid #dce4ee;padding:12mm 5mm 8mm;min-width:280mm;min-height:195mm;box-shadow:0 5px 18px rgba(27,48,78,.08)}#batchGrid .v532-acc-page .batch-preview-item{padding:0;border:0;box-shadow:none;overflow:visible;border-radius:0}#batchGrid .v532-acc-page .item-head{display:none}#batchGrid .v532-acc-page .acc-label{zoom:1!important;margin:0!important}#batchGrid .v532-acc-page::before{content:attr(data-page-label);position:absolute;top:3mm;left:5mm;font-size:11px;font-weight:750;color:#728097}}
 @media print{.v532-selectbar,.v532-select{display:none!important}
 body.batch-print-mode.accessory-print-mode:has(#batchGrid.v532-accessory-pages) .batch-preview-body{width:296mm!important;max-width:296mm!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0 auto!important;overflow:visible!important}
@@ -16915,7 +16927,7 @@ refresh();window.__v530Ui={refresh,category,states};
  const h=document.querySelector('.hq31-hero');if(!h)return;
  const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
  const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
- d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.7 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.8 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
  h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
  function report(){
   const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
