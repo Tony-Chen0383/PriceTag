@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.6｜Compact UI 高密度工作區版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.7｜Header 整合優化版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,12 +7271,14 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.6</span></div><div class="logo-sub">配件 × 二手機 × 新機｜V5.3.6｜Compact UI 高密度工作區版</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.7</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
+    <div id="v537Workspace" class="v537-workspace" hidden><span class="v537-workspace-caption">目前工作區</span><strong id="v537WorkspaceName" aria-live="polite">配件標籤</strong></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
       <span class="pill">新機／二手機建議售價：<strong id="topHqPriceDate">檢查中</strong></span>
-      <span class="pill">工作資料：<strong>僅本分頁記憶體</strong></span>
+      <span class="pill v537-session" title="工作資料僅存在目前瀏覽器分頁；重新整理或關閉頁面即清空。"><span>本分頁：</span><strong id="v537SessionCount">0 張</strong><span class="v537-session-privacy"> · 僅本分頁記憶體</span></span>
     </div>
+    <div id="v537HeaderActions" class="v537-header-actions" hidden></div>
   </header>
 
   <div class="shell">
@@ -7380,7 +7382,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.6｜Compact UI 高密度工作區版</div>
+      <div class="hq31-hero-title">V5.3.7｜Header 整合優化版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7413,8 +7415,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.6</div>
-      <div class="meta">Compact UI 高密度工作區版</div>
+      <div class="value">V5.3.7</div>
+      <div class="meta">Header 整合優化版</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -7697,7 +7699,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <div class="toast" id="toast"></div>
 <script>
 /* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.6',label:'Compact UI 高密度工作區版'});
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.7',label:'Header 整合優化版'});
 /* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
 const V534_METRICS=new Map();
 function v534Record(label,ms,error=false){
@@ -7722,7 +7724,7 @@ function priceTagSyncVersionUI(){
   const title=`創宇標籤／標價卡列印工具 ${version}｜${label}`;
   if(document.title!==title)document.title=title;
   set(document.querySelector('.logo-title span'),version);
-  set(document.querySelector('.logo-sub'),`配件 × 二手機 × 新機｜${version}｜${label}`);
+  set(document.querySelector('.logo-sub'),'門市標價卡工作台');
   set(document.querySelector('.hq31-hero-title'),`${version}｜${label}`);
   for(const card of document.querySelectorAll('.hq31-status,.status-card')){
     if(card.querySelector('.eyebrow')?.textContent.trim()==='工具版本'){
@@ -16385,7 +16387,7 @@ window.__v5266SerializedPeripheralHotfix=true;
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
 
-<!-- V5.3.6｜Compact UI 高密度工作區版。Print cards are recreated in buildUsedPrintPagesFast(). -->
+<!-- V5.3.7｜Header 整合優化版。Print cards are recreated in buildUsedPrintPagesFast(). -->
 <style id="v5293-watch-print-name-guard">
 /* The same typographic properties are used in preview AND in the rebuilt A4 print DOM.
    Safe fallback is deliberately smaller than the old, unmeasured 30px. JS replaces this
@@ -16657,6 +16659,17 @@ body{min-width:760px!important}
 #page-accessory.v535-compact #accDetectHint{margin:5px 0;font-size:11px;line-height:1.4}
 @media(max-width:1200px){.topbar .top-info .pill:nth-child(2){display:none!important}.app > .shell > main.main{padding:18px 17px 22px!important}.app .v530-footer{padding:10px 17px!important}.app .page-fixed-head > .status-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:950px){.app > .shell{grid-template-columns:66px minmax(0,1fr)}.sidebar .navbtn{justify-content:center!important;padding:11px 0!important}.sidebar .navbtn span:nth-child(2),.sidebar .nav-title,.sidebar .side-note,.v530-sidebar-head > span{display:none!important}.sidebar .v530-sidebar-head{justify-content:center;padding:0 0 10px}.app > .shell > .sidebar{padding:15px 8px!important}.topbar .top-info .pill:nth-child(3){display:none!important}.topbar .logo-title{font-size:16px!important}.topbar .logo-sub{font-size:10px!important}.page-head h1{font-size:22px!important}#page-templates > .hq31-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Header integration: one desktop row, responsive two-row fallback. Original print CSS is untouched. */
+.app.v537-header-ready > .topbar{display:flex!important;align-items:center!important;gap:10px!important;height:auto!important;min-height:62px!important;flex:0 0 auto!important;padding:7px 18px!important;flex-wrap:nowrap!important;box-sizing:border-box}
+.v537-header-ready .topbar .logo{flex:0 0 auto!important;gap:8px!important}.v537-header-ready .topbar .logo-mark{width:38px!important;height:38px!important}.v537-header-ready .topbar .logo-title{font-size:17px!important;letter-spacing:-.3px!important}.v537-header-ready .topbar .logo-sub{font-size:10px!important;margin-top:2px!important}
+.v537-workspace{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;border-left:1px solid #dce5ef;padding-left:12px;gap:2px;white-space:nowrap;color:#203957}.v537-workspace-caption{font-size:10px;color:#718297;font-weight:650}.v537-workspace strong{font-size:16px;line-height:1.25;letter-spacing:-.25px}
+.v537-header-ready .topbar .top-info{display:flex!important;flex:1 1 auto!important;min-width:0!important;justify-content:flex-end;align-items:center;gap:5px!important;flex-wrap:wrap;margin-left:auto!important}.v537-header-ready .topbar .top-info .pill{display:inline-flex!important;align-items:center;gap:3px;padding:5px 7px!important;font-size:10.5px!important;line-height:1.4!important;white-space:nowrap}
+.v537-header-ready .topbar .v537-session-privacy{display:none}.v537-header-actions{flex:0 0 auto;display:flex;align-items:center;justify-content:flex-end;padding-left:9px;border-left:1px solid #dce5ef}.v537-header-actions .actions{display:flex!important;align-items:center;gap:5px!important}.v537-header-actions .btn{padding:7px 9px!important;font-size:11px!important;line-height:1.4!important;white-space:nowrap}.v537-header-actions[hidden],.v537-header-actions .actions[hidden],.v537-workspace[hidden]{display:none!important}
+.app.v537-header-ready .page.v535-compact > .page-fixed-head > .page-head{display:none!important}.app.v537-header-ready > .shell > main.main{padding-top:12px!important}
+@media(max-width:1350px){.app.v537-header-ready > .topbar{display:grid!important;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;grid-template-areas:"brand workspace actions" "status status status";gap:5px 12px!important;padding:7px 15px!important}.v537-header-ready .topbar .logo{grid-area:brand}.v537-workspace{grid-area:workspace}.v537-header-actions{grid-area:actions}.v537-header-ready .topbar .top-info{grid-area:status;justify-content:flex-start;margin-left:0!important;border-top:1px solid #edf1f5;padding-top:5px}.v537-header-ready .topbar .v537-session-privacy{display:inline}}
+@media(max-width:950px){.v537-header-ready .topbar .logo-title{font-size:15px!important}.v537-workspace strong{font-size:14px}.v537-header-ready .topbar .v537-session-privacy{display:none}.v537-header-actions .btn{padding:6px 7px!important}}
+
 }
 @media print{.v530-footer,.v530-filterbar,.v530-sidebar-head,.v530-drop-icon,.v530-filter-empty{display:none!important}}
 </style>
@@ -16737,9 +16750,15 @@ const labels={all:'全部',phone:'手機',tablet:'平板',watch:'手錶',audio:'
 function category(r){const p=productAt(r)||{},c=String(p.category||'')+' '+String(r.small||'');if(/平板|tablet|ipad/i.test(c))return 'tablet';if(/手錶|手環|watch|穿戴/i.test(c)&&! /耳機|耳麥|音訊|喇叭/i.test(c))return 'watch';if(/耳機|耳麥|音訊|喇叭|headphone|earphone/i.test(c))return 'audio';if(/手機|smartphone/i.test(c))return 'phone';return 'other'}
 const allowed=(r,f)=>f==='all'||(f==='manual'?!!r.manualSpec:category(r)===f);
 function count(k){const rows=data(k);return k==='accessory'?(Number(($('accCount')?.textContent||'').replace(/[^0-9]/g,''))||0):rows.length;}
+function syncHeader(k,n){
+ text($('v537WorkspaceName'),headerNames[k]||'');
+ text($('v537SessionCount'),k==='templates'?'工作區隔離':n+' 張');
+ for(const [key,group] of Object.entries(headerGroups))group.hidden=key!==k;
+ headerHost.hidden=k==='templates';
+}
 function refresh(){
  const started=performance.now();
- const k=active(),n=count(k),f=$('v530Footer');f.hidden=k==='templates';$('v530Count').textContent='本次作業 '+n+' 張';$('v530FootNote').textContent=k==='accessory'?'沿用原配件列印清單':'篩選僅供檢視，批次列印仍包含全部商品';$('v530Print').disabled=n===0;$('v530Preview').disabled=n===0;
+ const k=active(),n=count(k),f=$('v530Footer');syncHeader(k,n);f.hidden=k==='templates';$('v530Count').textContent='本次作業 '+n+' 張';$('v530FootNote').textContent=k==='accessory'?'沿用原配件列印清單':'篩選僅供檢視，批次列印仍包含全部商品';$('v530Print').disabled=n===0;$('v530Preview').disabled=n===0;
  for(const [key,id] of Object.entries({accessory:'accDropZone',used:'usedDrop',new:'newReportDrop'})){const z=$(id);z.dataset.loaded=String(data(key).length>0||!!z.querySelector('input')?.files?.length);}
  const status=$('v51CatalogOverviewStatus')?.textContent.trim()||'檢查中';const c=$('v530Central');const txt='中央資料 '+status;if(c.textContent!==txt)c.textContent=txt;c.dataset.state=/4\/4/.test(status)?'ready':/\d\/4|失敗|缺|異常/.test(status)?'partial':'loading';c.title=$('v51CatalogOverviewMeta')?.textContent||'查看 HQ 中央資料來源';
  for(const k of ['used','new']){
@@ -16754,7 +16773,7 @@ const head=document.createElement('div');head.className='v530-sidebar-head';head
 side.querySelectorAll('.navbtn').forEach(b=>{const k=b.dataset.page;b.querySelector('.nav-icon').innerHTML=svg(k);b.title=b.textContent.trim();b.addEventListener('click',e=>{const current=active();if(current!==k&&current!=='templates'&&data(current).length&&!confirm('切換作業頁會清空目前的匯入資料，確定繼續？')){e.stopImmediatePropagation();e.preventDefault();}},true);b.addEventListener('click',()=>{shell.querySelector('main').scrollTop=0;for(const key of ['used','new']){if(!data(key).length){states[key].filter='all';states[key].page=0;states[key].query='';const inp=$('v531Search-'+key);if(inp)inp.value='';}}refresh();});});
 const central=document.createElement('button');central.type='button';central.id='v530Central';central.className='pill v530-central';central.textContent='中央資料 檢查中';central.onclick=()=>side.querySelector('[data-page="templates"]').click();q('.top-info').prepend(central);
 for(const id of ['accDropZone','usedDrop','newReportDrop']){const z=$(id),ic=document.createElement('span');ic.className='v530-drop-icon';ic.innerHTML=svg('upload');z.prepend(ic);z.querySelector('.k').textContent='拖曳 Excel 至此，或點擊選擇檔案';}
-// V5.3.6: compact screen workspace, retain original report and status nodes in an accessible disclosure.
+// V5.3.7: compact screen workspace, retain original report and status nodes in an accessible disclosure.
 const compact={};
 for(const k of ['accessory','used','new']){
  const page=$('page-'+k),head=page.querySelector('.page-fixed-head'),panel=page.querySelector('.grid2 > .panel:first-child'),ph=panel.querySelector('.panel-head');page.classList.add('v535-compact');
@@ -16768,6 +16787,13 @@ for(const k of ['accessory','used','new']){
  const total=document.createElement('span');total.className='v535-preview-count';ph.querySelector('.panel-title').append(total);const stage=document.createElement('span');stage.className='v536-stage';stage.setAttribute('role','status');tools.prepend(stage);compact[k]={total,detail,info,toggle,stage,ph};
  head.querySelector('.page-head p').textContent=({accessory:'匯入報表後可搜尋商品、調整列印名稱與張數。',used:'售價依來源報表帶入，不開放手動改價。',new:'匯入庫存／IMEI 報表，周邊依原規則產卡；售價可調整。'})[k];
 }
+// V5.3.7: move the existing action groups, not copies or replacement print handlers.
+const headerHost=$('v537HeaderActions'),headerGroups={},headerNames={};
+for(const k of ['accessory','used','new','templates']){
+ const page=$('page-'+k),h=page.querySelector('.page-head');headerNames[k]=h.querySelector('h1').textContent.trim();
+ const group=h.querySelector('.actions');if(group){headerGroups[k]=group;group.hidden=true;headerHost.append(group);}
+}
+$('v537Workspace').hidden=false;shell.closest('.app').classList.add('v537-header-ready');
 const footer=document.createElement('div');footer.id='v530Footer';footer.className='v530-footer';footer.innerHTML='<div class="v530-foot-copy"><strong id="v530Count">本次作業 0 張</strong><small id="v530FootNote">依原清單列印</small></div><div class="v530-foot-actions"><button id="v530Preview" type="button" class="btn ghost">A4 列印預覽</button><button id="v530Print" type="button" class="btn primary">'+svg('print')+'列印全部</button></div>';shell.append(footer);$('v530Print').onclick=()=>printPage(active());$('v530Preview').onclick=()=>openBatchPreview(active(),true);
 for(const k of ['used','new']){const box=$(k==='used'?'usedItems':'newItems');const panel=box.closest('.panel');const bar=document.createElement('div');bar.className='v530-filterbar';bar.id='v530Filter-'+k;bar.innerHTML=Object.keys(labels).filter(x=>k==='used'||x!=='manual').map(f=>'<button type="button" data-filter="'+f+'" aria-pressed="'+(f==='all')+'">'+labels[f]+' 0</button>').join('')+'';compact[k].info.after(bar);bar.addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;states[k].filter=b.dataset.filter;states[k].page=0;if(k==='used'){usedInlinePage=0;renderUsedItems();}else applyNewFilter();refresh();});}
 function filteredUsed(){const st=states.used,box=$('usedItems');if((st.filter==='all'&&!st.query)||!usedItems.length)return;const terms=searchTerms(st.query),ids=usedItems.map((r,i)=>visible(r,'used',terms)?i:-1).filter(i=>i>=0);const pages=Math.max(1,Math.ceil(ids.length/9));st.page=Math.max(0,Math.min(st.page,pages-1));if(!ids.length){box.innerHTML='<div class="v530-filter-empty">目前沒有符合搜尋／分類條件的標卡</div>';return;}box.innerHTML='<div class="used-inline-wrap"><div class="used-inline-head"><strong>'+(st.query?'搜尋結果':labels[st.filter])+'｜'+ids.length+' 張</strong><span>僅預覽篩選；列印清單不變</span></div><div class="batch-preview-grid fast-used-preview">'+ids.slice(st.page*9,st.page*9+9).map(i=>usedInlineCardHtml(usedItems[i],i)).join('')+'</div><div class="batch-pager"><button class="btn ghost" data-ui-step="-1" '+(st.page===0?'disabled':'')+'>上一頁</button><span class="pager-info">第 '+(st.page+1)+' / '+pages+' 頁｜共 '+ids.length+' 張</span><button class="btn ghost" data-ui-step="1" '+(st.page>=pages-1?'disabled':'')+'>下一頁</button></div></div>';}
@@ -16889,7 +16915,7 @@ refresh();window.__v530Ui={refresh,category,states};
  const h=document.querySelector('.hq31-hero');if(!h)return;
  const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
  const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
- d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.6 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.7 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
  h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
  function report(){
   const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
