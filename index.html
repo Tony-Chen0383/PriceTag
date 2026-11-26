@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.9｜Watch 品名預覽／列印一致性 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.3.10｜新機機型精確配對／配件 CY 編碼 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,7 +7271,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.9</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.10</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
     <div id="v537Workspace" class="v537-workspace" hidden><span class="v537-workspace-caption">目前工作區</span><strong id="v537WorkspaceName" aria-live="polite">配件標籤</strong></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
@@ -7382,7 +7382,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.9｜Watch 品名預覽／列印一致性 Hotfix</div>
+      <div class="hq31-hero-title">V5.3.10｜新機機型精確配對／配件 CY 編碼 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7415,8 +7415,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.9</div>
-      <div class="meta">Watch 品名預覽／列印一致性 Hotfix</div>
+      <div class="value">V5.3.10</div>
+      <div class="meta">新機機型精確配對／配件 CY 編碼 Hotfix</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -7699,7 +7699,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <div class="toast" id="toast"></div>
 <script>
 /* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.9',label:'Watch 品名預覽／列印一致性 Hotfix'});
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.10',label:'新機機型精確配對／配件 CY 編碼 Hotfix'});
 /* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
 const V534_METRICS=new Map();
 function v534Record(label,ms,error=false){
@@ -7844,7 +7844,7 @@ function getAccBrandLogo(brand){const key=brandKey(brand);return ACC_BRAND_LOGOS
 function getAccBrandScale(brand){return ACC_BRAND_OPTICAL_SCALE[brandKey(brand)]||1;}
 function setAccBrandLogo(slot,brand){const src=getAccBrandLogo(brand);if(src){const scale=getAccBrandScale(brand);slot.innerHTML=`<img src="${src}" alt="${h(brand||'品牌Logo')}" style="transform:scale(${scale})">`;slot.title=(ACC_BRAND_NAME_MAP[brandKey(brand)]||brand||'').toString()}else{slot.textContent=brand?String(brand).slice(0,2):'';slot.title=brand||''}}
 function isControlledBrand(v){return ctlBrands.includes(normBrand(v))}
-function accessoryLabelCode(member){const n=Math.max(0,Math.round(Number(member)||0));return 'NO'+String(n).padStart(6,'0')+'CA'}
+function accessoryLabelCode(member){const n=Math.max(0,Math.round(Number(member)||0));return 'NO'+String(n).padStart(6,'0')+'CY'}
 function accessoryLabelPrice(v){const n=Math.round(Number(v)||0);return n>0?String(n):''}
 function accessoryPrintName(p){return String((p&&((p.printName&&String(p.printName).trim())||p.name||p.code||p.barcode))||'').trim()}
 function num(v){if(typeof v==='number')return v;const n=String(v??'').replace(/[$,，元\s]/g,'').replace(/[^0-9.-]/g,'');return n?Number(n):0}
@@ -9615,20 +9615,31 @@ function v522ParseStockMemory(v){
   const rom=nrCap(String(m[2])+(unit==='T'||unit==='TB'?'TB':'GB'));
   return {ram,rom};
 }
+/* V5.3.10: condition annotations are metadata, not model identity. Keep the source row intact for box/warranty badges. */
+function v522NewCleanCondition(v){
+  return String(v||'').normalize('NFKC').replace(/\(\s*(?:外盒損傷|外盒瑕疵|盒損|保期不足|已拆封新品|拆封新品)\s*\)/g,' ').replace(/\s+/g,' ').trim();
+}
+function v522NewIphoneIdentity(v){
+  const text=v522NewCleanCondition(v).replace(/^apple\s+/i,'')
+    .replace(/\(\s*(?:印度版|印度|India|IN版|印|泰版|泰國版|泰國|TH版|Thailand|新加坡版|新加坡|SG版|Singapore|澳版|澳洲版|Australia|國際版|日版|港版|美版|韓版|歐版|台版|台灣版|陸版|中國版|大陸版)\s*\)/gi,' ')
+    .replace(/\s+/g,'').toLowerCase().replace(/\+/g,'plus');
+  // Only well-defined iPhone family names: no substring matches across Pro/Max/Plus/Mini/e.
+  return /^iphone(?:\d{1,2}(?:s|e)?(?:promax|pro|plus|mini)?|air|se[123]?|x(?:r|s(?:max)?)?)$/.test(text)?text:'';
+}
 function v522CanonNewName(v){
-  return nrKey(String(v||'')
-    .replace(/[（(]\s*(?:盒損|保期不足|拆封新品)\s*[）)]/gi,' ')
+  return nrKey(v522NewCleanCondition(v)
     .replace(/\bgalaxy\b/ig,' '));
 }
 matchProductFromStock=function(s){
   const brand=(typeof v511BrandKey==='function'?v511BrandKey(s.brand):nrKey(s.brand));
   const model=nrKey(s.model),mem=v522ParseStockMemory(s.capacity),capv=mem.rom,ramv=mem.ram;
-  const ver=nrVersion(s.version),cat=nrKey(s.mid||s.category||s.small),name=v522CanonNewName(s.name);
+  const ver=nrVersion(s.version),cat=nrKey(s.mid||s.category||s.small),name=v522CanonNewName(s.name),iphoneId=brand==='apple'?v522NewIphoneIdentity(s.name):'';
   let best=null,bestScore=-1;
   PRODUCTS.forEach((p,idx)=>{
     if(p.__v51UsedOnly)return;
     const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
     if(brand&&pb!==brand)return;
+    if(iphoneId&&v522NewIphoneIdentity(p.name)!==iphoneId)return; // MODEL NAME HARD GATE
     if(capv&&nrCap(p.rom)!==capv)return; // ROM HARD GATE
     if(ramv&&nrCap(p.ram)!==ramv)return; // RAM HARD GATE
     let score=0;
@@ -9638,7 +9649,7 @@ matchProductFromStock=function(s){
     if(ramv)score+=12;
     if(ver){const pv=nrVersion(p.network);if(pv===ver)score+=18;else if((ver==='wifi'||ver==='5g'||ver==='4g')&&pv)score-=5}
     if(cat&&nrKey(p.category)===cat)score+=10;
-    score+=newNameScore(String(s.name||'').replace(/[（(]\s*(?:盒損|保期不足|拆封新品)\s*[）)]/gi,''),p.name);
+    score+=iphoneId?20:newNameScore(v522NewCleanCondition(s.name),p.name);
     if(score>bestScore){bestScore=score;best={idx,p,score,matchMode:'v522-new-memory'}}
   });
   if(best&&best.score>=45)return best;
@@ -9647,6 +9658,7 @@ matchProductFromStock=function(s){
     if(p.__v51UsedOnly)return;
     const pb=(typeof v511BrandKey==='function'?v511BrandKey(p.brand):nrKey(p.brand));
     if(brand&&pb!==brand)return;
+    if(iphoneId&&v522NewIphoneIdentity(p.name)!==iphoneId)return; // MODEL NAME HARD GATE
     if(!name||v522CanonNewName(p.name)!==name)return;
     if(capv&&nrCap(p.rom)!==capv)return;
     if(ramv&&nrCap(p.ram)!==ramv)return;
@@ -16751,7 +16763,7 @@ refresh();window.__v530Ui={refresh,category,states};
  const h=document.querySelector('.hq31-hero');if(!h)return;
  const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
  const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
- d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.9 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.10 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
  h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
  function report(){
   const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
