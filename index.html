@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.10｜新機機型精確配對／配件 CY 編碼 Hotfix</title>
+<title>創宇標籤／標價卡列印工具 V5.3.11｜智慧手錶標卡統一版</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,7 +7271,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.10</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.11</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
     <div id="v537Workspace" class="v537-workspace" hidden><span class="v537-workspace-caption">目前工作區</span><strong id="v537WorkspaceName" aria-live="polite">配件標籤</strong></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
@@ -7382,7 +7382,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.10｜新機機型精確配對／配件 CY 編碼 Hotfix</div>
+      <div class="hq31-hero-title">V5.3.11｜智慧手錶標卡統一版</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7415,7 +7415,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.10</div>
+      <div class="value">V5.3.11</div>
       <div class="meta">新機機型精確配對／配件 CY 編碼 Hotfix</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
@@ -7699,7 +7699,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <div class="toast" id="toast"></div>
 <script>
 /* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.10',label:'新機機型精確配對／配件 CY 編碼 Hotfix'});
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.11',label:'智慧手錶標卡統一版'});
 /* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
 const V534_METRICS=new Map();
 function v534Record(label,ms,error=false){
@@ -8728,6 +8728,7 @@ function closeUsedManualEditor(){document.getElementById('usedManualModal')?.cla
 function saveUsedManualEditor(){
   const i=USED_MANUAL_EDIT_INDEX,r=usedItems[i];if(!r||!r.manualSpec)return closeUsedManualEditor();const p=r.manualProduct||(r.manualProduct={});
   const val=id=>(document.getElementById(id)?.value||'').trim();
+  if(window.__v5311WatchView?.fields(p,r)){if(val('umName')!==String(p.name||''))p.__manualWatchNameOverride=true;if(val('umNetwork')!==String(p.network||''))p.__manualWatchNetworkOverride=true;}
   p.brand=val('umBrand');p.name=val('umName');p.ram=val('umRam').replace(/GB$/i,'').trim();p.rom=val('umRom').replace(/GB$/i,'').trim();p.year=val('umYear');
   const msrp=Number(val('umMsrp').replace(/[^0-9]/g,''));p.msrp=msrp>0?msrp:'';p.__manualMsrpOverride=msrp>0;p.__manualDateOverride=!!p.year;
   p.processor=val('umProcessor');p.display=val('umDisplay');p.rearCamera=val('umCamera');p.battery=val('umBattery');p.network=val('umNetwork');
@@ -8767,9 +8768,10 @@ function usedManualEditableHtml(i,field,value,opt={}){
 function usedManualCleanUnit(v){return String(v||'').replace(/\s*(?:GB|G)\s*$/i,'').trim().replace(/^—$/,'')}
 function commitUsedManualInline(i,field,el){
   const r=usedItems[i];if(!r||!r.manualSpec)return;const p=r.manualProduct||(r.manualProduct={__manualSpec:true});let raw=String(el?.textContent||'').replace(/[\r\n]+/g,' ').trim();if(raw==='—')raw='';
+  if((field==='name'||field==='network')&&r.tpl==='穿戴'){const v=window.__v5311WatchView?.fields(p,r);if(v&&raw===(field==='name'?v.label:v.network).replace(/^—$/,''))return;}
   switch(field){
     case 'brand':p.brand=raw;break;
-    case 'name':p.name=raw;r.sourceCleanName=raw||r.sourceCleanName;break;
+    case 'name':if(window.__v5311WatchView?.fields(p,r))p.__manualWatchNameOverride=true;p.name=raw;r.sourceCleanName=raw||r.sourceCleanName;break;
     case 'ramrom':{
       const parts=raw.split(/\s*[\/／|]\s*/);p.ram=usedManualCleanUnit(parts[0]||'');p.rom=usedManualCleanUnit(parts[1]||'');r.sourceCapacity=p.rom||r.sourceCapacity;break;
     }
@@ -8779,7 +8781,7 @@ function commitUsedManualInline(i,field,el){
     case 'display':p.display=raw;break;
     case 'camera':p.rearCamera=raw;break;
     case 'battery':p.battery=raw;break;
-    case 'network':p.network=raw;r.sourceVersion=raw||r.sourceVersion;break;
+    case 'network':if(window.__v5311WatchView?.fields(p,r))p.__manualWatchNetworkOverride=true;p.network=raw;r.sourceVersion=raw||r.sourceVersion;break;
     case 'intl':r.internationalVersion=raw;break;
     case 'health':r.batteryHealth=raw;break;
     case 'burn':r.screenBurn=raw;break;
@@ -8792,9 +8794,10 @@ function usedManualPhoneHtml(p,r,i){
   return `<div class="cr-hero"><div class="cr-topline"></div><div class="cr-grade ${has?'has-image':'pending'}" style="--grade:${c[0]};--grade-text:${c[1]}">${usedGradeLogoHtml(r.grade,false)}</div>${usedManualEditableHtml(i,'brand',p.brand,{tag:'div',className:'cr-brand',title:'點擊修改品牌'})}${v531ManualPhoneModelHtml(usedManualEditableHtml(i,'name',displayName,{tag:'div',className:`cr-model ${phoneNameClass(displayName)}`,title:'點擊修改商品名稱'}),displayName)}<div class="cr-sale-row" style="${saleRowStyle}"><div class="cr-sale-badge" style="${saleBadgeStyle}" aria-label="ON SALE"></div><span class="cr-currency" style="${currencyStyle}">$</span><strong class="cr-price" style="${priceStyle}">${h(sale)}</strong></div><div class="cr-meta"><span class="cr-pill">上市日期</span>${usedManualEditableHtml(i,'year',date,{tag:'span',className:'cr-meta-val',title:'點擊修改上市日期'})}<span class="cr-pill">建議售價</span>${usedManualEditableHtml(i,'msrp',formatSuggestedMsrp(p),{tag:'span',className:'cr-meta-val',title:'點擊修改建議售價'})}</div></div><div class="phone-specs"><div class="spec-line"><div class="spec-label">RAM<br>ROM</div>${usedManualEditableHtml(i,'ramrom',ramrom,{tag:'div',className:'spec-value',title:'例如 8GB / 256GB'})}</div><div class="spec-line"><div class="spec-label dark">CPU<br>核心</div>${usedManualEditableHtml(i,'processor',p.processor||'—',{tag:'div',className:`spec-value yellow cpu-value ${cpuTextClass(p.processor)}`,title:'點擊修改 CPU / 處理器'})}</div><div class="spec-line"><div class="spec-label">螢幕<br>尺寸</div>${usedManualEditableHtml(i,'display',p.display||'—',{tag:'div',className:'spec-value',title:'點擊修改螢幕尺寸'})}</div><div class="spec-line"><div class="spec-label dark">相機<br>畫素</div>${usedManualEditableHtml(i,'camera',mainCamera,{tag:'div',className:'spec-value yellow',title:'點擊修改相機畫素'})}</div><div class="spec-line double"><div class="spec-label">保固</div><div class="spec-value">${h(usedWarrantyDays(r.warranty))}</div><div class="spec-label">國際<br>版本</div>${usedManualEditableHtml(i,'intl',r.internationalVersion||'—',{tag:'div',className:'spec-value',title:'點擊修改國際版本'})}</div><div class="spec-line double"><div class="spec-label dark">電池</div>${usedManualEditableHtml(i,'battery',formatBatteryCapacityDisplay(p.battery),{tag:'div',className:'spec-value yellow battery-capacity-value',title:'點擊修改電池容量'})}<div class="spec-label dark">電池<br>健康</div>${usedManualEditableHtml(i,'health',r.batteryHealth||'—',{tag:'div',className:'spec-value yellow',title:'點擊修改電池健康'})}</div><div class="spec-line double"><div class="spec-label">通訊<br>網路</div>${usedManualEditableHtml(i,'network',p.network||r.sourceVersion||'—',{tag:'div',className:'spec-value',title:'點擊修改通訊網路'})}<div class="spec-label">螢幕<br>烙印</div>${usedManualEditableHtml(i,'burn',r.screenBurn||'—',{tag:'div',className:'spec-value',title:'點擊修改螢幕烙印'})}</div><div class="spec-line imei"><div class="spec-label dark">${h(identifierLabel(r.imei))}</div><div class="spec-value imei-barcode-value">${identifierBarcodeHtml(r.imei)}</div></div></div>`;
 }
 function usedManualWearHtml(p,r,i){
-  const grade=r.grade||'A',date=usedDisplayDate(p,r),msrp=formatSuggestedMsrp(p),sale=money(r.price)||'—',brand=p.brand||'—',imei=r.imei||'尚未輸入',warrantyText=usedWarrantyDays(r.warranty),networkText=wearNetworkText(p),batteryText=formatBatteryCapacityDisplay(p.battery),batteryHealthText=r.batteryHealth||'—';
+  const grade=r.grade||'A',date=usedDisplayDate(p,r),msrp=formatSuggestedMsrp(p),sale=money(r.price)||'—',brand=p.brand||'—',imei=r.imei||'尚未輸入',warrantyText=usedWarrantyDays(r.warranty),watchView=window.__v5311WatchView?.fields(p,r),networkText=watchView?.network||wearNetworkText(p),batteryText=formatBatteryCapacityDisplay(p.battery),batteryHealthText=r.batteryHealth||'—';
   const specHtml=`<div class="wear-spec-row"><div class="wear-spec-label">電池<br>容量</div>${usedManualEditableHtml(i,'battery',batteryText,{tag:'div',className:'wear-spec-value battery-capacity-value',title:'點擊修改電池容量'})}<div class="wear-spec-label dark">電池<br>健康度</div>${usedManualEditableHtml(i,'health',batteryHealthText,{tag:'div',className:'wear-spec-value',title:'點擊修改電池健康'})}</div><div class="wear-spec-row"><div class="wear-spec-label dark">保固</div><div class="wear-spec-value">${h(warrantyText)}</div><div class="wear-spec-label">通訊<br>網路</div>${usedManualEditableHtml(i,'network',networkText,{tag:'div',className:'wear-spec-value',title:'點擊修改通訊網路'})}</div><div class="wear-spec-row single"><div class="wear-spec-label">${h(identifierLabel(imei))}</div><div class="wear-spec-value wear-imei-box imei-barcode-value">${identifierBarcodeHtml(imei)}</div></div>`;
-  return `<div class="wear-card used-tone">${wearGradeHtml(false,grade)}${usedManualEditableHtml(i,'brand',brand,{tag:'div',className:'wear-top-brand',title:'點擊修改品牌'})}<div class="wear-name-band">${usedManualEditableHtml(i,'name',p.name||'—',{tag:'div',className:'wear-name-main',title:'點擊修改商品名稱'})}</div><div class="wear-sale-row"><div class="wear-sale-mark">ON<br>SALE</div><div class="wear-sale-currency">$</div><div class="wear-sale-value">${h(sale)}</div></div><div class="wear-meta-row"><div class="wear-meta-pill">上市日期</div>${usedManualEditableHtml(i,'year',date,{tag:'div',className:'wear-meta-val',title:'點擊修改上市日期'})}<div class="wear-meta-pill">建議售價</div>${usedManualEditableHtml(i,'msrp',msrp,{tag:'div',className:'wear-meta-val price',title:'點擊修改建議售價'})}</div><div class="wear-specs">${specHtml}</div></div>`;
+  const markup=`<div class="wear-card used-tone">${wearGradeHtml(false,grade)}${usedManualEditableHtml(i,'brand',brand,{tag:'div',className:'wear-top-brand',title:'點擊修改品牌'})}<div class="wear-name-band">${usedManualEditableHtml(i,'name',watchView?.label||p.name||'—',{tag:'div',className:'wear-name-main',title:'點擊修改商品名稱'})}</div><div class="wear-sale-row"><div class="wear-sale-mark">ON<br>SALE</div><div class="wear-sale-currency">$</div><div class="wear-sale-value">${h(sale)}</div></div><div class="wear-meta-row"><div class="wear-meta-pill">上市日期</div>${usedManualEditableHtml(i,'year',date,{tag:'div',className:'wear-meta-val',title:'點擊修改上市日期'})}<div class="wear-meta-pill">建議售價</div>${usedManualEditableHtml(i,'msrp',msrp,{tag:'div',className:'wear-meta-val price',title:'點擊修改建議售價'})}</div><div class="wear-specs">${specHtml}</div></div>`;
+  return window.__v5311WatchView?.layout(markup,watchView,{manual:true})||markup;
 }
 const _v5052UsedManualMissingCount=usedManualMissingCount;
 usedManualMissingCount=function(r){
@@ -16266,6 +16269,74 @@ window.__v5266SerializedPeripheralHotfix=true;
  // No database / JSON / SKU matching changes. Font fitting works for Samsung because it carries the same view classes.
 
  window.__v5292SamsungWatch={displayFields,nameAndFamily,sizeFor,materialFor,networkFor};
+ // V5.3.11: shared 65mm smart-watch presentation, including manual/unmatched cards.
+ // Source and catalog fields are read-only; no changes to SKU matching or price lookup.
+ function isSmartWatch(p,r){
+   const cat=tidy(p?.category||r?.sourceSmall||r?.small||'');
+   const name=tidy(p?.name||r?.sourceName||'');
+   return /手錶|智慧錶|智能錶|smart\s*watch/i.test(cat) &&
+     !/錶帶|錶環|保護殼|錶殼配件|watch\s*(?:band|strap|case)\b/i.test(name);
+ }
+ function generalFields(p,r){
+   const source=front(r?.sourceName||r?.sourceCleanName||r?.name||p?.name||'');
+   const central=front(p?.name||'');
+   let label=(r?.manualSpec?central:source)||central;
+   const colors=new Set(tidy(p?.colors||'').split(/[、,，;；]/).map(tidy).filter(Boolean));
+   for(const b of tidy(r?.sourceName||'').matchAll(/\[([^\]]+)\]/g)){
+     const c=tidy(b[1].split(/[／/]/)[0]);if(isColor(c))colors.add(c);
+   }
+   function isColor(v){return /^(?:[\p{Script=Han}]{1,7}(?:色|黑|白|藍|綠|紅|紫|灰|銀|金|棕|粉|橘|黃)|黑彩虹|白彩虹|原色|black|white|blue|green|red|purple|gray|grey|silver|gold|brown|pink|orange|yellow|(?:midnight|space|ice|glacier|titanium|obsidian|rose)\s+(?:black|white|blue|gray|grey|silver|gold))$/iu.test(tidy(v));}
+   label=label.replace(/\(([^()]*)\)/g,(m,c)=>colors.has(tidy(c))||isColor(c)?'':m);
+   const brand=tidy(p?.brand||r?.brand||'');
+   const aliases=/^(?:mi|xiaomi|小米)$/i.test(brand)?['Xiaomi','Mi']: [brand];
+   for(const a of aliases.filter(Boolean))if(label.toLowerCase().startsWith(a.toLowerCase()+' '))label=label.slice(a.length).trim();
+   for(const c of [...colors].sort((a,b)=>b.length-a.length))if(c&&label.endsWith(' '+c))label=label.slice(0,-c.length).trim();
+   const dimension=v=>v.match(/\b(\d{2}(?:\.\d+)?)\s*mm\b/i)?.[1]||'';
+   const a=dimension(source),b=dimension(central),explicit=dimension(tidy(p?.caseSize||p?.size||''));
+   const size=a&&b&&a!==b?'—':(a||b||explicit)?(a||b||explicit)+'mm':'—';
+   label=label.replace(/\b\d{2}(?:\.\d+)?\s*mm\b/gi,' ').replace(/(?:\bGPS\s*[+＋]\s*(?:4G|LTE)|\b(?:GPS|LTE|4G|5G|BT|BLUETOOTH|WIFI|WI-FI|CELLULAR)\b)/gi,' ').replace(/[_-]+\s*$/,'').replace(/\s+/g,' ').trim();
+   let material=materialToken(tidy(p?.caseMaterial||p?.material||''));
+   if(!material)for(const raw of [r?.sourceName,p?.name].filter(Boolean)){
+     const text=tidy(raw);
+     const casePart=text.match(/(?:鈦金屬|鈦合金|鋁金屬|鋁合金|不鏽鋼|不銹鋼|陶瓷)(?:款|錶殼|表殼|外殼)/i)?.[0];
+     if(casePart){material=materialToken(casePart.replace('鈦合金','鈦金屬').replace('鋁合金','鋁金屬'));if(material)break;}
+   }
+   return {label:label||central||'—',size,material:material||'—',network:tidy(p?.network)||(r?.manualSpec?'—':wearNetworkText(p))};
+ }
+ function sharedFields(p,r){
+   if(!isSmartWatch(p,r))return null;
+   const apple=window.__v5286WatchLayout?.displayFields?.(p,r);
+   let f=apple?{label:apple.name,size:apple.size,material:apple.material,network:window.__v5285WatchLabel?.presentationNetwork?.(p,r)||tidy(p?.network)||'—'}:displayFields(p,r)||generalFields(p,r);
+   if(r?.manualSpec){
+     if(p?.__manualWatchNameOverride)f={...f,label:generalFields(r.manualProduct||p,r).label};
+     if(p?.__manualWatchNetworkOverride)f={...f,network:tidy(p.network)||'—'};
+   }
+   return f;
+ }
+ function syncWatchText(html,fields){
+   if(!fields)return html;
+   html=html.replace(/(<div class="wear-name-main">)[\s\S]*?(<\/div>)/,(_,a,b)=>a+safe(fields.label)+b);
+   return html.replace(/(<div class="wear-spec-label(?: dark)?">通訊<br>網路<\/div>\s*<div class="wear-spec-value[^"]*">)[\s\S]*?(<\/div>)/,(_,a,b)=>a+safe(fields.network)+b);
+ }
+ function addWatchLayout(html,fields,{manual=false}={}){
+   if(!fields||html.includes('v5286-apple-watch'))return html;
+   const pos=html.indexOf('<div class="wear-specs">'),first=html.indexOf('<div class="wear-spec-row',pos),second=html.indexOf('<div class="wear-spec-row',first+1);
+   if(pos<0||first<0||second<0)return html;
+   const row='<div class="wear-spec-row v5286-size-material"><div class="wear-spec-label dark">尺寸</div><div class="wear-spec-value">'+safe(fields.size)+'</div><div class="wear-spec-label">材質</div><div class="wear-spec-value v5286-material-value">'+safe(fields.material)+'</div></div>';
+   html=html.slice(0,second)+row+html.slice(second);
+   html=html.replace('class="wear-card ','class="wear-card v5285-apple-watch v5286-apple-watch ');
+   if(!manual)html=syncWatchText(html,fields);
+   html=html.replace(/(<div class="wear-spec-label(?: dark)?">通訊<br>網路<\/div>\s*<div class=")wear-spec-value(?=[" ])/,'$1wear-spec-value v5285-watch-network');
+   return html;
+ }
+ const brandWearCardHtml=wearCardHtml;
+ wearCardHtml=function(p,r,opt={}){
+   const html=brandWearCardHtml.apply(this,arguments);
+   if(html.includes('v5286-apple-watch'))return r?.manualSpec?syncWatchText(html,sharedFields(p,r)):html;
+   return addWatchLayout(html,sharedFields(p,r));
+ };
+ window.__v5311WatchView={fields:sharedFields,layout:addWatchLayout};
+
 })();
 </script>
 <!-- V5.2.92 uses existing Apple layout CSS; Samsung BT=藍牙, LTE=LTE; SN/price unchanged. -->
@@ -16763,7 +16834,7 @@ refresh();window.__v530Ui={refresh,category,states};
  const h=document.querySelector('.hq31-hero');if(!h)return;
  const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
  const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
- d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.10 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.11 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
  h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
  function report(){
   const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
