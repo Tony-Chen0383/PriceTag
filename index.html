@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>創宇標籤／標價卡列印工具 V5.3.11｜智慧手錶標卡統一版</title>
+<title>創宇標籤／標價卡列印工具 V5.3.12｜Apple Watch Ultra 精確配對 Hotfix</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -7271,7 +7271,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.11</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
+    <div class="logo"><div class="logo-mark"><img src="./assets/static/img-1c984a591a30ae01.png" alt="公司LOGO"></div><div><div class="logo-title">創宇標籤／標價卡列印工具 <span style="font-size:12px;color:#728097">V5.3.12</span></div><div class="logo-sub">門市標價卡工作台</div></div></div>
     <div id="v537Workspace" class="v537-workspace" hidden><span class="v537-workspace-caption">目前工作區</span><strong id="v537WorkspaceName" aria-live="polite">配件標籤</strong></div>
     <div class="top-info">
       <span class="pill good" id="topHqPriceLoadPill">● HQ 建議售價 <strong id="topHqPriceLoadStatus">載入中</strong></span>
@@ -7382,7 +7382,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 
   <div class="hq31-hero">
     <div>
-      <div class="hq31-hero-title">V5.3.11｜智慧手錶標卡統一版</div>
+      <div class="hq31-hero-title">V5.3.12｜Apple Watch Ultra 精確配對 Hotfix</div>
       <div class="hq31-hero-sub">不串資料庫。HQ GitHub 以一般版為主資料，再疊加特殊規格／國際版／烙印版；門市實際牌價、IMEI／SN 與作業資料仍由公司 Excel 匯入。</div>
     </div>
     <span class="hq31-hero-badge">GITHUB DIRECT PUBLISH · NO DB</span>
@@ -7415,8 +7415,8 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
     <div class="hq31-status">
       <span class="dot"></span>
       <div class="eyebrow">工具版本</div>
-      <div class="value">V5.3.11</div>
-      <div class="meta">新機機型精確配對／配件 CY 編碼 Hotfix</div>
+      <div class="value">V5.3.12</div>
+      <div class="meta">Apple Watch Ultra 精確配對 Hotfix</div>
     </div>
     <div class="hq31-status" id="hqOverviewPriceCard">
       <span class="dot"></span>
@@ -7699,7 +7699,7 @@ details.v512-source-row[open] .v512-chevron{transform:rotate(180deg)}
 <div class="toast" id="toast"></div>
 <script>
 /* V5.3.4 Performance: tool release metadata only; central manifest schema versions are independent. */
-const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.11',label:'智慧手錶標卡統一版'});
+const PRICE_TAG_RELEASE=Object.freeze({version:'V5.3.12',label:'Apple Watch Ultra 精確配對 Hotfix'});
 /* V5.3.4: bounded in-memory measurements; never persist/report business data or URLs. */
 const V534_METRICS=new Map();
 function v534Record(label,ms,error=false){
@@ -15683,7 +15683,58 @@ window.__v5266SerializedPeripheralHotfix=true;
     }
     return {targeted:true,hit:null,reason:'中央與本機基準都缺少精確 Model 規格'};
   }
+  // V5.3.12: Ultra 2/3 identity gate. No fallback across generation, case size,
+  // network, bundle or source layer; no stale embedded SKU is inserted.
+  function ultraGeneration(v){
+    const m=mainName(v).match(/\bwatch\s*ultra\s*([23])\b/i);
+    return m?m[1]:'';
+  }
+  function ultraSize(v){const m=mainName(v).match(/\b(\d{2})\s*mm\b/i);return m?Number(m[1]):0;}
+  function ultraBundle(v){
+    const s=mainName(v);
+    if(/herm[eè]s|愛馬仕/i.test(s))return 'hermes';
+    return /米蘭|milanese/i.test(s)?'milanese':'standard';
+  }
+  function ultraNetwork(v){
+    const s=norm(v);
+    if(/\b(?:lte|4g|cellular)\b/i.test(s))return '4g';
+    if(/\bgps\b|\b(?:bt|wifi|wi-fi)\b/i.test(s))return 'gps';
+    return '';
+  }
+  function ultraMatch(row){
+    if(!row||key(row.brand)!=='apple')return {targeted:false};
+    const raw=norm(row.name),main=mainName(raw),gen=ultraGeneration(main);
+    if(!gen)return {targeted:false};
+    const reject=()=>({targeted:true,hit:null});
+    if(/錶帶配件|保護殼|watch\s*(?:band|strap|case)\b/i.test(main))return reject();
+    const parsed=parseUsedMachine(raw,row.brand),dev=model(parsed.model),size=ultraSize(main),bundle=ultraBundle(main);
+    const mainNet=ultraNetwork(main);
+    const tail=raw.match(/\/\s*(LTE|4G|GPS|WIFI|WI-FI|BT)\s*\]/i)?.[1]||'';
+    const tailNet=ultraNetwork(tail),mode=mainNet||tailNet;
+    if(size!==49||mode!=='4g'||(mainNet&&tailNet&&mainNet!==tailNet))return reject();
+    if(parsed.capacity&&nrCap(parsed.capacity)!=='64')return reject();
+    if(parsed.ram&&nrCap(parsed.ram)!=='1')return reject();
+    const list=[];
+    PRODUCTS.forEach((p,idx)=>{
+      if(key(p?.brand)!=='apple'||key(p?.category)!=='手錶')return;
+      if(ultraGeneration(p.name)!==gen||ultraSize(p.name)!==size||ultraBundle(p.name)!==bundle)return;
+      if(ultraNetwork(p.network)!==mode||!model(p.model)||(dev&&model(p.model)!==dev))return;
+      if(parsed.capacity&&nrCap(p.rom)!==nrCap(parsed.capacity))return;
+      if(parsed.ram&&nrCap(p.ram)!==nrCap(parsed.ram))return;
+      list.push({idx,p});
+    });
+    const layer=v5215SelectSourceLayer(list,row);
+    if(!layer.length)return reject();
+    // Distinguish conflicting catalog records, including price and launch year.
+    const sig=p=>JSON.stringify([model(p.model),nrCap(p.ram),nrCap(p.rom),ultraNetwork(p.network),norm(p.year),norm(p.processor),norm(p.display),norm(p.battery),Number(p.msrp)||0,norm(p.__v51InternationalVersion),norm(p.__v51ScreenBurn)]);
+    if(new Set(layer.map(x=>sig(x.p))).size!==1)return reject();
+    const selected=layer[0];
+    if(!norm(selected.p.battery)||['—','-','N/A'].includes(norm(selected.p.battery))||!(Number(selected.p.msrp)>0))return reject();
+    return {targeted:true,hit:{...selected,parsed:{...parsed,version:'LTE'},score:995,matchMode:'v5312-apple-watch-ultra-bundle-hardgate'}};
+  }
   usedMatchProduct=function(row){
+    const ultra=ultraMatch(row);
+    if(ultra.targeted)return ultra.hit||null;
     const checked=findMatch(row);
     if(checked.targeted)return checked.hit||null;
     return priorMatch.apply(this,arguments);
@@ -15693,6 +15744,20 @@ window.__v5266SerializedPeripheralHotfix=true;
   const prevUsedWearHtml=usedWearHtml;
   usedWearHtml=function(p,r){
     const id=model(r?.sourceModel),src=r?.sourceName||'';
+    if(!r?.manualSpec&&key(p?.brand)==='apple'&&ultraGeneration(src)&&ultraGeneration(p?.name)===ultraGeneration(src)){
+      // Resolve HQ metadata using the original catalog name, never the shortened
+      // display name or shared model key (standard/Milanese MSRP differs).
+      const nameKey=hqPriceMapKey(p.brand,p.name,p.rom);
+      const hqPrice=HQ_PRICE_STATE.ready?Number(HQ_PRICE_BY_NAME_ROM.get(nameKey))||0:0;
+      const hqDate=HQ_PRICE_STATE.ready?HQ_DATE_BY_NAME_ROM.get(nameKey)||'':'';
+      const rawDate=norm(hqDate||p.year);
+      const date=/^\d{4}$/.test(rawDate)?rawDate+'年':wearDisplayDate(rawDate);
+      const amount=hqPrice||Number(p.msrp)||0;
+      const msrp=hqSuggestedMsrpIsForeign(p)||!amount?'—':'$'+amount.toLocaleString('zh-TW');
+      let html=prevUsedWearHtml.apply(this,arguments);
+      html=html.replace(/(<div class="wear-meta-val">)[\s\S]*?(<\/div>)/,(_,a,b)=>a+h(date)+b);
+      return html.replace(/(<div class="wear-meta-val price">)[\s\S]*?(<\/div>)/,(_,a,b)=>a+h(msrp)+b);
+    }
     if(['A2723','A2999'].includes(id)&&/\bwatch\b/i.test(src)&&net(mainName(src))==='gps'&&net(p?.network)==='gps'){
       const shown={...p,network:'藍牙'};
       // Central SE2 entry only carries 2023, while the source identifies the 2022 generation.
@@ -16834,7 +16899,7 @@ refresh();window.__v530Ui={refresh,category,states};
  const h=document.querySelector('.hq31-hero');if(!h)return;
  const btn=document.createElement('button');btn.className='btn ghost';btn.type='button';btn.textContent='效能診斷';btn.style.marginLeft='8px';h.querySelector('.hq31-hero-badge')?.after(btn);
  const d=document.createElement('details');d.id='v534Performance';d.style.cssText='margin:12px 0;padding:14px;background:#fff;border:1px solid #dfe6ef;border-radius:12px';
- d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.11 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
+ d.innerHTML='<summary style="cursor:pointer;font-weight:800;color:#18345e">V5.3.12 效能診斷（本次頁面）</summary><p style="font-size:12px;color:#68758a">實際瀏覽器量測；含等待的項目並非純 CPU 耗時。各階段可能重疊，不宜相加。未執行項目不顯示。報告不包含商品、序號、檔名、網址或授權資料。</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;background:#f5f7fb;padding:12px;border-radius:8px" aria-live="polite"></pre><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="btn ghost" data-action="refresh">更新數據</button><button type="button" class="btn primary" data-action="copy">複製診斷報告</button><span role="status" style="font-size:12px"></span></div>';
  h.after(d);const pre=d.querySelector('pre'),status=d.querySelector('[role=status]');
  function report(){
   const n=performance.getEntriesByType('navigation')[0],resources=performance.getEntriesByType('resource'),ms=x=>Number.isFinite(x)?x.toFixed(1)+'ms':'未完成';
